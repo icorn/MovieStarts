@@ -17,9 +17,11 @@ class NowTableViewController: UITableViewController, UITableViewDelegate, UITabl
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
+		
+		var database = Database(recordType: Constants.RECORD_TYPE_USA)
 
-		Database.getAllMovies(Constants.RECORD_TYPE_USA,
-			completionHandler: { (movies: [MovieRecord]?) in
+		database.getAllMovies(
+			{ (movies: [MovieRecord]?) in
 				self.movies = movies
 				self.tableView.reloadData()
 			},
