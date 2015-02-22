@@ -8,6 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		4F63E61E1A992BCA00528FB3 /* DatabaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */; };
+		4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6231A99CB5D00528FB3 /* Localizable.strings */; };
+		4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6281A9A3E1100528FB3 /* LaunchBackground.jpg */; };
+		4F63E62E1A9A416100528FB3 /* LaunchLogo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E62B1A9A416100528FB3 /* LaunchLogo@2x.png */; };
+		4F63E62F1A9A416100528FB3 /* LaunchLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E62C1A9A416100528FB3 /* LaunchLogo.png */; };
+		4F63E6301A9A416100528FB3 /* LaunchLogo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E62D1A9A416100528FB3 /* LaunchLogo@3x.png */; };
+		4F63E6391A9A8CD100528FB3 /* icon29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6331A9A8CD100528FB3 /* icon29@3x.png */; };
+		4F63E63A1A9A8CD100528FB3 /* icon40@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6341A9A8CD100528FB3 /* icon40@3x.png */; };
+		4F63E63B1A9A8CD100528FB3 /* icon40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6351A9A8CD100528FB3 /* icon40@2x.png */; };
+		4F63E63C1A9A8CD100528FB3 /* icon60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6361A9A8CD100528FB3 /* icon60@3x.png */; };
+		4F63E63D1A9A8CD100528FB3 /* icon60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6371A9A8CD100528FB3 /* icon60@2x.png */; };
+		4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6381A9A8CD100528FB3 /* icon29@2x.png */; };
 		4F6914821A8C041D00B8FFCE /* NowTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6914811A8C041D00B8FFCE /* NowTableViewController.swift */; };
 		4F69148C1A8C085300B8FFCE /* Video@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F6914831A8C085300B8FFCE /* Video@3x.png */; };
 		4F69148D1A8C085300B8FFCE /* Calender@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F6914841A8C085300B8FFCE /* Calender@3x.png */; };
@@ -32,6 +43,18 @@
 
 /* Begin PBXFileReference section */
 		4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseHelper.swift; sourceTree = "<group>"; };
+		4F63E6251A99CB9E00528FB3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4F63E6271A99CBD400528FB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4F63E6281A9A3E1100528FB3 /* LaunchBackground.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = LaunchBackground.jpg; sourceTree = "<group>"; };
+		4F63E62B1A9A416100528FB3 /* LaunchLogo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchLogo@2x.png"; sourceTree = "<group>"; };
+		4F63E62C1A9A416100528FB3 /* LaunchLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = LaunchLogo.png; sourceTree = "<group>"; };
+		4F63E62D1A9A416100528FB3 /* LaunchLogo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "LaunchLogo@3x.png"; sourceTree = "<group>"; };
+		4F63E6331A9A8CD100528FB3 /* icon29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon29@3x.png"; sourceTree = "<group>"; };
+		4F63E6341A9A8CD100528FB3 /* icon40@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon40@3x.png"; sourceTree = "<group>"; };
+		4F63E6351A9A8CD100528FB3 /* icon40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon40@2x.png"; sourceTree = "<group>"; };
+		4F63E6361A9A8CD100528FB3 /* icon60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon60@3x.png"; sourceTree = "<group>"; };
+		4F63E6371A9A8CD100528FB3 /* icon60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon60@2x.png"; sourceTree = "<group>"; };
+		4F63E6381A9A8CD100528FB3 /* icon29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon29@2x.png"; sourceTree = "<group>"; };
 		4F6914811A8C041D00B8FFCE /* NowTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowTableViewController.swift; sourceTree = "<group>"; };
 		4F6914831A8C085300B8FFCE /* Video@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Video@3x.png"; sourceTree = "<group>"; };
 		4F6914841A8C085300B8FFCE /* Calender@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Calender@3x.png"; sourceTree = "<group>"; };
@@ -69,6 +92,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F63E62A1A9A415100528FB3 /* Launch Images */ = {
+			isa = PBXGroup;
+			children = (
+				4F63E6281A9A3E1100528FB3 /* LaunchBackground.jpg */,
+				4F63E62C1A9A416100528FB3 /* LaunchLogo.png */,
+				4F63E62B1A9A416100528FB3 /* LaunchLogo@2x.png */,
+				4F63E62D1A9A416100528FB3 /* LaunchLogo@3x.png */,
+			);
+			name = "Launch Images";
+			sourceTree = "<group>";
+		};
+		4F63E6311A9A8C9D00528FB3 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				4F63E6381A9A8CD100528FB3 /* icon29@2x.png */,
+				4F63E6331A9A8CD100528FB3 /* icon29@3x.png */,
+				4F63E6351A9A8CD100528FB3 /* icon40@2x.png */,
+				4F63E6341A9A8CD100528FB3 /* icon40@3x.png */,
+				4F63E6371A9A8CD100528FB3 /* icon60@2x.png */,
+				4F63E6361A9A8CD100528FB3 /* icon60@3x.png */,
+			);
+			name = Icons;
+			sourceTree = "<group>";
+		};
+		4F63E6321A9A8CAD00528FB3 /* In-App-Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				4F6914851A8C085300B8FFCE /* Calender.png */,
+				4F6914861A8C085300B8FFCE /* Calender@2x.png */,
+				4F6914841A8C085300B8FFCE /* Calender@3x.png */,
+				4F69148A1A8C085300B8FFCE /* Settings.png */,
+				4F6914871A8C085300B8FFCE /* Settings@2x.png */,
+				4F6914891A8C085300B8FFCE /* Settings@3x.png */,
+				4F6914881A8C085300B8FFCE /* Video.png */,
+				4F69148B1A8C085300B8FFCE /* Video@2x.png */,
+				4F6914831A8C085300B8FFCE /* Video@3x.png */,
+			);
+			name = "In-App-Graphics";
+			sourceTree = "<group>";
+		};
 		4F87F9271A8DF0C1001869A1 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -112,16 +175,11 @@
 		4FAFF8C61A8BFFE500864078 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4F6914851A8C085300B8FFCE /* Calender.png */,
-				4F6914861A8C085300B8FFCE /* Calender@2x.png */,
-				4F6914841A8C085300B8FFCE /* Calender@3x.png */,
+				4F63E6311A9A8C9D00528FB3 /* Icons */,
+				4F63E6321A9A8CAD00528FB3 /* In-App-Graphics */,
 				4FAFF8C71A8BFFE500864078 /* Info.plist */,
-				4F69148A1A8C085300B8FFCE /* Settings.png */,
-				4F6914871A8C085300B8FFCE /* Settings@2x.png */,
-				4F6914891A8C085300B8FFCE /* Settings@3x.png */,
-				4F6914881A8C085300B8FFCE /* Video.png */,
-				4F69148B1A8C085300B8FFCE /* Video@2x.png */,
-				4F6914831A8C085300B8FFCE /* Video@3x.png */,
+				4F63E62A1A9A415100528FB3 /* Launch Images */,
+				4F63E6231A99CB5D00528FB3 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -186,6 +244,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = 4FAFF8BA1A8BFFE500864078;
 			productRefGroup = 4FAFF8C41A8BFFE500864078 /* Products */;
@@ -205,13 +264,24 @@
 				4F6914921A8C085300B8FFCE /* Settings@3x.png in Resources */,
 				4F69148F1A8C085300B8FFCE /* Calender@2x.png in Resources */,
 				4FAFF8D01A8BFFE500864078 /* Main.storyboard in Resources */,
+				4F63E6301A9A416100528FB3 /* LaunchLogo@3x.png in Resources */,
+				4F63E62E1A9A416100528FB3 /* LaunchLogo@2x.png in Resources */,
 				4F6914911A8C085300B8FFCE /* Video.png in Resources */,
+				4F63E63C1A9A8CD100528FB3 /* icon60@3x.png in Resources */,
 				4F6914941A8C085300B8FFCE /* Video@2x.png in Resources */,
 				4F6914931A8C085300B8FFCE /* Settings.png in Resources */,
 				4F69148D1A8C085300B8FFCE /* Calender@3x.png in Resources */,
 				4F69148C1A8C085300B8FFCE /* Video@3x.png in Resources */,
+				4F63E63A1A9A8CD100528FB3 /* icon40@3x.png in Resources */,
+				4F63E63B1A9A8CD100528FB3 /* icon40@2x.png in Resources */,
+				4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */,
+				4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */,
+				4F63E6391A9A8CD100528FB3 /* icon29@3x.png in Resources */,
 				4F69148E1A8C085300B8FFCE /* Calender.png in Resources */,
+				4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */,
+				4F63E63D1A9A8CD100528FB3 /* icon60@2x.png in Resources */,
 				4F6914901A8C085300B8FFCE /* Settings@2x.png in Resources */,
+				4F63E62F1A9A416100528FB3 /* LaunchLogo.png in Resources */,
 				4FAFF8D51A8BFFE500864078 /* LaunchScreen.xib in Resources */,
 				4FAFF8D21A8BFFE500864078 /* Images.xcassets in Resources */,
 			);
@@ -238,6 +308,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		4F63E6231A99CB5D00528FB3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4F63E6251A99CB9E00528FB3 /* de */,
+				4F63E6271A99CBD400528FB3 /* en */,
+			);
+			name = Localizable.strings;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		4FAFF8CE1A8BFFE500864078 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -292,7 +372,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -329,7 +409,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -344,7 +424,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MovieStarts/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -359,7 +439,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MovieStarts/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
