@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F0CBADF1A9D324800C63FAF /* InterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBADE1A9D324800C63FAF /* InterfaceController.swift */; };
+		4F0CBAE11A9D324800C63FAF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBAE01A9D324800C63FAF /* Images.xcassets */; };
+		4F0CBAE51A9D324800C63FAF /* MovieStarts WatchKit App.app in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBAE41A9D324800C63FAF /* MovieStarts WatchKit App.app */; };
+		4F0CBAED1A9D324800C63FAF /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBAEB1A9D324800C63FAF /* Interface.storyboard */; };
+		4F0CBAEF1A9D324800C63FAF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBAEE1A9D324800C63FAF /* Images.xcassets */; };
+		4F0CBAF21A9D324800C63FAF /* MovieStarts WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4F0CBADA1A9D324800C63FAF /* MovieStarts WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4F0CBAFC1A9D33F300C63FAF /* icon24@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBAFA1A9D33F300C63FAF /* icon24@2x.png */; };
+		4F0CBAFD1A9D33F300C63FAF /* icon27.5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBAFB1A9D33F300C63FAF /* icon27.5@2x.png */; };
+		4F0CBB001A9D346700C63FAF /* icon29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBAFE1A9D346700C63FAF /* icon29@2x.png */; };
+		4F0CBB011A9D346700C63FAF /* icon29@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBAFF1A9D346700C63FAF /* icon29@3x.png */; };
+		4F0CBB071A9D353800C63FAF /* icon86@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBB031A9D353800C63FAF /* icon86@2x.png */; };
+		4F0CBB081A9D353800C63FAF /* icon40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBB041A9D353800C63FAF /* icon40@2x.png */; };
+		4F0CBB091A9D353800C63FAF /* icon98@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBB051A9D353800C63FAF /* icon98@2x.png */; };
+		4F0CBB0A1A9D353800C63FAF /* icon44@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBB061A9D353800C63FAF /* icon44@2x.png */; };
 		4F63E61E1A992BCA00528FB3 /* DatabaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */; };
 		4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6231A99CB5D00528FB3 /* Localizable.strings */; };
 		4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6281A9A3E1100528FB3 /* LaunchBackground.jpg */; };
@@ -43,7 +57,54 @@
 		4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FECDF211A9096A700F84A52 /* MovieRecord.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		4F0CBAE61A9D324800C63FAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FAFF8BB1A8BFFE500864078 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F0CBAE31A9D324800C63FAF;
+			remoteInfo = "MovieStarts WatchKit App";
+		};
+		4F0CBAF01A9D324800C63FAF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FAFF8BB1A8BFFE500864078 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4F0CBAD91A9D324800C63FAF;
+			remoteInfo = "MovieStarts WatchKit Extension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4F0CBAF91A9D324800C63FAF /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4F0CBAF21A9D324800C63FAF /* MovieStarts WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		4F0CBADA1A9D324800C63FAF /* MovieStarts WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "MovieStarts WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F0CBADD1A9D324800C63FAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F0CBADE1A9D324800C63FAF /* InterfaceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterfaceController.swift; sourceTree = "<group>"; };
+		4F0CBAE01A9D324800C63FAF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4F0CBAE41A9D324800C63FAF /* MovieStarts WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MovieStarts WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F0CBAEA1A9D324800C63FAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4F0CBAEC1A9D324800C63FAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		4F0CBAEE1A9D324800C63FAF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4F0CBAFA1A9D33F300C63FAF /* icon24@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon24@2x.png"; sourceTree = "<group>"; };
+		4F0CBAFB1A9D33F300C63FAF /* icon27.5@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon27.5@2x.png"; sourceTree = "<group>"; };
+		4F0CBAFE1A9D346700C63FAF /* icon29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon29@2x.png"; sourceTree = "<group>"; };
+		4F0CBAFF1A9D346700C63FAF /* icon29@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon29@3x.png"; sourceTree = "<group>"; };
+		4F0CBB031A9D353800C63FAF /* icon86@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon86@2x.png"; sourceTree = "<group>"; };
+		4F0CBB041A9D353800C63FAF /* icon40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon40@2x.png"; sourceTree = "<group>"; };
+		4F0CBB051A9D353800C63FAF /* icon98@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon98@2x.png"; sourceTree = "<group>"; };
+		4F0CBB061A9D353800C63FAF /* icon44@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon44@2x.png"; sourceTree = "<group>"; };
 		4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseHelper.swift; sourceTree = "<group>"; };
 		4F63E6251A99CB9E00528FB3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4F63E6271A99CBD400528FB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -85,6 +146,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		4F0CBAD71A9D324800C63FAF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4FAFF8C01A8BFFE500864078 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -96,6 +164,58 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F0CBADB1A9D324800C63FAF /* MovieStarts WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				4F0CBADE1A9D324800C63FAF /* InterfaceController.swift */,
+				4F0CBAE01A9D324800C63FAF /* Images.xcassets */,
+				4F0CBADC1A9D324800C63FAF /* Supporting Files */,
+			);
+			path = "MovieStarts WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		4F0CBADC1A9D324800C63FAF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4F0CBADD1A9D324800C63FAF /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4F0CBAE81A9D324800C63FAF /* MovieStarts WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				4F0CBAEB1A9D324800C63FAF /* Interface.storyboard */,
+				4F0CBAEE1A9D324800C63FAF /* Images.xcassets */,
+				4F0CBAE91A9D324800C63FAF /* Supporting Files */,
+			);
+			path = "MovieStarts WatchKit App";
+			sourceTree = "<group>";
+		};
+		4F0CBAE91A9D324800C63FAF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4F0CBB021A9D347100C63FAF /* Icons */,
+				4F0CBAEA1A9D324800C63FAF /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4F0CBB021A9D347100C63FAF /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				4F0CBAFA1A9D33F300C63FAF /* icon24@2x.png */,
+				4F0CBAFB1A9D33F300C63FAF /* icon27.5@2x.png */,
+				4F0CBAFE1A9D346700C63FAF /* icon29@2x.png */,
+				4F0CBAFF1A9D346700C63FAF /* icon29@3x.png */,
+				4F0CBB041A9D353800C63FAF /* icon40@2x.png */,
+				4F0CBB061A9D353800C63FAF /* icon44@2x.png */,
+				4F0CBB031A9D353800C63FAF /* icon86@2x.png */,
+				4F0CBB051A9D353800C63FAF /* icon98@2x.png */,
+			);
+			name = Icons;
+			sourceTree = "<group>";
+		};
 		4F63E62A1A9A415100528FB3 /* Launch Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,6 +261,8 @@
 			children = (
 				4F6914811A8C041D00B8FFCE /* NowTableViewController.swift */,
 				4F6914971A8C09D300B8FFCE /* SettingsViewController.swift */,
+				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
+				4F63E6411A9D2A8B00528FB3 /* TabBarController.swift */,
 				4F6914951A8C09BA00B8FFCE /* UpcomingTableViewController.swift */,
 			);
 			name = "View Controllers";
@@ -151,6 +273,8 @@
 			children = (
 				4FAFF8EB1A8C002B00864078 /* CloudKit.framework */,
 				4FAFF8C51A8BFFE500864078 /* MovieStarts */,
+				4F0CBADB1A9D324800C63FAF /* MovieStarts WatchKit Extension */,
+				4F0CBAE81A9D324800C63FAF /* MovieStarts WatchKit App */,
 				4FAFF8C41A8BFFE500864078 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -159,6 +283,8 @@
 			isa = PBXGroup;
 			children = (
 				4FAFF8C31A8BFFE500864078 /* MovieStarts.app */,
+				4F0CBADA1A9D324800C63FAF /* MovieStarts WatchKit Extension.appex */,
+				4F0CBAE41A9D324800C63FAF /* MovieStarts WatchKit App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,8 +295,6 @@
 				4FAFF8EF1A8C036A00864078 /* Source */,
 				4FAFF8EA1A8C002800864078 /* MovieStarts.entitlements */,
 				4FAFF8CE1A8BFFE500864078 /* Main.storyboard */,
-				4F63E6411A9D2A8B00528FB3 /* TabBarController.swift */,
-				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
 				4FAFF8D11A8BFFE500864078 /* Images.xcassets */,
 				4FAFF8D31A8BFFE500864078 /* LaunchScreen.xib */,
 				4FAFF8C61A8BFFE500864078 /* Supporting Files */,
@@ -206,6 +330,39 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		4F0CBAD91A9D324800C63FAF /* MovieStarts WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F0CBAF61A9D324800C63FAF /* Build configuration list for PBXNativeTarget "MovieStarts WatchKit Extension" */;
+			buildPhases = (
+				4F0CBAD61A9D324800C63FAF /* Sources */,
+				4F0CBAD71A9D324800C63FAF /* Frameworks */,
+				4F0CBAD81A9D324800C63FAF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4F0CBAE71A9D324800C63FAF /* PBXTargetDependency */,
+			);
+			name = "MovieStarts WatchKit Extension";
+			productName = "MovieStarts WatchKit Extension";
+			productReference = 4F0CBADA1A9D324800C63FAF /* MovieStarts WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		4F0CBAE31A9D324800C63FAF /* MovieStarts WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4F0CBAF31A9D324800C63FAF /* Build configuration list for PBXNativeTarget "MovieStarts WatchKit App" */;
+			buildPhases = (
+				4F0CBAE21A9D324800C63FAF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "MovieStarts WatchKit App";
+			productName = "MovieStarts WatchKit App";
+			productReference = 4F0CBAE41A9D324800C63FAF /* MovieStarts WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp";
+		};
 		4FAFF8C21A8BFFE500864078 /* MovieStarts */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4FAFF8E41A8BFFE500864078 /* Build configuration list for PBXNativeTarget "MovieStarts" */;
@@ -213,10 +370,12 @@
 				4FAFF8BF1A8BFFE500864078 /* Sources */,
 				4FAFF8C01A8BFFE500864078 /* Frameworks */,
 				4FAFF8C11A8BFFE500864078 /* Resources */,
+				4F0CBAF91A9D324800C63FAF /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4F0CBAF11A9D324800C63FAF /* PBXTargetDependency */,
 			);
 			name = MovieStarts;
 			productName = MovieStarts;
@@ -232,6 +391,14 @@
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Oliver Eichhorn";
 				TargetAttributes = {
+					4F0CBAD91A9D324800C63FAF = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = FTX9FBCWZ9;
+					};
+					4F0CBAE31A9D324800C63FAF = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = FTX9FBCWZ9;
+					};
 					4FAFF8C21A8BFFE500864078 = {
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = FTX9FBCWZ9;
@@ -258,11 +425,39 @@
 			projectRoot = "";
 			targets = (
 				4FAFF8C21A8BFFE500864078 /* MovieStarts */,
+				4F0CBAD91A9D324800C63FAF /* MovieStarts WatchKit Extension */,
+				4F0CBAE31A9D324800C63FAF /* MovieStarts WatchKit App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		4F0CBAD81A9D324800C63FAF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F0CBAE51A9D324800C63FAF /* MovieStarts WatchKit App.app in Resources */,
+				4F0CBAE11A9D324800C63FAF /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4F0CBAE21A9D324800C63FAF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F0CBAED1A9D324800C63FAF /* Interface.storyboard in Resources */,
+				4F0CBB071A9D353800C63FAF /* icon86@2x.png in Resources */,
+				4F0CBAFD1A9D33F300C63FAF /* icon27.5@2x.png in Resources */,
+				4F0CBAEF1A9D324800C63FAF /* Images.xcassets in Resources */,
+				4F0CBB001A9D346700C63FAF /* icon29@2x.png in Resources */,
+				4F0CBB091A9D353800C63FAF /* icon98@2x.png in Resources */,
+				4F0CBAFC1A9D33F300C63FAF /* icon24@2x.png in Resources */,
+				4F0CBB011A9D346700C63FAF /* icon29@3x.png in Resources */,
+				4F0CBB081A9D353800C63FAF /* icon40@2x.png in Resources */,
+				4F0CBB0A1A9D353800C63FAF /* icon44@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4FAFF8C11A8BFFE500864078 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -296,6 +491,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4F0CBAD61A9D324800C63FAF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F0CBADF1A9D324800C63FAF /* InterfaceController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		4FAFF8BF1A8BFFE500864078 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -315,7 +518,28 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		4F0CBAE71A9D324800C63FAF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F0CBAE31A9D324800C63FAF /* MovieStarts WatchKit App */;
+			targetProxy = 4F0CBAE61A9D324800C63FAF /* PBXContainerItemProxy */;
+		};
+		4F0CBAF11A9D324800C63FAF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4F0CBAD91A9D324800C63FAF /* MovieStarts WatchKit Extension */;
+			targetProxy = 4F0CBAF01A9D324800C63FAF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
+		4F0CBAEB1A9D324800C63FAF /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4F0CBAEC1A9D324800C63FAF /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		4F63E6231A99CB5D00528FB3 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -345,6 +569,70 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		4F0CBAF41A9D324800C63FAF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IBSC_MODULE = MovieStarts_WatchKit_Extension;
+				INFOPLIST_FILE = "MovieStarts WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		4F0CBAF51A9D324800C63FAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				IBSC_MODULE = MovieStarts_WatchKit_Extension;
+				INFOPLIST_FILE = "MovieStarts WatchKit App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
+		4F0CBAF71A9D324800C63FAF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "MovieStarts WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		4F0CBAF81A9D324800C63FAF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = "MovieStarts WatchKit Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		4FAFF8E21A8BFFE500864078 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -431,6 +719,7 @@
 				CODE_SIGN_ENTITLEMENTS = MovieStarts/MovieStarts.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = MovieStarts/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -446,6 +735,7 @@
 				CODE_SIGN_ENTITLEMENTS = MovieStarts/MovieStarts.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				INFOPLIST_FILE = MovieStarts/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -457,6 +747,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		4F0CBAF31A9D324800C63FAF /* Build configuration list for PBXNativeTarget "MovieStarts WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F0CBAF41A9D324800C63FAF /* Debug */,
+				4F0CBAF51A9D324800C63FAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4F0CBAF61A9D324800C63FAF /* Build configuration list for PBXNativeTarget "MovieStarts WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F0CBAF71A9D324800C63FAF /* Debug */,
+				4F0CBAF81A9D324800C63FAF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		4FAFF8BE1A8BFFE500864078 /* Build configuration list for PBXProject "MovieStarts" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -181,6 +181,9 @@ class Database {
 
 			if (error != nil) {
 				stopActivityIndicator()
+				
+				// TODO: Error-Code 1 heißt u. a., dass der User nicht in iCloud eingeloggt ist
+				
 				self.errorHandler?(errorMessage: "Error querying records: \(error!.code) (\(error!.localizedDescription))")
 				return
 			}
