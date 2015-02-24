@@ -19,6 +19,8 @@
 		4F63E63C1A9A8CD100528FB3 /* icon60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6361A9A8CD100528FB3 /* icon60@3x.png */; };
 		4F63E63D1A9A8CD100528FB3 /* icon60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6371A9A8CD100528FB3 /* icon60@2x.png */; };
 		4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6381A9A8CD100528FB3 /* icon29@2x.png */; };
+		4F63E6401A9D24BA00528FB3 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */; };
+		4F63E6421A9D2A8B00528FB3 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E6411A9D2A8B00528FB3 /* TabBarController.swift */; };
 		4F6914821A8C041D00B8FFCE /* NowTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6914811A8C041D00B8FFCE /* NowTableViewController.swift */; };
 		4F69148C1A8C085300B8FFCE /* Video@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F6914831A8C085300B8FFCE /* Video@3x.png */; };
 		4F69148D1A8C085300B8FFCE /* Calender@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F6914841A8C085300B8FFCE /* Calender@3x.png */; };
@@ -55,6 +57,8 @@
 		4F63E6361A9A8CD100528FB3 /* icon60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon60@3x.png"; sourceTree = "<group>"; };
 		4F63E6371A9A8CD100528FB3 /* icon60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon60@2x.png"; sourceTree = "<group>"; };
 		4F63E6381A9A8CD100528FB3 /* icon29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon29@2x.png"; sourceTree = "<group>"; };
+		4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		4F63E6411A9D2A8B00528FB3 /* TabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		4F6914811A8C041D00B8FFCE /* NowTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowTableViewController.swift; sourceTree = "<group>"; };
 		4F6914831A8C085300B8FFCE /* Video@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Video@3x.png"; sourceTree = "<group>"; };
 		4F6914841A8C085300B8FFCE /* Calender@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Calender@3x.png"; sourceTree = "<group>"; };
@@ -165,6 +169,8 @@
 				4FAFF8EF1A8C036A00864078 /* Source */,
 				4FAFF8EA1A8C002800864078 /* MovieStarts.entitlements */,
 				4FAFF8CE1A8BFFE500864078 /* Main.storyboard */,
+				4F63E6411A9D2A8B00528FB3 /* TabBarController.swift */,
+				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
 				4FAFF8D11A8BFFE500864078 /* Images.xcassets */,
 				4FAFF8D31A8BFFE500864078 /* LaunchScreen.xib */,
 				4FAFF8C61A8BFFE500864078 /* Supporting Files */,
@@ -297,8 +303,10 @@
 				4FECDF201A8FE27D00F84A52 /* Database.swift in Sources */,
 				4F87F9261A8DEE31001869A1 /* Constants.swift in Sources */,
 				4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */,
+				4F63E6421A9D2A8B00528FB3 /* TabBarController.swift in Sources */,
 				4F6914961A8C09BA00B8FFCE /* UpcomingTableViewController.swift in Sources */,
 				4F63E61E1A992BCA00528FB3 /* DatabaseHelper.swift in Sources */,
+				4F63E6401A9D24BA00528FB3 /* StartViewController.swift in Sources */,
 				4FAFF8C91A8BFFE500864078 /* AppDelegate.swift in Sources */,
 				4F6914821A8C041D00B8FFCE /* NowTableViewController.swift in Sources */,
 				4F6914981A8C09D300B8FFCE /* SettingsViewController.swift in Sources */,

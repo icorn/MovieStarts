@@ -17,18 +17,13 @@ class NowTableViewController: UITableViewController, UITableViewDelegate, UITabl
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
-		
-		var database = Database(recordType: Constants.RECORD_TYPE_USA)
 
-		database.getAllMovies(
-			{ (movies: [MovieRecord]?) in
-				self.movies = movies
-				self.tableView.reloadData()
-			},
-			errorHandler: { (errorMessage: String) in
-				println(errorMessage)
-			}
-		)
+		var tabBarController = self.parentViewController as? TabBarController
+		
+		if let saveTabBarController = tabBarController {
+			self.movies = saveTabBarController.movies
+			self.tableView.reloadData()
+		}
     }
 	
 	

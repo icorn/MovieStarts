@@ -116,23 +116,4 @@ class DatabaseHelper {
 	}
 	
 	
-   /**
-	* Finishes the process: Writes the movies to device, stores the latest modification date, and calls handler
-	*/
-	class func finishMovies(dictArray: [NSDictionary], ckrecordArray: [CKRecord], documentsMoviePath: String,
-		completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
-			
-			// write it to device
-			if ((dictArray as NSArray).writeToFile(documentsMoviePath, atomically: true) == false) {
-				errorHandler(errorMessage: "Error writing movies-file")
-				return
-			}
-			
-			// and store the latest modification-date of the records
-			DatabaseHelper.storeLastModification(ckrecordArray)
-			
-			// success
-			completionHandler(movies: DatabaseHelper.movieDictsToMovieRecords(dictArray as NSArray))
-	}
-	
 }

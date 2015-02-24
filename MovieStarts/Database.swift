@@ -8,12 +8,18 @@
 
 import Foundation
 import CloudKit
+import UIKit
+
 
 class Database {
 	
 	var recordType: String
 	var documentsMoviePath: String
 	var loadedDictArray: [NSDictionary]?
+	var parentView: UIView?
+	
+//	var activityIndicator: UIActivityIndicatorView?
+	var activityView: UIView?
 	
 	var cloudKitContainer: CKContainer
 	var cloudKitDatabase: CKDatabase
@@ -32,10 +38,11 @@ class Database {
 		self.cloudKitDatabase = cloudKitContainer.publicCloudDatabase
 	}
 	
-	func getAllMovies(completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
+	func getAllMovies(parentView: UIView, completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
 		
 		self.completionHandler = completionHandler
 		self.errorHandler = errorHandler
+		self.parentView = parentView
 		
 		// try to load movies from device
 		
@@ -64,6 +71,8 @@ class Database {
 
 					println("Getting records after modification date \(saveModDate)")
 					
+					self.startActivityIndicator(title: "Updating movies...")
+					
 					var predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
 					var query = CKQuery(recordType: self.recordType, predicate: predicate)
 					let queryOperation = CKQueryOperation(query: query)
@@ -80,6 +89,8 @@ class Database {
 		}
 		else {
 			// movies are not on the device: get them from the cloud
+
+			self.startActivityIndicator(title: "Loading movies...")
 			
 			let predicate = NSPredicate(value: true)
 			let query = CKQuery(recordType: self.recordType, predicate: predicate)
@@ -90,6 +101,73 @@ class Database {
 			self.cloudKitDatabase.addOperation(queryOperation)
 		}
 	}
+	
+	func startActivityIndicator(title: String? = nil) {
+		if let saveParentView = self.parentView {
+			
+			if (title != nil) {
+				var labelWidth = (title! as NSString).sizeWithAttributes([NSFontAttributeName : UIFont.systemFontOfSize(16)]).width
+				var viewWidth = labelWidth + 20
+				
+				self.activityView = UIView(frame:
+					CGRect(x: saveParentView.frame.width / 2 - viewWidth / 2, y: saveParentView.frame.height / 2 - 50, width: viewWidth, height: 100))
+				self.activityView?.layer.cornerRadius = 15
+				self.activityView?.backgroundColor = UIColor.blackColor()
+				var spinner = UIActivityIndicatorView(frame: CGRect(x: viewWidth/2 - 20, y: 20, width: 40, height: 40))
+				spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+				spinner.startAnimating()
+				var msg = UILabel(frame: CGRect(x: 10, y: 75, width: labelWidth, height: 20))
+				msg.text = title
+				msg.font = UIFont.systemFontOfSize(14)
+				msg.textAlignment = NSTextAlignment.Center
+				msg.textColor = UIColor.whiteColor()
+				msg.backgroundColor = UIColor.clearColor()
+				self.activityView?.opaque = false
+				self.activityView?.backgroundColor = UIColor.blackColor()
+				self.activityView?.addSubview(spinner)
+				self.activityView?.addSubview(msg)
+				saveParentView.addSubview(activityView!)
+			}
+			else {
+				var viewWidth: CGFloat = 80.0
+				self.activityView = UIView(frame: CGRect(x: saveParentView.frame.width/2 - viewWidth/2, y: saveParentView.frame.height/2 - 20, width: viewWidth, height: viewWidth))
+				self.activityView?.layer.cornerRadius = 15
+				self.activityView?.backgroundColor = UIColor.blackColor()
+				var spinner = UIActivityIndicatorView(frame: CGRect(x: viewWidth/2 - 20, y: 20, width: 40, height: 40))
+				spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+				spinner.startAnimating()
+				self.activityView?.opaque = false
+				self.activityView?.backgroundColor = UIColor.blackColor()
+				self.activityView?.addSubview(spinner)
+				saveParentView.addSubview(activityView!)
+			}
+		}
+	}
+
+	func stopActivityIndicator() {
+		self.activityView?.removeFromSuperview()
+		self.activityView = nil
+	}
+
+	
+	func finishMovies(dictArray: [NSDictionary], ckrecordArray: [CKRecord], documentsMoviePath: String,
+		completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
+			
+			// write it to device
+			if ((dictArray as NSArray).writeToFile(documentsMoviePath, atomically: true) == false) {
+				self.stopActivityIndicator()
+				errorHandler(errorMessage: "Error writing movies-file")
+				return
+			}
+			
+			// and store the latest modification-date of the records
+			DatabaseHelper.storeLastModification(ckrecordArray)
+			
+			// success
+			self.stopActivityIndicator()
+			completionHandler(movies: DatabaseHelper.movieDictsToMovieRecords(dictArray as NSArray))
+	}
+	
 	
 	// MARK: callbacks for getting all movies
 	
@@ -102,6 +180,7 @@ class Database {
 			// all objects are here!
 
 			if (error != nil) {
+				stopActivityIndicator()
 				self.errorHandler?(errorMessage: "Error querying records: \(error!.code) (\(error!.localizedDescription))")
 				return
 			}
@@ -111,6 +190,7 @@ class Database {
 				var dictArray: [NSDictionary] = DatabaseHelper.ckrecordsToMovieDicts(self.allCKRecords)
 					
 				if (dictArray.isEmpty) {
+					stopActivityIndicator()
 					self.errorHandler?(errorMessage: "Error reading assets")
 					return
 				}
@@ -120,10 +200,11 @@ class Database {
 				
 				// finish movies
 				if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-					DatabaseHelper.finishMovies(dictArray, ckrecordArray: self.allCKRecords,
+					self.finishMovies(dictArray, ckrecordArray: self.allCKRecords,
 						documentsMoviePath: self.documentsMoviePath, self.completionHandler!, self.errorHandler!)
 				}
 				else {
+					stopActivityIndicator()
 					self.errorHandler?(errorMessage: "One of the handlers is nil!")
 					return
 				}
@@ -150,6 +231,7 @@ class Database {
 			// all objects are here!
 
 			if (error != nil) {
+				self.stopActivityIndicator()
 				self.errorHandler?(errorMessage: "Error querying updated records: \(error!.code) (\(error!.localizedDescription))")
 				return
 			}
@@ -168,16 +250,18 @@ class Database {
 					
 					// finish movies
 					if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-						DatabaseHelper.finishMovies(self.loadedDictArray!, ckrecordArray: self.updatedCKRecords,
+						self.finishMovies(self.loadedDictArray!, ckrecordArray: self.updatedCKRecords,
 							documentsMoviePath: self.documentsMoviePath, self.completionHandler!, self.errorHandler!)
 					}
 					else {
+						self.stopActivityIndicator()
 						self.errorHandler?(errorMessage: "One of the handlers is nil!")
 						return
 					}
 				}
 				else {
 					// no updated movies
+					self.stopActivityIndicator()
 					if let saveCompletionHandler = self.completionHandler {
 						saveCompletionHandler(movies: DatabaseHelper.movieDictsToMovieRecords(self.loadedDictArray!))
 					}
