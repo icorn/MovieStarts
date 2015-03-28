@@ -5,3 +5,14 @@
   Created by Oliver Eichhorn on 22.02.15.
   Copyright (c) 2015 Oliver Eichhorn. All rights reserved.
 */
+
+"NowPlaying"		= "Now Playing";
+"Upcoming"			= "Upcoming";
+"Settings"			= "Settings";
+"UpdatingMovies"	= "Updating movies...";
+"LoadingMovies"		= "Loading movies...";
+
+"Actors"			= "Actors";
+"Directors"			= "Directors";
+"Director"			= "Director";
+"Synopsis"			= "Plot";

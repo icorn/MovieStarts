@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-		// Override point for customization after application launch.
 		return true
 	}
 
@@ -42,5 +42,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 
+/*  Just a test
+
+	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
+		var cloudKitNotification = CKNotification(fromRemoteNotificationDictionary: userInfo)
+		var alertBody = cloudKitNotification.alertBody
+
+		if (cloudKitNotification.notificationType == CKNotificationType.Query) {
+		   	var recordID = (cloudKitNotification as CKQueryNotification).recordID
+			var av = UIAlertView(title: "DB", message: "Change in \(recordID.recordName)", delegate: nil, cancelButtonTitle: "OK")
+			av.show()
+		}
+	}
+*/
+	
+	
 }
 

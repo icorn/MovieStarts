@@ -8,164 +8,205 @@
 
 import Foundation
 import CloudKit
-import UIKit
 
 
 class Database {
 	
 	var recordType: String
-	var documentsMoviePath: String
+	var moviesPlistPath: String?
+	var moviesPlistFile: String?
 	var loadedDictArray: [NSDictionary]?
-	var parentView: UIView?
-	
-//	var activityIndicator: UIActivityIndicatorView?
-	var activityView: UIView?
-	
+	var totalNumberOfRecordsFromCloud: Int?
+
 	var cloudKitContainer: CKContainer
 	var cloudKitDatabase: CKDatabase
 	
 	var completionHandler: ((movies: [MovieRecord]?) -> ())?
 	var errorHandler: ((errorMessage: String) -> ())?
+	var showIndicator: ((updating: Bool, showProgress: Bool) -> ())?
+	var stopIndicator: (() -> ())?
+	var updateIndicator: ((progress: Float) -> ())?
 	
 	var allCKRecords: [CKRecord] = []
 	var updatedCKRecords: [CKRecord] = []
 
+	let userDefaults = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)
+	
 	
 	init(recordType: String) {
 		self.recordType = recordType
-		self.documentsMoviePath = Constants.DOCUMENTS_FOLDER.stringByAppendingPathComponent(recordType + ".plist")
+		var fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+
+		if ((fileUrl != nil) && (fileUrl!.path != nil)) {
+			self.moviesPlistPath = fileUrl!.path!
+		}
+		
 		self.cloudKitContainer = CKContainer(identifier: Constants.CLOUDKIT_CONTAINER_ID)
 		self.cloudKitDatabase = cloudKitContainer.publicCloudDatabase
 	}
 	
-	func getAllMovies(parentView: UIView, completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
+	func getAllMovies(	completionHandler: (movies: [MovieRecord]?) -> (),
+						errorHandler: (errorMessage: String) -> (),
+						showIndicator: ((updating: Bool, showProgress: Bool) -> ())?,
+						stopIndicator: (() -> ())?,
+						updateIndicator: ((progress: Float) -> ())?)
+	{
 		
-		self.completionHandler = completionHandler
-		self.errorHandler = errorHandler
-		self.parentView = parentView
+		self.completionHandler 	= completionHandler
+		self.errorHandler 		= errorHandler
+		self.showIndicator		= showIndicator
+		self.stopIndicator		= stopIndicator
+		self.updateIndicator	= updateIndicator
 		
-		// try to load movies from device
-		
-		self.loadedDictArray = NSArray(contentsOfFile: documentsMoviePath) as? [NSDictionary]
+		if let saveMoviesPlistPath = self.moviesPlistPath {
+			// try to load movies from device
+			self.moviesPlistFile = saveMoviesPlistPath.stringByAppendingPathComponent(self.recordType + ".plist")
+			self.loadedDictArray = NSArray(contentsOfFile: moviesPlistFile!) as? [NSDictionary]
 
-		if (self.loadedDictArray != nil) {
-			
-			// successfully loaded movies from device. Should we search for updated movies?
-
-			var getUpdatesFlag = true
-			var latestUpdate: NSDate? = NSUserDefaults.standardUserDefaults().objectForKey(Constants.PREFS_LATEST_DB_UPDATE_CHECK) as NSDate?
-			
-			if let saveLatestUpdate: NSDate = latestUpdate {
-				var daysSinceLastUpdate = abs(Int(saveLatestUpdate.timeIntervalSinceNow)) / 60 / 60 / 24
+			if (self.loadedDictArray != nil) {
 				
-				if (daysSinceLastUpdate < Constants.DAYS_TILL_DB_UPDATE) {
-					getUpdatesFlag = false
+				// successfully loaded movies from device. Should we search for updated movies?
+
+				var getUpdatesFlag = true
+				
+/* WIEDER REIN!!
+				var latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_UPDATE_CHECK) as NSDate?
+				
+				if let saveLatestUpdate: NSDate = latestUpdate {
+					var daysSinceLastUpdate = abs(Int(saveLatestUpdate.timeIntervalSinceNow)) / 60 / 60 / 24
+					
+					if (daysSinceLastUpdate < Constants.DAYS_TILL_DB_UPDATE) {
+						getUpdatesFlag = false
+					}
 				}
-			}
-			
-			if (getUpdatesFlag) {
-				// get updates from the cloud
-				var latestModDate: NSDate? = NSUserDefaults.standardUserDefaults().objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as NSDate?
+*/
+				
+				if (getUpdatesFlag) {
+					// get updates from the cloud
+					var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as NSDate?
 
-				if let saveModDate: NSDate = latestModDate {
+					if let saveModDate: NSDate = latestModDate {
 
-					println("Getting records after modification date \(saveModDate)")
-					
-					self.startActivityIndicator(title: "Updating movies...")
-					
-					var predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
-					var query = CKQuery(recordType: self.recordType, predicate: predicate)
-					let queryOperation = CKQueryOperation(query: query)
-					
-					queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
-					queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
-					self.cloudKitDatabase.addOperation(queryOperation)
+						println("Getting records after modification date \(saveModDate)")
+						
+						if let saveShowIndicator = self.showIndicator {
+							dispatch_async(dispatch_get_main_queue()) {
+								saveShowIndicator(updating: true, showProgress: false)
+							}
+						}
+						
+						var predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
+						var query = CKQuery(recordType: self.recordType, predicate: predicate)
+						let queryOperation = CKQueryOperation(query: query)
+						
+						queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
+						queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
+						self.cloudKitDatabase.addOperation(queryOperation)
+					}
+				}
+				else {
+					// no updates wanted, just return the stuff from the file
+					completionHandler(movies: DatabaseHelper.movieDictsToMovieRecords(loadedDictArray!))
 				}
 			}
 			else {
-				// no updates wanted, just return the stuff from the file
-				completionHandler(movies: DatabaseHelper.movieDictsToMovieRecords(loadedDictArray!))
+				// movies are not on the device: get them from the cloud
+				
+				// first get number of records for nice progress display
+
+				var recordId = CKRecordID(recordName: Constants.RECORD_ID_RESULT_USA)
+				
+				self.cloudKitDatabase.fetchRecordWithID(recordId, completionHandler: { (record: CKRecord!, error: NSError!) in
+					
+					if (error != nil) {
+						println("Error getting number of records: \(error!.code) (\(error!.localizedDescription))")
+					}
+					else if (record != nil) {
+						self.totalNumberOfRecordsFromCloud = record!.objectForKey(Constants.DB_ID_NUMBER_OF_RECORDS) as? Int
+					}
+
+					if let saveShowIndicator = self.showIndicator {
+						dispatch_async(dispatch_get_main_queue()) {
+							saveShowIndicator(updating: false, showProgress: self.totalNumberOfRecordsFromCloud != nil)
+						}
+					}
+					
+					let predicate = NSPredicate(value: true)
+					let query = CKQuery(recordType: self.recordType, predicate: predicate)
+					let queryOperation = CKQueryOperation(query: query)
+					
+					queryOperation.recordFetchedBlock = self.recordFetchedAllMoviesCallback
+					queryOperation.queryCompletionBlock = self.queryCompleteAllMoviesCallback
+					queryOperation.resultsLimit = 10
+					self.cloudKitDatabase.addOperation(queryOperation)
+				})
 			}
 		}
 		else {
-			// movies are not on the device: get them from the cloud
-
-			self.startActivityIndicator(title: "Loading movies...")
-			
-			let predicate = NSPredicate(value: true)
-			let query = CKQuery(recordType: self.recordType, predicate: predicate)
-			let queryOperation = CKQueryOperation(query: query)
-				
-			queryOperation.recordFetchedBlock = recordFetchedAllMoviesCallback
-			queryOperation.queryCompletionBlock = queryCompleteAllMoviesCallback
-			self.cloudKitDatabase.addOperation(queryOperation)
+			println("No group folder found")
+			errorHandler(errorMessage: "No group folder found")
 		}
 	}
 	
-	func startActivityIndicator(title: String? = nil) {
-		if let saveParentView = self.parentView {
-			
-			if (title != nil) {
-				var labelWidth = (title! as NSString).sizeWithAttributes([NSFontAttributeName : UIFont.systemFontOfSize(16)]).width
-				var viewWidth = labelWidth + 20
+
+/*
+	func setUpSubscription() {
+		
+		// unused. Called in StartViewController.viewDidAppear()
+		
+		self.cloudKitDatabase.fetchSubscriptionWithID(Constants.SUBSCRIPTION_ID_USA) { subscription, error in
+			if (subscription == nil) {
+				// we have no subscription: make it!
 				
-				self.activityView = UIView(frame:
-					CGRect(x: saveParentView.frame.width / 2 - viewWidth / 2, y: saveParentView.frame.height / 2 - 50, width: viewWidth, height: 100))
-				self.activityView?.layer.cornerRadius = 15
-				self.activityView?.backgroundColor = UIColor.blackColor()
-				var spinner = UIActivityIndicatorView(frame: CGRect(x: viewWidth/2 - 20, y: 20, width: 40, height: 40))
-				spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
-				spinner.startAnimating()
-				var msg = UILabel(frame: CGRect(x: 10, y: 75, width: labelWidth, height: 20))
-				msg.text = title
-				msg.font = UIFont.systemFontOfSize(14)
-				msg.textAlignment = NSTextAlignment.Center
-				msg.textColor = UIColor.whiteColor()
-				msg.backgroundColor = UIColor.clearColor()
-				self.activityView?.opaque = false
-				self.activityView?.backgroundColor = UIColor.blackColor()
-				self.activityView?.addSubview(spinner)
-				self.activityView?.addSubview(msg)
-				saveParentView.addSubview(activityView!)
-			}
-			else {
-				var viewWidth: CGFloat = 80.0
-				self.activityView = UIView(frame: CGRect(x: saveParentView.frame.width/2 - viewWidth/2, y: saveParentView.frame.height/2 - 20, width: viewWidth, height: viewWidth))
-				self.activityView?.layer.cornerRadius = 15
-				self.activityView?.backgroundColor = UIColor.blackColor()
-				var spinner = UIActivityIndicatorView(frame: CGRect(x: viewWidth/2 - 20, y: 20, width: 40, height: 40))
-				spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
-				spinner.startAnimating()
-				self.activityView?.opaque = false
-				self.activityView?.backgroundColor = UIColor.blackColor()
-				self.activityView?.addSubview(spinner)
-				saveParentView.addSubview(activityView!)
+				let predicate = NSPredicate(value: true)
+				let notificationInfo = CKNotificationInfo()
+				notificationInfo.shouldSendContentAvailable = true
+				
+				let subscription = CKSubscription(recordType: Constants.RECORD_TYPE_USA, predicate: predicate, subscriptionID: Constants.SUBSCRIPTION_ID_USA,
+				options: CKSubscriptionOptions.FiresOnRecordCreation | CKSubscriptionOptions.FiresOnRecordDeletion | CKSubscriptionOptions.FiresOnRecordUpdate)
+				
+				subscription.notificationInfo = notificationInfo
+
+				self.cloudKitDatabase.saveSubscription(subscription) { subscription, error in
+					if (error != nil) {
+						// TODO
+						println("Error adding subscriptions: \(error!.code) (\(error!.localizedDescription))")
+					}
+				}
 			}
 		}
 	}
-
-	func stopActivityIndicator() {
-		self.activityView?.removeFromSuperview()
-		self.activityView = nil
-	}
-
+*/
 	
-	func finishMovies(dictArray: [NSDictionary], ckrecordArray: [CKRecord], documentsMoviePath: String,
-		completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
+	
+	func finishMovies(allMoviesAsDictArray: [NSDictionary], updatedMoviesAsRecordArray: [CKRecord], completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
+
+		// write it to device
+		if ((allMoviesAsDictArray as NSArray).writeToFile(self.moviesPlistFile!, atomically: true) == false) {
 			
-			// write it to device
-			if ((dictArray as NSArray).writeToFile(documentsMoviePath, atomically: true) == false) {
-				self.stopActivityIndicator()
-				errorHandler(errorMessage: "Error writing movies-file")
-				return
+			if let saveStopIndicator = self.stopIndicator {
+				dispatch_async(dispatch_get_main_queue()) {
+					saveStopIndicator()
+				}
 			}
 			
-			// and store the latest modification-date of the records
-			DatabaseHelper.storeLastModification(ckrecordArray)
-			
-			// success
-			self.stopActivityIndicator()
-			completionHandler(movies: DatabaseHelper.movieDictsToMovieRecords(dictArray as NSArray))
+			errorHandler(errorMessage: "Error writing movies-file")
+			return
+		}
+		
+		// and store the latest modification-date of the records
+		if (updatedMoviesAsRecordArray.count > 0) {
+			DatabaseHelper.storeLastModification(updatedMoviesAsRecordArray)
+		}
+		
+		// success
+		if let saveStopIndicator = self.stopIndicator {
+			dispatch_async(dispatch_get_main_queue()) {
+				saveStopIndicator()
+			}
+		}
+		
+		completionHandler(movies: DatabaseHelper.movieDictsToMovieRecords(allMoviesAsDictArray as NSArray))
 	}
 	
 	
@@ -173,6 +214,19 @@ class Database {
 	
 	func recordFetchedAllMoviesCallback(record: CKRecord!) {
 		self.allCKRecords.append(record)
+		
+		if let saveRecordNumber = self.totalNumberOfRecordsFromCloud {
+			if ((self.allCKRecords.count % 5 == 0) || (self.allCKRecords.count == saveRecordNumber)) {
+				var percent = Float(self.allCKRecords.count) / Float(saveRecordNumber)
+				percent = (percent > 1.0) ? 1.0 : percent
+				
+				if let saveUpdateIndicator = self.updateIndicator {
+					dispatch_async(dispatch_get_main_queue()) {
+						saveUpdateIndicator(progress: percent)
+					}
+				}
+			}
+		}
 	}
 	
 	func queryCompleteAllMoviesCallback(cursor: CKQueryCursor!, error: NSError!) {
@@ -180,7 +234,11 @@ class Database {
 			// all objects are here!
 
 			if (error != nil) {
-				stopActivityIndicator()
+				if let saveStopIndicator = self.stopIndicator {
+					dispatch_async(dispatch_get_main_queue()) {
+						saveStopIndicator()
+					}
+				}
 				
 				// TODO: Error-Code 1 heißt u. a., dass der User nicht in iCloud eingeloggt ist
 				
@@ -193,21 +251,29 @@ class Database {
 				var dictArray: [NSDictionary] = DatabaseHelper.ckrecordsToMovieDicts(self.allCKRecords)
 					
 				if (dictArray.isEmpty) {
-					stopActivityIndicator()
+					if let saveStopIndicator = self.stopIndicator {
+						dispatch_async(dispatch_get_main_queue()) {
+							saveStopIndicator()
+						}
+					}
+					
 					self.errorHandler?(errorMessage: "Error reading assets")
 					return
 				}
 				
-				NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_UPDATE_CHECK)
-				NSUserDefaults.standardUserDefaults().synchronize()
+				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_UPDATE_CHECK)
+				userDefaults?.synchronize()
 				
 				// finish movies
 				if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-					self.finishMovies(dictArray, ckrecordArray: self.allCKRecords,
-						documentsMoviePath: self.documentsMoviePath, self.completionHandler!, self.errorHandler!)
+					self.finishMovies(dictArray, updatedMoviesAsRecordArray: self.allCKRecords, self.completionHandler!, self.errorHandler!)
 				}
 				else {
-					stopActivityIndicator()
+					if let saveStopIndicator = self.stopIndicator {
+						dispatch_async(dispatch_get_main_queue()) {
+							saveStopIndicator()
+						}
+					}
 					self.errorHandler?(errorMessage: "One of the handlers is nil!")
 					return
 				}
@@ -231,18 +297,24 @@ class Database {
 
 	func queryCompleteUpdatedMoviesCallback(cursor: CKQueryCursor!, error: NSError!) {
 		if (cursor == nil) {
-			// all objects are here!
+			// all updated records are here!
 
 			if (error != nil) {
-				self.stopActivityIndicator()
+				// there was an error
+				
+				if let saveStopIndicator = self.stopIndicator {
+					dispatch_async(dispatch_get_main_queue()) {
+						saveStopIndicator()
+					}
+				}
 				self.errorHandler?(errorMessage: "Error querying updated records: \(error!.code) (\(error!.localizedDescription))")
 				return
 			}
 			else {
 				// received records from the cloud
 				
-				NSUserDefaults.standardUserDefaults().setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_UPDATE_CHECK)
-				NSUserDefaults.standardUserDefaults().synchronize()
+				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_UPDATE_CHECK)
+				userDefaults?.synchronize()
 				
 				if (self.updatedCKRecords.count > 0) {
 					// generate an array of dictionaries
@@ -250,24 +322,24 @@ class Database {
 					
 					// merge both dict-arrays (the existing movies and the updated movies)
 					DatabaseHelper.joinDictArrays(&(self.loadedDictArray!), updatedMovies: updatedDictArray)
-					
-					// finish movies
-					if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-						self.finishMovies(self.loadedDictArray!, ckrecordArray: self.updatedCKRecords,
-							documentsMoviePath: self.documentsMoviePath, self.completionHandler!, self.errorHandler!)
-					}
-					else {
-						self.stopActivityIndicator()
-						self.errorHandler?(errorMessage: "One of the handlers is nil!")
-						return
-					}
+				}
+				
+				// delete all movies which were not updated and don't exist anymore in the cloud
+
+				self.cleanUpExistingMovies(&self.loadedDictArray!)
+				
+				// finish movies
+				if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
+					self.finishMovies(self.loadedDictArray!, updatedMoviesAsRecordArray: self.updatedCKRecords, self.completionHandler!, self.errorHandler!)
 				}
 				else {
-					// no updated movies
-					self.stopActivityIndicator()
-					if let saveCompletionHandler = self.completionHandler {
-						saveCompletionHandler(movies: DatabaseHelper.movieDictsToMovieRecords(self.loadedDictArray!))
+					if let saveStopIndicator = self.stopIndicator {
+						dispatch_async(dispatch_get_main_queue()) {
+							saveStopIndicator()
+						}
 					}
+					self.errorHandler?(errorMessage: "One of the handlers is nil!")
+					return
 				}
 			}
 		}
@@ -279,5 +351,29 @@ class Database {
 			self.cloudKitDatabase.addOperation(queryOperation)
 		}
 	}
+	
+	
+	private func cleanUpExistingMovies(inout existingMovies: [NSDictionary]) {
+		
+		var compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.MAX_DAYS_IN_THE_PAST) // 30 days ago
+		var oldNumberOfMovies = existingMovies.count
+		
+		println("Cleaning up old movies...")
+		
+		for (var index = existingMovies.count-1; index >= 0; index--) {
+			var releaseDate = existingMovies[index].objectForKey(Constants.DB_ID_RELEASE) as? NSDate
+			
+			if let saveDate = releaseDate {
+				if (saveDate.compare(compareDate) == NSComparisonResult.OrderedAscending) {
+					// movie is too old
+					println("   '\(existingMovies[index].objectForKey(Constants.DB_ID_TITLE))' (\(saveDate)) removed")
+					existingMovies.removeAtIndex(index)
+				}
+			}
+		}
+		
+		println("Clean up over, removed \(oldNumberOfMovies - existingMovies.count) movies from local file. Now we have \(existingMovies.count) movies.")
+	}
+
 }
 

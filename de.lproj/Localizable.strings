@@ -5,3 +5,14 @@
   Created by Oliver Eichhorn on 22.02.15.
   Copyright (c) 2015 Oliver Eichhorn. All rights reserved.
 */
+
+"NowPlaying"		= "Jetzt im Kino";
+"Upcoming"			= "Demnächst";
+"Settings"			= "Einstellungen";
+"UpdatingMovies"	= "Filme aktualisieren...";
+"LoadingMovies"		= "Filme laden...";
+
+"Actors"			= "Schauspieler";
+"Directors"			= "Regie";
+"Director"			= "Regie";
+"Synopsis"			= "Inhalt";

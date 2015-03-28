@@ -1,15 +1,201 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6221" systemVersion="13E28" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6213"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
     </dependencies>
     <scenes>
-        <!--Interface Controller-->
+        <!--MovieStarts-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController" customModuleProvider="target"/>
+                <controller identifier="StartScene" title="MovieStarts" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="MovieStarts_WatchKit_App" customModuleProvider="target">
+                    <items>
+                        <table alignment="left" id="CzZ-gN-qr0">
+                            <items>
+                                <tableRow identifier="StartSceneTableRow" id="xEK-tc-xZx" customClass="StartSceneTableRow" customModule="MovieStarts_WatchKit_Extension">
+                                    <group key="rootItem" width="1" alignment="left" id="3Mu-tL-SaC">
+                                        <items>
+                                            <imageView width="30" height="30" alignment="left" verticalAlignment="center" contentMode="center" id="8S9-Dl-8uM"/>
+                                            <label alignment="left" verticalAlignment="center" text="Label" numberOfLines="2" id="uXJ-Rf-Ode"/>
+                                        </items>
+                                        <edgeInsets key="margins" left="2" right="0.0" top="0.0" bottom="0.0"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="rowImage" destination="8S9-Dl-8uM" id="4Ds-u5-Ulx"/>
+                                        <outlet property="rowLabel" destination="uXJ-Rf-Ode" id="wft-9t-ygK"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="menuTable" destination="CzZ-gN-qr0" id="haH-Gp-3bS"/>
+                    </connections>
+                </controller>
             </objects>
+            <point key="canvasLocation" x="-112" y="445"/>
+        </scene>
+        <!--Now-->
+        <scene sceneID="fgc-Ka-DdK">
+            <objects>
+                <controller identifier="NowController" title="Now" id="Xgf-dg-tAv" customClass="NowInterfaceController" customModule="MovieStarts_WatchKit_Extension">
+                    <items>
+                        <table alignment="left" id="wuU-9T-uiJ">
+                            <items>
+                                <tableRow identifier="MovieListRowNow" id="s4E-Vc-uau" customClass="MovieListRowNow" customModule="MovieStarts_WatchKit_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" spacing="0.0" id="I5I-l0-64K">
+                                        <items>
+                                            <label width="1" alignment="left" verticalAlignment="center" text="TitleLabel" textAlignment="left" numberOfLines="2" id="faQ-65-knf">
+                                                <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                            </label>
+                                            <label width="1" alignment="left" verticalAlignment="center" text="DetailLabel" textAlignment="left" id="DuB-qy-UfO">
+                                                <color key="textColor" red="0.0" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                            </label>
+                                        </items>
+                                        <edgeInsets key="margins" left="4" right="0.0" top="1" bottom="1"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="detailLabel" destination="DuB-qy-UfO" id="otS-e9-soC"/>
+                                        <outlet property="titleLabel" destination="faQ-65-knf" id="Tme-ti-K8f"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="nowTable" destination="wuU-9T-uiJ" id="JSt-7o-R1v"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="88" y="317"/>
+        </scene>
+        <!--Upcoming-->
+        <scene sceneID="aTJ-1n-GMR">
+            <objects>
+                <controller identifier="UpcomingController" title="Upcoming" id="sQz-hR-BVP" customClass="UpcomingInterfaceController" customModule="MovieStarts_WatchKit_Extension">
+                    <items>
+                        <table alignment="left" id="saw-I9-tC7">
+                            <items>
+                                <tableRow identifier="MovieListRowUpcoming" id="4MM-6s-DOZ" customClass="MovieListRowUpcoming" customModule="MovieStarts_WatchKit_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" spacing="0.0" id="WUP-Ln-16Y">
+                                        <items>
+                                            <label width="1" alignment="left" verticalAlignment="center" text="TitleLabel" textAlignment="left" numberOfLines="3" id="8PV-R6-m4h">
+                                                <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                            </label>
+                                            <label width="1" alignment="left" verticalAlignment="center" text="DetailLabel" textAlignment="left" id="4PV-SL-JeI">
+                                                <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                            </label>
+                                        </items>
+                                        <edgeInsets key="margins" left="4" right="0.0" top="1" bottom="1"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="detailLabel" destination="4PV-SL-JeI" id="hGt-DX-jfa"/>
+                                        <outlet property="titleLabel" destination="8PV-R6-m4h" id="dM2-66-AsV"/>
+                                    </connections>
+                                </tableRow>
+                                <tableRow identifier="MovieDateRow" id="k9G-cQ-LJ4" customClass="MovieDateRow" customModule="MovieStarts_WatchKit_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" id="JaT-je-8bO">
+                                        <items>
+                                            <label alignment="left" text="DateLabel" id="mGs-Lz-d5H">
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                            </label>
+                                        </items>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="dateLabel" destination="mGs-Lz-d5H" id="74O-WI-I2w"/>
+                                    </connections>
+                                </tableRow>
+                            </items>
+                        </table>
+                    </items>
+                    <connections>
+                        <outlet property="upcomingTable" destination="saw-I9-tC7" id="JtN-If-K5f"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="88" y="564"/>
+        </scene>
+        <!--Details-->
+        <scene sceneID="GLE-nl-OLe">
+            <objects>
+                <controller identifier="DetailController" title="Details" id="VgH-m3-liD" customClass="DetailInterfaceController" customModule="MovieStarts_WatchKit_Extension">
+                    <items>
+                        <group width="1" alignment="left" layout="vertical" spacing="6" id="X1k-e6-mhD" userLabel="MainGroup">
+                            <items>
+                                <label width="1" alignment="left" text="titleLabel" textAlignment="left" numberOfLines="4" id="aX4-1k-Nxm">
+                                    <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                </label>
+                                <separator width="1" alignment="center" id="Qev-IP-WpN">
+                                    <color key="color" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                </separator>
+                                <group width="1" alignment="left" layout="vertical" spacing="2" id="BJw-gB-aDt" userLabel="DataGroup">
+                                    <items>
+                                        <label width="1" alignment="left" text="dataLabel" textAlignment="left" numberOfLines="4" id="oMW-9w-Eeu" userLabel="dataLabel">
+                                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                        </label>
+                                    </items>
+                                </group>
+                                <group width="1" alignment="left" layout="vertical" spacing="2" id="wm9-pi-Wsr" userLabel="DirectorGroup">
+                                    <items>
+                                        <label width="1" alignment="left" text="directorHeadlineLabel" textAlignment="left" id="Tu5-VV-slc">
+                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                        </label>
+                                        <label width="1" alignment="left" text="directorLabel" textAlignment="left" numberOfLines="5" id="E74-Zg-Aze">
+                                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                        </label>
+                                    </items>
+                                </group>
+                                <group width="1" alignment="left" layout="vertical" spacing="2" id="l1P-h3-fwI" userLabel="ActorGroup">
+                                    <items>
+                                        <label width="1" alignment="left" text="actorHeadlineLabel" textAlignment="left" id="TdL-Hc-Z8G" userLabel="actorHeadlineLabel">
+                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                        </label>
+                                        <label width="1" alignment="left" text="actorLabel" textAlignment="left" numberOfLines="8" id="3QJ-mr-3Lc" userLabel="actorLabel">
+                                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                        </label>
+                                    </items>
+                                </group>
+                                <group width="1" alignment="left" layout="vertical" spacing="2" id="xAO-Bp-2uR" userLabel="SynopsisGroup">
+                                    <items>
+                                        <label width="1" alignment="left" text="synopsisHeadlineLabel" textAlignment="left" id="dLG-cL-stv" userLabel="synopsisHeadlineLabel">
+                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                        </label>
+                                        <label width="1" alignment="left" text="synopsisLabel" textAlignment="left" numberOfLines="50" id="ZL8-o4-NdE" userLabel="synopsisLabel">
+                                            <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                        </label>
+                                    </items>
+                                </group>
+                                <imageView width="1" height="150" alignment="center" contentMode="scaleAspectFit" id="caO-AJ-zsm" userLabel="coverImage"/>
+                            </items>
+                        </group>
+                    </items>
+                    <edgeInsets key="margins" left="3" right="3" top="0.0" bottom="0.0"/>
+                    <connections>
+                        <outlet property="actorGroup" destination="l1P-h3-fwI" id="qeH-f1-pOW"/>
+                        <outlet property="actorHeadlineLabel" destination="TdL-Hc-Z8G" id="eee-aL-xjz"/>
+                        <outlet property="actorLabel" destination="3QJ-mr-3Lc" id="JEG-Pd-nJX"/>
+                        <outlet property="coverImage" destination="caO-AJ-zsm" id="E8a-Mf-XRW"/>
+                        <outlet property="dataGroup" destination="BJw-gB-aDt" id="6wc-XY-GKL"/>
+                        <outlet property="dataLabel" destination="oMW-9w-Eeu" id="dWb-gr-6I8"/>
+                        <outlet property="directorGroup" destination="wm9-pi-Wsr" id="u7H-ug-9O2"/>
+                        <outlet property="directorHeadlineLabel" destination="Tu5-VV-slc" id="sPM-ha-P7w"/>
+                        <outlet property="directorLabel" destination="E74-Zg-Aze" id="o6X-54-3Cs"/>
+                        <outlet property="separator" destination="Qev-IP-WpN" id="bIE-NN-IhD"/>
+                        <outlet property="synopsisGroup" destination="xAO-Bp-2uR" id="X4o-MM-Eje"/>
+                        <outlet property="synopsisHeadlineLabel" destination="dLG-cL-stv" id="btb-KM-Jj1"/>
+                        <outlet property="synopsisLabel" destination="ZL8-o4-NdE" id="P3h-EZ-LFK"/>
+                        <outlet property="titleLabel" destination="aX4-1k-Nxm" id="VbK-Gy-hTO"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="289" y="447"/>
         </scene>
     </scenes>
 </document>

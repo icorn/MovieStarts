@@ -65,8 +65,8 @@ class DatabaseHelper {
 			}
 		}
 		
-		NSUserDefaults.standardUserDefaults().setObject(latestModification, forKey: Constants.PREFS_LATEST_DB_MODIFICATION)
-		NSUserDefaults.standardUserDefaults().synchronize()
+		NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(latestModification, forKey: Constants.PREFS_LATEST_DB_MODIFICATION)
+		NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.synchronize()
 	}
 	
 	
