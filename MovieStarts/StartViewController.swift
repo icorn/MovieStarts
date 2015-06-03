@@ -25,7 +25,7 @@ class StartViewController: UIViewController {
 		if ((aboutViews != nil) && (aboutViews?.count > 0) && (aboutViews?[0] != nil) && (aboutViews?[0] is UIView)) {
 			aboutView = aboutViews![0] as? UIView
 			aboutView!.frame = CGRect(origin: self.view.frame.origin, size: self.view.frame.size)
-			self.view.addSubview(aboutViews![0] as UIView)
+			self.view.addSubview(aboutViews![0] as! UIView)
 		}
     }
 	

@@ -52,11 +52,21 @@ class NowTableViewController: UITableViewController, UITableViewDelegate, UITabl
     }
 
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("NowCell", forIndexPath: indexPath) as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("NowCell", forIndexPath: indexPath) as! UITableViewCell
 
 		cell.textLabel?.text = self.movies?[indexPath.row].origTitle
 
         return cell
     }
 
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		if let saveMovies = self.movies, saveStoryboard = self.storyboard {
+			var movieController: MovieViewController = saveStoryboard.instantiateViewControllerWithIdentifier("MovieViewController") as! MovieViewController
+			movieController.movie = saveMovies[indexPath.row]
+			self.presentViewController(movieController, animated: true, completion: nil)
+		}
+	}
+	
 }
+

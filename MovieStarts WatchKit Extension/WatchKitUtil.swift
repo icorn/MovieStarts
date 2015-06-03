@@ -19,7 +19,7 @@ class WatchKitUtil {
 			detailText += "\(movie.genres.first!) | "
 		}
 		
-		if (countElements(detailText) > 0) {
+		if (count(detailText) > 0) {
 			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor().predecessor())
 		}
 		
@@ -45,13 +45,13 @@ class WatchKitUtil {
 		
 		if (movie.productionCountries.count > 0) {
 			for country in movie.productionCountries {
-				detailText += WatchKitUtil.shortenCountryname(country) + ", "
+				detailText += MovieStartsUtil.shortenCountryname(country) + ", "
 			}
 
 			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor()) + " | "
 		}
 		
-		if (countElements(detailText) > 0) {
+		if (count(detailText) > 0) {
 			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor().predecessor())
 		}
 		
@@ -66,7 +66,7 @@ class WatchKitUtil {
 			detailText += "\(movie.runtime) m | "
 		}
 		
-		if ((movie.certification != nil) && (countElements(movie.certification!) > 0)) {
+		if ((movie.certification != nil) && (count(movie.certification!) > 0)) {
 			
 			var cert = movie.certification!
 			
@@ -79,19 +79,6 @@ class WatchKitUtil {
 		}
 		
 		return detailText
-	}
-	
-	
-	class func shortenCountryname(name: String) -> String {
-		
-		switch(name) {
-			case "United States of America":
-				return "USA"
-			case "United Kingdom":
-				return "UK"
-			default:
-				return name
-		}
 	}
 	
 }

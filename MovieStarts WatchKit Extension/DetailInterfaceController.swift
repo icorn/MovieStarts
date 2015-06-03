@@ -39,7 +39,7 @@ class DetailInterfaceController: WKInterfaceController {
 		
 		separator.setHeight(10.0)
 		
-		var movie: MovieRecord = (context as MovieRecord)
+		var movie: MovieRecord = (context as! MovieRecord)
 		
 		if (movie.title != nil) {
 			titleLabel.setText(movie.title!)
@@ -88,7 +88,7 @@ class DetailInterfaceController: WKInterfaceController {
 		}
 		
 		// synopsis
-		if ((movie.synopsis != nil) && (countElements(movie.synopsis!) > 0)) {
+		if ((movie.synopsis != nil) && (count(movie.synopsis!) > 0)) {
 			synopsisHeadlineLabel.setText(NSLocalizedString("Synopsis", comment: "") + ":")
 			synopsisLabel.setText(movie.synopsis!)
 		}

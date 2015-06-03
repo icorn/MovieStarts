@@ -19,7 +19,7 @@ class NowInterfaceController: WKInterfaceController {
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
 		
-		movies = (context as [MovieRecord])
+		movies = (context as! [MovieRecord])
 		
 		// set up the table
 		nowTable.setNumberOfRows(movies!.count, withRowType: "MovieListRowNow")

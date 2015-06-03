@@ -23,7 +23,7 @@ class UpcomingInterfaceController: WKInterfaceController {
         
 		// set up the table
 
-		var movies = (context as [MovieRecord])
+		var movies = (context as! [MovieRecord])
 		var oldDate = NSDate(timeIntervalSince1970: 0)
 		
 		var rowTypeArray: [String] = []
@@ -53,10 +53,10 @@ class UpcomingInterfaceController: WKInterfaceController {
 		for (index, content) in enumerate(rowContentArray) {
 			if (content is NSDate) {
 				let row: MovieDateRow? = upcomingTable.rowControllerAtIndex(index) as? MovieDateRow
-				row?.dateLabel.setText(movieDateToString(content as NSDate))
+				row?.dateLabel.setText(movieDateToString(content as! NSDate))
 			}
 			else if (content is MovieRecord) {
-				var movie = (content as MovieRecord)
+				var movie = (content as! MovieRecord)
 				let row: MovieListRowUpcoming? = upcomingTable.rowControllerAtIndex(index) as? MovieListRowUpcoming
 				row?.titleLabel.setText((movie.title != nil) ? movie.title! : movie.origTitle!)
 				row?.detailLabel.setText(WatchKitUtil.makeMovieDetailTitle(movie))
@@ -65,12 +65,13 @@ class UpcomingInterfaceController: WKInterfaceController {
     }
 	
 	private func movieDateToString(releaseDate: NSDate) -> String {
-		var gregorian = NSCalendar(calendarIdentifier: NSGregorianCalendar)
+		
+		var gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
 		gregorian?.timeZone = NSTimeZone(abbreviation: "GMT")!
 		var retval = ""
 		
 		if let saveGregorian = gregorian {
-			var components = saveGregorian.components(NSCalendarUnit.DayCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.YearCalendarUnit, fromDate: releaseDate)
+			var components = saveGregorian.components(NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitYear, fromDate: releaseDate)
 			retval = "\(components.month).\(components.day).\(components.year)"
 		}
 

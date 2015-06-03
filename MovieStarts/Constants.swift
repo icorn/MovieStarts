@@ -36,10 +36,10 @@ struct Constants {
 	
 	static let DB_ID_TMDB_ID				= "tmdbId"
 	static let DB_ID_ORIG_TITLE				= "origTitle"
-	static let DB_ID_POPULARITY				= "popularity"
+//	static let DB_ID_POPULARITY				= "popularity"
 	static let DB_ID_RUNTIME				= "runtime"
 	static let DB_ID_VOTE_AVERAGE			= "voteAverage"
-	static let DB_ID_VOTE_COUNT				= "voteCount"
+//	static let DB_ID_VOTE_COUNT				= "voteCount"
 	
 	static let DB_ID_TITLE					= "title"
 	static let DB_ID_SYNOPSIS				= "synopsis"

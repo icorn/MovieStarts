@@ -51,6 +51,7 @@
 		4F6F78F81AB2D92A0023246F /* WatchKitUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F78F71AB2D92A0023246F /* WatchKitUtil.swift */; };
 		4F6F78FB1AB3867D0023246F /* MovieDateRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F78FA1AB3867D0023246F /* MovieDateRow.swift */; };
 		4F6F78FD1AB388090023246F /* MovieListRowUpcoming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6F78FC1AB388090023246F /* MovieListRowUpcoming.swift */; };
+		4F7B49D51B04B77100F54454 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7B49D41B04B77100F54454 /* MovieViewController.swift */; };
 		4F7CCA581AB5ED6600A81FA8 /* DetailRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7CCA571AB5ED6600A81FA8 /* DetailRow.swift */; };
 		4F7CCA5A1AB5EE0000A81FA8 /* DetailInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7CCA591AB5EE0000A81FA8 /* DetailInterfaceController.swift */; };
 		4F8577521AAA469400638FB0 /* MovieRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FECDF211A9096A700F84A52 /* MovieRecord.swift */; };
@@ -75,6 +76,7 @@
 		4FE0FC961AB605A5008A30F5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6231A99CB5D00528FB3 /* Localizable.strings */; };
 		4FECDF201A8FE27D00F84A52 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FECDF1F1A8FE27D00F84A52 /* Database.swift */; };
 		4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FECDF211A9096A700F84A52 /* MovieRecord.swift */; };
+		4FEF42851B1F46A500AF0E16 /* MovieStartsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBB0D1A9E7EAF00C63FAF /* MovieStartsUtil.swift */; };
 		4FF0E54C1AAC4F5700CEB85D /* FileCleanerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF0E54B1AAC4F5700CEB85D /* FileCleanerOld.swift */; };
 /* End PBXBuildFile section */
 
@@ -157,6 +159,7 @@
 		4F6F78F71AB2D92A0023246F /* WatchKitUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchKitUtil.swift; sourceTree = "<group>"; };
 		4F6F78FA1AB3867D0023246F /* MovieDateRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDateRow.swift; sourceTree = "<group>"; };
 		4F6F78FC1AB388090023246F /* MovieListRowUpcoming.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieListRowUpcoming.swift; sourceTree = "<group>"; };
+		4F7B49D41B04B77100F54454 /* MovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieViewController.swift; path = ../MovieViewController.swift; sourceTree = "<group>"; };
 		4F7CCA571AB5ED6600A81FA8 /* DetailRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailRow.swift; sourceTree = "<group>"; };
 		4F7CCA591AB5EE0000A81FA8 /* DetailInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailInterfaceController.swift; sourceTree = "<group>"; };
 		4F87F9251A8DEE31001869A1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -320,6 +323,7 @@
 		4F87F9271A8DF0C1001869A1 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4F7B49D41B04B77100F54454 /* MovieViewController.swift */,
 				4F6914811A8C041D00B8FFCE /* NowTableViewController.swift */,
 				4F6914971A8C09D300B8FFCE /* SettingsViewController.swift */,
 				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
@@ -634,6 +638,7 @@
 				4F0CBADF1A9D324800C63FAF /* InterfaceController.swift in Sources */,
 				4F6F78FB1AB3867D0023246F /* MovieDateRow.swift in Sources */,
 				4FB45DB11AA843AA00B45979 /* StartSceneTableRow.swift in Sources */,
+				4FEF42851B1F46A500AF0E16 /* MovieStartsUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -641,6 +646,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F7B49D51B04B77100F54454 /* MovieViewController.swift in Sources */,
 				4F0CBB0E1A9E7EAF00C63FAF /* MovieStartsUtil.swift in Sources */,
 				4FECDF201A8FE27D00F84A52 /* Database.swift in Sources */,
 				4F87F9261A8DEE31001869A1 /* Constants.swift in Sources */,

@@ -19,7 +19,7 @@ class DatabaseHelper {
 		var movieRecordArray: [MovieRecord] = []
 		
 		for dict in dictArray {
-			movieRecordArray.append(MovieRecord(dict: dict as [String : AnyObject]))
+			movieRecordArray.append(MovieRecord(dict: dict as! [String : AnyObject]))
 		}
 		
 		return movieRecordArray

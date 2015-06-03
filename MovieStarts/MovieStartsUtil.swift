@@ -12,6 +12,18 @@ import UIKit
 
 class MovieStartsUtil {
 	
+	class func shortenCountryname(name: String) -> String {
+		
+		switch(name) {
+		case "United States of America":
+			return "USA"
+		case "United Kingdom":
+			return "UK"
+		default:
+			return name
+		}
+	}
+	
 /*
 	class func startActivityIndicator(parentView: UIView, title: String? = nil) -> UIView {
 		

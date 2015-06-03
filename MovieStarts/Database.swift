@@ -83,7 +83,7 @@ class Database {
 				
 				if (getUpdatesFlag) {
 					// get updates from the cloud
-					var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as NSDate?
+					var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as! NSDate?
 
 					if let saveModDate: NSDate = latestModDate {
 
@@ -178,7 +178,7 @@ class Database {
 	}
 */
 	
-	
+
 	func finishMovies(allMoviesAsDictArray: [NSDictionary], updatedMoviesAsRecordArray: [CKRecord], completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
 
 		// write it to device
@@ -266,7 +266,7 @@ class Database {
 				
 				// finish movies
 				if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-					self.finishMovies(dictArray, updatedMoviesAsRecordArray: self.allCKRecords, self.completionHandler!, self.errorHandler!)
+					self.finishMovies(dictArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: self.completionHandler!, errorHandler: self.errorHandler!)
 				}
 				else {
 					if let saveStopIndicator = self.stopIndicator {
@@ -330,7 +330,7 @@ class Database {
 				
 				// finish movies
 				if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-					self.finishMovies(self.loadedDictArray!, updatedMoviesAsRecordArray: self.updatedCKRecords, self.completionHandler!, self.errorHandler!)
+					self.finishMovies(self.loadedDictArray!, updatedMoviesAsRecordArray: self.updatedCKRecords, completionHandler: self.completionHandler!, errorHandler: self.errorHandler!)
 				}
 				else {
 					if let saveStopIndicator = self.stopIndicator {

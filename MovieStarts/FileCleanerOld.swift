@@ -45,7 +45,7 @@ class FileCleanerOld {
 		var movieIDsToIgnore: [Int] = []
 		
 		for movie in updatedMovies {
-			var tmdbId = movie.objectForKey(Constants.DB_ID_TMDB_ID) as Int?
+			var tmdbId = movie.objectForKey(Constants.DB_ID_TMDB_ID) as! Int?
 			
 			if let saveTmdbId = tmdbId {
 				movieIDsToIgnore.append(saveTmdbId)
@@ -59,7 +59,7 @@ class FileCleanerOld {
 		var movieIDsToCheck: [CKReference] = []
 		
 		for localMovie in allLocalMovies {
-			var tmdbId = localMovie.objectForKey(Constants.DB_ID_TMDB_ID) as Int?
+			var tmdbId = localMovie.objectForKey(Constants.DB_ID_TMDB_ID) as! Int?
 			var ignore = false
 			
 			if let saveTmdbId = tmdbId {
@@ -128,7 +128,7 @@ class FileCleanerOld {
 		
 		for deleteId in self.movieIDsToDelete {
 			for (index, existingMovie) in enumerate(existingMovies) {
-				var tmdbIdExisting = existingMovie.objectForKey(Constants.DB_ID_TMDB_ID) as Int?
+				var tmdbIdExisting = existingMovie.objectForKey(Constants.DB_ID_TMDB_ID) as! Int?
 				
 				if let saveTmdbIdExisting = tmdbIdExisting {
 					if (String(saveTmdbIdExisting) == deleteId) {

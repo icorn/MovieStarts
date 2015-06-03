@@ -51,7 +51,7 @@ class InterfaceController: WKInterfaceController {
 						else {
 							self.nowMovies.append(movie)
 							
-							if ((movie.voteCount > 10) && (movie.voteAverage >= 7.0)) {
+							if (movie.voteAverage >= 7.0) {
 								self.bestMovies.append(movie)
 							}
 						}
@@ -136,7 +136,7 @@ class InterfaceController: WKInterfaceController {
 		var movieRecordArray: [MovieRecord] = []
 		
 		for dict in dictArray {
-			movieRecordArray.append(MovieRecord(dict: dict as [String : AnyObject]))
+			movieRecordArray.append(MovieRecord(dict: dict as! [String : AnyObject]))
 		}
 		
 		return movieRecordArray
