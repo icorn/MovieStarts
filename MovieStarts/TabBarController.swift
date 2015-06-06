@@ -17,7 +17,7 @@ class TabBarController: UITabBarController {
 
 	override func viewDidLoad() {
         super.viewDidLoad()
-		
+/*
 		if let saveItems = self.movieTabBar.items {
 			if (saveItems.count == 3) {
 				(saveItems[0] as! UITabBarItem).title = NSLocalizedString("NowPlaying", comment: "")
@@ -25,6 +25,7 @@ class TabBarController: UITabBarController {
 				(saveItems[2] as! UITabBarItem).title = NSLocalizedString("Settings", comment: "")
 			}
 		}
+*/
     }
 
     override func didReceiveMemoryWarning() {
