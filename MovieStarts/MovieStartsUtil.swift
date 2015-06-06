@@ -12,6 +12,13 @@ import UIKit
 
 class MovieStartsUtil {
 	
+	/**
+		Shortens the given country name.
+	
+		:param:	name	the country name to be shortened
+	
+		:returns: the shortened country name (often the same as the input name)
+	*/
 	class func shortenCountryname(name: String) -> String {
 		
 		switch(name) {
@@ -23,6 +30,67 @@ class MovieStartsUtil {
 			return name
 		}
 	}
+	
+	
+	/**
+		Generates the subtitle for the detail view of a movie.
+	
+		:param:	movie	the MovieRecord object to generate the subtitle for
+	
+		:returns: the generated subtitle, consting of the runtime and the production countries
+	*/
+	class func generateDetailSubtitle(movie: MovieRecord) -> String {
+		
+		var detailText = ""
+		
+		// add runtime 
+		
+		if (movie.runtime > 0) {
+			detailText += "\(movie.runtime) min | "
+		}
+		
+		// add countries
+		
+		if (movie.productionCountries.count > 0) {
+			for country in movie.productionCountries {
+				detailText += MovieStartsUtil.shortenCountryname(country) + ", "
+			}
+		}
+		
+		if (count(detailText) > 0) {
+			// remove last two characters
+			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor())
+		}
+		
+		return detailText
+	}
+	
+	
+	/**
+		Generates the string of call genres of a movie.
+	
+		:param:	movie	the MovieRecord object to generate the subtitle for
+	
+		:returns: the generated string consisting of the movies genres
+	*/
+	class func generateGenreString(movie: MovieRecord) -> String {
+		
+		var genreText = ""
+		
+		if (movie.genres.count > 0) {
+			
+			for genre in movie.genres {
+				genreText += genre + ", "
+			}
+		}
+		
+		if (count(genreText) > 0) {
+			genreText = genreText.substringToIndex(genreText.endIndex.predecessor().predecessor())
+		}
+		
+		return genreText
+	}
+
 	
 /*
 	class func startActivityIndicator(parentView: UIView, title: String? = nil) -> UIView {

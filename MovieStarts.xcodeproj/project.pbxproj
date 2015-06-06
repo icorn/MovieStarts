@@ -23,6 +23,27 @@
 		4F0CBB0A1A9D353800C63FAF /* icon44@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0CBB061A9D353800C63FAF /* icon44@2x.png */; };
 		4F0CBB0C1A9DC0BD00C63FAF /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAFF8EB1A8C002B00864078 /* CloudKit.framework */; };
 		4F0CBB0E1A9E7EAF00C63FAF /* MovieStartsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBB0D1A9E7EAF00C63FAF /* MovieStartsUtil.swift */; };
+		4F3EC6D41B20ACB4003C48E4 /* CertificateLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */; };
+		4F3EC6E91B23580A003C48E4 /* certificateNR@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D51B23580A003C48E4 /* certificateNR@2x.png */; };
+		4F3EC6EA1B23580A003C48E4 /* certificateNR.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D61B23580A003C48E4 /* certificateNR.png */; };
+		4F3EC6EB1B23580A003C48E4 /* certificateG.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D71B23580A003C48E4 /* certificateG.png */; };
+		4F3EC6EC1B23580A003C48E4 /* certificateR@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D81B23580A003C48E4 /* certificateR@4x.png */; };
+		4F3EC6ED1B23580A003C48E4 /* certificatePG.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D91B23580A003C48E4 /* certificatePG.png */; };
+		4F3EC6EE1B23580A003C48E4 /* certificateNR@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6DA1B23580A003C48E4 /* certificateNR@4x.png */; };
+		4F3EC6EF1B23580A003C48E4 /* certificateG@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6DB1B23580A003C48E4 /* certificateG@3x.png */; };
+		4F3EC6F01B23580A003C48E4 /* certificatePG-13@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6DC1B23580A003C48E4 /* certificatePG-13@4x.png */; };
+		4F3EC6F11B23580A003C48E4 /* certificateNR@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6DD1B23580A003C48E4 /* certificateNR@3x.png */; };
+		4F3EC6F21B23580A003C48E4 /* certificatePG-13@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6DE1B23580A003C48E4 /* certificatePG-13@3x.png */; };
+		4F3EC6F31B23580A003C48E4 /* certificateR.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6DF1B23580A003C48E4 /* certificateR.png */; };
+		4F3EC6F41B23580A003C48E4 /* certificatePG-13@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E01B23580A003C48E4 /* certificatePG-13@2x.png */; };
+		4F3EC6F51B23580A003C48E4 /* certificatePG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E11B23580A003C48E4 /* certificatePG@2x.png */; };
+		4F3EC6F61B23580A003C48E4 /* certificatePG-13.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E21B23580A003C48E4 /* certificatePG-13.png */; };
+		4F3EC6F71B23580A003C48E4 /* certificateR@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E31B23580A003C48E4 /* certificateR@2x.png */; };
+		4F3EC6F81B23580A003C48E4 /* certificateG@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E41B23580A003C48E4 /* certificateG@4x.png */; };
+		4F3EC6F91B23580A003C48E4 /* certificatePG@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E51B23580A003C48E4 /* certificatePG@4x.png */; };
+		4F3EC6FA1B23580A003C48E4 /* certificateG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E61B23580A003C48E4 /* certificateG@2x.png */; };
+		4F3EC6FB1B23580A003C48E4 /* certificateR@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E71B23580A003C48E4 /* certificateR@3x.png */; };
+		4F3EC6FC1B23580A003C48E4 /* certificatePG@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E81B23580A003C48E4 /* certificatePG@3x.png */; };
 		4F63E61E1A992BCA00528FB3 /* DatabaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */; };
 		4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6231A99CB5D00528FB3 /* Localizable.strings */; };
 		4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6281A9A3E1100528FB3 /* LaunchBackground.jpg */; };
@@ -77,6 +98,10 @@
 		4FECDF201A8FE27D00F84A52 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FECDF1F1A8FE27D00F84A52 /* Database.swift */; };
 		4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FECDF211A9096A700F84A52 /* MovieRecord.swift */; };
 		4FEF42851B1F46A500AF0E16 /* MovieStartsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0CBB0D1A9E7EAF00C63FAF /* MovieStartsUtil.swift */; };
+		4FEF429D1B1F701F00AF0E16 /* certificateNC-17@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEF42991B1F701F00AF0E16 /* certificateNC-17@3x.png */; };
+		4FEF429E1B1F701F00AF0E16 /* certificateNC-17.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEF429A1B1F701F00AF0E16 /* certificateNC-17.png */; };
+		4FEF429F1B1F701F00AF0E16 /* certificateNC-17@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEF429B1B1F701F00AF0E16 /* certificateNC-17@4x.png */; };
+		4FEF42A01B1F701F00AF0E16 /* certificateNC-17@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEF429C1B1F701F00AF0E16 /* certificateNC-17@2x.png */; };
 		4FF0E54C1AAC4F5700CEB85D /* FileCleanerOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF0E54B1AAC4F5700CEB85D /* FileCleanerOld.swift */; };
 /* End PBXBuildFile section */
 
@@ -130,6 +155,27 @@
 		4F0CBB061A9D353800C63FAF /* icon44@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon44@2x.png"; sourceTree = "<group>"; };
 		4F0CBB0B1A9DC0A600C63FAF /* MovieStarts WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MovieStarts WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		4F0CBB0D1A9E7EAF00C63FAF /* MovieStartsUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieStartsUtil.swift; sourceTree = "<group>"; };
+		4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificateLogo.swift; sourceTree = "<group>"; };
+		4F3EC6D51B23580A003C48E4 /* certificateNR@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNR@2x.png"; sourceTree = "<group>"; };
+		4F3EC6D61B23580A003C48E4 /* certificateNR.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = certificateNR.png; sourceTree = "<group>"; };
+		4F3EC6D71B23580A003C48E4 /* certificateG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = certificateG.png; sourceTree = "<group>"; };
+		4F3EC6D81B23580A003C48E4 /* certificateR@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateR@4x.png"; sourceTree = "<group>"; };
+		4F3EC6D91B23580A003C48E4 /* certificatePG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = certificatePG.png; sourceTree = "<group>"; };
+		4F3EC6DA1B23580A003C48E4 /* certificateNR@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNR@4x.png"; sourceTree = "<group>"; };
+		4F3EC6DB1B23580A003C48E4 /* certificateG@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateG@3x.png"; sourceTree = "<group>"; };
+		4F3EC6DC1B23580A003C48E4 /* certificatePG-13@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificatePG-13@4x.png"; sourceTree = "<group>"; };
+		4F3EC6DD1B23580A003C48E4 /* certificateNR@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNR@3x.png"; sourceTree = "<group>"; };
+		4F3EC6DE1B23580A003C48E4 /* certificatePG-13@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificatePG-13@3x.png"; sourceTree = "<group>"; };
+		4F3EC6DF1B23580A003C48E4 /* certificateR.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = certificateR.png; sourceTree = "<group>"; };
+		4F3EC6E01B23580A003C48E4 /* certificatePG-13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificatePG-13@2x.png"; sourceTree = "<group>"; };
+		4F3EC6E11B23580A003C48E4 /* certificatePG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificatePG@2x.png"; sourceTree = "<group>"; };
+		4F3EC6E21B23580A003C48E4 /* certificatePG-13.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificatePG-13.png"; sourceTree = "<group>"; };
+		4F3EC6E31B23580A003C48E4 /* certificateR@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateR@2x.png"; sourceTree = "<group>"; };
+		4F3EC6E41B23580A003C48E4 /* certificateG@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateG@4x.png"; sourceTree = "<group>"; };
+		4F3EC6E51B23580A003C48E4 /* certificatePG@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificatePG@4x.png"; sourceTree = "<group>"; };
+		4F3EC6E61B23580A003C48E4 /* certificateG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateG@2x.png"; sourceTree = "<group>"; };
+		4F3EC6E71B23580A003C48E4 /* certificateR@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateR@3x.png"; sourceTree = "<group>"; };
+		4F3EC6E81B23580A003C48E4 /* certificatePG@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificatePG@3x.png"; sourceTree = "<group>"; };
 		4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseHelper.swift; sourceTree = "<group>"; };
 		4F63E6251A99CB9E00528FB3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4F63E6271A99CBD400528FB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -184,6 +230,10 @@
 		4FB45DB01AA843AA00B45979 /* StartSceneTableRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StartSceneTableRow.swift; path = "../MovieStarts WatchKit App/StartSceneTableRow.swift"; sourceTree = "<group>"; };
 		4FECDF1F1A8FE27D00F84A52 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		4FECDF211A9096A700F84A52 /* MovieRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieRecord.swift; sourceTree = "<group>"; };
+		4FEF42991B1F701F00AF0E16 /* certificateNC-17@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNC-17@3x.png"; sourceTree = "<group>"; };
+		4FEF429A1B1F701F00AF0E16 /* certificateNC-17.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNC-17.png"; sourceTree = "<group>"; };
+		4FEF429B1B1F701F00AF0E16 /* certificateNC-17@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNC-17@4x.png"; sourceTree = "<group>"; };
+		4FEF429C1B1F701F00AF0E16 /* certificateNC-17@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNC-17@2x.png"; sourceTree = "<group>"; };
 		4FF0E54B1AAC4F5700CEB85D /* FileCleanerOld.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileCleanerOld.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -413,6 +463,7 @@
 		4FAFF8C61A8BFFE500864078 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4FEF428E1B1F677E00AF0E16 /* Certifications */,
 				4F63E6311A9A8C9D00528FB3 /* Icons */,
 				4F63E6321A9A8CAD00528FB3 /* In-App-Graphics */,
 				4FAFF8C71A8BFFE500864078 /* Info.plist */,
@@ -426,6 +477,7 @@
 			isa = PBXGroup;
 			children = (
 				4FAFF8C81A8BFFE500864078 /* AppDelegate.swift */,
+				4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */,
 				4F87F9251A8DEE31001869A1 /* Constants.swift */,
 				4FECDF1F1A8FE27D00F84A52 /* Database.swift */,
 				4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */,
@@ -435,6 +487,37 @@
 				4F87F9271A8DF0C1001869A1 /* View Controllers */,
 			);
 			name = Source;
+			sourceTree = "<group>";
+		};
+		4FEF428E1B1F677E00AF0E16 /* Certifications */ = {
+			isa = PBXGroup;
+			children = (
+				4F3EC6D71B23580A003C48E4 /* certificateG.png */,
+				4F3EC6E61B23580A003C48E4 /* certificateG@2x.png */,
+				4F3EC6DB1B23580A003C48E4 /* certificateG@3x.png */,
+				4F3EC6E41B23580A003C48E4 /* certificateG@4x.png */,
+				4FEF429A1B1F701F00AF0E16 /* certificateNC-17.png */,
+				4FEF429C1B1F701F00AF0E16 /* certificateNC-17@2x.png */,
+				4FEF42991B1F701F00AF0E16 /* certificateNC-17@3x.png */,
+				4FEF429B1B1F701F00AF0E16 /* certificateNC-17@4x.png */,
+				4F3EC6D61B23580A003C48E4 /* certificateNR.png */,
+				4F3EC6D51B23580A003C48E4 /* certificateNR@2x.png */,
+				4F3EC6DD1B23580A003C48E4 /* certificateNR@3x.png */,
+				4F3EC6DA1B23580A003C48E4 /* certificateNR@4x.png */,
+				4F3EC6E21B23580A003C48E4 /* certificatePG-13.png */,
+				4F3EC6E01B23580A003C48E4 /* certificatePG-13@2x.png */,
+				4F3EC6DE1B23580A003C48E4 /* certificatePG-13@3x.png */,
+				4F3EC6DC1B23580A003C48E4 /* certificatePG-13@4x.png */,
+				4F3EC6D91B23580A003C48E4 /* certificatePG.png */,
+				4F3EC6E11B23580A003C48E4 /* certificatePG@2x.png */,
+				4F3EC6E81B23580A003C48E4 /* certificatePG@3x.png */,
+				4F3EC6E51B23580A003C48E4 /* certificatePG@4x.png */,
+				4F3EC6DF1B23580A003C48E4 /* certificateR.png */,
+				4F3EC6E31B23580A003C48E4 /* certificateR@2x.png */,
+				4F3EC6E71B23580A003C48E4 /* certificateR@3x.png */,
+				4F3EC6D81B23580A003C48E4 /* certificateR@4x.png */,
+			);
+			name = Certifications;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -593,28 +676,52 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F3EC6FB1B23580A003C48E4 /* certificateR@3x.png in Resources */,
+				4F3EC6F21B23580A003C48E4 /* certificatePG-13@3x.png in Resources */,
 				4F6914921A8C085300B8FFCE /* Settings@3x.png in Resources */,
+				4F3EC6ED1B23580A003C48E4 /* certificatePG.png in Resources */,
 				4F69148F1A8C085300B8FFCE /* Calendar@2x.png in Resources */,
 				4FAFF8D01A8BFFE500864078 /* Main.storyboard in Resources */,
 				4F63E6301A9A416100528FB3 /* LaunchLogo@3x.png in Resources */,
 				4F63E62E1A9A416100528FB3 /* LaunchLogo@2x.png in Resources */,
 				4F94A93D1AA84E1000E5F27F /* Calendar@3x.png in Resources */,
+				4FEF429F1B1F701F00AF0E16 /* certificateNC-17@4x.png in Resources */,
+				4F3EC6EC1B23580A003C48E4 /* certificateR@4x.png in Resources */,
+				4F3EC6FA1B23580A003C48E4 /* certificateG@2x.png in Resources */,
+				4F3EC6EA1B23580A003C48E4 /* certificateNR.png in Resources */,
 				4F6914911A8C085300B8FFCE /* Video.png in Resources */,
+				4FEF429D1B1F701F00AF0E16 /* certificateNC-17@3x.png in Resources */,
+				4F3EC6F11B23580A003C48E4 /* certificateNR@3x.png in Resources */,
+				4F3EC6F51B23580A003C48E4 /* certificatePG@2x.png in Resources */,
+				4F3EC6EE1B23580A003C48E4 /* certificateNR@4x.png in Resources */,
+				4F3EC6F01B23580A003C48E4 /* certificatePG-13@4x.png in Resources */,
 				4F63E63C1A9A8CD100528FB3 /* icon60@3x.png in Resources */,
 				4F6914941A8C085300B8FFCE /* Video@2x.png in Resources */,
 				4F6914931A8C085300B8FFCE /* Settings.png in Resources */,
 				4F69148C1A8C085300B8FFCE /* Video@3x.png in Resources */,
 				4F63E63A1A9A8CD100528FB3 /* icon40@3x.png in Resources */,
 				4F63E63B1A9A8CD100528FB3 /* icon40@2x.png in Resources */,
+				4FEF42A01B1F701F00AF0E16 /* certificateNC-17@2x.png in Resources */,
+				4F3EC6F41B23580A003C48E4 /* certificatePG-13@2x.png in Resources */,
+				4F3EC6E91B23580A003C48E4 /* certificateNR@2x.png in Resources */,
+				4F3EC6FC1B23580A003C48E4 /* certificatePG@3x.png in Resources */,
 				4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */,
 				4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */,
 				4F63E6391A9A8CD100528FB3 /* icon29@3x.png in Resources */,
 				4F69148E1A8C085300B8FFCE /* Calendar.png in Resources */,
+				4F3EC6F31B23580A003C48E4 /* certificateR.png in Resources */,
+				4F3EC6F91B23580A003C48E4 /* certificatePG@4x.png in Resources */,
+				4F3EC6EB1B23580A003C48E4 /* certificateG.png in Resources */,
+				4FEF429E1B1F701F00AF0E16 /* certificateNC-17.png in Resources */,
 				4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */,
 				4F63E63D1A9A8CD100528FB3 /* icon60@2x.png in Resources */,
 				4F6914901A8C085300B8FFCE /* Settings@2x.png in Resources */,
+				4F3EC6F71B23580A003C48E4 /* certificateR@2x.png in Resources */,
+				4F3EC6F61B23580A003C48E4 /* certificatePG-13.png in Resources */,
 				4F63E62F1A9A416100528FB3 /* LaunchLogo.png in Resources */,
 				4FAFF8D51A8BFFE500864078 /* LaunchScreen.xib in Resources */,
+				4F3EC6F81B23580A003C48E4 /* certificateG@4x.png in Resources */,
+				4F3EC6EF1B23580A003C48E4 /* certificateG@3x.png in Resources */,
 				4FAFF8D21A8BFFE500864078 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -646,6 +753,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F3EC6D41B20ACB4003C48E4 /* CertificateLogo.swift in Sources */,
 				4F7B49D51B04B77100F54454 /* MovieViewController.swift in Sources */,
 				4F0CBB0E1A9E7EAF00C63FAF /* MovieStartsUtil.swift in Sources */,
 				4FECDF201A8FE27D00F84A52 /* Database.swift in Sources */,
