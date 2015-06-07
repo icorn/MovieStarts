@@ -64,26 +64,7 @@ class NowTableViewController: UITableViewController, UITableViewDelegate, UITabl
 		if let saveMovies = self.movies, saveStoryboard = self.storyboard {
 			var movieController: MovieViewController = saveStoryboard.instantiateViewControllerWithIdentifier("MovieViewController") as! MovieViewController
 			movieController.movie = saveMovies[indexPath.row]
-			
-//			self.presentViewController(movieController, animated: true, completion: nil)
-
 			navigationController?.pushViewController(movieController, animated: true)
-			
-/*
-
-			F3aInfoContent *infoContent = [[F3aInfoContent alloc] init];
-			infoContent.nid = ((F3aInfonid*)selectedObject).nid;
-			infoContent.nidString = ((F3aInfonid*)selectedObject).name;
-			
-			F3aFilmDetailTableController *filmDetailTableController = [self.storyboard instantiateViewControllerWithIdentifier:@"PersonMovieList"];
-			filmDetailTableController.infoContent = infoContent;
-			
-			[self.navigationController pushViewController:filmDetailTableController animated:YES];
-
-*/
-			
-			
-			
 		}
 	}
 	

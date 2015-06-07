@@ -13,6 +13,8 @@ class MovieViewController: UIViewController {
 
 	// outlets
 	
+	@IBOutlet weak var contentView: UIView!
+	@IBOutlet weak var scrollView: UIScrollView!
 	@IBOutlet weak var posterImageView: UIImageView!
 	@IBOutlet weak var titleLabel: UILabel!
 	@IBOutlet weak var runtimeCountriesLabel: UILabel!
@@ -36,6 +38,8 @@ class MovieViewController: UIViewController {
 	
 	// constraints
 	
+	@IBOutlet weak var contentViewWidthConstraint: NSLayoutConstraint!
+	@IBOutlet weak var scrollViewWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var certificateImageHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorHeadlineLabelHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2HeightConstraint: NSLayoutConstraint!
@@ -79,6 +83,10 @@ class MovieViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+
+		contentViewWidthConstraint.constant = view.frame.width
+		
+		// start to show all movie details
 		
 		actorLabels = [actorLabel1, actorLabel2, actorLabel3, actorLabel4, actorLabel5]
 		directorLabels = [directorLabel, directorLabel2]
@@ -201,7 +209,10 @@ class MovieViewController: UIViewController {
 	}
 
 	override func viewDidAppear(animated: Bool) {
+		// Resize the content size of the scrollview.
+		// The height was not correct - maybe the combination of scrollview, autolayout, and a dynamic label (storylabel)
 		
+		scrollView.contentSize = CGSize(width: scrollView.frame.width, height: storyLabel.frame.maxY + 16)
 	}
 	
 	override func didReceiveMemoryWarning() {
