@@ -35,11 +35,14 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel5: UILabel!
 	@IBOutlet weak var storyHeadlineLabel: UILabel!
 	@IBOutlet weak var storyLabel: UILabel!
+	@IBOutlet weak var imageLink1: UIImageView!
+	@IBOutlet weak var imageLink2: UIImageView!
+	@IBOutlet weak var imageLink3: UIImageView!
 	
 	// constraints
 	
+	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var contentViewWidthConstraint: NSLayoutConstraint!
-	@IBOutlet weak var scrollViewWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var certificateImageHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorHeadlineLabelHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2HeightConstraint: NSLayoutConstraint!
@@ -68,10 +71,7 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel4HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
 	
-	
 	var movie: MovieRecord?
-	var actorLabels: [UILabel] = []
-	var directorLabels: [UILabel] = []
 	var certificationDict: [String: CertificateLogo] = [
 		"R" 	: CertificateLogo(filename: "certificateR.png", height: 30),
 		"G" 	: CertificateLogo(filename: "certificateG.png", height: 30),
@@ -79,8 +79,8 @@ class MovieViewController: UIViewController {
 		"PG-13" : CertificateLogo(filename: "certificatePG-13.png", height: 30),
 		"NC-17" : CertificateLogo(filename: "certificateNC-17.png", height: 30)
 	]
-	
-	
+
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -88,8 +88,9 @@ class MovieViewController: UIViewController {
 		
 		// start to show all movie details
 		
-		actorLabels = [actorLabel1, actorLabel2, actorLabel3, actorLabel4, actorLabel5]
-		directorLabels = [directorLabel, directorLabel2]
+		var actorLabels = [actorLabel1, actorLabel2, actorLabel3, actorLabel4, actorLabel5]
+		var directorLabels = [directorLabel, directorLabel2]
+		var imageLinks = [imageLink1, imageLink2, imageLink3]
 		
 		if let saveMovie = movie {
 			
@@ -204,20 +205,67 @@ class MovieViewController: UIViewController {
 				storyLabel.text = synopsis
 			}
 			
+			// show links
+			
+			var currentImageLink = 0
+			
+			if (saveMovie.trailerIds.count > 0) {
+				// show youtube-link
+				
+				currentImageLink++
+			}
+			
+			if let imdbId = saveMovie.imdbId {
+				// show imdb-link
+				
+				var rec = UITapGestureRecognizer(target: self, action: Selector("imdbButtonTapped:"))
+				rec.numberOfTapsRequired = 1
+				imageLinks[currentImageLink].addGestureRecognizer(rec)
+				currentImageLink++
+			}
+			
+			if let tmdbId = saveMovie.tmdbId {
+				// show tmdb-link
+				
+			}
+			
 			updateViewConstraints()
 		}
 	}
-
+	
+	override func viewDidLayoutSubviews() {
+		if let navBarHeight = navigationController?.navigationBar.frame.height {
+			// Move the content down a bit: the height of the navbar plus the height of the status bar plus 20 (looks nicer).
+			// This is necessary, because both the status bar and the navbar are transparent.
+			posterImageTopSpaceConstraint.constant = 20 + navBarHeight + UIApplication.sharedApplication().statusBarFrame.size.height
+		}
+	}
+	
 	override func viewDidAppear(animated: Bool) {
 		// Resize the content size of the scrollview.
 		// The height was not correct - maybe the combination of scrollview, autolayout, and a dynamic label (storylabel)
-		
-		scrollView.contentSize = CGSize(width: scrollView.frame.width, height: storyLabel.frame.maxY + 16)
+
+		scrollView.contentSize = CGSize(width: scrollView.frame.width, height: imageLink1.frame.maxY + 16)
 	}
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 	}
+	
+	
+	// MARK: Button callbacks
+	
+	func imdbButtonTapped(recognizer: UITapGestureRecognizer) {
+		var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
+		
+		if let saveImdbId = movie?.imdbId {
+			webViewController.urlString = "http://www.imdb.com/title/\(saveImdbId)"
+			navigationController?.pushViewController(webViewController, animated: true)
+		}
+	}
+	
+	
+	// MARK: Helpers
 	
 	private final func setConstraintsToZero(constraints: NSLayoutConstraint...) {
 		for constraint in constraints {

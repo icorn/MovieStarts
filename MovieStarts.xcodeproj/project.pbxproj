@@ -44,6 +44,13 @@
 		4F3EC6FA1B23580A003C48E4 /* certificateG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E61B23580A003C48E4 /* certificateG@2x.png */; };
 		4F3EC6FB1B23580A003C48E4 /* certificateR@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E71B23580A003C48E4 /* certificateR@3x.png */; };
 		4F3EC6FC1B23580A003C48E4 /* certificatePG@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6E81B23580A003C48E4 /* certificatePG@3x.png */; };
+		4F3EC7001B24A147003C48E4 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EC6FF1B24A147003C48E4 /* WebViewController.swift */; };
+		4F3EC7071B24B35B003C48E4 /* WebViewRefresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7011B24B35B003C48E4 /* WebViewRefresh@2x.png */; };
+		4F3EC7081B24B35B003C48E4 /* WebViewForward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7021B24B35B003C48E4 /* WebViewForward@2x.png */; };
+		4F3EC7091B24B35B003C48E4 /* WebViewBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7031B24B35B003C48E4 /* WebViewBack@2x.png */; };
+		4F3EC70A1B24B35B003C48E4 /* WebViewForward.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7041B24B35B003C48E4 /* WebViewForward.png */; };
+		4F3EC70B1B24B35B003C48E4 /* WebViewRefresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7051B24B35B003C48E4 /* WebViewRefresh.png */; };
+		4F3EC70C1B24B35B003C48E4 /* WebViewBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7061B24B35B003C48E4 /* WebViewBack.png */; };
 		4F63E61E1A992BCA00528FB3 /* DatabaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */; };
 		4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6231A99CB5D00528FB3 /* Localizable.strings */; };
 		4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6281A9A3E1100528FB3 /* LaunchBackground.jpg */; };
@@ -176,6 +183,13 @@
 		4F3EC6E61B23580A003C48E4 /* certificateG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateG@2x.png"; sourceTree = "<group>"; };
 		4F3EC6E71B23580A003C48E4 /* certificateR@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateR@3x.png"; sourceTree = "<group>"; };
 		4F3EC6E81B23580A003C48E4 /* certificatePG@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificatePG@3x.png"; sourceTree = "<group>"; };
+		4F3EC6FF1B24A147003C48E4 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		4F3EC7011B24B35B003C48E4 /* WebViewRefresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WebViewRefresh@2x.png"; sourceTree = "<group>"; };
+		4F3EC7021B24B35B003C48E4 /* WebViewForward@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WebViewForward@2x.png"; sourceTree = "<group>"; };
+		4F3EC7031B24B35B003C48E4 /* WebViewBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WebViewBack@2x.png"; sourceTree = "<group>"; };
+		4F3EC7041B24B35B003C48E4 /* WebViewForward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WebViewForward.png; sourceTree = "<group>"; };
+		4F3EC7051B24B35B003C48E4 /* WebViewRefresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WebViewRefresh.png; sourceTree = "<group>"; };
+		4F3EC7061B24B35B003C48E4 /* WebViewBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WebViewBack.png; sourceTree = "<group>"; };
 		4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseHelper.swift; sourceTree = "<group>"; };
 		4F63E6251A99CB9E00528FB3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4F63E6271A99CBD400528FB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -347,6 +361,12 @@
 				4F6914881A8C085300B8FFCE /* Video.png */,
 				4F69148B1A8C085300B8FFCE /* Video@2x.png */,
 				4F6914831A8C085300B8FFCE /* Video@3x.png */,
+				4F3EC7061B24B35B003C48E4 /* WebViewBack.png */,
+				4F3EC7031B24B35B003C48E4 /* WebViewBack@2x.png */,
+				4F3EC7041B24B35B003C48E4 /* WebViewForward.png */,
+				4F3EC7021B24B35B003C48E4 /* WebViewForward@2x.png */,
+				4F3EC7051B24B35B003C48E4 /* WebViewRefresh.png */,
+				4F3EC7011B24B35B003C48E4 /* WebViewRefresh@2x.png */,
 			);
 			name = "In-App-Graphics";
 			sourceTree = "<group>";
@@ -379,6 +399,7 @@
 				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
 				4F63E6411A9D2A8B00528FB3 /* TabBarController.swift */,
 				4F6914951A8C09BA00B8FFCE /* UpcomingTableViewController.swift */,
+				4F3EC6FF1B24A147003C48E4 /* WebViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -677,6 +698,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F3EC6FB1B23580A003C48E4 /* certificateR@3x.png in Resources */,
+				4F3EC7091B24B35B003C48E4 /* WebViewBack@2x.png in Resources */,
 				4F3EC6F21B23580A003C48E4 /* certificatePG-13@3x.png in Resources */,
 				4F6914921A8C085300B8FFCE /* Settings@3x.png in Resources */,
 				4F3EC6ED1B23580A003C48E4 /* certificatePG.png in Resources */,
@@ -688,6 +710,7 @@
 				4FEF429F1B1F701F00AF0E16 /* certificateNC-17@4x.png in Resources */,
 				4F3EC6EC1B23580A003C48E4 /* certificateR@4x.png in Resources */,
 				4F3EC6FA1B23580A003C48E4 /* certificateG@2x.png in Resources */,
+				4F3EC7081B24B35B003C48E4 /* WebViewForward@2x.png in Resources */,
 				4F3EC6EA1B23580A003C48E4 /* certificateNR.png in Resources */,
 				4F6914911A8C085300B8FFCE /* Video.png in Resources */,
 				4FEF429D1B1F701F00AF0E16 /* certificateNC-17@3x.png in Resources */,
@@ -701,12 +724,14 @@
 				4F69148C1A8C085300B8FFCE /* Video@3x.png in Resources */,
 				4F63E63A1A9A8CD100528FB3 /* icon40@3x.png in Resources */,
 				4F63E63B1A9A8CD100528FB3 /* icon40@2x.png in Resources */,
+				4F3EC70C1B24B35B003C48E4 /* WebViewBack.png in Resources */,
 				4FEF42A01B1F701F00AF0E16 /* certificateNC-17@2x.png in Resources */,
 				4F3EC6F41B23580A003C48E4 /* certificatePG-13@2x.png in Resources */,
 				4F3EC6E91B23580A003C48E4 /* certificateNR@2x.png in Resources */,
 				4F3EC6FC1B23580A003C48E4 /* certificatePG@3x.png in Resources */,
 				4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */,
 				4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */,
+				4F3EC70B1B24B35B003C48E4 /* WebViewRefresh.png in Resources */,
 				4F63E6391A9A8CD100528FB3 /* icon29@3x.png in Resources */,
 				4F69148E1A8C085300B8FFCE /* Calendar.png in Resources */,
 				4F3EC6F31B23580A003C48E4 /* certificateR.png in Resources */,
@@ -718,6 +743,8 @@
 				4F6914901A8C085300B8FFCE /* Settings@2x.png in Resources */,
 				4F3EC6F71B23580A003C48E4 /* certificateR@2x.png in Resources */,
 				4F3EC6F61B23580A003C48E4 /* certificatePG-13.png in Resources */,
+				4F3EC7071B24B35B003C48E4 /* WebViewRefresh@2x.png in Resources */,
+				4F3EC70A1B24B35B003C48E4 /* WebViewForward.png in Resources */,
 				4F63E62F1A9A416100528FB3 /* LaunchLogo.png in Resources */,
 				4FAFF8D51A8BFFE500864078 /* LaunchScreen.xib in Resources */,
 				4F3EC6F81B23580A003C48E4 /* certificateG@4x.png in Resources */,
@@ -766,6 +793,7 @@
 				4F63E6401A9D24BA00528FB3 /* StartViewController.swift in Sources */,
 				4FAFF8C91A8BFFE500864078 /* AppDelegate.swift in Sources */,
 				4F6914821A8C041D00B8FFCE /* NowTableViewController.swift in Sources */,
+				4F3EC7001B24A147003C48E4 /* WebViewController.swift in Sources */,
 				4F6914981A8C09D300B8FFCE /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
