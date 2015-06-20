@@ -13,39 +13,31 @@ import CloudKit
 class DatabaseHelper {
 	
    /**
-	* Converts an NSArray of NSDictionaries to an arry of MovieRecords objects.
+	* Converts an array of MovieRecord objects to an array of NSDictionaries.
 	*/
-	class func movieDictsToMovieRecords(dictArray: NSArray) -> [MovieRecord] {
-		var movieRecordArray: [MovieRecord] = []
-		
-		for dict in dictArray {
-			movieRecordArray.append(MovieRecord(dict: dict as! [String : AnyObject]))
+	class func movieRecordArrayToDictArray(movieRecords: [MovieRecord]) -> [NSDictionary] {
+		var retval: [NSDictionary] = []
+	
+		for record in movieRecords {
+			retval.append(record.toDictionary())
 		}
-		
-		return movieRecordArray
+	
+		return retval
 	}
 	
 	
    /**
-	* Converts an array of CKRecords to an array of NSDictionaries.
+	* Converts an array of MovieRecord objects to an array of NSDictionaries.
 	*/
-	class func ckrecordsToMovieDicts(ckrecords: [CKRecord]) -> [NSDictionary] {
-		var retval: [NSDictionary] = []
+	class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]) -> [MovieRecord] {
+		var retval: [MovieRecord] = []
 		
-		for record in ckrecords {
-			var asset: CKAsset? = (record as CKRecord).objectForKey(Constants.DB_ID_ASSET) as? CKAsset
-			var urlString: String? = asset?.fileURL.absoluteString
-			
-			if let saveUrlString = urlString {
-				var url: NSURL? = NSURL(string: saveUrlString)
-				
-				if let saveUrl = url {
-					var dict = NSDictionary(contentsOfURL: saveUrl)
-					
-					if let saveDict = dict {
-						retval.append(saveDict)
-					}
-				}
+		for dict in dictArray {
+			if let dict = (dict as? [String : AnyObject]) {
+				retval.append(MovieRecord(dict: dict))
+			}
+			else {
+				println("Error converting dictionary")
 			}
 		}
 		
@@ -71,9 +63,9 @@ class DatabaseHelper {
 	
 	
    /**
-	* Joins the both arrays of NSDictionary with existing and updated movies.
+	* Joins the both arrays of MovieRecord with existing and updated movies.
 	*/
-	class func joinDictArrays(inout existingMovies: [NSDictionary], updatedMovies: [NSDictionary]) {
+	class func joinMovieRecordArrays(inout existingMovies: [MovieRecord], updatedMovies: [MovieRecord]) {
 		
 		for updatedMovie in updatedMovies {
 			var movieIndex = DatabaseHelper.findArrayIndexOfMovie(updatedMovie, array: existingMovies)
@@ -91,17 +83,16 @@ class DatabaseHelper {
 	
 	
    /**
-	* Searches for a movie in an array of movie dictionaries. The index or null is returned.
+	* Searches for a movie in an array of movie records. The index or null is returned.
 	*/
-	class func findArrayIndexOfMovie(updatedMovie: NSDictionary, array: [NSDictionary]) -> Int? {
+	class func findArrayIndexOfMovie(updatedMovie: MovieRecord, array: [MovieRecord]) -> Int? {
 		var foundIndex: Int?
 		
-		if let updatedMovieId = updatedMovie.objectForKey(Constants.DB_ID_TMDB_ID) as? Int {
+		if let updatedMovieId = updatedMovie.tmdbId {
 			var index = 0
 			
 			for movie in array {
-				
-				if let existingMovieId = movie.objectForKey(Constants.DB_ID_TMDB_ID) as? Int {
+				if let existingMovieId = movie.tmdbId {
 					if (existingMovieId == updatedMovieId) {
 						foundIndex = index
 						break
