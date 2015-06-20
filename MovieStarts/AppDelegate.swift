@@ -16,6 +16,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+		
+		// create folders for image asset
+		
+		var appPathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+
+		if let appPathUrl = appPathUrl, absolutePath = appPathUrl.path {
+			var fileManager = NSFileManager.defaultManager()
+			var error: NSErrorPointer = nil
+
+			// create thumbnail folder
+			
+			if (fileManager.createDirectoryAtPath(absolutePath + Constants.THUMBNAIL_FOLDER, withIntermediateDirectories: true, attributes: nil, error: error) == false) {
+				println("Error creating folder for thumbnails at \(absolutePath + Constants.THUMBNAIL_FOLDER).")
+				if (error != nil) {
+					println(error.debugDescription)
+				}
+			}
+			
+			// create big poster folder
+			
+			if (fileManager.createDirectoryAtPath(absolutePath + Constants.BIG_POSTER_FOLDER, withIntermediateDirectories: true, attributes: nil, error: error) == false) {
+				println("Error creating folder for big posters at \(absolutePath + Constants.BIG_POSTER_FOLDER).")
+				if (error != nil) {
+					println(error.debugDescription)
+				}
+			}
+		}
+		
 		return true
 	}
 
