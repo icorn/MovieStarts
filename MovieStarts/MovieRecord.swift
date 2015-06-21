@@ -115,6 +115,20 @@ class MovieRecord {
 		return retval
 	}
 	
+    var thumbnailImagePath: String? {
+        get {
+            
+            var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+            
+            if let pathUrl = pathUrl, basePath = pathUrl.path, posterUrl = posterUrl {
+                return basePath + Constants.THUMBNAIL_FOLDER + posterUrl
+            }
+            else {
+                return nil
+            }
+        }
+    }
+    
 	
 	/**
      * Moves a downloaded thumbnail poster from the temporar folder to the final one.
@@ -131,7 +145,7 @@ class MovieRecord {
 				var error: NSErrorPointer = nil
 				
 				if (NSFileManager.defaultManager().moveItemAtPath(sourcePathString, toPath: targetPathString, error: error) == false) {
-					println("Error moving thumbnail image.")
+					println("Error moving thumbnail image from \(sourcePathString) to \(targetPathString)")
 					
 					if (error != nil) {
 						println(error.debugDescription)
