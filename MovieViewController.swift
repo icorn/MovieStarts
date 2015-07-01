@@ -71,6 +71,7 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel4HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
 	
+	var bigPosterView: UIImageView?
 	var movie: MovieRecord?
 	var certificationDict: [String: CertificateLogo] = [
 		"R" 	: CertificateLogo(filename: "certificateR.png", height: 30),
@@ -93,6 +94,16 @@ class MovieViewController: UIViewController {
 		var imageLinks = [imageLink1, imageLink2, imageLink3]
 		
 		if let saveMovie = movie {
+			
+			// show poster
+			
+			if (saveMovie.thumbnailImage.1) {
+				posterImageView.image = saveMovie.thumbnailImage.0
+				var rec = UITapGestureRecognizer(target: self, action: Selector("thumbnailTapped:"))
+				rec.numberOfTapsRequired = 1
+				posterImageView.addGestureRecognizer(rec)
+			}
+			
 			
 			// fill labels
 			
@@ -261,6 +272,52 @@ class MovieViewController: UIViewController {
 		if let saveImdbId = movie?.imdbId {
 			webViewController.urlString = "http://www.imdb.com/title/\(saveImdbId)"
 			navigationController?.pushViewController(webViewController, animated: true)
+		}
+	}
+	
+	
+	func thumbnailTapped(recognizer: UITapGestureRecognizer) {
+		
+		if let saveMovie = movie, thumbnailImage = saveMovie.thumbnailImage.0 {
+			
+			// add new image view
+			
+			bigPosterView = UIImageView(frame: CGRect(x: posterImageView.frame.minX, y: posterImageView.frame.minY,
+				width: posterImageView.frame.width, height: posterImageView.frame.height))
+			
+			if let bigPosterView = bigPosterView {
+				bigPosterView.contentMode = UIViewContentMode.ScaleAspectFit
+				bigPosterView.image = thumbnailImage
+				bigPosterView.userInteractionEnabled = true
+				bigPosterView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("bigPosterTapped:")))
+				self.view.addSubview(bigPosterView)
+				
+				// animate it to a bigger poster
+				
+				UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut,
+					animations: {
+						bigPosterView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+					},
+					completion: { finished in }
+				)
+			}
+		}
+	}
+	
+	
+	func bigPosterTapped(recognizer: UITapGestureRecognizer) {
+		
+		if let bigPosterView = bigPosterView {
+			UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut,
+				animations: {
+					bigPosterView.frame = CGRect(x: self.posterImageView.frame.minX, y: self.posterImageView.frame.minY,
+						width: self.posterImageView.frame.width, height: self.posterImageView.frame.height)
+				},
+				completion: { finished in
+					bigPosterView.removeFromSuperview()
+					self.bigPosterView = nil
+				}
+			)
 		}
 	}
 	
