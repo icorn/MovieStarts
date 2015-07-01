@@ -229,22 +229,6 @@ class MovieRecord {
 	}
 	
 	
-/*
-    var thumbnailImagePath: String? {
-        get {
-	
-            var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
-	
-            if let pathUrl = pathUrl, basePath = pathUrl.path, posterUrl = posterUrl {
-                return basePath + Constants.THUMBNAIL_FOLDER + posterUrl
-            }
-            else {
-                return nil
-            }
-        }
-    }
-*/
-	
 	/**
 		Moves a downloaded thumbnail poster from the temporar folder to the final one.
 	*/

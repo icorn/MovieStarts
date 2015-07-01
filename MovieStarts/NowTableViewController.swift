@@ -79,7 +79,7 @@ class NowTableViewController: UITableViewController, UITableViewDelegate, UITabl
 		
 			// vertically "center" the labels
 			var moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
-			cell.titleTextTopSpaceConstraint.constant = /*8 +*/ CGFloat(moveY / 2)
+			cell.titleTextTopSpaceConstraint.constant = /*8 +*/ CGFloat(moveY / 2) - 4
 		}
 		
         return cell

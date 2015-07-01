@@ -17,8 +17,9 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var scrollView: UIScrollView!
 	@IBOutlet weak var posterImageView: UIImageView!
 	@IBOutlet weak var titleLabel: UILabel!
-	@IBOutlet weak var runtimeCountriesLabel: UILabel!
-	@IBOutlet weak var genresLabel: UILabel!
+	@IBOutlet weak var subtitleText1: UILabel!
+	@IBOutlet weak var subtitleText2: UILabel!
+	@IBOutlet weak var subtitleText3: UILabel!
 	@IBOutlet weak var certificateImageView: UIImageView!
 	@IBOutlet weak var releaseDateHeadlineLabel: UILabel!
 	@IBOutlet weak var releaseDateLabel: UILabel!
@@ -70,6 +71,8 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel3HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var actorLabel4HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
+
 	
 	var bigPosterView: UIImageView?
 	var movie: MovieRecord?
@@ -104,12 +107,27 @@ class MovieViewController: UIViewController {
 				posterImageView.addGestureRecognizer(rec)
 			}
 			
-			
 			// fill labels
 			
 			titleLabel?.text = saveMovie.title
-			runtimeCountriesLabel?.text = MovieStartsUtil.generateDetailSubtitle(saveMovie)
-			genresLabel?.text = MovieStartsUtil.generateGenreString(saveMovie)
+
+			// show labels with subtitles
+			
+			var subtitleLabels = [subtitleText1, subtitleText2, subtitleText3]
+			
+			for (index, subtitle) in enumerate(saveMovie.subtitleArray) {
+				subtitleLabels[index]?.text = subtitle
+			}
+			
+			// hide unused labels
+			
+			for (var index = saveMovie.subtitleArray.count; index < subtitleLabels.count; index++) {
+				subtitleLabels[index]?.hidden = true
+			}
+			
+			// vertically "center" the labels
+			var moveY = (subtitleLabels.count - saveMovie.subtitleArray.count) * 19
+			titleLabelTopSpaceConstraint.constant = CGFloat(moveY / 2) * -1 + 4
 			
 			// show release date
 			
