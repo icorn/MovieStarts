@@ -8,6 +8,7 @@
 
 import Foundation
 import CloudKit
+import UIKit
 
 
 class MovieRecord {
@@ -115,11 +116,125 @@ class MovieRecord {
 		return retval
 	}
 	
+	
+	/**
+		Gets the thumbnail image object.
+	
+		:returns: a tuple with the image, and the "found" flag indicating if a poster image was returned or if it only is the default image.
+	*/
+	var thumbnailImage: (UIImage?, Bool) {
+		get {
+			
+			var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+			
+			if let pathUrl = pathUrl, basePath = pathUrl.path {
+				if let posterUrl = posterUrl {
+					return (UIImage(contentsOfFile: basePath + Constants.THUMBNAIL_FOLDER + posterUrl), true)
+				}
+			}
+			
+			return (UIImage(named: "noposter.png"), false)
+		}
+	}
+	
+	/**
+		Generates the string of call genres of the movie.
+	
+		:returns: the generated string consisting of the movies genres
+	*/
+	var genreString: String? {
+		get {
+			var genreText = ""
+			
+			if (genres.count > 0) {
+				for genre in genres {
+					genreText += genre + ", "
+				}
+				
+				return genreText.substringToIndex(genreText.endIndex.predecessor().predecessor())
+			}
+			else {
+				return nil
+			}
+		}
+	}
+	
+	
+	/**
+		Generates the subtitle for the detail view of the movie.
+	
+		:returns: the generated subtitle, consting of the runtime and the production countries
+	*/
+	var detailSubtitle: String? {
+		var detailText = ""
+		
+		// add runtime
+		
+		if (runtime > 0) {
+			var minutesShort = NSLocalizedString("MinutesShort", comment: "")
+			detailText += "\(runtime) \(minutesShort) | "
+		}
+		
+		// add countries
+		
+		if (productionCountries.count > 0) {
+			for country in productionCountries {
+				detailText += MovieStartsUtil.shortenCountryname(country) + ", "
+			}
+		}
+		
+		if (count(detailText) > 0) {
+			// remove last two characters
+			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor())
+		}
+		
+		if (count(detailText) == 0) {
+			return nil
+		}
+		else {
+			return detailText
+		}
+	}
+	
+	
+	var originalTitleForDisplay: String? {
+		var retval: String? = nil
+		
+		if let origTitle = origTitle, title = title where origTitle != title {
+			var akaString = NSLocalizedString("aka", comment: "")
+			retval = "\(akaString) \"\(origTitle)\""
+		}
+		
+		return retval
+	}
+	
+	
+	var subtitleArray: [String] {
+		
+		var subtitles: [String] = []
+		
+		if let origText = originalTitleForDisplay {
+			subtitles.append(origText)
+		}
+		
+		if let details = detailSubtitle {
+			subtitles.append(details)
+		}
+		
+		if let genres = genreString {
+			subtitles.append(genres)
+		}
+		
+		return subtitles
+	}
+	
+	
+/*
     var thumbnailImagePath: String? {
         get {
-            
+	
             var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
-            
+	
             if let pathUrl = pathUrl, basePath = pathUrl.path, posterUrl = posterUrl {
                 return basePath + Constants.THUMBNAIL_FOLDER + posterUrl
             }
@@ -128,11 +243,11 @@ class MovieRecord {
             }
         }
     }
-    
+*/
 	
 	/**
-     * Moves a downloaded thumbnail poster from the temporar folder to the final one.
-     */
+		Moves a downloaded thumbnail poster from the temporar folder to the final one.
+	*/
 	func storeThumbnailPoster(thumbnailAsset: CKAsset?) {
 		if let thumbnailAsset = thumbnailAsset, posterUrl = posterUrl {
 			var targetPathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)

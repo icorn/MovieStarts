@@ -24,6 +24,9 @@ class NowTableViewController: UITableViewController, UITableViewDelegate, UITabl
 			self.movies = saveTabBarController.movies
 			self.tableView.reloadData()
 		}
+		
+		tableView.registerNib(UINib(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
+		navigationItem.title = NSLocalizedString("NowPlayingLong", comment: "")
     }
 	
 	
@@ -52,48 +55,33 @@ class NowTableViewController: UITableViewController, UITableViewDelegate, UITabl
     }
 
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("NowCell", forIndexPath: indexPath) as! MovieTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell", forIndexPath: indexPath) as! MovieTableViewCell
 
-        // setting up titleText
-        cell.titleText?.text = self.movies?[indexPath.row].title
-        cell.titleText?.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        // setting up subtitleText
-        cell.subtitleText?.text = "bla"
-        cell.subtitleText?.setTranslatesAutoresizingMaskIntoConstraints(false)
-        
-        // setting up thumbnail
-        var thumbnailImagePath = self.movies?[indexPath.row].thumbnailImagePath
+		if let movie = self.movies?[indexPath.row] {
+			
+			cell.posterImage.image = movie.thumbnailImage.0
+			cell.titleText.text = movie.title
+		
+			// show labels with subtitles
 
-        if let thumbnailImagePath = thumbnailImagePath {
-            cell.posterImage.image = UIImage(contentsOfFile: thumbnailImagePath)
-        }
-        
-        cell.posterImage?.setTranslatesAutoresizingMaskIntoConstraints(false)
-        cell.posterImage?.contentMode = UIViewContentMode.ScaleToFill
-        
-        cell.addConstraints([
-            
-            // constraints for posterImage
-            
-            NSLayoutConstraint(item: cell.posterImage, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: cell, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 10.0),
-            NSLayoutConstraint(item: cell.posterImage, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: cell, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 10.0),
-            NSLayoutConstraint(item: cell.posterImage, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 67.0),
-            NSLayoutConstraint(item: cell.posterImage, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 100.0),
-
-            // constraints for titleText
-            
-            NSLayoutConstraint(item: cell.posterImage, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: cell.titleText, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: -10.0),
-            NSLayoutConstraint(item: cell.titleText, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: cell, attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 10.0),
-            NSLayoutConstraint(item: cell.titleText, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: cell, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -30.0),
-            
-            // constraints for subtitleText
-            
-            NSLayoutConstraint(item: cell.posterImage, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: cell.subtitleText, attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: -10.0),
-            NSLayoutConstraint(item: cell.subtitleText, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: cell.titleText, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 5.0),
-            NSLayoutConstraint(item: cell.subtitleText, attribute: NSLayoutAttribute.Right, relatedBy: NSLayoutRelation.Equal, toItem: cell, attribute: NSLayoutAttribute.Right, multiplier: 1.0, constant: -30.0),
-        ])
-
+			var subtitleLabels = [cell.subtitleText1, cell.subtitleText2, cell.subtitleText3]
+			
+			for (index, subtitle) in enumerate(movie.subtitleArray) {
+				subtitleLabels[index]?.hidden = false
+				subtitleLabels[index]?.text = subtitle
+			}
+			
+			// hide unused labels
+			
+			for (var index = movie.subtitleArray.count; index < subtitleLabels.count; index++) {
+				subtitleLabels[index]?.hidden = true
+			}
+		
+			// vertically "center" the labels
+			var moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
+			cell.titleTextTopSpaceConstraint.constant = /*8 +*/ CGFloat(moveY / 2)
+		}
+		
         return cell
     }
 

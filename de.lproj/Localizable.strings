@@ -7,7 +7,9 @@
 */
 
 "NowPlaying"		= "Jetzt im Kino";
+"NowPlayingLong"	= "Jetzt im Kino";
 "Upcoming"			= "Demnächst";
+"UpcomingLong"		= "Demnächst";
 "Settings"			= "Einstellungen";
 "UpdatingMovies"	= "Filme aktualisieren...";
 "LoadingMovies"		= "Filme laden...";
@@ -16,3 +18,6 @@
 "Directors"			= "Regie";
 "Director"			= "Regie";
 "Synopsis"			= "Inhalt";
+
+"MinutesShort"		= "Min";
+"aka"				= "Original:";
