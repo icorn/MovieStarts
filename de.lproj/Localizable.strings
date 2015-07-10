@@ -21,3 +21,8 @@
 
 "MinutesShort"		= "Min";
 "aka"				= "Original:";
+
+"ShowOnImdb"			= "Zeige Details auf IMDb";
+"ShowTrailer"			= "Zeige ";
+"AddToFavorites"		= "Zu Favoriten hinzufügen";
+"RemoveFromFavorites"	= "Aus Favoriten entfernen";

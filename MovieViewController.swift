@@ -36,9 +36,16 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel5: UILabel!
 	@IBOutlet weak var storyHeadlineLabel: UILabel!
 	@IBOutlet weak var storyLabel: UILabel!
-	@IBOutlet weak var imageLink1: UIImageView!
-	@IBOutlet weak var imageLink2: UIImageView!
-	@IBOutlet weak var imageLink3: UIImageView!
+	@IBOutlet weak var textButton1: UIButton!
+	@IBOutlet weak var textButton2: UIButton!
+	@IBOutlet weak var textButton3: UIButton!
+	@IBOutlet weak var textButton4: UIButton!
+	@IBOutlet weak var textButton5: UIButton!
+	
+	@IBOutlet weak var line7: UIView!
+	@IBOutlet weak var line8: UIView!
+	@IBOutlet weak var line9: UIView!
+	@IBOutlet weak var line10: UIView!
 	
 	// constraints
 	
@@ -72,10 +79,11 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel4HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
-
 	
 	var bigPosterView: UIImageView?
 	var movie: MovieRecord?
+	var textButtons = [UIButton]()
+	var bottomButton: UIButton?
 	var certificationDict: [String: CertificateLogo] = [
 		"R" 	: CertificateLogo(filename: "certificateR.png", height: 30),
 		"G" 	: CertificateLogo(filename: "certificateG.png", height: 30),
@@ -88,13 +96,15 @@ class MovieViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
+		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame)" )
+		
+		
 		contentViewWidthConstraint.constant = view.frame.width
 		
 		// start to show all movie details
 		
 		var actorLabels = [actorLabel1, actorLabel2, actorLabel3, actorLabel4, actorLabel5]
 		var directorLabels = [directorLabel, directorLabel2]
-		var imageLinks = [imageLink1, imageLink2, imageLink3]
 		
 		if let saveMovie = movie {
 			
@@ -233,30 +243,37 @@ class MovieViewController: UIViewController {
 			if let synopsis = saveMovie.synopsis {
 				storyLabel.text = synopsis
 			}
+
+			// show textbuttons for imdb, trailers, and favorites
 			
-			// show links
-			
-			var currentImageLink = 0
-			
-			if (saveMovie.trailerIds.count > 0) {
-				// show youtube-link
-				
-				currentImageLink++
-			}
+			textButtons = [textButton1, textButton2, textButton3, textButton4, textButton5]
+			var textButtonIndex = 0
+			var buttonLines = [line7, line8, line9, line10]
 			
 			if let imdbId = saveMovie.imdbId {
-				// show imdb-link
-				
-				var rec = UITapGestureRecognizer(target: self, action: Selector("imdbButtonTapped:"))
-				rec.numberOfTapsRequired = 1
-				imageLinks[currentImageLink].addGestureRecognizer(rec)
-				currentImageLink++
+				textButtons[textButtonIndex].addTarget(self, action: Selector("imdbButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				textButtons[textButtonIndex].setTitle(NSLocalizedString("ShowOnImdb", comment: ""), forState: UIControlState.Normal)
+				textButtonIndex++
 			}
 			
-			if let tmdbId = saveMovie.tmdbId {
-				// show tmdb-link
-				
+			for trailerName in saveMovie.trailerNames {
+				textButtons[textButtonIndex].addTarget(self, action: Selector("trailerButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				textButtons[textButtonIndex].setTitle(NSLocalizedString("ShowTrailer", comment: "") + "'" + trailerName + "'", forState: UIControlState.Normal)
+				textButtonIndex++
 			}
+			
+			textButtons[textButtonIndex].addTarget(self, action: Selector("favoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+			textButtons[textButtonIndex].setTitle(NSLocalizedString("AddToFavorites", comment: ""), forState: UIControlState.Normal)
+			textButtonIndex++
+
+			// hide unused button(s)
+			
+			for (var hideId = textButtonIndex; hideId < textButtons.count; hideId++) {
+				textButtons[hideId].hidden = true
+				buttonLines[hideId-1].hidden = true
+			}
+			
+			bottomButton = textButtons[textButtonIndex-1]
 			
 			updateViewConstraints()
 		}
@@ -271,10 +288,15 @@ class MovieViewController: UIViewController {
 	}
 	
 	override func viewDidAppear(animated: Bool) {
-		// Resize the content size of the scrollview.
-		// The height was not correct - maybe the combination of scrollview, autolayout, and a dynamic label (storylabel)
-
-		scrollView.contentSize = CGSize(width: scrollView.frame.width, height: imageLink1.frame.maxY + 16)
+		// Set the height of ohe content size of the scrollview.
+		
+		
+		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame) ENDE" )
+		
+		
+		if let maxY = bottomButton?.frame.maxY {
+			scrollView.contentSize = CGSize(width: scrollView.frame.width, height: maxY + 30)
+		}
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -284,13 +306,45 @@ class MovieViewController: UIViewController {
 	
 	// MARK: Button callbacks
 	
-	func imdbButtonTapped(recognizer: UITapGestureRecognizer) {
+	func imdbButtonTapped(sender:UIButton!) {
 		var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
 		
 		if let saveImdbId = movie?.imdbId {
 			webViewController.urlString = "http://www.imdb.com/title/\(saveImdbId)"
 			navigationController?.pushViewController(webViewController, animated: true)
 		}
+	}
+
+	func trailerButtonTapped(sender:UIButton!) {
+		
+		// find out which trailer was tapped
+		
+		var index = 0
+		
+		if ((movie != nil) && (movie?.imdbId != nil)) {
+			index--
+		}
+		
+		for button in textButtons {
+			if (button == sender) {
+				break
+			}
+			index++
+		}
+		
+		println("Trailer \(index) was tapped: \(movie?.trailerIds[index])")
+		
+		var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
+
+		if let trailerId = movie?.trailerIds[index] {
+			webViewController.urlString = "http://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
+			navigationController?.pushViewController(webViewController, animated: true)
+		}
+
+	}
+	
+	func favoriteButtonTapped(sender:UIButton!) {
+		// TODO
 	}
 	
 	

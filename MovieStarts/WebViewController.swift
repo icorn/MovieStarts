@@ -25,6 +25,9 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+		println("view: \(view.frame), webview: \(webview.frame)")
+		
+		
 		webview.delegate = self
 
 		// avoid white flash
