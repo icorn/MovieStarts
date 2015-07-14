@@ -10,15 +10,18 @@ import UIKit
 
 class TabBarController: UITabBarController {
 
-	var movies: [MovieRecord]?
+	var allMovies: [MovieRecord] = []
+	var nowMovies: [MovieRecord] = []
+	var upcomingMovies: [MovieRecord] = []
+	var bestMovies: [MovieRecord] = []
 	
 	@IBOutlet weak var movieTabBar: UITabBar!
 	
 
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)
-
-		if let saveItems = self.movieTabBar.items {
+		
+		if let saveItems = movieTabBar.items {
 			if (saveItems.count == 3) {
 				
 				// set tab bar titles
@@ -35,7 +38,7 @@ class TabBarController: UITabBarController {
 			}
 		}
     }
-
+	
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

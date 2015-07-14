@@ -41,11 +41,47 @@ class StartViewController: UIViewController {
 			
 				// show the next view controller
 			
-				var newVC = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
+				var tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
 			
-				if let saveVC = newVC {
-					saveVC.movies = movies
-					self.presentViewController(saveVC, animated: true, completion: { () in
+				if let tabBarController = tabBarController, allMovies = movies {
+					
+					// store movies in tabbarcontroller
+					
+					tabBarController.allMovies = allMovies
+					
+					var today = NSDate()
+					
+					// iterate over all movies and sort them into one of three lists (and ignore the ones without release date)
+					for movie in allMovies {
+						if let saveDate = movie.releaseDate {
+							if (saveDate.compare(today) == NSComparisonResult.OrderedDescending) {
+								tabBarController.upcomingMovies.append(movie)
+							}
+							else {
+								tabBarController.nowMovies.append(movie)
+								
+								if (movie.voteAverage >= 7.0) {
+									tabBarController.bestMovies.append(movie)
+								}
+							}
+						}
+					}
+					
+					tabBarController.upcomingMovies.sort {
+						return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
+					}
+					
+					tabBarController.nowMovies.sort {
+						return $0.title < $1.title
+					}
+					
+					tabBarController.bestMovies.sort {
+						return $0.voteAverage > $1.voteAverage
+					}
+					
+					// show tabbarcontroller
+					
+					self.presentViewController(tabBarController, animated: true, completion: { () in
 						if let saveAboutView = self.aboutView {
 							saveAboutView.removeFromSuperview()
 						}
