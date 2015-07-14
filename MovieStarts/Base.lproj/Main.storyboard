@@ -1222,7 +1222,6 @@
                         <subviews>
                             <webView contentMode="scaleToFill" ambiguous="YES" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hEf-Dr-oUb">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="800" id="RRY-dt-Ldg"/>
                                     <constraint firstAttribute="width" constant="600" id="d3d-Fu-NO2"/>
@@ -1398,7 +1397,7 @@
         <!--NowNavigationController-->
         <scene sceneID="gVw-8b-BRz">
             <objects>
-                <navigationController title="NowNavigationController" id="kK1-8l-NS4" customClass="NowNavigationController" customModule="MovieStarts" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController title="NowNavigationController" id="kK1-8l-NS4" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Now Playing" image="Video.png" id="RGi-jq-dEF"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="28j-pf-VFM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
