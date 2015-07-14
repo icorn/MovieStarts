@@ -98,7 +98,6 @@ class MovieViewController: UIViewController {
 
 		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame)" )
 		
-		
 		contentViewWidthConstraint.constant = view.frame.width
 		
 		// start to show all movie details
@@ -280,23 +279,31 @@ class MovieViewController: UIViewController {
 	}
 	
 	override func viewDidLayoutSubviews() {
+		super.viewDidLayoutSubviews()
+		
 		if let navBarHeight = navigationController?.navigationBar.frame.height {
 			// Move the content down a bit: the height of the navbar plus the height of the status bar plus 20 (looks nicer).
 			// This is necessary, because both the status bar and the navbar are transparent.
-			posterImageTopSpaceConstraint.constant = 20 + navBarHeight + UIApplication.sharedApplication().statusBarFrame.size.height
+			
+//			posterImageTopSpaceConstraint.constant = 20 + navBarHeight + UIApplication.sharedApplication().statusBarFrame.size.height
 		}
 	}
 	
 	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+		
 		// Set the height of ohe content size of the scrollview.
-		
-		
-		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame) ENDE" )
-		
+/*
+		let value = UIInterfaceOrientation.Portrait.rawValue
+		UIDevice.currentDevice().setValue(value, forKey: "orientation")
+*/
 		
 		if let maxY = bottomButton?.frame.maxY {
 			scrollView.contentSize = CGSize(width: scrollView.frame.width, height: maxY + 30)
 		}
+
+		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame) ENDE" )
+		
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -331,8 +338,6 @@ class MovieViewController: UIViewController {
 			}
 			index++
 		}
-		
-		println("Trailer \(index) was tapped: \(movie?.trailerIds[index])")
 		
 		var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
 
@@ -392,6 +397,12 @@ class MovieViewController: UIViewController {
 			)
 		}
 	}
+
+/*
+	override func supportedInterfaceOrientations() -> Int {
+		return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+	}
+*/
 	
 	
 	// MARK: Helpers

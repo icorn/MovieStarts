@@ -33,7 +33,7 @@ class StartViewController: UIViewController {
 		super.viewDidAppear(animated)
 		
 		// read movies from device or from cloud
-		
+
 		var database = Database(recordType: Constants.RECORD_TYPE_USA)
 		
 		database.getAllMovies(
