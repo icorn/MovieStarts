@@ -222,7 +222,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="30Z-Vh-qKo"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
@@ -241,7 +241,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="YPO-os-8RZ"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
@@ -277,7 +277,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="3lK-o4-LOt"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
@@ -296,7 +296,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="CIo-kg-fDF"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
@@ -315,7 +315,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="kI8-vl-44j"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
@@ -334,7 +334,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="t4U-pd-OnE"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
@@ -353,7 +353,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="16" id="q6P-fN-14y"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                                 <variation key="default">
@@ -1303,6 +1303,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="UpcomingTableViewController" title="UpcomingTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="BkO-79-sa7" customClass="UpcomingTableViewController" customModule="MovieStarts" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="137" sectionHeaderHeight="22" sectionFooterHeight="22" id="su5-0N-SKR">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
@@ -1359,17 +1360,7 @@
                                             </variation>
                                         </label>
                                     </subviews>
-                                    <variation key="heightClass=regular-widthClass=regular">
-                                        <mask key="subviews">
-                                            <include reference="vjh-3h-fRI"/>
-                                            <include reference="43i-Ma-Nho"/>
-                                        </mask>
-                                    </variation>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="subtitleText" destination="vjh-3h-fRI" id="PwP-I8-RRM"/>
-                                    <outlet property="titleText" destination="43i-Ma-Nho" id="mRS-JD-wk4"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

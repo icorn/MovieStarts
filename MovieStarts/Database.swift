@@ -378,23 +378,6 @@ class Database {
 				// clean up posters
 				
 				cleanUpPosters()
-				
-				
-/*
-				// finish movies
-				if ((completionHandler != nil) && (errorHandler != nil)) {
-					finishMovies(loadedMovieRecordArray!, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler!)
-				}
-				else {
-					if let saveStopIndicator = stopIndicator {
-						dispatch_async(dispatch_get_main_queue()) {
-							saveStopIndicator()
-						}
-					}
-					errorHandler?(errorMessage: "One of the handlers is nil!")
-					return
-				}
-*/
 			}
 		}
 		else {
@@ -408,29 +391,8 @@ class Database {
 	}
 	
 	
-	private func cleanUpExistingMovies(inout existingMovies: [MovieRecord]) {
-		
-		var compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.MAX_DAYS_IN_THE_PAST) // 30 days ago
-		var oldNumberOfMovies = existingMovies.count
-		
-		println("Cleaning up old movies...")
-		
-		for (var index = existingMovies.count-1; index >= 0; index--) {
-			var releaseDate = existingMovies[index].releaseDate
-			
-			if let saveDate = releaseDate {
-				if (saveDate.compare(compareDate) == NSComparisonResult.OrderedAscending) {
-					// movie is too old
-					println("   '\(existingMovies[index].title)' (\(saveDate)) removed")
-					existingMovies.removeAtIndex(index)
-				}
-			}
-		}
-		
-		println("Clean up over, removed \(oldNumberOfMovies - existingMovies.count) movies from local file. Now we have \(existingMovies.count) movies.")
-	}
+	// MARK: cleaning up posters
 
-	
 	private func cleanUpPosters() {
 		
 		var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
@@ -522,7 +484,32 @@ class Database {
 	}
 	
 	
-	func downloadsFinished() {
+	// MARK: private helper functions
+
+	private func cleanUpExistingMovies(inout existingMovies: [MovieRecord]) {
+		
+		var compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.MAX_DAYS_IN_THE_PAST) // 30 days ago
+		var oldNumberOfMovies = existingMovies.count
+		
+		println("Cleaning up old movies...")
+		
+		for (var index = existingMovies.count-1; index >= 0; index--) {
+			var releaseDate = existingMovies[index].releaseDate
+			
+			if let saveDate = releaseDate {
+				if (saveDate.compare(compareDate) == NSComparisonResult.OrderedAscending) {
+					// movie is too old
+					println("   '\(existingMovies[index].title)' (\(saveDate)) removed")
+					existingMovies.removeAtIndex(index)
+				}
+			}
+		}
+		
+		println("Clean up over, removed \(oldNumberOfMovies - existingMovies.count) movies from local file. Now we have \(existingMovies.count) movies.")
+	}
+
+	
+	private func downloadsFinished() {
 		// finish movies
 		if ((completionHandler != nil) && (errorHandler != nil)) {
 			finishMovies(loadedMovieRecordArray!, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler!)
