@@ -359,35 +359,42 @@ class Database {
 				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_UPDATE_CHECK)
 				userDefaults?.synchronize()
 				
-				if (self.updatedCKRecords.count > 0) {
+				if (updatedCKRecords.count > 0) {
 					// generate an array of MovieRecords
 					var updatedMovieRecordArray: [MovieRecord] = []
 					
-					for ckRecord in self.updatedCKRecords {
+					for ckRecord in updatedCKRecords {
 						updatedMovieRecordArray.append(MovieRecord(ckRecord: ckRecord))
 					}
 					
 					// merge both arrays (the existing movies and the updated movies)
-					DatabaseHelper.joinMovieRecordArrays(&(self.loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
+					DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
 				}
 				
 				// delete all movies which were not updated and don't exist anymore in the cloud
 
-				self.cleanUpExistingMovies(&self.loadedMovieRecordArray!)
+				cleanUpExistingMovies(&loadedMovieRecordArray!)
 				
+				// clean up posters
+				
+				cleanUpPosters()
+				
+				
+/*
 				// finish movies
-				if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-					self.finishMovies(self.loadedMovieRecordArray!, updatedMoviesAsRecordArray: self.updatedCKRecords, completionHandler: self.completionHandler!, errorHandler: self.errorHandler!)
+				if ((completionHandler != nil) && (errorHandler != nil)) {
+					finishMovies(loadedMovieRecordArray!, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler!)
 				}
 				else {
-					if let saveStopIndicator = self.stopIndicator {
+					if let saveStopIndicator = stopIndicator {
 						dispatch_async(dispatch_get_main_queue()) {
 							saveStopIndicator()
 						}
 					}
-					self.errorHandler?(errorMessage: "One of the handlers is nil!")
+					errorHandler?(errorMessage: "One of the handlers is nil!")
 					return
 				}
+*/
 			}
 		}
 		else {
@@ -396,7 +403,7 @@ class Database {
 			queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
 			queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
 			queryOperation.desiredKeys = desiredQueryKeysForUpdate
-			self.cloudKitDatabase.addOperation(queryOperation)
+			cloudKitDatabase.addOperation(queryOperation)
 		}
 	}
 	
@@ -423,5 +430,113 @@ class Database {
 		println("Clean up over, removed \(oldNumberOfMovies - existingMovies.count) movies from local file. Now we have \(existingMovies.count) movies.")
 	}
 
+	
+	private func cleanUpPosters() {
+		
+		var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		
+		if let pathUrl = pathUrl, basePath = pathUrl.path, movies = loadedMovieRecordArray {
+			var error : NSErrorPointer = nil
+			var filenames = NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.THUMBNAIL_FOLDER, error: error)
+			
+			// first check for all poster files if they are still needed
+			
+			if let posterfilenames = filenames {
+				for posterfilename in posterfilenames {
+					var found = false
+					
+					for movie in movies {
+						if let posterUrl = movie.posterUrl where count(posterUrl) > 3 {
+							
+							if ((posterfilename as! String) == posterUrl.substringWithRange(Range<String.Index>(start: advance(posterUrl.startIndex, 1), end: posterUrl.endIndex))) {
+								found = true
+								break
+							}
+						}
+					}
+					
+					if !found {
+						
+						// posterfile is not in any database record anymore: delete poster(s)
+						
+						println("Deleting unneeded poster image \(posterfilename as! String)")
+						NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.THUMBNAIL_FOLDER + "/" + (posterfilename as! String), error: error)
+						NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.BIG_POSTER_FOLDER + "/" + (posterfilename as! String), error: error)
+					}
+				}
+			}
+			
+			// second: check for missing poster files and download them
+
+			var idsOfMissindPosters : [Int] = []
+			
+			for movie in movies {
+				if let posterUrl = movie.posterUrl {
+					if (NSFileManager.defaultManager().fileExistsAtPath(basePath + Constants.THUMBNAIL_FOLDER + posterUrl) == false) {
+						// poster file is missing
+						idsOfMissindPosters.append(movie.tmdbId!)
+					}
+				}
+			}
+
+			if (idsOfMissindPosters.count > 0) {
+
+				// download missing posters
+				
+				var predicate = NSPredicate(format: "tmdbId IN %@", argumentArray: [idsOfMissindPosters])
+				var query = CKQuery(recordType: self.recordType, predicate: predicate)
+				let queryOperation = CKQueryOperation(query: query)
+				queryOperation.recordFetchedBlock = recordFetchedMissingPostersCallback
+				queryOperation.queryCompletionBlock = queryCompleteMissingPostersCallback
+				queryOperation.desiredKeys = [Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_TMDB_ID]
+				self.cloudKitDatabase.addOperation(queryOperation)
+				
+				println("Loading \(idsOfMissindPosters.count) missing posters.")
+			}
+			else {
+				// no posters missing
+				downloadsFinished()
+			}
+		}
+	}
+	
+	
+	func recordFetchedMissingPostersCallback(record: CKRecord!) {
+		
+		// poster fetched: store it to disk
+		
+		var tmdbIdToFind: Int = record.objectForKey(Constants.DB_ID_TMDB_ID) as! Int
+		
+		if let movies = loadedMovieRecordArray {
+			for movie in movies {
+				if let tmdbId = movie.tmdbId where tmdbId == tmdbIdToFind {
+					movie.storeThumbnailPoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
+				}
+			}
+		}
+	}
+
+	
+	func queryCompleteMissingPostersCallback(cursor: CKQueryCursor!, error: NSError!) {
+		downloadsFinished()
+	}
+	
+	
+	func downloadsFinished() {
+		// finish movies
+		if ((completionHandler != nil) && (errorHandler != nil)) {
+			finishMovies(loadedMovieRecordArray!, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler!)
+		}
+		else {
+			if let saveStopIndicator = stopIndicator {
+				dispatch_async(dispatch_get_main_queue()) {
+					saveStopIndicator()
+				}
+			}
+			errorHandler?(errorMessage: "One of the handlers is nil!")
+			return
+		}
+
+	}
 }
 
