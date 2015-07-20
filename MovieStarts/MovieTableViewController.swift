@@ -12,7 +12,9 @@ import CloudKit
 
 class MovieTableViewController: UITableViewController, UITableViewDelegate, UITableViewDataSource {
 
-	private (set) var movies: [MovieRecord] = []  // is overwritten
+	var movies: [MovieRecord] = []
+	var moviesInSections: [[MovieRecord]] = []
+	var sections: [String] = []
 
 	var movieTabBarController: TabBarController? {
 		get {
@@ -28,13 +30,17 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		}
 		
 		tableView.registerNib(UINib(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
-		navigationItem.title = NSLocalizedString("NowPlayingLong", comment: "")
     }
 	
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
+	func getMovieFromIndexPath(indexPath: NSIndexPath) -> MovieRecord {
+		// dummy, will be overwritten
+		return MovieRecord(dict: [:])
+	}
+	
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -47,7 +53,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell", forIndexPath: indexPath) as! MovieTableViewCell
-		let movie = movies[indexPath.row]
+		let movie = getMovieFromIndexPath(indexPath)
 			
 		cell.posterImage.image = movie.thumbnailImage.0
 		cell.titleText.text = movie.title
@@ -78,7 +84,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		
 		if let saveStoryboard = self.storyboard {
 			var movieController: MovieViewController = saveStoryboard.instantiateViewControllerWithIdentifier("MovieViewController") as! MovieViewController
-			movieController.movie = movies[indexPath.row]
+			movieController.movie = getMovieFromIndexPath(indexPath)
 			navigationController?.pushViewController(movieController, animated: true)
 		}
 	}

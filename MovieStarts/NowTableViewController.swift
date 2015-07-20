@@ -10,18 +10,14 @@ import UIKit
 
 class NowTableViewController: MovieTableViewController {
 
-	override var movies: [MovieRecord] {
-		get {
-			if let movieTabBarController = movieTabBarController {
-				return movieTabBarController.nowMovies
-			}
-			else {
-				return []
-			}
-		}
+	override func getMovieFromIndexPath(indexPath: NSIndexPath) -> MovieRecord {
+		return movies[indexPath.row]
 	}
 
-    override func viewDidLoad() {
+	override func viewDidLoad() {
+		if let movieTabBarController = movieTabBarController {
+			movies = movieTabBarController.nowMovies
+		}
         super.viewDidLoad()
 		navigationItem.title = NSLocalizedString("NowPlayingLong", comment: "")
     }
