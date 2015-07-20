@@ -18,6 +18,7 @@
 "Directors"			= "Regie";
 "Director"			= "Regie";
 "Synopsis"			= "Inhalt";
+"NoReleaseDate" 	= "Datum unbekannt";
 
 "MinutesShort"		= "Min";
 "aka"				= "Original:";
