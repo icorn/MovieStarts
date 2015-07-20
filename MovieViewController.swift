@@ -141,10 +141,7 @@ class MovieViewController: UIViewController {
 			// show release date
 			
 			if let saveDate = saveMovie.releaseDate {
-				var dateFormatter = NSDateFormatter()
-				dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
-				dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-				releaseDateLabel?.text = dateFormatter.stringFromDate(saveDate)
+				releaseDateLabel?.text = saveMovie.releaseDateString
 			}
 			else {
 				// no release date (cannot happen)
