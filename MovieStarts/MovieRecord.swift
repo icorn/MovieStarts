@@ -229,6 +229,36 @@ class MovieRecord {
 	}
 	
 	
+	var releaseDateString: String {
+
+		var retval = NSLocalizedString("NoReleaseDate", comment: "")
+		
+		if let releaseDate = releaseDate {
+			var dateFormatter = NSDateFormatter()
+			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+			dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+			retval = dateFormatter.stringFromDate(releaseDate)
+		}
+		
+		return retval
+	}
+	
+	
+	var releaseDateStringLong: String {
+		
+		var retval = NSLocalizedString("NoReleaseDate", comment: "")
+		
+		if let releaseDate = releaseDate {
+			var dateFormatter = NSDateFormatter()
+			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+			dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+			retval = dateFormatter.stringFromDate(releaseDate)
+		}
+		
+		return retval
+	}
+	
+	
 	/**
 		Moves a downloaded thumbnail poster from the temporar folder to the final one.
 	*/
