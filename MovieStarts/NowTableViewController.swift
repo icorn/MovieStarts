@@ -10,10 +10,6 @@ import UIKit
 
 class NowTableViewController: MovieTableViewController {
 
-	override func getMovieFromIndexPath(indexPath: NSIndexPath) -> MovieRecord {
-		return movies[indexPath.row]
-	}
-
 	override func viewDidLoad() {
 		if let movieTabBarController = movieTabBarController {
 			movies = movieTabBarController.nowMovies

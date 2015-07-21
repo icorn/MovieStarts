@@ -21,6 +21,8 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 			return navigationController?.parentViewController as? TabBarController
 		}
 	}
+	
+	// MARK: - UIViewController
 
 	override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,55 +38,88 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
         super.didReceiveMemoryWarning()
     }
 
-	func getMovieFromIndexPath(indexPath: NSIndexPath) -> MovieRecord {
-		// dummy, will be overwritten
-		return MovieRecord(dict: [:])
-	}
-	
-    // MARK: - Table view data source
+	// MARK: - UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-		return 1
+		if moviesInSections.count > 0 {
+			return sections.count
+		}
+		else {
+			return 1
+		}
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return movies.count
+		if (moviesInSections.count > section) {
+			return moviesInSections[section].count
+		}
+		else {
+			return movies.count
+		}
     }
-
+	
+	override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+		if (sections.count > section) {
+			return sections[section]
+		}
+		else {
+			return nil
+		}
+	}
+	
+	// MARK: - UITableView
+	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell", forIndexPath: indexPath) as! MovieTableViewCell
-		let movie = getMovieFromIndexPath(indexPath)
-			
-		cell.posterImage.image = movie.thumbnailImage.0
-		cell.titleText.text = movie.title
-	
-		// show labels with subtitles
+		
+		var movie: MovieRecord?
+		
+		if moviesInSections.count > 0 {
+			movie = moviesInSections[indexPath.section][indexPath.row]
+		}
+		else {
+			movie = movies[indexPath.row]
+		}
+		
+		if let movie = movie {
+			cell.posterImage.image = movie.thumbnailImage.0
+			cell.titleText.text = movie.title
+		
+			// show labels with subtitles
 
-		var subtitleLabels = [cell.subtitleText1, cell.subtitleText2, cell.subtitleText3]
+			var subtitleLabels = [cell.subtitleText1, cell.subtitleText2, cell.subtitleText3]
+			
+			for (index, subtitle) in enumerate(movie.subtitleArray) {
+				subtitleLabels[index]?.hidden = false
+				subtitleLabels[index]?.text = subtitle
+			}
+			
+			// hide unused labels
+			
+			for (var index = movie.subtitleArray.count; index < subtitleLabels.count; index++) {
+				subtitleLabels[index]?.hidden = true
+			}
 		
-		for (index, subtitle) in enumerate(movie.subtitleArray) {
-			subtitleLabels[index]?.hidden = false
-			subtitleLabels[index]?.text = subtitle
+			// vertically "center" the labels
+			var moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
+			cell.titleTextTopSpaceConstraint.constant = CGFloat(moveY / 2) - 4
 		}
-		
-		// hide unused labels
-		
-		for (var index = movie.subtitleArray.count; index < subtitleLabels.count; index++) {
-			subtitleLabels[index]?.hidden = true
-		}
-	
-		// vertically "center" the labels
-		var moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
-		cell.titleTextTopSpaceConstraint.constant = CGFloat(moveY / 2) - 4
 		
         return cell
     }
-    
+	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		
 		if let saveStoryboard = self.storyboard {
 			var movieController: MovieViewController = saveStoryboard.instantiateViewControllerWithIdentifier("MovieViewController") as! MovieViewController
-			movieController.movie = getMovieFromIndexPath(indexPath)
+			
+			if moviesInSections.count > 0 {
+				movieController.movie = moviesInSections[indexPath.section][indexPath.row]
+			}
+			else {
+				movieController.movie = movies[indexPath.row]
+			}
+			
 			navigationController?.pushViewController(movieController, animated: true)
 		}
 	}

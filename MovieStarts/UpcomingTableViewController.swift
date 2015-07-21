@@ -10,10 +10,6 @@ import UIKit
 
 class UpcomingTableViewController: MovieTableViewController {
 
-	override func getMovieFromIndexPath(indexPath: NSIndexPath) -> MovieRecord {
-		return moviesInSections[indexPath.section][indexPath.row]
-	}
-	
 	override func viewDidLoad() {
 		if let movieTabBarController = movieTabBarController {
 
@@ -41,29 +37,6 @@ class UpcomingTableViewController: MovieTableViewController {
 		super.viewDidLoad()
 		navigationItem.title = NSLocalizedString("UpcomingLong", comment: "")
 	}
-	
-	
-	override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-		return sections.count
-	}
-	
-	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-		if (moviesInSections.count > section) {
-			return moviesInSections[section].count
-		}
-		else {
-			return 0
-		}
-	}
-
-	override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		if (sections.count > section) {
-			return sections[section]
-		}
-		else {
-			return nil
-		}
-	}
 }
 
