@@ -69,21 +69,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
 
-
-/*  Just a test
-
-	func application(application: UIApplication, didReceiveRemoteNotification userInfo: [NSObject : AnyObject]) {
-		var cloudKitNotification = CKNotification(fromRemoteNotificationDictionary: userInfo)
-		var alertBody = cloudKitNotification.alertBody
-
-		if (cloudKitNotification.notificationType == CKNotificationType.Query) {
-		   	var recordID = (cloudKitNotification as CKQueryNotification).recordID
-			var av = UIAlertView(title: "DB", message: "Change in \(recordID.recordName)", delegate: nil, cancelButtonTitle: "OK")
-			av.show()
-		}
-	}
-*/
-	
-	
 }
 
