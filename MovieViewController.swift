@@ -93,6 +93,8 @@ class MovieViewController: UIViewController {
 	]
 
 
+	// MARK: - UIViewController
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
@@ -308,8 +310,14 @@ class MovieViewController: UIViewController {
 	}
 	
 	
-	// MARK: Button callbacks
+	// MARK: - Button callbacks
 	
+	
+	/**
+		Calls the webview with the imdb page for the movie.
+	
+		:param: sender	The tapped button
+	*/
 	func imdbButtonTapped(sender:UIButton!) {
 		var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
 		
@@ -319,6 +327,12 @@ class MovieViewController: UIViewController {
 		}
 	}
 
+
+	/**
+		Calls the webview with the trailer page for the movie.
+	
+		:param: sender	The tapped button
+	*/
 	func trailerButtonTapped(sender:UIButton!) {
 		
 		// find out which trailer was tapped
@@ -345,11 +359,22 @@ class MovieViewController: UIViewController {
 
 	}
 	
+	
+	/**
+		Adds the current movie to favorites, or removes current pictures from favorites.
+	
+		:param: sender	The tapped button
+	*/
 	func favoriteButtonTapped(sender:UIButton!) {
 		// TODO
 	}
 	
 	
+	/**
+		Enlarges the tapped thumbnail poster.
+	
+		:param: recognizer	The gesture recognizer - unused.
+	*/
 	func thumbnailTapped(recognizer: UITapGestureRecognizer) {
 		
 		if let saveMovie = movie, thumbnailImage = saveMovie.thumbnailImage.0 {
@@ -379,6 +404,11 @@ class MovieViewController: UIViewController {
 	}
 	
 	
+	/**
+		Closes the enlarged poster.
+	
+		:param: recognizer	The gesture recognizer - unused.
+	*/
 	func bigPosterTapped(recognizer: UITapGestureRecognizer) {
 		
 		if let bigPosterView = bigPosterView {
@@ -402,11 +432,18 @@ class MovieViewController: UIViewController {
 */
 	
 	
-	// MARK: Helpers
+	// MARK: - Helpers
 	
+	
+	/**
+		Sets the given constraint constant to 0.
+	
+		:param: constraints		A number of NSLayoutConstraints to be set to 0
+	*/
 	private final func setConstraintsToZero(constraints: NSLayoutConstraint...) {
 		for constraint in constraints {
 			constraint.constant = 0
 		}
 	}
+
 }

@@ -15,6 +15,8 @@ class StartViewController: UIViewController {
 	var progressView: UIProgressView?
 	
 	
+	// MARK: - UIViewController
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		
@@ -108,7 +110,20 @@ class StartViewController: UIViewController {
 		)
 	}
 
+	override func didReceiveMemoryWarning() {
+		super.didReceiveMemoryWarning()
+	}
 	
+	
+	// MARK: - 
+	
+	
+	/**
+		Opens a progress indicator view.
+	
+		:param: updating		The flag saying if we update the movies (TRUE) or loading (FALSE)
+		:param: showProgress	The flag saying if we show the progress indicator or not
+	*/
 	func startActivityIndicator(updating: Bool, showProgress: Bool) {
 		
 		var title = NSLocalizedString("LoadingMovies", comment: "")
@@ -157,9 +172,5 @@ class StartViewController: UIViewController {
 	}
 
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
 }
 

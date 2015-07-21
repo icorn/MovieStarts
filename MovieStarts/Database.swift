@@ -59,6 +59,16 @@ class Database {
 		self.cloudKitDatabase = cloudKitContainer.publicCloudDatabase
 	}
 	
+	
+	/**
+		Read movies if needed.
+
+		:param: completionHandler	The handler which is called after all movies are read
+		:param: errorHandler		The handler which is called if an error occurs
+		:param: showIndicator		Callback which is called to show a progress indicator
+		:param: stopIndicator		Callback which is called to stop the progress indicator
+		:param: updateIndicator		Callback which is called to update the progress indicator with a new progress
+	*/
 	func getAllMovies(	completionHandler: (movies: [MovieRecord]?) -> (),
 						errorHandler: (errorMessage: String) -> (),
 						showIndicator: ((updating: Bool, showProgress: Bool) -> ())?,
@@ -166,44 +176,22 @@ class Database {
 			errorHandler(errorMessage: "No group folder found")
 		}
 	}
+
 	
-
-/*
-	func setUpSubscription() {
-		
-		// unused. Called in StartViewController.viewDidAppear()
-		
-		self.cloudKitDatabase.fetchSubscriptionWithID(Constants.SUBSCRIPTION_ID_USA) { subscription, error in
-			if (subscription == nil) {
-				// we have no subscription: make it!
-				
-				let predicate = NSPredicate(value: true)
-				let notificationInfo = CKNotificationInfo()
-				notificationInfo.shouldSendContentAvailable = true
-				
-				let subscription = CKSubscription(recordType: Constants.RECORD_TYPE_USA, predicate: predicate, subscriptionID: Constants.SUBSCRIPTION_ID_USA,
-				options: CKSubscriptionOptions.FiresOnRecordCreation | CKSubscriptionOptions.FiresOnRecordDeletion | CKSubscriptionOptions.FiresOnRecordUpdate)
-				
-				subscription.notificationInfo = notificationInfo
-
-				self.cloudKitDatabase.saveSubscription(subscription) { subscription, error in
-					if (error != nil) {
-						// TODO
-						println("Error adding subscriptions: \(error!.code) (\(error!.localizedDescription))")
-					}
-				}
-			}
-		}
-	}
-*/
+	/**
+		Writes the movies and the modification date to file.
 	
-
-	func finishMovies(allMoviesRecords: [MovieRecord], updatedMoviesAsRecordArray: [CKRecord], completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
+		:param: allMovieRecords				The array with all movies
+		:param: updatedMoviesAsRecordArray	The array with all updated movies (used to find out latest modification date)
+		:param: completionHandler			The handler which is called upon completion
+		:param: errorHandler				The handler which is called if an error occurs
+	*/
+	func writeMovies(allMovieRecords: [MovieRecord], updatedMoviesAsRecordArray: [CKRecord], completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
 
 		// write it to device
 		
 		if let filename = self.moviesPlistFile {
-			if ((DatabaseHelper.movieRecordArrayToDictArray(allMoviesRecords) as NSArray).writeToFile(filename, atomically: true) == false) {
+			if ((DatabaseHelper.movieRecordArrayToDictArray(allMovieRecords) as NSArray).writeToFile(filename, atomically: true) == false) {
 				if let saveStopIndicator = self.stopIndicator {
 					dispatch_async(dispatch_get_main_queue()) {
 						saveStopIndicator()
@@ -231,24 +219,20 @@ class Database {
 			}
 		}
 		
-		completionHandler(movies: allMoviesRecords)
+		completionHandler(movies: allMovieRecords)
 	}
 	
 	
-	// MARK: callbacks for getting all movies
+	// MARK: - callbacks for getting all movies
+
+
+	/**
+		Adds the record to an array to save it for later processing.
+		This function is called when a new record was fetched from the CloudKit database.
 	
+		:param: record	The record from the CloudKit database
+	*/
 	func recordFetchedAllMoviesCallback(record: CKRecord!) {
-		
-/*
-		var bla = record.objectForKey(Constants.DB_ID_POSTER_ASSET)
-		var bla2 = record.objectForKey(Constants.DB_ID_BIG_POSTER_ASSET)
-		
-		
-		if (bla2 != nil) {
-			var sepp = 42
-		}
-*/
-		
 		self.allCKRecords.append(record)
 		
 		if let saveRecordNumber = self.totalNumberOfRecordsFromCloud {
@@ -265,6 +249,15 @@ class Database {
 		}
 	}
 	
+	
+	/**
+		Checks if all movies are read or if there are more pages of movies to read from the CloudKit database.
+		If all movies are here, MovieRecord objects are generated and save.
+		This function is called when all records (or at least all records from a page) have been fetched from the CloudKit database.
+	
+		:param: cursor	The paging cursor used to find out if there are more pages of movies to load
+		:param: error	The error object
+	*/
 	func queryCompleteAllMoviesCallback(cursor: CKQueryCursor!, error: NSError!) {
 		if (cursor == nil) {
 			// all objects are here!
@@ -308,7 +301,7 @@ class Database {
 				
 				// finish movies
 				if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-					self.finishMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: self.completionHandler!, errorHandler: self.errorHandler!)
+					self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: self.completionHandler!, errorHandler: self.errorHandler!)
 				}
 				else {
 					if let saveStopIndicator = self.stopIndicator {
@@ -332,12 +325,28 @@ class Database {
 	}
 	
 
-	// MARK: callbacks for getting updated movies
+	// MARK: - callbacks for getting updated movies
 	
+	
+	/**
+		Adds the record to an array to save it for later processing.
+		This function is called when a new updated record was fetched from the CloudKit database.
+	
+		:param: record	The record from the CloudKit database
+	*/
 	func recordFetchedUpdatedMoviesCallback(record: CKRecord!) {
 		self.updatedCKRecords.append(record)
 	}
 
+	
+	/**
+		Checks if all updated movies are read or if there are more pages of movies to read from the CloudKit database.
+		If all movies are here, MovieRecord objects are generated and save.
+		This function is called when all updated records (or at least all records from a page) have been fetched from the CloudKit database.
+	
+		:param: cursor	The paging cursor used to find out if there are more pages of movies to load
+		:param: error	The error object
+	*/
 	func queryCompleteUpdatedMoviesCallback(cursor: CKQueryCursor!, error: NSError!) {
 		if (cursor == nil) {
 			// all updated records are here!
@@ -391,8 +400,12 @@ class Database {
 	}
 	
 	
-	// MARK: cleaning up posters
+	// MARK: - cleaning up posters
 
+	
+	/**
+		Deleted unneeded poster files from the device, and reads missing poster files from the CloudKit database to the device.
+	*/
 	private func cleanUpPosters() {
 		
 		var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
@@ -463,6 +476,12 @@ class Database {
 	}
 	
 	
+	/**
+		Adds the poster record to an array to save it for later processing.
+		This function is called when a new poster record was fetched from the CloudKit database.
+	
+		:param: record	The record from the CloudKit database
+	*/
 	func recordFetchedMissingPostersCallback(record: CKRecord!) {
 		
 		// poster fetched: store it to disk
@@ -479,13 +498,25 @@ class Database {
 	}
 
 	
+	/**
+		Is called when all missing poster files have been fetched from the CloudKit database.
+	
+		:param: cursor	The paging cursor used to find out if there are more pages of movies to load
+		:param: error	The error object
+	*/
 	func queryCompleteMissingPostersCallback(cursor: CKQueryCursor!, error: NSError!) {
 		downloadsFinished()
 	}
 	
 	
-	// MARK: private helper functions
+	// MARK: - private helper functions
 
+	
+	/**
+		Checks if there are movies which are too old and removes them.
+	
+		:param: existingMovies	The array of existing movies to check
+	*/
 	private func cleanUpExistingMovies(inout existingMovies: [MovieRecord]) {
 		
 		var compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.MAX_DAYS_IN_THE_PAST) // 30 days ago
@@ -509,10 +540,13 @@ class Database {
 	}
 
 	
+	/**
+		Tries to write the movies to the device.
+	*/
 	private func downloadsFinished() {
 		// finish movies
 		if ((completionHandler != nil) && (errorHandler != nil)) {
-			finishMovies(loadedMovieRecordArray!, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler!)
+			writeMovies(loadedMovieRecordArray!, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler!)
 		}
 		else {
 			if let saveStopIndicator = stopIndicator {

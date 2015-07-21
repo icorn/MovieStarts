@@ -16,7 +16,9 @@ class TabBarController: UITabBarController {
 	var bestMovies: [MovieRecord] = []
 	
 	@IBOutlet weak var movieTabBar: UITabBar!
+
 	
+	// MARK: - UIViewController
 
 	override func viewWillAppear(animated: Bool) {
 		super.viewWillAppear(animated)

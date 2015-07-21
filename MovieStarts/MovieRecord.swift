@@ -87,6 +87,11 @@ class MovieRecord {
 //		if (ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) != nil) 	{ self.voteCount 		= ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) 	as! Int }
 	}
 
+	/**
+		Converts this object to a dictionary for serialization.
+
+		:returns: A dictionary with all non-null members of this object.
+	*/
 	
 	func toDictionary() -> [String: AnyObject] {
 		
@@ -116,12 +121,8 @@ class MovieRecord {
 		return retval
 	}
 	
+	/// The thumbnail image object as a tuple: the image object and the "found" flag indicating if a poster image was returned or if it only is the default image.
 	
-	/**
-		Gets the thumbnail image object.
-	
-		:returns: a tuple with the image, and the "found" flag indicating if a poster image was returned or if it only is the default image.
-	*/
 	var thumbnailImage: (UIImage?, Bool) {
 		get {
 			
@@ -137,11 +138,8 @@ class MovieRecord {
 		}
 	}
 	
-	/**
-		Generates the string of call genres of the movie.
+	/// The string of genres of the movie.
 	
-		:returns: the generated string consisting of the movies genres
-	*/
 	var genreString: String? {
 		get {
 			var genreText = ""
@@ -159,12 +157,8 @@ class MovieRecord {
 		}
 	}
 	
-	
-	/**
-		Generates the subtitle for the detail view of the movie.
-	
-		:returns: the generated subtitle, consting of the runtime and the production countries
-	*/
+	/// The subtitle for the detail view of the movie.
+
 	var detailSubtitle: String? {
 		var detailText = ""
 		
@@ -196,6 +190,7 @@ class MovieRecord {
 		}
 	}
 	
+	/// The original momvie title including language-specific prefix (like "aka").
 	
 	var originalTitleForDisplay: String? {
 		var retval: String? = nil
@@ -208,6 +203,7 @@ class MovieRecord {
 		return retval
 	}
 	
+	/// An array with up to three items for the subtitle.
 	
 	var subtitleArray: [String] {
 		
@@ -228,6 +224,7 @@ class MovieRecord {
 		return subtitles
 	}
 	
+	/// The release data as string in medium sized format.
 	
 	var releaseDateString: String {
 
@@ -243,6 +240,7 @@ class MovieRecord {
 		return retval
 	}
 	
+	/// The release data as string in long format.
 	
 	var releaseDateStringLong: String {
 		
@@ -261,6 +259,8 @@ class MovieRecord {
 	
 	/**
 		Moves a downloaded thumbnail poster from the temporar folder to the final one.
+	
+		:param: thumbnailAsset	The asset of the poster coming from CloudKit
 	*/
 	func storeThumbnailPoster(thumbnailAsset: CKAsset?) {
 		if let thumbnailAsset = thumbnailAsset, posterUrl = posterUrl {

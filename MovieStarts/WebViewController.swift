@@ -24,17 +24,14 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 	var forwardButton: UIBarButtonItem?
 	
 	
+	// MARK: - UIViewController
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		
-		
 		heightConstraint.constant = view.frame.height
 		widthConstraint.constant = view.frame.width
 		println("nav: \(navigationController?.view.bounds) view: \(view.bounds), webview: \(webview.bounds), webscroll: \(webview.scrollView.bounds) BEGIN")
-		
-		
-
 		
 		webview.delegate = self
 
@@ -84,8 +81,6 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 //		view.setNeedsLayout()
 //		updateViewConstraints()
 		
-
-		
 		heightConstraint.constant = view.frame.height
 		widthConstraint.constant = view.frame.width
 		
@@ -108,7 +103,7 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 	}
 */
 	
-	// MARK: UIWebViewDelegate implementation
+	// MARK: - UIWebViewDelegate
 	
 	func webViewDidStartLoad(webView: UIWebView) {
 	
@@ -153,7 +148,7 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 		spinning = false
 	}
 	
-
+	
 	func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
 		if ((error.code != NSURLErrorCancelled) && (count(error.localizedDescription) > 0)) {
 		
@@ -174,14 +169,14 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 	}
 
 	
-	// MARK: UIAlertViewDelegate implementation
+	// MARK: - UIAlertViewDelegate
 	
 	func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
 		// user pressed OK in alert: do nothing (for now)
 	}
 
 	
-	// MARK: Button callbacks
+	// MARK: - Button callbacks
 
 	func reloadButtonPressed() {
 		webview.reload()

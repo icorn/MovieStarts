@@ -32,7 +32,7 @@ struct Constants {
 	static let DAYS_TILL_DB_UPDATE			= 7
 	static let MAX_DAYS_IN_THE_PAST			= 28.0
 
-	// MARK: keys for records fromt the cloud
+	// MARK: - keys for records fromt the cloud
 	
 	static let DB_ID_TMDB_ID				= "tmdbId"
 	static let DB_ID_ORIG_TITLE				= "origTitle"

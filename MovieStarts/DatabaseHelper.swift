@@ -13,7 +13,11 @@ import CloudKit
 class DatabaseHelper {
 	
    /**
-	* Converts an array of MovieRecord objects to an array of NSDictionaries.
+		Converts an array of MovieRecord objects to an array of NSDictionaries.
+	
+		:param: movieRecords	The input array of MovieRecord objects
+	
+		:returns: An array of NSDictionarys which contain the data of the input parameter movieRecords.
 	*/
 	class func movieRecordArrayToDictArray(movieRecords: [MovieRecord]) -> [NSDictionary] {
 		var retval: [NSDictionary] = []
@@ -27,7 +31,11 @@ class DatabaseHelper {
 	
 	
    /**
-	* Converts an array of MovieRecord objects to an array of NSDictionaries.
+		Converts an array of NSDictionarys to an array of MovieRecord objects.
+	
+		:param: dictArray	The input array of NSDictionarys
+	
+		:returns: An array of MovieRecord objects, generated of the input parameter dictArray.
 	*/
 	class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]) -> [MovieRecord] {
 		var retval: [MovieRecord] = []
@@ -46,7 +54,9 @@ class DatabaseHelper {
 	
 	
    /**
-	* Stores the date of the last modified CKRecord in the UserDefaults.
+		Stores the date of the last modified CKRecord in the UserDefaults.
+	
+		:param: ckrecords	The new or updated CKRecords from the CloudKit database
 	*/
 	class func storeLastModification(ckrecords: [CKRecord]) {
 		var latestModification = NSDate(timeIntervalSince1970: 0)
@@ -63,7 +73,10 @@ class DatabaseHelper {
 	
 	
    /**
-	* Joins the both arrays of MovieRecord with existing and updated movies.
+		Joins the both arrays of MovieRecord with existing and updated movies.
+	
+		:param: existingMovies	The array with the existing movies
+		:param: updatedMovies	The array with the updated movies
 	*/
 	class func joinMovieRecordArrays(inout existingMovies: [MovieRecord], updatedMovies: [MovieRecord]) {
 		
@@ -83,7 +96,10 @@ class DatabaseHelper {
 	
 	
    /**
-	* Searches for a movie in an array of movie records. The index or null is returned.
+		Searches for a movie in an array of movie records. The index or null is returned.
+	
+		:param: updatedMovie	The movie record to search for
+		:param: array			The array to be searched
 	*/
 	class func findArrayIndexOfMovie(updatedMovie: MovieRecord, array: [MovieRecord]) -> Int? {
 		var foundIndex: Int?
