@@ -10,7 +10,7 @@ import Foundation
 import CloudKit
 
 
-class DatabaseHelper {
+public class DatabaseHelper {
 	
    /**
 		Converts an array of MovieRecord objects to an array of NSDictionaries.
@@ -19,7 +19,7 @@ class DatabaseHelper {
 	
 		:returns: An array of NSDictionarys which contain the data of the input parameter movieRecords.
 	*/
-	class func movieRecordArrayToDictArray(movieRecords: [MovieRecord]) -> [NSDictionary] {
+	public class func movieRecordArrayToDictArray(movieRecords: [MovieRecord]) -> [NSDictionary] {
 		var retval: [NSDictionary] = []
 	
 		for record in movieRecords {
@@ -37,7 +37,7 @@ class DatabaseHelper {
 	
 		:returns: An array of MovieRecord objects, generated of the input parameter dictArray.
 	*/
-	class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]) -> [MovieRecord] {
+	public class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]) -> [MovieRecord] {
 		var retval: [MovieRecord] = []
 		
 		for dict in dictArray {
@@ -78,7 +78,7 @@ class DatabaseHelper {
 		:param: existingMovies	The array with the existing movies
 		:param: updatedMovies	The array with the updated movies
 	*/
-	class func joinMovieRecordArrays(inout existingMovies: [MovieRecord], updatedMovies: [MovieRecord]) {
+	public class func joinMovieRecordArrays(inout existingMovies: [MovieRecord], updatedMovies: [MovieRecord]) {
 		
 		for updatedMovie in updatedMovies {
 			var movieIndex = DatabaseHelper.findArrayIndexOfMovie(updatedMovie, array: existingMovies)
@@ -101,7 +101,7 @@ class DatabaseHelper {
 		:param: updatedMovie	The movie record to search for
 		:param: array			The array to be searched
 	*/
-	class func findArrayIndexOfMovie(updatedMovie: MovieRecord, array: [MovieRecord]) -> Int? {
+	public class func findArrayIndexOfMovie(updatedMovie: MovieRecord, array: [MovieRecord]) -> Int? {
 		var foundIndex: Int?
 		
 		if let updatedMovieId = updatedMovie.tmdbId {

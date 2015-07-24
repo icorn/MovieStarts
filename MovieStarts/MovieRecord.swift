@@ -11,32 +11,32 @@ import CloudKit
 import UIKit
 
 
-class MovieRecord {
+public class MovieRecord {
 	
-	var tmdbId:Int?
-	var origTitle:String?
-	var runtime:Int = 0
-	var voteAverage:Double = 0.0
-	var title:String?
-	var synopsis:String?
-	var releaseDate:NSDate?
-	var genres:[String] = []
-	var genreIds:[Int] = []
-	var productionCountries:[String] = []
-	var certification:String?
-	var posterUrl:String?
-	var imdbId:String?
-	var directors:[String] = []
-	var actors:[String] = []
+	public var tmdbId:Int?
+	public var origTitle:String?
+	public var runtime:Int = 0
+	public var voteAverage:Double = 0.0
+	public var title:String?
+	public var synopsis:String?
+	public var releaseDate:NSDate?
+	public var genres:[String] = []
+	public var genreIds:[Int] = []
+	public var productionCountries:[String] = []
+	public var certification:String?
+	public var posterUrl:String?
+	public var imdbId:String?
+	public var directors:[String] = []
+	public var actors:[String] = []
 	
-	var trailerNames:[String] = []
-	var trailerIds:[String] = []
+	public var trailerNames:[String] = []
+	public var trailerIds:[String] = []
 
 	//	var popularity:Int = 0
 	//	var voteCount:Int = 0
 
 	
-	init(dict: [String: AnyObject]) {
+	public init(dict: [String: AnyObject]) {
 		
 		if (dict[Constants.DB_ID_TMDB_ID] != nil) 		{ self.tmdbId 			= dict[Constants.DB_ID_TMDB_ID] 		as? Int }
 		if (dict[Constants.DB_ID_ORIG_TITLE] != nil)	{ self.origTitle 		= dict[Constants.DB_ID_ORIG_TITLE] 		as? String }
@@ -93,7 +93,7 @@ class MovieRecord {
 		:returns: A dictionary with all non-null members of this object.
 	*/
 	
-	func toDictionary() -> [String: AnyObject] {
+	public func toDictionary() -> [String: AnyObject] {
 		
 		var retval: [String:AnyObject] = [:]
 		
@@ -124,42 +124,37 @@ class MovieRecord {
 	/// The thumbnail image object as a tuple: the image object and the "found" flag indicating if a poster image was returned or if it only is the default image.
 	
 	var thumbnailImage: (UIImage?, Bool) {
-		get {
-			
-			var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
-			
-			if let pathUrl = pathUrl, basePath = pathUrl.path {
-				if let posterUrl = posterUrl {
-					return (UIImage(contentsOfFile: basePath + Constants.THUMBNAIL_FOLDER + posterUrl), true)
-				}
+		var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		
+		if let pathUrl = pathUrl, basePath = pathUrl.path {
+			if let posterUrl = posterUrl {
+				return (UIImage(contentsOfFile: basePath + Constants.THUMBNAIL_FOLDER + posterUrl), true)
 			}
-			
-			return (UIImage(named: "noposter.png"), false)
 		}
+		
+		return (UIImage(named: "noposter.png"), false)
 	}
 	
 	/// The string of genres of the movie.
 	
-	var genreString: String? {
-		get {
-			var genreText = ""
+	public var genreString: String? {
+		var genreText = ""
+		
+		if (genres.count > 0) {
+			for genre in genres {
+				genreText += genre + ", "
+			}
 			
-			if (genres.count > 0) {
-				for genre in genres {
-					genreText += genre + ", "
-				}
-				
-				return genreText.substringToIndex(genreText.endIndex.predecessor().predecessor())
-			}
-			else {
-				return nil
-			}
+			return genreText.substringToIndex(genreText.endIndex.predecessor().predecessor())
+		}
+		else {
+			return nil
 		}
 	}
 	
 	/// The subtitle for the detail view of the movie.
 
-	var detailSubtitle: String? {
+	public var detailSubtitle: String? {
 		var detailText = ""
 		
 		// add runtime
@@ -190,7 +185,7 @@ class MovieRecord {
 		}
 	}
 	
-	/// The original momvie title including language-specific prefix (like "aka").
+	/// The original movie title including language-specific prefix (like "aka").
 	
 	var originalTitleForDisplay: String? {
 		var retval: String? = nil
@@ -205,8 +200,7 @@ class MovieRecord {
 	
 	/// An array with up to three items for the subtitle.
 	
-	var subtitleArray: [String] {
-		
+	public var subtitleArray: [String] {
 		var subtitles: [String] = []
 		
 		if let origText = originalTitleForDisplay {
@@ -227,7 +221,6 @@ class MovieRecord {
 	/// The release data as string in medium sized format.
 	
 	var releaseDateString: String {
-
 		var retval = NSLocalizedString("NoReleaseDate", comment: "")
 		
 		if let releaseDate = releaseDate {
@@ -243,7 +236,6 @@ class MovieRecord {
 	/// The release data as string in long format.
 	
 	var releaseDateStringLong: String {
-		
 		var retval = NSLocalizedString("NoReleaseDate", comment: "")
 		
 		if let releaseDate = releaseDate {
