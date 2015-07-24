@@ -505,7 +505,32 @@ class Database {
 		:param: error	The error object
 	*/
 	func queryCompleteMissingPostersCallback(cursor: CKQueryCursor!, error: NSError!) {
-		downloadsFinished()
+		if (cursor == nil) {
+			if (error != nil) {
+				if let saveStopIndicator = self.stopIndicator {
+					dispatch_async(dispatch_get_main_queue()) {
+						saveStopIndicator()
+					}
+				}
+				
+				// TODO: Error-Code 1 heißt u. a., dass der User nicht in iCloud eingeloggt ist
+				
+				self.errorHandler?(errorMessage: "Error querying posters: \(error!.code) (\(error!.localizedDescription))")
+				return
+			}
+			else {
+				// no errors
+				downloadsFinished()
+			}
+		}
+		else {
+			// some objects are here, ask for more
+			let queryOperation = CKQueryOperation(cursor: cursor)
+			queryOperation.recordFetchedBlock = recordFetchedMissingPostersCallback
+			queryOperation.queryCompletionBlock = queryCompleteMissingPostersCallback
+			queryOperation.desiredKeys = [Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_TMDB_ID]
+			self.cloudKitDatabase.addOperation(queryOperation)
+		}
 	}
 	
 	
