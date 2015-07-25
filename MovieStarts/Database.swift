@@ -147,6 +147,9 @@ class Database {
 				self.cloudKitDatabase.fetchRecordWithID(recordId, completionHandler: { (record: CKRecord!, error: NSError!) in
 					
 					if (error != nil) {
+						
+						// TODO error 1 wenn nicht in iCloud eingeloggt (checken)
+						
 						println("Error getting number of records: \(error!.code) (\(error!.localizedDescription))")
 					}
 					else if (record != nil) {
@@ -380,7 +383,7 @@ class Database {
 					DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
 				}
 				
-				// delete all movies which were not updated and don't exist anymore in the cloud
+				// delete all movies which are too old
 
 				cleanUpExistingMovies(&loadedMovieRecordArray!)
 				
