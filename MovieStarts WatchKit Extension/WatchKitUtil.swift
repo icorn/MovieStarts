@@ -43,12 +43,8 @@ class WatchKitUtil {
 
 		// add countries
 		
-		if (movie.productionCountries.count > 0) {
-			for country in movie.productionCountries {
-				detailText += MovieStartsUtil.shortenCountryname(country) + ", "
-			}
-
-			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor()) + " | "
+		if let countries = movie.countryString {
+			detailText += countries + " | "
 		}
 		
 		if (count(detailText) > 0) {

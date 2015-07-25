@@ -138,7 +138,7 @@ public class MovieRecord {
 	/// The string of genres of the movie.
 	
 	public var genreString: String? {
-		var genreText = ""
+		var genreText: String = ""
 		
 		if (genres.count > 0) {
 			for genre in genres {
@@ -146,6 +146,23 @@ public class MovieRecord {
 			}
 			
 			return genreText.substringToIndex(genreText.endIndex.predecessor().predecessor())
+		}
+		else {
+			return nil
+		}
+	}
+	
+	/// The string of production countries.
+	
+	var countryString: String? {
+		var countryText: String = ""
+		
+		if (productionCountries.count > 0) {
+			for country in productionCountries {
+				countryText += shortenCountryname(country) + ", "
+			}
+			
+			return countryText.substringToIndex(countryText.endIndex.predecessor().predecessor())
 		}
 		else {
 			return nil
@@ -165,16 +182,9 @@ public class MovieRecord {
 		}
 		
 		// add countries
-		
-		if (productionCountries.count > 0) {
-			for country in productionCountries {
-				detailText += MovieStartsUtil.shortenCountryname(country) + ", "
-			}
-		}
-		
-		if (count(detailText) > 0) {
-			// remove last two characters
-			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor())
+
+		if let countries = countryString {
+			detailText += countries
 		}
 		
 		if (count(detailText) == 0) {
@@ -276,5 +286,25 @@ public class MovieRecord {
 		}
 	}
 	
+	
+	/**
+		Shortens the given country name.
+	
+		:param:	name	The country name to be shortened
+	
+		:returns: The shortened country name (often the same as the input name).
+	*/
+	private func shortenCountryname(name: String) -> String {
+		
+		switch(name) {
+		case "United States of America":
+			return "USA"
+		case "United Kingdom":
+			return "UK"
+		default:
+			return name
+		}
+	}
+
 }
 
