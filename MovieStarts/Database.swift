@@ -382,7 +382,7 @@ class Database {
 					// merge both arrays (the existing movies and the updated movies)
 					DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
 				}
-				
+
 				// delete all movies which are too old
 
 				cleanUpExistingMovies(&loadedMovieRecordArray!)
