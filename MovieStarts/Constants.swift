@@ -11,6 +11,8 @@ import Foundation
 
 public struct Constants {
 	
+	// MARK: - Constants
+	
 	static let CLOUDKIT_CONTAINER_ID		= "iCloud.com.icorn.MovieStarts"
 	static let MOVIESTARTS_GROUP			= "group.com.icorn.MovieStarts"
 	static let THUMBNAIL_FOLDER				= "/Thumbnails"
@@ -18,6 +20,7 @@ public struct Constants {
 	
 	static let PREFS_LATEST_DB_MODIFICATION = "modificationDate"
 	static let PREFS_LATEST_DB_UPDATE_CHECK = "lastestCheck"
+	static let PREFS_FAVORITES				= "favorites"
 
 	static let SUBSCRIPTION_ID_USA			= "MovieStartsSubscriptionUSA"
 	static let SUBSCRIPTION_ID_GERMANY		= "MovieStartsSubscriptionGermany"
@@ -32,7 +35,7 @@ public struct Constants {
 	static let DAYS_TILL_DB_UPDATE			= 7
 	static let MAX_DAYS_IN_THE_PAST			= 28.0
 
-	// MARK: - keys for records fromt the cloud
+	// MARK: - Keys for records fromt the cloud
 	
 	public static let DB_ID_TMDB_ID					= "tmdbId"
 	public static let DB_ID_ORIG_TITLE				= "origTitle"
@@ -55,6 +58,8 @@ public struct Constants {
 	
 	public static let DB_ID_POSTER_ASSET			= "posterAsset"
 	public static let DB_ID_BIG_POSTER_ASSET		= "bigPosterAsset"
+	
+	public static let DB_ID_ID						= "id"
 
 //	public static let DB_ID_POPULARITY				= "popularity"
 //	public static let DB_ID_VOTE_COUNT				= "voteCount"

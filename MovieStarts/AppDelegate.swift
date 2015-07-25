@@ -43,6 +43,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				}
 			}
 		}
+
+		// read favorites from file
+		var favorites: [String]? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_FAVORITES) as! [String]?
+		
+		if let favorites = favorites {
+			Favorites.IDs = favorites
+		}
 		
 		return true
 	}

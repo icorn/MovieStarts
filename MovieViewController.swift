@@ -84,6 +84,7 @@ class MovieViewController: UIViewController {
 	var movie: MovieRecord?
 	var textButtons = [UIButton]()
 	var bottomButton: UIButton?
+	var favoriteButtonIndex: Int = 0
 	var certificationDict: [String: CertificateLogo] = [
 		"R" 	: CertificateLogo(filename: "certificateR.png", height: 30),
 		"G" 	: CertificateLogo(filename: "certificateG.png", height: 30),
@@ -242,7 +243,7 @@ class MovieViewController: UIViewController {
 				storyLabel.text = synopsis
 			}
 
-			// show textbuttons for imdb, trailers, and favorites
+			// show textbuttons for imdb and trailers
 			
 			textButtons = [textButton1, textButton2, textButton3, textButton4, textButton5]
 			var textButtonIndex = 0
@@ -260,8 +261,23 @@ class MovieViewController: UIViewController {
 				textButtonIndex++
 			}
 			
-			textButtons[textButtonIndex].addTarget(self, action: Selector("favoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-			textButtons[textButtonIndex].setTitle(NSLocalizedString("AddToFavorites", comment: ""), forState: UIControlState.Normal)
+			// generate favorite button
+
+			favoriteButtonIndex = textButtonIndex
+			setUpFavoriteButton()
+/*
+			if (contains(Constants.favorites, saveMovie.id)) {
+				// this movie is a favorite: show remove-button
+				textButtons[textButtonIndex].addTarget(self, action: Selector("removeFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				textButtons[textButtonIndex].setTitle(NSLocalizedString("RemoveFromFavorites", comment: ""), forState: UIControlState.Normal)
+			}
+			else {
+				// this movie is not a favorite: show add-button
+				textButtons[textButtonIndex].addTarget(self, action: Selector("addFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				textButtons[textButtonIndex].setTitle(NSLocalizedString("AddToFavorites", comment: ""), forState: UIControlState.Normal)
+			}
+*/
+			
 			textButtonIndex++
 
 			// hide unused button(s)
@@ -361,12 +377,28 @@ class MovieViewController: UIViewController {
 	
 	
 	/**
-		Adds the current movie to favorites, or removes current pictures from favorites.
+		Adds the current movie to favorites.
 	
 		:param: sender	The tapped button
 	*/
-	func favoriteButtonTapped(sender:UIButton!) {
-		// TODO
+	func addFavoriteButtonTapped(sender:UIButton!) {
+		if let movie = movie {
+			Favorites.addMovieID(movie.id)
+			setUpFavoriteButton()
+		}
+	}
+
+	
+	/**
+		Removes current movie from favorites.
+	
+		:param: sender	The tapped button
+	*/
+	func removeFavoriteButtonTapped(sender:UIButton!) {
+		if let movie = movie {
+			Favorites.removeMovieID(movie.id)
+			setUpFavoriteButton()
+		}
 	}
 	
 	
@@ -446,4 +478,20 @@ class MovieViewController: UIViewController {
 		}
 	}
 
+	private final func setUpFavoriteButton() {
+		if let movie = movie {
+			textButtons[favoriteButtonIndex].removeTarget(nil, action: nil, forControlEvents: UIControlEvents.AllEvents)
+			
+			if (contains(Favorites.IDs, movie.id)) {
+				// this movie is a favorite: show remove-button
+				textButtons[favoriteButtonIndex].addTarget(self, action: Selector("removeFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				textButtons[favoriteButtonIndex].setTitle(NSLocalizedString("RemoveFromFavorites", comment: ""), forState: UIControlState.Normal)
+			}
+			else {
+				// this movie is not a favorite: show add-button
+				textButtons[favoriteButtonIndex].addTarget(self, action: Selector("addFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				textButtons[favoriteButtonIndex].setTitle(NSLocalizedString("AddToFavorites", comment: ""), forState: UIControlState.Normal)
+			}
+		}
+	}
 }

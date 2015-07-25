@@ -13,29 +13,46 @@ import UIKit
 
 public class MovieRecord {
 	
+	/// the unique ID from CKAsset
+	public var id:String
+	/// the ID from tmdb.org
 	public var tmdbId:Int?
+	/// the original movie title
 	public var origTitle:String?
+	/// the movie runtime in minutes
 	public var runtime:Int = 0
+	/// the vote average between 0 and 10
 	public var voteAverage:Double = 0.0
+	/// the movie title
 	public var title:String?
+	/// the synopsis of the movie
 	public var synopsis:String?
+	/// the release date of the movie
 	public var releaseDate:NSDate?
+	/// an array with movie genres as strings
 	public var genres:[String] = []
+	/// an array with movie genres as IDs
 	public var genreIds:[Int] = []
+	/// an array of production countries as strings
 	public var productionCountries:[String] = []
+	/// the certification of the movie
 	public var certification:String?
+	/// the url of the poster
 	public var posterUrl:String?
+	/// the ID from imdb.com
 	public var imdbId:String?
+	/// an array of directors
 	public var directors:[String] = []
+	/// an array of actors
 	public var actors:[String] = []
-	
+	/// an array of trailer names (for display)
 	public var trailerNames:[String] = []
+	/// an array of trailer IDs (IDs for youtube)
 	public var trailerIds:[String] = []
 
 	//	var popularity:Int = 0
 	//	var voteCount:Int = 0
 
-	
 	public init(dict: [String: AnyObject]) {
 		
 		if (dict[Constants.DB_ID_TMDB_ID] != nil) 		{ self.tmdbId 			= dict[Constants.DB_ID_TMDB_ID] 		as? Int }
@@ -59,8 +76,17 @@ public class MovieRecord {
 		
 //		if (dict[Constants.DB_ID_POPULARITY] != nil) 	{ self.popularity 		= dict[Constants.DB_ID_POPULARITY] 		as! Int }
 //		if (dict[Constants.DB_ID_VOTE_COUNT] != nil) 	{ self.voteCount 		= dict[Constants.DB_ID_VOTE_COUNT] 		as! Int }
+		
+		if let saveId = dict[Constants.DB_ID_ID] as? String {
+			id = saveId
+		}
+		else {
+			// this should never happen
+			println("Id for movie \(title) is empty!")
+			id = ""
+		}
 	}
-	
+
 	
 	init(ckRecord: CKRecord) {
 		
@@ -85,6 +111,8 @@ public class MovieRecord {
 		
 //		if (ckRecord.objectForKey(Constants.DB_ID_POPULARITY) != nil) 	{ self.popularity 		= ckRecord.objectForKey(Constants.DB_ID_POPULARITY) 	as! Int }
 //		if (ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) != nil) 	{ self.voteCount 		= ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) 	as! Int }
+		
+		id = ckRecord.recordID.recordName
 	}
 
 	/**
@@ -117,6 +145,8 @@ public class MovieRecord {
 		
 //		retval[Constants.DB_ID_POPULARITY] = popularity
 //		retval[Constants.DB_ID_VOTE_COUNT] = voteCount
+		
+		retval[Constants.DB_ID_ID] = id
 		
 		return retval
 	}
