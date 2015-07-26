@@ -24,19 +24,21 @@ class TabBarController: UITabBarController {
 		super.viewWillAppear(animated)
 		
 		if let saveItems = movieTabBar.items {
-			if (saveItems.count == 3) {
+			if (saveItems.count == 4) {
 				
 				// set tab bar titles
 				
 				(saveItems[0] as! UITabBarItem).title = NSLocalizedString("NowPlaying", comment: "")
 				(saveItems[1] as! UITabBarItem).title = NSLocalizedString("Upcoming", comment: "")
-				(saveItems[2] as! UITabBarItem).title = NSLocalizedString("Settings", comment: "")
+				(saveItems[2] as! UITabBarItem).title = NSLocalizedString("Favorites", comment: "")
+				(saveItems[3] as! UITabBarItem).title = NSLocalizedString("Settings", comment: "")
 				
 				// set tab bar images
 
 				(saveItems[0] as! UITabBarItem).image = UIImage(named: "Video.png")
 				(saveItems[1] as! UITabBarItem).image = UIImage(named: "Calendar.png")
-				(saveItems[2] as! UITabBarItem).image = UIImage(named: "Settings.png")
+				(saveItems[2] as! UITabBarItem).image = UIImage(named: "Favorite.png")
+				(saveItems[3] as! UITabBarItem).image = UIImage(named: "Settings.png")
 			}
 		}
     }

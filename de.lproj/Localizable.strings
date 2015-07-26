@@ -10,6 +10,7 @@
 "NowPlayingLong"	= "Jetzt im Kino";
 "Upcoming"			= "Demnächst";
 "UpcomingLong"		= "Demnächst im Kino";
+"Favorites"			= "Favoriten";
 "Settings"			= "Einstellungen";
 "UpdatingMovies"	= "Filme aktualisieren...";
 "LoadingMovies"		= "Filme laden...";
@@ -25,5 +26,7 @@
 
 "ShowOnImdb"			= "Zeige Details auf IMDb";
 "ShowTrailer"			= "Zeige ";
-"AddToFavorites"		= "Zu Favoriten hinzufügen";
+"AddToFavorites"		= "Als Favorit markieren";
 "RemoveFromFavorites"	= "Aus Favoriten entfernen";
+"AddToFavoritesShort"		= "Als Favorit\nmarkieren";
+"RemoveFromFavoritesShort"	= "Aus Favoriten\nentfernen";

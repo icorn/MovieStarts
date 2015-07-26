@@ -10,6 +10,7 @@
 "NowPlayingLong"	= "Now Playing in Theaters";
 "Upcoming"			= "Upcoming";
 "UpcomingLong"		= "Upcoming Movies in Theaters";
+"Favorites"			= "Favorites";
 "Settings"			= "Settings";
 "UpdatingMovies"	= "Updating movies...";
 "LoadingMovies"		= "Loading movies...";
@@ -27,3 +28,5 @@
 "ShowTrailer"			= "Show ";
 "AddToFavorites"		= "Add to Favorites";
 "RemoveFromFavorites"	= "Remove from Favorites";
+"AddToFavoritesShort"		= "Add to\nFavorites";
+"RemoveFromFavoritesShort"	= "Remove from\nFavorites";

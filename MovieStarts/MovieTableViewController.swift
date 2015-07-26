@@ -128,5 +128,61 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		return 116
 	}
 	
+	override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+		var movieID: String!
+		
+		if moviesInSections.count > 0 {
+			movieID = moviesInSections[indexPath.section][indexPath.row].id
+		}
+		else {
+			movieID = movies[indexPath.row].id
+		}
+
+		var title: String!
+		var backColor: UIColor!
+		
+		if (contains(Favorites.IDs, movieID)) {
+			title = NSLocalizedString("RemoveFromFavoritesShort", comment: "")
+			backColor = UIColor.redColor()
+		}
+		else {
+			title = NSLocalizedString("AddToFavoritesShort", comment: "")
+			backColor = UIColor.blueColor()
+		}
+		
+		var favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: {
+			(action: UITableViewRowAction!, path: NSIndexPath!) -> () in
+			
+				var movieID: String!
+				if self.moviesInSections.count > 0 {
+					movieID = self.moviesInSections[indexPath.section][indexPath.row].id
+				}
+				else {
+					movieID = self.movies[indexPath.row].id
+				}
+			
+				if (contains(Favorites.IDs, movieID)) {
+					Favorites.removeMovieID(movieID)
+				}
+				else {
+					Favorites.addMovieID(movieID)
+				}
+			
+				self.tableView.setEditing(false, animated: true)
+			}
+		)
+		
+		favAction.backgroundColor = backColor
+		
+		return [favAction]
+	}
+	
+	override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+		// Bug in iOS 8: This function is not called, but without it, swiping is not enabled
+	}
+	
+	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+		return true
+	}
 }
 
