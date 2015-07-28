@@ -42,7 +42,7 @@ class StartViewController: UIViewController {
 			{ (movies: [MovieRecord]?) in
 			
 				// show the next view controller
-			
+				
 				var tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
 			
 				if let tabBarController = tabBarController, allMovies = movies {
@@ -50,7 +50,6 @@ class StartViewController: UIViewController {
 					// store movies in tabbarcontroller
 					
 					tabBarController.allMovies = allMovies
-					
 					var today = NSDate()
 					
 					// iterate over all movies and sort them into one of three lists (and ignore the ones without release date)
@@ -88,6 +87,11 @@ class StartViewController: UIViewController {
 							saveAboutView.removeFromSuperview()
 						}
 					})
+
+					// iOS bug: Some times the main runloop doesn't wake up!
+					// To wake it up, enqueue an empty block into the main runloop.
+					
+					dispatch_async(dispatch_get_main_queue()) {}
 				}
 			},
 			
