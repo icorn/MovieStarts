@@ -28,6 +28,9 @@
 		4F2C92AC1B64E4710044A27B /* favorite.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92A91B64E4710044A27B /* favorite.png */; };
 		4F2C92AD1B64E4710044A27B /* favorite@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92AA1B64E4710044A27B /* favorite@3x.png */; };
 		4F2C92AE1B64E4710044A27B /* favorite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92AB1B64E4710044A27B /* favorite@2x.png */; };
+		4F2C92B21B66EC840044A27B /* favoritecorner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92AF1B66EC840044A27B /* favoritecorner@2x.png */; };
+		4F2C92B31B66EC840044A27B /* favoritecorner.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92B01B66EC840044A27B /* favoritecorner.png */; };
+		4F2C92B41B66EC840044A27B /* favoritecorner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92B11B66EC840044A27B /* favoritecorner@3x.png */; };
 		4F3EC6D41B20ACB4003C48E4 /* CertificateLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */; };
 		4F3EC6E91B23580A003C48E4 /* certificateNR@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D51B23580A003C48E4 /* certificateNR@2x.png */; };
 		4F3EC6EA1B23580A003C48E4 /* certificateNR.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D61B23580A003C48E4 /* certificateNR.png */; };
@@ -183,6 +186,9 @@
 		4F2C92A91B64E4710044A27B /* favorite.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favorite.png; sourceTree = "<group>"; };
 		4F2C92AA1B64E4710044A27B /* favorite@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favorite@3x.png"; sourceTree = "<group>"; };
 		4F2C92AB1B64E4710044A27B /* favorite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favorite@2x.png"; sourceTree = "<group>"; };
+		4F2C92AF1B66EC840044A27B /* favoritecorner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoritecorner@2x.png"; sourceTree = "<group>"; };
+		4F2C92B01B66EC840044A27B /* favoritecorner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoritecorner.png; sourceTree = "<group>"; };
+		4F2C92B11B66EC840044A27B /* favoritecorner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoritecorner@3x.png"; sourceTree = "<group>"; };
 		4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificateLogo.swift; sourceTree = "<group>"; };
 		4F3EC6D51B23580A003C48E4 /* certificateNR@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNR@2x.png"; sourceTree = "<group>"; };
 		4F3EC6D61B23580A003C48E4 /* certificateNR.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = certificateNR.png; sourceTree = "<group>"; };
@@ -402,13 +408,16 @@
 		4F63E6321A9A8CAD00528FB3 /* In-App-Graphics */ = {
 			isa = PBXGroup;
 			children = (
-				4F8ED3EE1B444B43008C24FE /* noposter.png */,
 				4F6914851A8C085300B8FFCE /* Calendar.png */,
 				4F6914861A8C085300B8FFCE /* Calendar@2x.png */,
 				4F94A93C1AA84E1000E5F27F /* Calendar@3x.png */,
 				4F2C92A91B64E4710044A27B /* favorite.png */,
-				4F2C92AA1B64E4710044A27B /* favorite@3x.png */,
 				4F2C92AB1B64E4710044A27B /* favorite@2x.png */,
+				4F2C92AA1B64E4710044A27B /* favorite@3x.png */,
+				4F2C92B01B66EC840044A27B /* favoritecorner.png */,
+				4F2C92AF1B66EC840044A27B /* favoritecorner@2x.png */,
+				4F2C92B11B66EC840044A27B /* favoritecorner@3x.png */,
+				4F8ED3EE1B444B43008C24FE /* noposter.png */,
 				4F69148A1A8C085300B8FFCE /* Settings.png */,
 				4F6914871A8C085300B8FFCE /* Settings@2x.png */,
 				4F6914891A8C085300B8FFCE /* Settings@3x.png */,
@@ -822,6 +831,8 @@
 				4F2C92AC1B64E4710044A27B /* favorite.png in Resources */,
 				4F3EC6F41B23580A003C48E4 /* certificatePG-13@2x.png in Resources */,
 				4F3EC6E91B23580A003C48E4 /* certificateNR@2x.png in Resources */,
+				4F2C92B41B66EC840044A27B /* favoritecorner@3x.png in Resources */,
+				4F2C92B21B66EC840044A27B /* favoritecorner@2x.png in Resources */,
 				4F3EC6FC1B23580A003C48E4 /* certificatePG@3x.png in Resources */,
 				4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */,
 				4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */,
@@ -832,6 +843,7 @@
 				4F3EC6F91B23580A003C48E4 /* certificatePG@4x.png in Resources */,
 				4F3EC6EB1B23580A003C48E4 /* certificateG.png in Resources */,
 				4FEF429E1B1F701F00AF0E16 /* certificateNC-17.png in Resources */,
+				4F2C92B31B66EC840044A27B /* favoritecorner.png in Resources */,
 				4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */,
 				4F63E63D1A9A8CD100528FB3 /* icon60@2x.png in Resources */,
 				4F6914901A8C085300B8FFCE /* Settings@2x.png in Resources */,

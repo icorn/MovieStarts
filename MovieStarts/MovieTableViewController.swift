@@ -84,6 +84,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		if let movie = movie {
 			cell.posterImage.image = movie.thumbnailImage.0
 			cell.titleText.text = movie.title
+			cell.tag = Constants.tagTableCell
 		
 			// show labels with subtitles
 
@@ -103,6 +104,23 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 			// vertically "center" the labels
 			var moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
 			cell.titleTextTopSpaceConstraint.constant = CGFloat(moveY / 2) - 4
+			
+			// add favorite-icon
+			
+			if contains(Favorites.IDs, movie.id) {
+				addFavoriteIconToCell(cell)
+			}
+			else {
+				removeFavoriteIconFromCell(cell)
+				
+/*
+				var favImageView: UIImageView? = cell.viewWithTag(Constants.tagFavoriteView) as? UIImageView
+				
+				if let favImageView = favImageView {
+					favImageView.removeFromSuperview()
+				}
+*/
+			}
 		}
 		
         return cell
@@ -152,6 +170,8 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		
 		var favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: {
 			(action: UITableViewRowAction!, path: NSIndexPath!) -> () in
+
+				// find out movie id
 			
 				var movieID: String!
 				if self.moviesInSections.count > 0 {
@@ -161,11 +181,24 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 					movieID = self.movies[indexPath.row].id
 				}
 			
+				// add or remove movie as favorite
+			
+				var currentCell: UITableViewCell? = self.tableView.cellForRowAtIndexPath(indexPath)
+
 				if (contains(Favorites.IDs, movieID)) {
+					// movie is favorite: remove it as favorite and remove favorite-icon
 					Favorites.removeMovieID(movieID)
+					self.removeFavoriteIconFromCell(currentCell)
 				}
 				else {
+					// movie was no favorite: add to as favorite and add favorite-icon
 					Favorites.addMovieID(movieID)
+
+					var contentView: UIView? = currentCell?.viewWithTag(Constants.tagTableCell)
+					
+					if let contentView = contentView {
+						self.addFavoriteIconToCell(contentView)
+					}
 				}
 			
 				self.tableView.setEditing(false, animated: true)
@@ -183,6 +216,28 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	
 	override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
 		return true
+	}
+
+	
+	// MARK: - Private helper functions
+	
+	private func addFavoriteIconToCell(cell: UIView) {
+		var favImage = UIImage(named: "favoritecorner")
+		
+		if let favImage = favImage {
+			var favView = UIImageView(frame: CGRect(x: cell.frame.maxX - favImage.size.width, y: 0, width: favImage.size.width, height: favImage.size.height))
+			favView.image = favImage
+			favView.tag = Constants.tagFavoriteView
+			cell.addSubview(favView)
+		}
+	}
+
+	private func removeFavoriteIconFromCell(cell: UITableViewCell?) {
+		var favImageView: UIImageView? = cell?.viewWithTag(Constants.tagFavoriteView) as? UIImageView
+		
+		if let favImageView = favImageView {
+			favImageView.removeFromSuperview()
+		}
 	}
 }
 

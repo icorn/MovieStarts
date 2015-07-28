@@ -34,6 +34,9 @@ public struct Constants {
 	
 	static let DAYS_TILL_DB_UPDATE			= 7
 	static let MAX_DAYS_IN_THE_PAST			= 28.0
+	
+	static let tagFavoriteView: Int			= 10000
+	static let tagTableCell: Int			= 10001
 
 	// MARK: - Keys for records fromt the cloud
 	

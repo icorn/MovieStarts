@@ -1286,9 +1286,13 @@
             <objects>
                 <navigationController title="UpcomingNavigationController" id="hD1-in-9iX" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="1" title="Upcoming" image="Calendar.png" id="J9l-4c-wzx"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="oNt-Gs-9za">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="oNt-Gs-9za">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.0" green="0.78576755523681641" blue="0.7883266806602478" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="BkO-79-sa7" kind="relationship" relationship="rootViewController" id="1fS-lX-xiA"/>
@@ -1356,9 +1360,13 @@
             <objects>
                 <navigationController title="FavoritesNavigationController" id="S4U-1Q-lHo" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="2" title="Favorites" image="favorite.png" id="wqa-LQ-bZm"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="J79-vK-JJM">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="J79-vK-JJM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.0" green="0.78576755523681641" blue="0.7883266806602478" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="ql6-Lh-q2N" kind="relationship" relationship="rootViewController" id="e33-AA-DrH"/>
@@ -1422,9 +1430,13 @@
             <objects>
                 <navigationController title="NowNavigationController" id="kK1-8l-NS4" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Now Playing" image="Video.png" id="RGi-jq-dEF"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="28j-pf-VFM">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="28j-pf-VFM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.0" green="0.78576755523681641" blue="0.7883266806602478" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="u1W-0B-BoW" kind="relationship" relationship="rootViewController" id="Efk-G6-ADv"/>

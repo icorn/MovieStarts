@@ -6,12 +6,12 @@
   Copyright (c) 2015 Oliver Eichhorn. All rights reserved.
 */
 
-"NowPlaying"		= "Jetzt im Kino";
+"NowPlayingTabBar"	= "Jetzt";
 "NowPlayingLong"	= "Jetzt im Kino";
-"Upcoming"			= "Demnächst";
+"UpcomingTabBar"	= "Demnächst";
 "UpcomingLong"		= "Demnächst im Kino";
-"Favorites"			= "Favoriten";
-"Settings"			= "Einstellungen";
+"FavoritesTabBar"	= "Favoriten";
+"SettingsTabBar"	= "Einstellungen";
 "UpdatingMovies"	= "Filme aktualisieren...";
 "LoadingMovies"		= "Filme laden...";
 

@@ -28,16 +28,16 @@ class TabBarController: UITabBarController {
 				
 				// set tab bar titles
 				
-				(saveItems[0] as! UITabBarItem).title = NSLocalizedString("NowPlaying", comment: "")
-				(saveItems[1] as! UITabBarItem).title = NSLocalizedString("Upcoming", comment: "")
-				(saveItems[2] as! UITabBarItem).title = NSLocalizedString("Favorites", comment: "")
-				(saveItems[3] as! UITabBarItem).title = NSLocalizedString("Settings", comment: "")
+				(saveItems[0] as! UITabBarItem).title = NSLocalizedString("NowPlayingTabBar", comment: "")
+				(saveItems[1] as! UITabBarItem).title = NSLocalizedString("UpcomingTabBar", comment: "")
+				(saveItems[2] as! UITabBarItem).title = NSLocalizedString("FavoritesTabBar", comment: "")
+				(saveItems[3] as! UITabBarItem).title = NSLocalizedString("SettingsTabBar", comment: "")
 				
 				// set tab bar images
 
 				(saveItems[0] as! UITabBarItem).image = UIImage(named: "Video.png")
 				(saveItems[1] as! UITabBarItem).image = UIImage(named: "Calendar.png")
-				(saveItems[2] as! UITabBarItem).image = UIImage(named: "Favorite.png")
+				(saveItems[2] as! UITabBarItem).image = UIImage(named: "favorite.png")
 				(saveItems[3] as! UITabBarItem).image = UIImage(named: "Settings.png")
 			}
 		}

@@ -6,12 +6,12 @@
   Copyright (c) 2015 Oliver Eichhorn. All rights reserved.
 */
 
-"NowPlaying"		= "Now Playing";
+"NowPlayingTabBar"	= "Now Playing";
 "NowPlayingLong"	= "Now Playing in Theaters";
-"Upcoming"			= "Upcoming";
+"UpcomingTabBar"	= "Upcoming";
 "UpcomingLong"		= "Upcoming Movies in Theaters";
-"Favorites"			= "Favorites";
-"Settings"			= "Settings";
+"FavoritesTabBar"	= "Favorites";
+"SettingsTabBar"	= "Settings";
 "UpdatingMovies"	= "Updating movies...";
 "LoadingMovies"		= "Loading movies...";
 
