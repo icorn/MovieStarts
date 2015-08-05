@@ -38,6 +38,11 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
         super.didReceiveMemoryWarning()
     }
 
+	override func viewDidAppear(animated: Bool) {
+		// reload to update favorite-icon if we come back from detail view.
+		tableView.reloadData()
+	}
+
 	// MARK: - UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
