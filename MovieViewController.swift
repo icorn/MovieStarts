@@ -196,7 +196,9 @@ class MovieViewController: UIViewController {
 			
 			if (saveMovie.directors.count > 0) {
 				for index in 0...saveMovie.directors.count-1 {
-					directorLabels[index].text = saveMovie.directors[index]
+					if (index < 2) {
+						directorLabels[index].text = saveMovie.directors[index]
+					}
 				}
 			}
 			
@@ -214,7 +216,9 @@ class MovieViewController: UIViewController {
 			
 			if (saveMovie.actors.count > 0) {
 				for index in 0...saveMovie.actors.count-1 {
-					actorLabels[index].text = saveMovie.actors[index]
+					if (index < 5) {
+						actorLabels[index].text = saveMovie.actors[index]
+					}
 				}
 			}
 			
