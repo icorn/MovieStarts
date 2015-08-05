@@ -51,11 +51,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			Favorites.IDs = favorites
 		}
 		
-		// set tintcolor and textsize of tabbar
+		// set some colors, etc.
 		UITabBar.appearance().tintColor = UIColor(red: 0.0, green: 200.0/255.0, blue: 200.0/255.0, alpha: 1.0)
 		UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14.0)], forState: .Normal)
-		
-		// set status bar text color to white
+		UINavigationBar.appearance().tintColor = UIColor.whiteColor()
 		UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
 		
 		return true
