@@ -26,9 +26,10 @@ struct Favorites {
 	
 		:param: id	the new favorite movie id
 	*/
-	static func addMovieID(id: String) {
+	static func addMovieID(id: String, tabBarController: TabBarController?) {
 		Favorites.IDs.append(id)
 		Favorites.saveFavorites()
+		tabBarController?.updateFavorites()
 	}
 	
 	/**
@@ -36,11 +37,12 @@ struct Favorites {
 	
 		:param: id	the movie id to be removed
 	*/
-	static func removeMovieID(id: String) {
+	static func removeMovieID(id: String, tabBarController: TabBarController?) {
 		for (var i=0; i < Favorites.IDs.count; i++) {
 			if (Favorites.IDs[i] == id) {
 				Favorites.IDs.removeAtIndex(i)
 				Favorites.saveFavorites()
+				tabBarController?.updateFavorites()
 				return
 			}
 		}
