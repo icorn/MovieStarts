@@ -44,17 +44,16 @@ class InterfaceController: WKInterfaceController {
 				
 				// iterate over all movies and sort them into one of three lists (and ignore the ones without release date)
 				for movie in self.allMovies {
-					if let saveDate = movie.releaseDate {
-						if (saveDate.compare(today) == NSComparisonResult.OrderedDescending) {
-							self.upcomingMovies.append(movie)
+					
+					if movie.isNowPlaying() {
+						self.nowMovies.append(movie)
+						
+						if (movie.voteAverage >= 7.0) {
+							self.bestMovies.append(movie)
 						}
-						else {
-							self.nowMovies.append(movie)
-							
-							if (movie.voteAverage >= 7.0) {
-								self.bestMovies.append(movie)
-							}
-						}
+					}
+					else {
+						self.upcomingMovies.append(movie)
 					}
 				}
 

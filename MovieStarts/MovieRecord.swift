@@ -336,5 +336,31 @@ public class MovieRecord {
 		}
 	}
 
+
+	/**
+		Checks if the movie is now playing in theaters.
+
+		:returns: TRUE if it is now playing, FALSE otherwise
+	*/
+	func isNowPlaying() -> Bool {
+		var retval = false
+		
+		if let saveDate = releaseDate {
+			
+			var today = NSDate()
+			
+			if (saveDate.compare(today) == NSComparisonResult.OrderedDescending) {
+				// upcoming movie
+				retval = false
+			}
+			else {
+				// now playing
+				retval = true
+			}
+		}
+		
+		return retval
+	}
+
 }
 

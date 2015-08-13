@@ -29,7 +29,15 @@ class FavoriteTableViewController: MovieTableViewController {
 			sections = []
 			
 			for movie in movieTabBarController.favoriteMovies {
-				if ((previousDate == nil) || (previousDate != movie.releaseDate)) {
+				if (movie.isNowPlaying() && (currentSection == -1)) {
+					// it's a current movie, but there is no section for it yet
+					var newMovieArray: [MovieRecord] = []
+					moviesInSections.append(newMovieArray)
+					sections.append(NSLocalizedString("NowPlayingLong", comment: ""))
+					currentSection++
+				}
+				else if ((movie.isNowPlaying() == false) && ((previousDate == nil) || (previousDate != movie.releaseDate))) {
+					// upcoming movies:
 					// a new sections starts: create new array and add to film-array
 					var newMovieArray: [MovieRecord] = []
 					moviesInSections.append(newMovieArray)
