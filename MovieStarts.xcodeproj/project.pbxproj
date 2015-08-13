@@ -31,6 +31,7 @@
 		4F2C92B21B66EC840044A27B /* favoritecorner@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92AF1B66EC840044A27B /* favoritecorner@2x.png */; };
 		4F2C92B31B66EC840044A27B /* favoritecorner.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92B01B66EC840044A27B /* favoritecorner.png */; };
 		4F2C92B41B66EC840044A27B /* favoritecorner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92B11B66EC840044A27B /* favoritecorner@3x.png */; };
+		4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3AA9891B71FEFD00640D04 /* FavoriteTableViewController.swift */; };
 		4F3EC6D41B20ACB4003C48E4 /* CertificateLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */; };
 		4F3EC6E91B23580A003C48E4 /* certificateNR@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D51B23580A003C48E4 /* certificateNR@2x.png */; };
 		4F3EC6EA1B23580A003C48E4 /* certificateNR.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D61B23580A003C48E4 /* certificateNR.png */; };
@@ -189,6 +190,7 @@
 		4F2C92AF1B66EC840044A27B /* favoritecorner@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoritecorner@2x.png"; sourceTree = "<group>"; };
 		4F2C92B01B66EC840044A27B /* favoritecorner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoritecorner.png; sourceTree = "<group>"; };
 		4F2C92B11B66EC840044A27B /* favoritecorner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoritecorner@3x.png"; sourceTree = "<group>"; };
+		4F3AA9891B71FEFD00640D04 /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
 		4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificateLogo.swift; sourceTree = "<group>"; };
 		4F3EC6D51B23580A003C48E4 /* certificateNR@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNR@2x.png"; sourceTree = "<group>"; };
 		4F3EC6D61B23580A003C48E4 /* certificateNR.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = certificateNR.png; sourceTree = "<group>"; };
@@ -456,6 +458,7 @@
 		4F87F9271A8DF0C1001869A1 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4F3AA9891B71FEFD00640D04 /* FavoriteTableViewController.swift */,
 				4F6914811A8C041D00B8FFCE /* MovieTableViewController.swift */,
 				4F7B49D41B04B77100F54454 /* MovieViewController.swift */,
 				4FAE075A1B555615009C7507 /* NowTableViewController.swift */,
@@ -904,6 +907,7 @@
 				4F8ED3EC1B4442C7008C24FE /* MovieTableViewCell.swift in Sources */,
 				4F63E6421A9D2A8B00528FB3 /* TabBarController.swift in Sources */,
 				4F6914961A8C09BA00B8FFCE /* UpcomingTableViewController.swift in Sources */,
+				4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */,
 				4F63E61E1A992BCA00528FB3 /* DatabaseHelper.swift in Sources */,
 				4F63E6401A9D24BA00528FB3 /* StartViewController.swift in Sources */,
 				4FAFF8C91A8BFFE500864078 /* AppDelegate.swift in Sources */,

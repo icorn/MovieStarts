@@ -111,20 +111,10 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 			cell.titleTextTopSpaceConstraint.constant = CGFloat(moveY / 2) - 4
 			
 			// add favorite-icon
+			removeFavoriteIconFromCell(cell)
 			
 			if contains(Favorites.IDs, movie.id) {
 				addFavoriteIconToCell(cell)
-			}
-			else {
-				removeFavoriteIconFromCell(cell)
-				
-/*
-				var favImageView: UIImageView? = cell.viewWithTag(Constants.tagFavoriteView) as? UIImageView
-				
-				if let favImageView = favImageView {
-					favImageView.removeFromSuperview()
-				}
-*/
 			}
 		}
 		
@@ -154,6 +144,8 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
 		var movieID: String!
 		
+		// find ID of edited movie
+		
 		if moviesInSections.count > 0 {
 			movieID = moviesInSections[indexPath.section][indexPath.row].id
 		}
@@ -161,6 +153,8 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 			movieID = movies[indexPath.row].id
 		}
 
+		// set title and color of button
+		
 		var title: String!
 		var backColor: UIColor!
 		
@@ -172,6 +166,8 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 			title = NSLocalizedString("AddToFavoritesShort", comment: "")
 			backColor = UIColor.blueColor()
 		}
+		
+		// define button-action
 		
 		var favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: {
 			(action: UITableViewRowAction!, path: NSIndexPath!) -> () in
@@ -192,12 +188,12 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 
 				if (contains(Favorites.IDs, movieID)) {
 					// movie is favorite: remove it as favorite and remove favorite-icon
-					Favorites.removeMovieID(movieID)
+					Favorites.removeMovieID(movieID, tabBarController: self.movieTabBarController)
 					self.removeFavoriteIconFromCell(currentCell)
 				}
 				else {
 					// movie was no favorite: add to as favorite and add favorite-icon
-					Favorites.addMovieID(movieID)
+					Favorites.addMovieID(movieID, tabBarController: self.movieTabBarController)
 
 					var contentView: UIView? = currentCell?.viewWithTag(Constants.tagTableCell)
 					
@@ -207,6 +203,11 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 				}
 			
 				self.tableView.setEditing(false, animated: true)
+			
+				if self.isKindOfClass(FavoriteTableViewController) {
+					// immediately refresh favorite-tableview
+					self.viewDidLoad()
+				}
 			}
 		)
 		

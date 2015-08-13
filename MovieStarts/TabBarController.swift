@@ -13,7 +13,8 @@ class TabBarController: UITabBarController {
 	var allMovies: [MovieRecord] = []
 	var nowMovies: [MovieRecord] = []
 	var upcomingMovies: [MovieRecord] = []
-	var bestMovies: [MovieRecord] = []
+	var favoriteMovies: [MovieRecord] = []
+	//	var bestMovies: [MovieRecord] = []
 	
 	@IBOutlet weak var movieTabBar: UITabBar!
 
@@ -55,6 +56,40 @@ class TabBarController: UITabBarController {
 		else {
 			return Int(UIInterfaceOrientationMask.Portrait.rawValue)
 		}
+	}
+	
+	func updateFavorites() {
+		favoriteMovies = []
+
+		// find all favorite movies
+		
+		for movie in allMovies {
+			if (contains(Favorites.IDs, movie.id)) {
+				favoriteMovies.append(movie)
+			}
+		}
+		
+		// sort them by date
+		
+		favoriteMovies.sort {
+			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
+		}
+		
+		// update view controller
+		
+		if let tabBarVcs = viewControllers {
+		
+			for tabBarVc in tabBarVcs {
+				if tabBarVc is UINavigationController {
+					for navVc in (tabBarVc as! UINavigationController).viewControllers {
+						if navVc is FavoriteTableViewController {
+							(navVc as? FavoriteTableViewController)?.updateMoviesAndSections()
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 /*

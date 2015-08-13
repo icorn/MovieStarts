@@ -11,6 +11,7 @@
 "UpcomingTabBar"	= "Demnächst";
 "UpcomingLong"		= "Demnächst im Kino";
 "FavoritesTabBar"	= "Favoriten";
+"FavoritesLong"		= "Favoriten";
 "SettingsTabBar"	= "Einstellungen";
 "UpdatingMovies"	= "Filme aktualisieren...";
 "LoadingMovies"		= "Filme laden...";

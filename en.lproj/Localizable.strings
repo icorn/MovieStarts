@@ -11,6 +11,7 @@
 "UpcomingTabBar"	= "Upcoming";
 "UpcomingLong"		= "Upcoming Movies in Theaters";
 "FavoritesTabBar"	= "Favorites";
+"FavoritesLong"		= "Favorites";
 "SettingsTabBar"	= "Settings";
 "UpdatingMovies"	= "Updating movies...";
 "LoadingMovies"		= "Loading movies...";

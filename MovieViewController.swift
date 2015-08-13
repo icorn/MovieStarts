@@ -80,6 +80,12 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 	
+	var movieTabBarController: TabBarController? {
+		get {
+			return navigationController?.parentViewController as? TabBarController
+		}
+	}
+
 	var bigPosterView: UIImageView?
 	var movie: MovieRecord?
 	var textButtons = [UIButton]()
@@ -387,7 +393,7 @@ class MovieViewController: UIViewController {
 	*/
 	func addFavoriteButtonTapped(sender:UIButton!) {
 		if let movie = movie {
-			Favorites.addMovieID(movie.id)
+			Favorites.addMovieID(movie.id, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
 		}
 	}
@@ -400,7 +406,7 @@ class MovieViewController: UIViewController {
 	*/
 	func removeFavoriteButtonTapped(sender:UIButton!) {
 		if let movie = movie {
-			Favorites.removeMovieID(movie.id)
+			Favorites.removeMovieID(movie.id, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
 		}
 	}

@@ -60,10 +60,6 @@ class StartViewController: UIViewController {
 							}
 							else {
 								tabBarController.nowMovies.append(movie)
-								
-								if (movie.voteAverage >= 7.0) {
-									tabBarController.bestMovies.append(movie)
-								}
 							}
 						}
 					}
@@ -76,9 +72,7 @@ class StartViewController: UIViewController {
 						return $0.title < $1.title
 					}
 					
-					tabBarController.bestMovies.sort {
-						return $0.voteAverage > $1.voteAverage
-					}
+					tabBarController.updateFavorites()
 					
 					// show tabbarcontroller
 					
