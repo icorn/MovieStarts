@@ -16,7 +16,8 @@ class MovieTableViewCell: UITableViewCell {
 	@IBOutlet weak var subtitleText2: UILabel!
 	@IBOutlet weak var subtitleText3: UILabel!
 	@IBOutlet weak var titleTextTopSpaceConstraint: NSLayoutConstraint!
-	
+	@IBOutlet weak var favoriteCorner: UIImageView!
+	@IBOutlet weak var favoriteCornerHorizontalSpace: NSLayoutConstraint!
 	
     override func awakeFromNib() {
         super.awakeFromNib()

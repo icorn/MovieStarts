@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -58,10 +58,19 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="favoritecorner.png" translatesAutoresizingMaskIntoConstraints="NO" id="9Y1-dx-xUe">
+                        <rect key="frame" x="497" y="0.0" width="44" height="44"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="44" id="Bi7-IH-r3s"/>
+                            <constraint firstAttribute="height" constant="44" id="E8V-tQ-fB2"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="hZo-Mv-kG5" secondAttribute="trailing" id="4k3-T6-HVn"/>
                     <constraint firstItem="hZo-Mv-kG5" firstAttribute="leading" secondItem="xiE-9K-obE" secondAttribute="leading" id="589-Qo-Ipp"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="9Y1-dx-xUe" secondAttribute="trailing" constant="-8" id="95r-2Y-kTI"/>
+                    <constraint firstItem="9Y1-dx-xUe" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="GBG-cy-2Fk"/>
                     <constraint firstItem="R8O-XF-6Gv" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="H9T-T6-Cri"/>
                     <constraint firstItem="hZo-Mv-kG5" firstAttribute="trailing" secondItem="xiE-9K-obE" secondAttribute="trailing" id="Qzx-fQ-Xiu"/>
                     <constraint firstItem="xiE-9K-obE" firstAttribute="top" secondItem="k70-N7-bJp" secondAttribute="bottom" constant="4" id="RPx-ZE-gnq"/>
@@ -77,6 +86,8 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="favoriteCorner" destination="9Y1-dx-xUe" id="Eqa-Pl-kW7"/>
+                <outlet property="favoriteCornerHorizontalSpace" destination="95r-2Y-kTI" id="YMS-zf-pmf"/>
                 <outlet property="posterImage" destination="R8O-XF-6Gv" id="QOE-h0-uvD"/>
                 <outlet property="subtitleText1" destination="pXW-G1-bkG" id="8mN-Ag-XUD"/>
                 <outlet property="subtitleText2" destination="k70-N7-bJp" id="gaJ-Uw-wMP"/>
@@ -87,4 +98,7 @@
             <point key="canvasLocation" x="481" y="292"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="favoritecorner.png" width="44" height="44"/>
+    </resources>
 </document>

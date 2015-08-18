@@ -189,17 +189,12 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 				if (contains(Favorites.IDs, movieID)) {
 					// movie is favorite: remove it as favorite and remove favorite-icon
 					Favorites.removeMovieID(movieID, tabBarController: self.movieTabBarController)
-					self.removeFavoriteIconFromCell(currentCell)
+					self.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
 				}
 				else {
 					// movie was no favorite: add to as favorite and add favorite-icon
 					Favorites.addMovieID(movieID, tabBarController: self.movieTabBarController)
-
-					var contentView: UIView? = currentCell?.viewWithTag(Constants.tagTableCell)
-					
-					if let contentView = contentView {
-						self.addFavoriteIconToCell(contentView)
-					}
+					self.addFavoriteIconToCell(currentCell as? MovieTableViewCell)
 				}
 			
 				self.tableView.setEditing(false, animated: true)
@@ -227,23 +222,17 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	
 	// MARK: - Private helper functions
 	
-	private func addFavoriteIconToCell(cell: UIView) {
-		var favImage = UIImage(named: "favoritecorner")
-		
-		if let favImage = favImage {
-			var favView = UIImageView(frame: CGRect(x: cell.frame.maxX - favImage.size.width, y: 0, width: favImage.size.width, height: favImage.size.height))
-			favView.image = favImage
-			favView.tag = Constants.tagFavoriteView
-			cell.addSubview(favView)
+	private func addFavoriteIconToCell(cell: MovieTableViewCell?) {
+		if let cell = cell {
+			var borderWidth = cell.frame.width - cell.contentView.frame.width
+			cell.favoriteCornerHorizontalSpace.constant = -8 - borderWidth
+			cell.favoriteCorner.hidden = false
 		}
+	}
+	
+	private func removeFavoriteIconFromCell(cell: MovieTableViewCell?) {
+		cell?.favoriteCorner.hidden = true
 	}
 
-	private func removeFavoriteIconFromCell(cell: UITableViewCell?) {
-		var favImageView: UIImageView? = cell?.viewWithTag(Constants.tagFavoriteView) as? UIImageView
-		
-		if let favImageView = favImageView {
-			favImageView.removeFromSuperview()
-		}
-	}
 }
 
