@@ -149,6 +149,7 @@ class MovieViewController: UIViewController {
 			
 			// show release date
 			
+			releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
 			if let saveDate = saveMovie.releaseDate {
 				releaseDateLabel?.text = saveMovie.releaseDateString
 			}
@@ -159,6 +160,7 @@ class MovieViewController: UIViewController {
 			
 			// show rating
 
+			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
 			if (saveMovie.voteAverage > 0.1) {
 				var numberFormatter = NSNumberFormatter()
 				numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
@@ -199,6 +201,11 @@ class MovieViewController: UIViewController {
 			}
 			
 			// show director(s)
+
+			directorHeadlineLabel.text = NSLocalizedString("Director", comment: "") + ":"
+			if (saveMovie.directors.count > 1) {
+				directorHeadlineLabel.text = NSLocalizedString("Directors", comment: "") + ":"
+			}
 			
 			if (saveMovie.directors.count > 0) {
 				for index in 0...saveMovie.directors.count-1 {
@@ -220,6 +227,7 @@ class MovieViewController: UIViewController {
 			
 			// show actor(s)
 			
+			actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "") + ":"
 			if (saveMovie.actors.count > 0) {
 				for index in 0...saveMovie.actors.count-1 {
 					if (index < 5) {
@@ -249,6 +257,7 @@ class MovieViewController: UIViewController {
 			
 			// show story
 			
+			storyHeadlineLabel.text = NSLocalizedString("Synopsis", comment: "") + ":"
 			if let synopsis = saveMovie.synopsis {
 				storyLabel.text = synopsis
 			}
