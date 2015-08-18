@@ -15,12 +15,16 @@
 "SettingsTabBar"	= "Settings";
 "UpdatingMovies"	= "Updating movies...";
 "LoadingMovies"		= "Loading movies...";
+"NoFavorites"		= "No Favorites";
+"HowToAddFavorites" = "You can add favorites either in a movie list by swiping to the left, or in a detail view by tapping the favorite button.";
 
+"ReleaseDate"		= "Release Date";
+"UserRating"		= "User Rating";
 "Actors"			= "Actors";
 "Directors"			= "Directors";
 "Director"			= "Director";
-"Synopsis"			= "Plot";
-"NoReleaseDate" 	= "Unknown Release Date";
+"Synopsis"			= "Story";
+"NoReleaseDate" 	= "unknown";
 
 "MinutesShort"		= "min";
 "aka"				= "aka";

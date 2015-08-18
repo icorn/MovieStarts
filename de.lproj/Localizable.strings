@@ -15,12 +15,16 @@
 "SettingsTabBar"	= "Einstellungen";
 "UpdatingMovies"	= "Filme aktualisieren...";
 "LoadingMovies"		= "Filme laden...";
+"NoFavorites"		= "Keine Favoriten";
+"HowToAddFavorites" = "Du kannst Favoriten entweder in einer Listenansicht durch Wischen nach links oder in einer Detailansicht durch Tap auf den Favoriten-Button hinzufügen.";
 
+"ReleaseDate"		= "Veröffentlichung";
+"UserRating"		= "Bewertung";
 "Actors"			= "Schauspieler";
 "Directors"			= "Regie";
 "Director"			= "Regie";
 "Synopsis"			= "Inhalt";
-"NoReleaseDate" 	= "Datum unbekannt";
+"NoReleaseDate" 	= "unbekannt";
 
 "MinutesShort"		= "Min";
 "aka"				= "Original:";
