@@ -216,6 +216,11 @@ public class MovieRecord {
 		if let countries = countryString {
 			detailText += countries
 		}
+		else {
+			if (count(detailText) > 2) {
+				detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor())
+			}
+		}
 		
 		if (count(detailText) == 0) {
 			return nil
