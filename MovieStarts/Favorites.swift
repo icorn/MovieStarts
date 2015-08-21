@@ -29,7 +29,7 @@ struct Favorites {
 	static func addMovieID(id: String, tabBarController: TabBarController?) {
 		Favorites.IDs.append(id)
 		Favorites.saveFavorites()
-		tabBarController?.updateFavorites()
+		tabBarController?.favoriteController?.addFavorite(id)
 	}
 	
 	/**
@@ -42,7 +42,7 @@ struct Favorites {
 			if (Favorites.IDs[i] == id) {
 				Favorites.IDs.removeAtIndex(i)
 				Favorites.saveFavorites()
-				tabBarController?.updateFavorites()
+				tabBarController?.favoriteController?.removeFavorite(id)
 				return
 			}
 		}

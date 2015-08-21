@@ -11,6 +11,9 @@ import UIKit
 class UpcomingTableViewController: MovieTableViewController {
 
 	override func viewDidLoad() {
+		currentTab = MovieTab.Upcoming
+
+/*
 		if let movieTabBarController = movieTabBarController {
 
 			// put movies into sections
@@ -33,7 +36,7 @@ class UpcomingTableViewController: MovieTableViewController {
 				previousDate = movie.releaseDate
 			}
 		}
-		
+*/		
 		super.viewDidLoad()
 		navigationItem.title = NSLocalizedString("UpcomingLong", comment: "")
 	}

@@ -11,16 +11,77 @@ import CloudKit
 
 
 class MovieTableViewController: UITableViewController, UITableViewDelegate, UITableViewDataSource {
-
-	var movies: [MovieRecord] = []
-	var moviesInSections: [[MovieRecord]] = []
-	var sections: [String] = []
+	
+	var currentTab: MovieTab?
 
 	var movieTabBarController: TabBarController? {
 		get {
 			return navigationController?.parentViewController as? TabBarController
 		}
 	}
+
+	var movies: [MovieRecord] {
+		get {
+			if let tbc = movieTabBarController {
+				return tbc.nowMovies
+			}
+			else {
+				return []
+			}
+		}
+	}
+	
+	var sections: [String] {
+		get {
+			if let tbc = movieTabBarController {
+				if (currentTab == MovieTab.Upcoming) {
+					return tbc.upcomingSections
+				}
+				else if (currentTab == MovieTab.Favorites) {
+					return tbc.favoriteSections
+				}
+			}
+			
+			return []
+		}
+		
+		set {
+			if let tbc = movieTabBarController {
+				if (currentTab == MovieTab.Upcoming) {
+					tbc.upcomingSections = newValue
+				}
+				else if (currentTab == MovieTab.Favorites) {
+					tbc.favoriteSections = newValue
+				}
+			}
+		}
+	}
+	
+	var moviesInSections: [[MovieRecord]] {
+		get {
+			if let tbc = movieTabBarController {
+				if (currentTab == MovieTab.Upcoming) {
+					return tbc.upcomingMovies
+				}
+				else if (currentTab == MovieTab.Favorites) {
+					return tbc.favoriteMovies
+				}
+			}
+			return []
+		}
+		
+		set {
+			if let tbc = movieTabBarController {
+				if (currentTab == MovieTab.Upcoming) {
+					tbc.upcomingMovies = newValue
+				}
+				else if (currentTab == MovieTab.Favorites) {
+					tbc.favoriteMovies = newValue
+				}
+			}
+		}
+	}
+	
 	
 	// MARK: - UIViewController
 

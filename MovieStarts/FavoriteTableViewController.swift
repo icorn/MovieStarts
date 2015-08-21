@@ -11,6 +11,7 @@ import UIKit
 class FavoriteTableViewController: MovieTableViewController {
 
 	override func viewDidLoad() {
+		currentTab = MovieTab.Favorites
 		updateMoviesAndSections()
 		checkForEmptyList()
 		
@@ -24,6 +25,7 @@ class FavoriteTableViewController: MovieTableViewController {
 	}
 	
 	func updateMoviesAndSections() {
+/*
 		if let movieTabBarController = movieTabBarController {
 			
 			// put movies into sections
@@ -55,6 +57,7 @@ class FavoriteTableViewController: MovieTableViewController {
 				previousDate = movie.releaseDate
 			}
 		}
+*/
 	}
 	
 	private func checkForEmptyList() {
@@ -91,5 +94,51 @@ class FavoriteTableViewController: MovieTableViewController {
 			tableView.separatorStyle =  UITableViewCellSeparatorStyle.SingleLine
 		}
 	}
+	
+	
+	func addFavorite(newFavoriteId: String) {
+		
+	}
+	
+	func removeFavorite(removedFavoriteId: String) {
+		tableView.beginUpdates()
+
+		var rowId: Int?
+		var sectionId: Int?
+		
+		// search favorite
+		for sectionIndex: Int in 0 ..< moviesInSections.count {
+			for movieIndex: Int in 0 ..< moviesInSections[sectionIndex].count {
+				if (moviesInSections[sectionIndex][movieIndex].id == removedFavoriteId) {
+					rowId = movieIndex
+					sectionId = sectionIndex
+					break
+				}
+			}
+		}
+
+		if let rowId = rowId, sectionId = sectionId {
+			// remove cell
+			var indexPath: NSIndexPath = NSIndexPath(forRow: rowId, inSection: sectionId)
+			tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+			
+			// remove movie from datasource
+			moviesInSections[sectionId].removeAtIndex(rowId)
+
+			// if the section is now empty: remove it also
+			if moviesInSections[sectionId].isEmpty {
+				// remove section from datasource
+				moviesInSections.removeAtIndex(sectionId)
+				sections.removeAtIndex(sectionId)
+				
+				// remove section from table
+				var indexSet: NSIndexSet = NSIndexSet(index: sectionId)
+				tableView.deleteSections(indexSet, withRowAnimation: UITableViewRowAnimation.None)
+			}
+		}
+		
+		tableView.endUpdates()
+	}
+	
 }
 

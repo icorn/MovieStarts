@@ -29,6 +29,9 @@ class Database {
 	var stopIndicator: (() -> ())?
 	var updateIndicator: ((progress: Float) -> ())?
 	
+	var addNewMovieHandler: ((movie: MovieRecord) -> ())?
+	var updateMovieHandler: ((movie: MovieRecord) -> ())?
+	
 	var allCKRecords: [CKRecord] = []
 	var updatedCKRecords: [CKRecord] = []
 
@@ -61,7 +64,7 @@ class Database {
 	
 	
 	/**
-		Read movies if needed.
+		If a local database exists, this method reads the movies from the local database. Otherwise, it gets all movies from the cloud.
 
 		:param: completionHandler	The handler which is called after all movies are read
 		:param: errorHandler		The handler which is called if an error occurs
@@ -92,11 +95,12 @@ class Database {
 				
 				loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray)
 				
+
+				
+/*
 				// Should we search for updated movies?
 
 				var getUpdatesFlag = true
-				
-/* WIEDER REIN!!
 				var latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_UPDATE_CHECK) as NSDate?
 				
 				if let saveLatestUpdate: NSDate = latestUpdate {
@@ -106,8 +110,7 @@ class Database {
 						getUpdatesFlag = false
 					}
 				}
-*/
-				
+
 				if (getUpdatesFlag) {
 					// get updates from the cloud
 					var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as! NSDate?
@@ -134,8 +137,11 @@ class Database {
 				}
 				else {
 					// no updates wanted, just return the stuff from the file
+*/
 					completionHandler(movies: loadedMovieRecordArray)
+/*
 				}
+*/
 			}
 			else {
 				// movies are not on the device: get them from the cloud
@@ -180,6 +186,40 @@ class Database {
 		}
 	}
 
+	
+	/**
+		Checks if there are new or updates movies in the cloud and gets them.
+	*/
+	func getUpdatedMovies(addNewMovieHandler: (movie: MovieRecord) -> (), updateMovieHandler: (movie: MovieRecord) -> ()) {
+		self.addNewMovieHandler = addNewMovieHandler
+		self.updateMovieHandler = updateMovieHandler
+		
+		var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as! NSDate?
+		
+		if let saveModDate: NSDate = latestModDate {
+			
+			println("Getting records after modification date \(saveModDate)")
+/*
+			if let saveShowIndicator = self.showIndicator {
+				dispatch_async(dispatch_get_main_queue()) {
+					saveShowIndicator(updating: true, showProgress: false)
+				}
+			}
+*/
+			var predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
+			var query = CKQuery(recordType: self.recordType, predicate: predicate)
+			
+			let queryOperation = CKQueryOperation(query: query)
+			queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
+			queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
+			queryOperation.desiredKeys = desiredQueryKeysForUpdate
+			self.cloudKitDatabase.addOperation(queryOperation)
+		}
+		else {
+			println("ERROR: mo last mod.data of db")
+		}
+	}
+	
 	
 	/**
 		Writes the movies and the modification date to file.
@@ -338,7 +378,30 @@ class Database {
 		:param: record	The record from the CloudKit database
 	*/
 	func recordFetchedUpdatedMoviesCallback(record: CKRecord!) {
-		self.updatedCKRecords.append(record)
+		
+//		self.updatedCKRecords.append(record)
+		
+		
+		var newMovieRecord = MovieRecord(ckRecord: record)
+		var movieAlreadyExists: Bool = false
+		
+		if let existingMovieRecords = loadedMovieRecordArray {
+			for existingMovieRecord in existingMovieRecords {
+				if (existingMovieRecord.id == newMovieRecord.id) {
+					movieAlreadyExists = true
+					break
+				}
+			}
+		}
+		
+		if (movieAlreadyExists) {
+//			println("Updated movie: \(newMovieRecord.title!)")
+			self.updateMovieHandler?(movie: newMovieRecord)
+		}
+		else {
+//			println("New movie: \(newMovieRecord.title!)")
+			self.addNewMovieHandler?(movie: newMovieRecord)
+		}
 	}
 
 	
@@ -354,6 +417,11 @@ class Database {
 		if (cursor == nil) {
 			// all updated records are here!
 
+			
+			
+			
+			
+/*
 			if (error != nil) {
 				// there was an error
 				
@@ -391,6 +459,8 @@ class Database {
 				
 				cleanUpPosters()
 			}
+*/
+			
 		}
 		else {
 			// some objects are here, ask for more
@@ -588,4 +658,3 @@ class Database {
 
 	}
 }
-

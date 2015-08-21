@@ -11,9 +11,8 @@ import UIKit
 class NowTableViewController: MovieTableViewController {
 
 	override func viewDidLoad() {
-		if let movieTabBarController = movieTabBarController {
-			movies = movieTabBarController.nowMovies
-		}
+		currentTab = MovieTab.NowPlaying
+
         super.viewDidLoad()
 		navigationItem.title = NSLocalizedString("NowPlayingLong", comment: "")
     }

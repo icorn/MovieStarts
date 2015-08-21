@@ -48,31 +48,7 @@ class StartViewController: UIViewController {
 				if let tabBarController = tabBarController, allMovies = movies {
 					
 					// store movies in tabbarcontroller
-					
-					tabBarController.allMovies = allMovies
-					var today = NSDate()
-					
-					// iterate over all movies and sort them into one of three lists (and ignore the ones without release date)
-					for movie in allMovies {
-						if let saveDate = movie.releaseDate {
-							if (saveDate.compare(today) == NSComparisonResult.OrderedDescending) {
-								tabBarController.upcomingMovies.append(movie)
-							}
-							else {
-								tabBarController.nowMovies.append(movie)
-							}
-						}
-					}
-					
-					tabBarController.upcomingMovies.sort {
-						return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
-					}
-					
-					tabBarController.nowMovies.sort {
-						return $0.title < $1.title
-					}
-					
-					tabBarController.updateFavorites()
+					tabBarController.setUpMovies(allMovies)
 					
 					// show tabbarcontroller
 					
@@ -82,10 +58,38 @@ class StartViewController: UIViewController {
 						}
 					})
 
-					// iOS bug: Some times the main runloop doesn't wake up!
+					// iOS bug: Sometimes the main runloop doesn't wake up!
 					// To wake it up, enqueue an empty block into the main runloop.
 					
 					dispatch_async(dispatch_get_main_queue()) {}
+					
+/*
+					// We got all movies, either from the local database or from the cloud (if we had no local db).
+					// If we got the movies from the local db, the "dbNeedsUpdate"-flag is set. Then we will check for updates from the cloud.
+					
+					if dbNeedsUpdate {
+						database.getUpdatedMovies(
+							{ (movie: MovieRecord) in
+								
+								// add new movie 
+
+								dispatch_async(dispatch_get_main_queue()) {
+									tabBarController.addNewMovie(movie)
+								}
+							},
+							
+							updateMovieHandler: { (movie: MovieRecord) in
+								
+								// update movie
+								
+								dispatch_async(dispatch_get_main_queue()) {
+									tabBarController.updateMovie(movie)
+								}
+							}
+
+						)
+					}
+*/
 				}
 			},
 			
