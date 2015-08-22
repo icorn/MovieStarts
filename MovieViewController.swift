@@ -402,7 +402,7 @@ class MovieViewController: UIViewController {
 	*/
 	func addFavoriteButtonTapped(sender:UIButton!) {
 		if let movie = movie {
-			Favorites.addMovieID(movie.id, tabBarController: movieTabBarController)
+			Favorites.addMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
 		}
 	}

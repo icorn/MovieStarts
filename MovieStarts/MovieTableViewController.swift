@@ -235,26 +235,26 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 
 				// find out movie id
 			
-				var movieID: String!
+				var movie: MovieRecord!
 				if self.moviesInSections.count > 0 {
-					movieID = self.moviesInSections[indexPath.section][indexPath.row].id
+					movie = self.moviesInSections[indexPath.section][indexPath.row]
 				}
 				else {
-					movieID = self.movies[indexPath.row].id
+					movie = self.movies[indexPath.row]
 				}
 			
 				// add or remove movie as favorite
 			
 				var currentCell: UITableViewCell? = self.tableView.cellForRowAtIndexPath(indexPath)
 
-				if (contains(Favorites.IDs, movieID)) {
+				if (contains(Favorites.IDs, movie.id)) {
 					// movie is favorite: remove it as favorite and remove favorite-icon
-					Favorites.removeMovieID(movieID, tabBarController: self.movieTabBarController)
+					Favorites.removeMovieID(movie.id, tabBarController: self.movieTabBarController)
 					self.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
 				}
 				else {
 					// movie was no favorite: add to as favorite and add favorite-icon
-					Favorites.addMovieID(movieID, tabBarController: self.movieTabBarController)
+					Favorites.addMovie(movie, tabBarController: self.movieTabBarController)
 					self.addFavoriteIconToCell(currentCell as? MovieTableViewCell)
 				}
 			

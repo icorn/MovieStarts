@@ -95,16 +95,31 @@ class TabBarController: UITabBarController {
 		}
 
 		upcoming.sort {
-			// TODO: danach nach titel sortieren!!
-			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
+			if let date0 = $0.releaseDate, date1 = $1.releaseDate {
+				return date0.compare(date1) == NSComparisonResult.OrderedAscending
+			}
+			else {
+				return true
+			}
+//			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
 		}
 
 		favorites.sort {
+			if let date0 = $0.releaseDate, date1 = $1.releaseDate {
+				return date0.compare(date1) == NSComparisonResult.OrderedAscending
+			}
+			else {
+				return true
+			}
+			//			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
+			
+/*
 			if let otherTitle = $1.title {
 				return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
 			
 			return true
+*/
 		}
 		
 		// put upcoming movies in sections

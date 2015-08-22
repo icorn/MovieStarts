@@ -96,10 +96,57 @@ class FavoriteTableViewController: MovieTableViewController {
 	}
 	
 	
-	func addFavorite(newFavoriteId: String) {
+	func addFavorite(newFavorite: MovieRecord) {
+		tableView.beginUpdates()
+
+		// search apropriate section for the new favorite
+		var sectionToSearch: String!
 		
+		if newFavorite.isNowPlaying() {
+			sectionToSearch = NSLocalizedString("NowPlayingLong", comment: "")
+		}
+		else {
+			sectionToSearch = newFavorite.releaseDateStringLong
+		}
+			
+		var foundSectionIndex: Int?
+		
+		for sectionIndex in 0 ..< sections.count {
+			if (sections[sectionIndex] == sectionToSearch) {
+				foundSectionIndex = sectionIndex
+				break
+			}
+		}
+
+		if let foundSectionIndex = foundSectionIndex {
+			// the section exists: add new movie to the section, then sort it
+			moviesInSections[foundSectionIndex].append(newFavorite)
+			moviesInSections[foundSectionIndex].sort {
+				if let otherTitle = $1.title {
+					return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
+				}
+				return true
+			}
+			
+			// get position of new movie so we can insert it
+			for movieIndex in 0 ..< moviesInSections[foundSectionIndex].count {
+				if (moviesInSections[foundSectionIndex][movieIndex].id == newFavorite.id) {
+					tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: movieIndex, inSection: foundSectionIndex)], withRowAnimation: UITableViewRowAnimation.Automatic)
+					break
+				}
+			}
+		}
+		else {
+			// the section doesn't exists
+			
+			// TODO
+			var bla = 42
+		}
+		
+		tableView.endUpdates()
 	}
-	
+
+
 	func removeFavorite(removedFavoriteId: String) {
 		tableView.beginUpdates()
 
@@ -120,7 +167,7 @@ class FavoriteTableViewController: MovieTableViewController {
 		if let rowId = rowId, sectionId = sectionId {
 			// remove cell
 			var indexPath: NSIndexPath = NSIndexPath(forRow: rowId, inSection: sectionId)
-			tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.None)
+			tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
 			
 			// remove movie from datasource
 			moviesInSections[sectionId].removeAtIndex(rowId)
@@ -133,7 +180,7 @@ class FavoriteTableViewController: MovieTableViewController {
 				
 				// remove section from table
 				var indexSet: NSIndexSet = NSIndexSet(index: sectionId)
-				tableView.deleteSections(indexSet, withRowAnimation: UITableViewRowAnimation.None)
+				tableView.deleteSections(indexSet, withRowAnimation: UITableViewRowAnimation.Automatic)
 			}
 		}
 		

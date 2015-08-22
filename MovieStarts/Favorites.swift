@@ -26,10 +26,10 @@ struct Favorites {
 	
 		:param: id	the new favorite movie id
 	*/
-	static func addMovieID(id: String, tabBarController: TabBarController?) {
-		Favorites.IDs.append(id)
+	static func addMovie(movie: MovieRecord, tabBarController: TabBarController?) {
+		Favorites.IDs.append(movie.id)
 		Favorites.saveFavorites()
-		tabBarController?.favoriteController?.addFavorite(id)
+		tabBarController?.favoriteController?.addFavorite(movie)
 	}
 	
 	/**
