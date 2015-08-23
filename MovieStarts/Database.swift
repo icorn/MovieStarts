@@ -190,9 +190,10 @@ class Database {
 	/**
 		Checks if there are new or updates movies in the cloud and gets them.
 	*/
-	func getUpdatedMovies(addNewMovieHandler: (movie: MovieRecord) -> (), updateMovieHandler: (movie: MovieRecord) -> ()) {
+	func getUpdatedMovies(allMovies: [MovieRecord], addNewMovieHandler: (movie: MovieRecord) -> (), updateMovieHandler: (movie: MovieRecord) -> ()) {
 		self.addNewMovieHandler = addNewMovieHandler
 		self.updateMovieHandler = updateMovieHandler
+		self.loadedMovieRecordArray = allMovies
 		
 		var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as! NSDate?
 		
@@ -378,10 +379,7 @@ class Database {
 		:param: record	The record from the CloudKit database
 	*/
 	func recordFetchedUpdatedMoviesCallback(record: CKRecord!) {
-		
-//		self.updatedCKRecords.append(record)
-		
-		
+
 		var newMovieRecord = MovieRecord(ckRecord: record)
 		var movieAlreadyExists: Bool = false
 		

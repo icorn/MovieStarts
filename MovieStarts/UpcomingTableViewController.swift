@@ -41,5 +41,31 @@ class UpcomingTableViewController: MovieTableViewController {
 		navigationItem.title = NSLocalizedString("UpcomingLong", comment: "")
 	}
 
+	
+	func addMovie(newMovie: MovieRecord) {
+		tableView.beginUpdates()
+
+		// search apropriate section for the new movie
+		var sectionToSearchFor = newMovie.releaseDateStringLong
+		var foundSectionIndex: Int?
+		
+		for sectionIndex in 0 ..< sections.count {
+			if (sections[sectionIndex] == sectionToSearchFor) {
+				foundSectionIndex = sectionIndex
+				break
+			}
+		}
+		
+		if let foundSectionIndex = foundSectionIndex {
+			// the section for the new movie already exists
+			addMovieToExistingSection(foundSectionIndex, newMovie: newMovie)
+		}
+		else {
+			// the section doesn't exist yet
+			addMovieToNewSection(sectionToSearchFor, newMovie: newMovie)
+		}
+
+		tableView.endUpdates()
+	}
 }
 

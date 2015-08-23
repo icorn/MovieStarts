@@ -29,6 +29,12 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 				return []
 			}
 		}
+		
+		set {
+			if let tbc = movieTabBarController {
+				tbc.nowMovies = newValue
+			}
+		}
 	}
 	
 	var sections: [String] {
@@ -293,6 +299,74 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	
 	private func removeFavoriteIconFromCell(cell: MovieTableViewCell?) {
 		cell?.favoriteCorner.hidden = true
+	}
+
+	
+	// MARK: - Helper functions for the children classes (TabViewControllers)
+	
+	func addMovieToExistingSection(foundSectionIndex: Int, newMovie: MovieRecord) {
+		
+		// add new movie to the section, then sort it
+		moviesInSections[foundSectionIndex].append(newMovie)
+		moviesInSections[foundSectionIndex].sort {
+			if let otherTitle = $1.title {
+				return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
+			}
+			return true
+		}
+		
+		// get position of new movie after sorting so we can insert it
+		for movieIndex in 0 ..< moviesInSections[foundSectionIndex].count {
+			if (moviesInSections[foundSectionIndex][movieIndex].id == newMovie.id) {
+				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: movieIndex, inSection: foundSectionIndex)], withRowAnimation: UITableViewRowAnimation.Automatic)
+				break
+			}
+		}
+	}
+	
+	func addMovieToNewSection(sectionName: String, newMovie: MovieRecord) {
+		
+		if newMovie.isNowPlaying() {
+			// special case: insert the "now playing" section (which is always first) with the movie
+			sections.insert(sectionName, atIndex: 0)
+			moviesInSections.insert([newMovie], atIndex: 0)
+			tableView.insertSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
+			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+		}
+		else {
+			// normal case: insert a section for the release date with the movie
+			// but first check out, at which position the new section should be inserted
+			
+			var newSectionIndex: Int?
+			
+			for sectionIndex in 0 ..< moviesInSections.count {
+				// from every section, get the first movie an compare releasedates
+				if (moviesInSections[sectionIndex].count > 0) {
+					if let existingDate = moviesInSections[sectionIndex][0].releaseDate, newFavoriteDate = newMovie.releaseDate {
+						if (existingDate.compare(newFavoriteDate) == NSComparisonResult.OrderedDescending) {
+							// insert the new section here
+							newSectionIndex = sectionIndex
+							break
+						}
+					}
+				}
+			}
+			
+			if let newSectionIndex = newSectionIndex {
+				// insert new section
+				sections.insert(sectionName, atIndex: newSectionIndex)
+				moviesInSections.insert([newMovie], atIndex: newSectionIndex)
+				tableView.insertSections(NSIndexSet(index: newSectionIndex), withRowAnimation: UITableViewRowAnimation.Automatic)
+				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: newSectionIndex)], withRowAnimation: UITableViewRowAnimation.Automatic)
+			}
+			else {
+				// append new section at the end
+				sections.append(sectionName)
+				moviesInSections.append([newMovie])
+				tableView.insertSections(NSIndexSet(index: sections.count-1), withRowAnimation: UITableViewRowAnimation.Automatic)
+				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: sections.count-1)], withRowAnimation: UITableViewRowAnimation.Automatic)
+			}
+		}
 	}
 
 }

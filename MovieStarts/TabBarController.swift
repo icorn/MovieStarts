@@ -193,6 +193,37 @@ class TabBarController: UITabBarController {
 	}
 	
 	
+	func updateMovies(allMovies: [MovieRecord]) {
+		
+		// TODO : check if last update-check was more than 24 hours ago. if yes, check for update.
+		
+		var database = Database(recordType: Constants.RECORD_TYPE_USA)
+		
+		database.getUpdatedMovies(allMovies,
+			addNewMovieHandler: { (movie: MovieRecord) in
+				
+				// add new movie
+				
+				dispatch_async(dispatch_get_main_queue()) {
+					if movie.isNowPlaying() {
+						self.nowPlayingController?.addMovie(movie)
+					}
+					else {
+						self.upcomingController?.addMovie(movie)
+					}
+				}
+			},
+			
+			updateMovieHandler: { (movie: MovieRecord) in
+
+				// update movie
+				
+				dispatch_async(dispatch_get_main_queue()) {
+//					tabBarController.updateMovie(movie)
+				}
+			}
+		)
+	}
 	
 	
 	
@@ -341,8 +372,55 @@ class TabBarController: UITabBarController {
 */
 	
 	
+	var nowPlayingController: NowTableViewController? {
+		get {
+			return findTableViewController()
+			
+/*
+			if let tabBarVcs = viewControllers {
+				for tabBarVc in tabBarVcs {
+					if tabBarVc is UINavigationController {
+						for navVc in (tabBarVc as! UINavigationController).viewControllers {
+							if navVc is NowTableViewController {
+								return navVc as? NowTableViewController
+							}
+						}
+					}
+				}
+			}
+			
+			return nil
+*/
+		}
+	}
+	
+	var upcomingController: UpcomingTableViewController? {
+		get {
+			return findTableViewController()
+
+/*
+			if let tabBarVcs = viewControllers {
+				for tabBarVc in tabBarVcs {
+					if tabBarVc is UINavigationController {
+						for navVc in (tabBarVc as! UINavigationController).viewControllers {
+							if navVc is UpcomingTableViewController {
+								return navVc as? UpcomingTableViewController
+							}
+						}
+					}
+				}
+			}
+			
+			return nil
+*/
+		}
+	}
+	
 	var favoriteController: FavoriteTableViewController? {
 		get {
+			return findTableViewController()
+
+/*
 			if let tabBarVcs = viewControllers {
 				for tabBarVc in tabBarVcs {
 					if tabBarVc is UINavigationController {
@@ -356,7 +434,23 @@ class TabBarController: UITabBarController {
 			}
 			
 			return nil
+*/
 		}
 	}
 	
+	private func findTableViewController<T>() -> T? {
+		if let tabBarVcs = viewControllers {
+			for tabBarVc in tabBarVcs {
+				if tabBarVc is UINavigationController {
+					for navVc in (tabBarVc as! UINavigationController).viewControllers {
+						if navVc is T {
+							return navVc as? T
+						}
+					}
+				}
+			}
+		}
+		
+		return nil
+	}
 }

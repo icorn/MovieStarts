@@ -55,6 +55,7 @@ class StartViewController: UIViewController {
 					self.presentViewController(tabBarController, animated: true, completion: { () in
 						if let saveAboutView = self.aboutView {
 							saveAboutView.removeFromSuperview()
+							tabBarController.updateMovies(allMovies)
 						}
 					})
 
@@ -62,34 +63,6 @@ class StartViewController: UIViewController {
 					// To wake it up, enqueue an empty block into the main runloop.
 					
 					dispatch_async(dispatch_get_main_queue()) {}
-					
-/*
-					// We got all movies, either from the local database or from the cloud (if we had no local db).
-					// If we got the movies from the local db, the "dbNeedsUpdate"-flag is set. Then we will check for updates from the cloud.
-					
-					if dbNeedsUpdate {
-						database.getUpdatedMovies(
-							{ (movie: MovieRecord) in
-								
-								// add new movie 
-
-								dispatch_async(dispatch_get_main_queue()) {
-									tabBarController.addNewMovie(movie)
-								}
-							},
-							
-							updateMovieHandler: { (movie: MovieRecord) in
-								
-								// update movie
-								
-								dispatch_async(dispatch_get_main_queue()) {
-									tabBarController.updateMovie(movie)
-								}
-							}
-
-						)
-					}
-*/
 				}
 			},
 			

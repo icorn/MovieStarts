@@ -34,9 +34,6 @@
                                                         <variation key="heightClass=regular" constant="100"/>
                                                     </constraint>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="20" width="305" height="115"/>
-                                                </variation>
                                             </imageView>
                                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="titleLabel" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IDh-DI-GX7">
                                                 <rect key="frame" x="104" y="20" width="480" height="70"/>
@@ -109,9 +106,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="xST-UW-B5K"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="143" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="P9K-K7-OrA" userLabel="certificateImageView">
                                                 <rect key="frame" x="16" y="152" width="60" height="60"/>
@@ -141,8 +135,7 @@
                                                         <exclude reference="mpv-a3-hQM"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="147" y="152" width="120" height="17"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="cug-X2-eUk"/>
                                                         <exclude reference="mpv-a3-hQM"/>
@@ -163,8 +156,7 @@
                                                         <exclude reference="KAy-r1-k4V"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="157" y="173" width="100" height="17"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="KAy-r1-k4V"/>
                                                     </mask>
@@ -186,8 +178,7 @@
                                                         <exclude reference="nwS-p5-bd4"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="298" y="152" width="100" height="17"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="nwS-p5-bd4"/>
                                                     </mask>
@@ -207,8 +198,7 @@
                                                         <exclude reference="jFD-3E-CzH"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="298" y="173" width="100" height="17"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="jFD-3E-CzH"/>
                                                     </mask>
@@ -220,9 +210,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="RK7-WA-Pox"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="220" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Director:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wfA-YV-bBb" userLabel="directorHeadlineLabel">
                                                 <rect key="frame" x="16" y="229" width="100" height="21"/>
@@ -266,8 +253,7 @@
                                                         <exclude reference="YPO-os-8RZ"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="258" width="382" height="21"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="YPO-os-8RZ"/>
                                                     </mask>
@@ -279,9 +265,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="a7A-F2-Pmp"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="290" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Actor:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cU6-bZ-VCa" userLabel="actorHeadlineLabel">
                                                 <rect key="frame" x="16" y="299" width="120" height="21"/>
@@ -325,8 +308,7 @@
                                                         <exclude reference="CIo-kg-fDF"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="328" width="382" height="21"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="CIo-kg-fDF"/>
                                                     </mask>
@@ -345,8 +327,7 @@
                                                         <exclude reference="kI8-vl-44j"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="358" width="382" height="21"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="kI8-vl-44j"/>
                                                     </mask>
@@ -365,8 +346,7 @@
                                                         <exclude reference="t4U-pd-OnE"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="387" width="382" height="21"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="t4U-pd-OnE"/>
                                                     </mask>
@@ -385,8 +365,7 @@
                                                         <exclude reference="q6P-fN-14y"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="416" width="382" height="21"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="q6P-fN-14y"/>
                                                     </mask>
@@ -398,9 +377,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="hMD-cQ-5ay"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="290" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cu2-mI-B5P" userLabel="line5">
                                                 <rect key="frame" x="16" y="290" width="568" height="1"/>
@@ -408,9 +384,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="TpB-Nc-PJz"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES">
-                                                    <rect key="frame" x="16" y="290" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Story:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GEG-7d-cJi" userLabel="storyHeadlineLabel">
                                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
@@ -425,8 +398,7 @@
                                                         <exclude reference="IzD-l7-ysS"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="-21" width="382" height="21"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="IzD-l7-ysS"/>
                                                     </mask>
@@ -447,8 +419,7 @@
                                                         <exclude reference="hMZ-lD-gNU"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="-21" width="382" height="21"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="hMZ-lD-gNU"/>
                                                     </mask>
@@ -487,8 +458,7 @@
                                                         <exclude reference="6VZ-QJ-gyD"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="-15" width="382" height="30"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="6VZ-QJ-gyD"/>
                                                     </mask>
@@ -500,9 +470,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="oo1-6h-IlG"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="290" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YgK-ua-18I">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -518,8 +485,7 @@
                                                         <exclude reference="toQ-H3-6cB"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="-15" width="382" height="30"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="toQ-H3-6cB"/>
                                                     </mask>
@@ -531,9 +497,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="LYg-gC-61x"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="290" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pg6-fp-n3Q">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -549,8 +512,7 @@
                                                         <exclude reference="pAQ-qJ-dwb"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="-15" width="382" height="30"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="pAQ-qJ-dwb"/>
                                                     </mask>
@@ -562,9 +524,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="t5E-BM-Cqf"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="290" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aYz-kL-lXg">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -580,8 +539,7 @@
                                                         <exclude reference="1YK-60-iDA"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="-15" width="382" height="30"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="1YK-60-iDA"/>
                                                     </mask>
@@ -593,9 +551,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="sgy-sK-fHs"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="290" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SrP-NY-9g9">
                                                 <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -611,8 +566,7 @@
                                                         <exclude reference="jLX-SH-mwb"/>
                                                     </mask>
                                                 </variation>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="-15" width="382" height="30"/>
+                                                <variation key="heightClass=regular">
                                                     <mask key="constraints">
                                                         <include reference="jLX-SH-mwb"/>
                                                     </mask>
@@ -624,9 +578,6 @@
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="SDm-oh-8Fp"/>
                                                 </constraints>
-                                                <variation key="heightClass=regular" ambiguous="YES" misplaced="YES">
-                                                    <rect key="frame" x="16" y="290" width="382" height="1"/>
-                                                </variation>
                                             </view>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

@@ -100,19 +100,19 @@ class FavoriteTableViewController: MovieTableViewController {
 		tableView.beginUpdates()
 
 		// search apropriate section for the new favorite
-		var sectionToSearch: String!
+		var sectionToSearchFor: String!
 		
 		if newFavorite.isNowPlaying() {
-			sectionToSearch = NSLocalizedString("NowPlayingLong", comment: "")
+			sectionToSearchFor = NSLocalizedString("NowPlayingLong", comment: "")
 		}
 		else {
-			sectionToSearch = newFavorite.releaseDateStringLong
+			sectionToSearchFor = newFavorite.releaseDateStringLong
 		}
 			
 		var foundSectionIndex: Int?
 		
 		for sectionIndex in 0 ..< sections.count {
-			if (sections[sectionIndex] == sectionToSearch) {
+			if (sections[sectionIndex] == sectionToSearchFor) {
 				foundSectionIndex = sectionIndex
 				break
 			}
@@ -120,11 +120,11 @@ class FavoriteTableViewController: MovieTableViewController {
 
 		if let foundSectionIndex = foundSectionIndex {
 			// the section for the new favorite already exists
-			addFavoriteToExistingSection(foundSectionIndex, newFavorite: newFavorite)
+			addMovieToExistingSection(foundSectionIndex, newMovie: newFavorite)
 		}
 		else {
 			// the section doesn't exist yet
-			addFavoriteToNewSection(sectionToSearch, newFavorite: newFavorite)
+			addMovieToNewSection(sectionToSearchFor, newMovie: newFavorite)
 		}
 		
 		tableView.endUpdates()
@@ -172,10 +172,12 @@ class FavoriteTableViewController: MovieTableViewController {
 	}
 	
 	
-	private func addFavoriteToExistingSection(foundSectionIndex: Int, newFavorite: MovieRecord) {
+	// MARK: - Private helper functions
+/*
+	private func addMovieToExistingSection(foundSectionIndex: Int, newMovie: MovieRecord) {
 		
 		// add new movie to the section, then sort it
-		moviesInSections[foundSectionIndex].append(newFavorite)
+		moviesInSections[foundSectionIndex].append(newMovie)
 		moviesInSections[foundSectionIndex].sort {
 			if let otherTitle = $1.title {
 				return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
@@ -185,7 +187,7 @@ class FavoriteTableViewController: MovieTableViewController {
 		
 		// get position of new movie after sorting so we can insert it
 		for movieIndex in 0 ..< moviesInSections[foundSectionIndex].count {
-			if (moviesInSections[foundSectionIndex][movieIndex].id == newFavorite.id) {
+			if (moviesInSections[foundSectionIndex][movieIndex].id == newMovie.id) {
 				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: movieIndex, inSection: foundSectionIndex)], withRowAnimation: UITableViewRowAnimation.Automatic)
 				break
 			}
@@ -193,12 +195,12 @@ class FavoriteTableViewController: MovieTableViewController {
 	}
 	
 	
-	private func addFavoriteToNewSection(sectionName: String, newFavorite: MovieRecord) {
+	private func addMovieToNewSection(sectionName: String, newMovie: MovieRecord) {
 		
-		if newFavorite.isNowPlaying() {
+		if newMovie.isNowPlaying() {
 			// special case: insert the "now playing" section (which is always first) with the movie
 			sections.insert(sectionName, atIndex: 0)
-			moviesInSections.insert([newFavorite], atIndex: 0)
+			moviesInSections.insert([newMovie], atIndex: 0)
 			tableView.insertSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
 			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
 		}
@@ -211,7 +213,7 @@ class FavoriteTableViewController: MovieTableViewController {
 			for sectionIndex in 0 ..< moviesInSections.count {
 				// from every section, get the first movie an compare releasedates
 				if (moviesInSections[sectionIndex].count > 0) {
-					if let existingDate = moviesInSections[sectionIndex][0].releaseDate, newFavoriteDate = newFavorite.releaseDate {
+					if let existingDate = moviesInSections[sectionIndex][0].releaseDate, newFavoriteDate = newMovie.releaseDate {
 						if (existingDate.compare(newFavoriteDate) == NSComparisonResult.OrderedDescending) {
 							// insert the new section here
 							newSectionIndex = sectionIndex
@@ -224,19 +226,19 @@ class FavoriteTableViewController: MovieTableViewController {
 			if let newSectionIndex = newSectionIndex {
 				// insert new section
 				sections.insert(sectionName, atIndex: newSectionIndex)
-				moviesInSections.insert([newFavorite], atIndex: newSectionIndex)
+				moviesInSections.insert([newMovie], atIndex: newSectionIndex)
 				tableView.insertSections(NSIndexSet(index: newSectionIndex), withRowAnimation: UITableViewRowAnimation.Automatic)
 				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: newSectionIndex)], withRowAnimation: UITableViewRowAnimation.Automatic)
 			}
 			else {
 				// append new section at the end
 				sections.append(sectionName)
-				moviesInSections.append([newFavorite])
+				moviesInSections.append([newMovie])
 				tableView.insertSections(NSIndexSet(index: sections.count-1), withRowAnimation: UITableViewRowAnimation.Automatic)
 				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: sections.count-1)], withRowAnimation: UITableViewRowAnimation.Automatic)
 			}
 		}
 	}
-	
+*/
 }
 
