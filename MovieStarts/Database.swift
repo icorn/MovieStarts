@@ -39,7 +39,7 @@ class Database {
 	let desiredQueryKeysForUpdate = [Constants.DB_ID_TMDB_ID, Constants.DB_ID_TITLE, Constants.DB_ID_ORIG_TITLE, Constants.DB_ID_RUNTIME, Constants.DB_ID_VOTE_AVERAGE, Constants.DB_ID_SYNOPSIS,
 		Constants.DB_ID_RELEASE, Constants.DB_ID_GENRES, Constants.DB_ID_CERTIFICATION, Constants.DB_ID_POSTER_URL, Constants.DB_ID_PRODUCTION_COUNTRIES,
 		Constants.DB_ID_IMDB_ID, Constants.DB_ID_DIRECTORS, Constants.DB_ID_ACTORS, Constants.DB_ID_TRAILER_NAMES, Constants.DB_ID_TRAILER_IDS,
-		Constants.DB_ID_ASSET, Constants.DB_ID_HIDDEN]
+		Constants.DB_ID_ASSET, Constants.DB_ID_HIDDEN, Constants.DB_ID_POSTER_ASSET]
 	let desiredQueryKeysForAll = [Constants.DB_ID_TMDB_ID, Constants.DB_ID_TITLE, Constants.DB_ID_ORIG_TITLE, Constants.DB_ID_RUNTIME, Constants.DB_ID_VOTE_AVERAGE, Constants.DB_ID_SYNOPSIS,
 		Constants.DB_ID_RELEASE, Constants.DB_ID_GENRES, Constants.DB_ID_CERTIFICATION, Constants.DB_ID_POSTER_URL, Constants.DB_ID_PRODUCTION_COUNTRIES,
 		Constants.DB_ID_IMDB_ID, Constants.DB_ID_DIRECTORS, Constants.DB_ID_ACTORS, Constants.DB_ID_TRAILER_NAMES, Constants.DB_ID_TRAILER_IDS,
@@ -387,6 +387,13 @@ class Database {
 			for existingMovieRecord in existingMovieRecords {
 				if (existingMovieRecord.id == newMovieRecord.id) {
 					movieAlreadyExists = true
+					
+					if (existingMovieRecord.posterUrl != newMovieRecord.posterUrl) {
+						// movie exists, but has new poster: get thumbnail of poster
+						newMovieRecord.storeThumbnailPoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
+						// TODO: delete old thumbnail and big poster
+					}
+					
 					break
 				}
 			}
@@ -398,6 +405,7 @@ class Database {
 		}
 		else {
 //			println("New movie: \(newMovieRecord.title!)")
+			newMovieRecord.storeThumbnailPoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
 			self.addNewMovieHandler?(movie: newMovieRecord)
 		}
 	}
