@@ -105,7 +105,7 @@ class MovieViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame)" )
+//		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame)" )
 		
 		contentViewWidthConstraint.constant = view.frame.width
 		
@@ -336,7 +336,7 @@ class MovieViewController: UIViewController {
 			scrollView.contentSize = CGSize(width: scrollView.frame.width, height: maxY + 30)
 		}
 
-		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame) ENDE" )
+//		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame) ENDE" )
 		
 	}
 	
