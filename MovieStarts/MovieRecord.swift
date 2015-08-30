@@ -11,7 +11,7 @@ import CloudKit
 import UIKit
 
 
-public class MovieRecord {
+public class MovieRecord : Printable {
 	
 	/// the unique ID from CKAsset
 	public var id:String
@@ -367,5 +367,83 @@ public class MovieRecord {
 		return retval
 	}
 
+	
+	/**
+		Checks if the updated version of the movie record has changes
+		which are visible in the table cell.
+    */
+	func hasVisibleChanges(updatedMovie: MovieRecord) -> Bool {
+		
+		if ((title != updatedMovie.title) || (origTitle != updatedMovie.origTitle) || (runtime != updatedMovie.runtime) ||
+			(productionCountries != updatedMovie.productionCountries) || (genres != updatedMovie.genres))
+		{
+			if ((posterUrl == nil) && (updatedMovie.posterUrl != nil)) {
+				return true
+			}
+		}
+		
+		return false
+	}
+	
+	// MARK: - Printable
+	
+	public var description: String {
+		
+		var retval = ""
+		
+		retval += "id: \(id) | "
+		retval += "runtime: \(runtime) | "
+		retval += "voteAvg: \(voteAverage) | "
+
+		if let tmdbId = tmdbId {
+			retval += "tmdbId: \(tmdbId) | "
+		} else {
+			retval += "tmdbId: nil | "
+		}
+		
+		if let imdbId = imdbId {
+			retval += "imdbId: \(imdbId) | "
+		} else {
+			retval += "imdbId: nil | "
+		}
+
+		if let title = title {
+			retval += "title: \(title) | "
+		} else {
+			retval += "title: nil | "
+		}
+
+		if let origTitle = origTitle {
+			retval += "origTitle: \(origTitle) | "
+		} else {
+			retval += "origTitle: nil | "
+		}
+
+		if let releaseDate = releaseDate {
+			retval += "releaseDate: \(releaseDate) | "
+		} else {
+			retval += "releaseDate: nil | "
+		}
+
+		if let posterUrl = posterUrl {
+			retval += "posterUrl: \(posterUrl) | "
+		} else {
+			retval += "posterUrl: nil | "
+		}
+
+		return retval
+		
+		/* ignored:
+		public var certification:String?
+		public var synopsis:String?
+		public var productionCountries:[String] = []
+		public var genres:[String] = []
+		public var genreIds:[Int] = []
+		public var directors:[String] = []
+		public var actors:[String] = []
+		public var trailerNames:[String] = []
+		public var trailerIds:[String] = []
+		*/
+	}
 }
 
