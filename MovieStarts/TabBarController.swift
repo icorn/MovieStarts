@@ -206,9 +206,11 @@ class TabBarController: UITabBarController {
 				
 				dispatch_async(dispatch_get_main_queue()) {
 					if movie.isNowPlaying() {
+						println("Adding \(movie.title!) to NOW PLAYING")
 						self.nowPlayingController?.addMovie(movie)
 					}
 					else {
+						println("Adding \(movie.title!) to UPCOMING")
 						self.upcomingController?.addMovie(movie)
 					}
 				}
@@ -217,224 +219,75 @@ class TabBarController: UITabBarController {
 			updateMovieHandler: { (movie: MovieRecord) in
 
 				// update movie
+
+				// there are several possibilities:
+				// 1a) movie was and is now-playing, movie cell stays in same position, only "invisible" changes
+				// 1b) movie was and is now-playing, movie cell stays in same position, changes in visible data, change cell with animation
+				// 1c) movie was and is now-playing, movie cell moves because of name-change
+				
+				// 2a) movie was and is upcoming, movie cell stays in same position (same date, same name), only "invisible" changes
+				// 2b) movie was and is upcoming, movie cell stays in same position (same date, same name), changes in visible data, change cell with animation
+				// 2c) movie was and is upcoming, movie cell moves in current section (same date, name has changed)
+				// 2d) movie was and is upcoming, movie cell moves from one section to another (date has changed)
+
+				// 3) movie was upcoming, is now now-playing
+				// 4) movie was now-playing, is now upcoming (unlikely)
+				
+				// the last two remove the cell from one *tab* and add it to another.
+				
+				var movieIsInUpcomingList = self.isMovieInUpcomingList(movie)
+				var movieIsInNowPlayingList = self.isMovieInNowPlayingList(movie)
 				
 				dispatch_async(dispatch_get_main_queue()) {
-//					tabBarController.updateMovie(movie)
+					if (movie.isNowPlaying() && movieIsInNowPlayingList) {
+						// movie was and is now-playing
+						println("Updating \(movie.title!) in NOW PLAYING")
+						self.nowPlayingController?.updateMovie(movie)
+					}
+					else if (!movie.isNowPlaying() && movieIsInUpcomingList) {
+						// movie was and is upcoming
+						println("Updating \(movie.title!) in UPCOMING")
+						self.upcomingController?.updateMovie(movie)
+					}
+					else if (!movie.isNowPlaying() && movieIsInNowPlayingList) {
+						// movie was now-playing, is now upcoming
+						println("Moving \(movie.title!) in from NOW PLAYING to UPCOMING")
+						self.nowPlayingController?.removeMovie(movie)
+						self.upcomingController?.addMovie(movie)
+					}
+					else if (movie.isNowPlaying() && movieIsInUpcomingList) {
+						// movie was upcoming, is now now-playing
+						println("Moving \(movie.title!) in from UPCOMING to NOW PLAYING")
+						self.upcomingController?.removeMovie(movie)
+						self.nowPlayingController?.addMovie(movie)
+					}
+					
+					if (contains(Favorites.IDs, movie.id)) {
+						// also, update the favorites
+						println("Updating \(movie.title!) in FAVORITES")
+						self.favoriteController?.updateFavorite(movie)
+					}
 				}
 			}
 		)
 	}
 	
-	
-	
-/*
-	func addNewMovie(movie: MovieRecord) {
-		allMovies.append(movie)
-		
-		if let saveDate = movie.releaseDate {
-			if movie.isNowPlaying() {
-				println("Add new movie to now: \(movie.title)")
-				nowMovies.append(movie)
-			}
-			else {
-				println("Add new movie to upcoming: \(movie.title)")
-				upcomingMovies.append(movie)
-			}
-		}
 
-		sortLists()
-		updateFavorites()
-
-	}
-
-	func updateMovie(movie: MovieRecord) {
-
-		// update allMovies-list
-		
-		for index in 0 ..< allMovies.count {
-			if (allMovies[index].id == movie.id) {
-				allMovies[index] = movie
-				break
-			}
-		}
-
-		// update now-list
-		
-		var foundInNow = false
-		
-		for index in 0 ..< nowMovies.count {
-			if (nowMovies[index].id == movie.id) {
-				if (movie.isNowPlaying()) {
-					// update-movie is in now-list and is still playing now: movie is in correct list, just update record
-					println("Updating movie in now: \(movie.title)")
-					nowMovies[index] = movie
-				}
-				else {
-					// update-movie is in now-list, but is playing in the future. Move to upcoming-list.
-					println("*** Updating movie from now to upcoming: \(movie.title)")
-					nowMovies.removeAtIndex(index)
-					upcomingMovies.append(movie)
-				}
-				foundInNow = true
-				break
-			}
-		}
-
-		// update upcoming-list
-		
-		if !foundInNow {
-			for index in 0 ..< upcomingMovies.count {
-				if (upcomingMovies[index].id == movie.id) {
-					if (movie.isNowPlaying()) {
-						// update-movie is in upcoming-list, but is playing now: Move to now-list.
-						println("*** Updating movie from upcoming to now: \(movie.title)")
-						upcomingMovies.removeAtIndex(index)
-						nowMovies.append(movie)
-					}
-					else {
-						// update-movie is in upcoming-list and is still upcoming. Just update the record.
-						println("Updating movie in upcoming: \(movie.title)")
-						upcomingMovies[index] = movie
-					}
-					break
-				}
-			}
-		}
-		
-		// sort that all
-		
-		sortLists()
-		updateFavorites()
-	}
-*/
-	
-	
-	func updateFavorites() {
-/*
-		
-		favoriteMovies = []
-
-		// find all favorite movies
-		
-		for movie in allMovies {
-			if (contains(Favorites.IDs, movie.id)) {
-				favoriteMovies.append(movie)
-			}
-		}
-		
-		
-		// sort them by date
-		
-		favoriteMovies.sort {
-			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
-		}
-		
-		// update view controller
-		
-		if let tabBarVcs = viewControllers {
-		
-			for tabBarVc in tabBarVcs {
-				if tabBarVc is UINavigationController {
-					for navVc in (tabBarVc as! UINavigationController).viewControllers {
-						if navVc is FavoriteTableViewController {
-							(navVc as? FavoriteTableViewController)?.updateMoviesAndSections()
-						}
-					}
-				}
-			}
-		}
-
-*/
-		
-	}
-	
-/*
-	func sortLists() {
-		upcomingMovies.sort {
-			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
-		}
-		
-		nowMovies.sort {
-			return $0.title < $1.title
-		}
-	}
-*/
-	
-/*
-	override func shouldAutorotate() -> Bool {
-		if let svc = selectedViewController {
-			return svc.shouldAutorotate()
-		}
-		else {
-			return false
-		}
-	}
-*/
-	
-	
 	var nowPlayingController: NowTableViewController? {
 		get {
 			return findTableViewController()
-			
-/*
-			if let tabBarVcs = viewControllers {
-				for tabBarVc in tabBarVcs {
-					if tabBarVc is UINavigationController {
-						for navVc in (tabBarVc as! UINavigationController).viewControllers {
-							if navVc is NowTableViewController {
-								return navVc as? NowTableViewController
-							}
-						}
-					}
-				}
-			}
-			
-			return nil
-*/
 		}
 	}
 	
 	var upcomingController: UpcomingTableViewController? {
 		get {
 			return findTableViewController()
-
-/*
-			if let tabBarVcs = viewControllers {
-				for tabBarVc in tabBarVcs {
-					if tabBarVc is UINavigationController {
-						for navVc in (tabBarVc as! UINavigationController).viewControllers {
-							if navVc is UpcomingTableViewController {
-								return navVc as? UpcomingTableViewController
-							}
-						}
-					}
-				}
-			}
-			
-			return nil
-*/
 		}
 	}
 	
 	var favoriteController: FavoriteTableViewController? {
 		get {
 			return findTableViewController()
-
-/*
-			if let tabBarVcs = viewControllers {
-				for tabBarVc in tabBarVcs {
-					if tabBarVc is UINavigationController {
-						for navVc in (tabBarVc as! UINavigationController).viewControllers {
-							if navVc is FavoriteTableViewController {
-								return navVc as? FavoriteTableViewController
-							}
-						}
-					}
-				}
-			}
-			
-			return nil
-*/
 		}
 	}
 	
@@ -452,5 +305,27 @@ class TabBarController: UITabBarController {
 		}
 		
 		return nil
+	}
+
+	private func isMovieInNowPlayingList(newMovie: MovieRecord) -> Bool {
+		for movie in nowMovies {
+			if (movie.id == newMovie.id) {
+				return true
+			}
+		}
+		
+		return false
+	}
+
+	private func isMovieInUpcomingList(newMovie: MovieRecord) -> Bool {
+		for section in upcomingMovies {
+			for movie in section {
+				if (movie.id == newMovie.id) {
+					return true
+				}
+			}
+		}
+		
+		return false
 	}
 }

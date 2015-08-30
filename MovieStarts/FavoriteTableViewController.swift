@@ -12,7 +12,6 @@ class FavoriteTableViewController: MovieTableViewController {
 
 	override func viewDidLoad() {
 		currentTab = MovieTab.Favorites
-		updateMoviesAndSections()
 		checkForEmptyList()
 		
 		super.viewDidLoad()
@@ -22,42 +21,6 @@ class FavoriteTableViewController: MovieTableViewController {
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		checkForEmptyList()
-	}
-	
-	func updateMoviesAndSections() {
-/*
-		if let movieTabBarController = movieTabBarController {
-			
-			// put movies into sections
-			
-			var previousDate: NSDate? = nil
-			var currentSection = -1
-			moviesInSections = []
-			sections = []
-			
-			for movie in movieTabBarController.favoriteMovies {
-				if (movie.isNowPlaying() && (currentSection == -1)) {
-					// it's a current movie, but there is no section for it yet
-					var newMovieArray: [MovieRecord] = []
-					moviesInSections.append(newMovieArray)
-					sections.append(NSLocalizedString("NowPlayingLong", comment: ""))
-					currentSection++
-				}
-				else if ((movie.isNowPlaying() == false) && ((previousDate == nil) || (previousDate != movie.releaseDate))) {
-					// upcoming movies:
-					// a new sections starts: create new array and add to film-array
-					var newMovieArray: [MovieRecord] = []
-					moviesInSections.append(newMovieArray)
-					sections.append(movie.releaseDateStringLong)
-					currentSection++
-				}
-				
-				// add movie to current section
-				moviesInSections[currentSection].append(movie)
-				previousDate = movie.releaseDate
-			}
-		}
-*/
 	}
 	
 	private func checkForEmptyList() {
@@ -98,7 +61,11 @@ class FavoriteTableViewController: MovieTableViewController {
 	
 	func addFavorite(newFavorite: MovieRecord) {
 		tableView.beginUpdates()
+		addFavoritePrivate(newFavorite)
+		tableView.endUpdates()
+	}
 
+	private func addFavoritePrivate(newFavorite: MovieRecord) {
 		// search apropriate section for the new favorite
 		var sectionToSearchFor: String!
 		
@@ -108,7 +75,7 @@ class FavoriteTableViewController: MovieTableViewController {
 		else {
 			sectionToSearchFor = newFavorite.releaseDateStringLong
 		}
-			
+		
 		var foundSectionIndex: Int?
 		
 		for sectionIndex in 0 ..< sections.count {
@@ -117,7 +84,7 @@ class FavoriteTableViewController: MovieTableViewController {
 				break
 			}
 		}
-
+		
 		if let foundSectionIndex = foundSectionIndex {
 			// the section for the new favorite already exists
 			addMovieToExistingSection(foundSectionIndex, newMovie: newFavorite)
@@ -127,13 +94,16 @@ class FavoriteTableViewController: MovieTableViewController {
 			addMovieToNewSection(sectionToSearchFor, newMovie: newFavorite)
 		}
 		
-		tableView.endUpdates()
 	}
-
 	
 	func removeFavorite(removedFavoriteId: String) {
 		tableView.beginUpdates()
-
+		removeFavoritePrivate(removedFavoriteId)
+		tableView.endUpdates()
+	}
+	
+	
+	private func removeFavoritePrivate(removedFavoriteId: String) {
 		var rowId: Int?
 		var sectionId: Int?
 		
@@ -147,7 +117,7 @@ class FavoriteTableViewController: MovieTableViewController {
 				}
 			}
 		}
-
+		
 		if let rowId = rowId, sectionId = sectionId {
 			// remove cell
 			var indexPath: NSIndexPath = NSIndexPath(forRow: rowId, inSection: sectionId)
@@ -155,7 +125,7 @@ class FavoriteTableViewController: MovieTableViewController {
 			
 			// remove movie from datasource
 			moviesInSections[sectionId].removeAtIndex(rowId)
-
+			
 			// if the section is now empty: remove it also
 			if moviesInSections[sectionId].isEmpty {
 				// remove section from datasource
@@ -167,78 +137,49 @@ class FavoriteTableViewController: MovieTableViewController {
 				tableView.deleteSections(indexSet, withRowAnimation: UITableViewRowAnimation.Automatic)
 			}
 		}
+	}
+	
+	
+	func updateFavorite(updatedMovie: MovieRecord) {
+		tableView.beginUpdates()
+		
+		// find the index of the existing movie in the table
+		
+		var indexPathForUpdateMovie: NSIndexPath?
+		
+		for (sectionIndex, section) in enumerate(moviesInSections) {
+			for (movieIndex, movie) in enumerate(section) {
+				if (movie.id == updatedMovie.id) {
+					indexPathForUpdateMovie = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
+					break
+				}
+			}
+		}
+		
+		// check for changes
+		
+		if let indexPathForUpdateMovie = indexPathForUpdateMovie {
+			if ((moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row].title != updatedMovie.title) ||
+				(moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row].releaseDate != updatedMovie.releaseDate))
+			{
+				// the title or the date has changed. we have to move the table cell to a new position.
+				removeFavoritePrivate(updatedMovie.id)
+				addFavoritePrivate(updatedMovie)
+			}
+			else if (moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row].hasVisibleChanges(updatedMovie)) {
+				// some data has changed which is shown in the table cell -> change the cell with an animation
+				moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row] = updatedMovie
+				tableView.reloadRowsAtIndexPaths([indexPathForUpdateMovie], withRowAnimation: UITableViewRowAnimation.Automatic)
+			}
+			else {
+				// some data has changed which is now visible in the table cell -> change the cell, no animation
+				moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row] = updatedMovie
+				tableView.reloadRowsAtIndexPaths([indexPathForUpdateMovie], withRowAnimation: UITableViewRowAnimation.None)
+			}
+		}
 		
 		tableView.endUpdates()
 	}
 	
-	
-	// MARK: - Private helper functions
-/*
-	private func addMovieToExistingSection(foundSectionIndex: Int, newMovie: MovieRecord) {
-		
-		// add new movie to the section, then sort it
-		moviesInSections[foundSectionIndex].append(newMovie)
-		moviesInSections[foundSectionIndex].sort {
-			if let otherTitle = $1.title {
-				return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
-			}
-			return true
-		}
-		
-		// get position of new movie after sorting so we can insert it
-		for movieIndex in 0 ..< moviesInSections[foundSectionIndex].count {
-			if (moviesInSections[foundSectionIndex][movieIndex].id == newMovie.id) {
-				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: movieIndex, inSection: foundSectionIndex)], withRowAnimation: UITableViewRowAnimation.Automatic)
-				break
-			}
-		}
-	}
-	
-	
-	private func addMovieToNewSection(sectionName: String, newMovie: MovieRecord) {
-		
-		if newMovie.isNowPlaying() {
-			// special case: insert the "now playing" section (which is always first) with the movie
-			sections.insert(sectionName, atIndex: 0)
-			moviesInSections.insert([newMovie], atIndex: 0)
-			tableView.insertSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic)
-			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
-		}
-		else {
-			// normal case: insert a section for the release date with the movie
-			// but first check out, at which position the new section should be inserted
-			
-			var newSectionIndex: Int?
-			
-			for sectionIndex in 0 ..< moviesInSections.count {
-				// from every section, get the first movie an compare releasedates
-				if (moviesInSections[sectionIndex].count > 0) {
-					if let existingDate = moviesInSections[sectionIndex][0].releaseDate, newFavoriteDate = newMovie.releaseDate {
-						if (existingDate.compare(newFavoriteDate) == NSComparisonResult.OrderedDescending) {
-							// insert the new section here
-							newSectionIndex = sectionIndex
-							break
-						}
-					}
-				}
-			}
-			
-			if let newSectionIndex = newSectionIndex {
-				// insert new section
-				sections.insert(sectionName, atIndex: newSectionIndex)
-				moviesInSections.insert([newMovie], atIndex: newSectionIndex)
-				tableView.insertSections(NSIndexSet(index: newSectionIndex), withRowAnimation: UITableViewRowAnimation.Automatic)
-				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: newSectionIndex)], withRowAnimation: UITableViewRowAnimation.Automatic)
-			}
-			else {
-				// append new section at the end
-				sections.append(sectionName)
-				moviesInSections.append([newMovie])
-				tableView.insertSections(NSIndexSet(index: sections.count-1), withRowAnimation: UITableViewRowAnimation.Automatic)
-				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: sections.count-1)], withRowAnimation: UITableViewRowAnimation.Automatic)
-			}
-		}
-	}
-*/
 }
 

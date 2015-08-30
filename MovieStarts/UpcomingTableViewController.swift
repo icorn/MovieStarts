@@ -12,31 +12,6 @@ class UpcomingTableViewController: MovieTableViewController {
 
 	override func viewDidLoad() {
 		currentTab = MovieTab.Upcoming
-
-/*
-		if let movieTabBarController = movieTabBarController {
-
-			// put movies into sections
-			
-			var previousDate: NSDate? = nil
-			var currentSection = -1
-			moviesInSections = []
-
-			for movie in movieTabBarController.upcomingMovies {
-				if ((previousDate == nil) || (previousDate != movie.releaseDate)) {
-					// a new sections starts: create new array and add to film-array
-					var newMovieArray: [MovieRecord] = []
-					moviesInSections.append(newMovieArray)
-					sections.append(movie.releaseDateStringLong)
-					currentSection++
-				}
-							
-				// add movie to current section
-				moviesInSections[currentSection].append(movie)
-				previousDate = movie.releaseDate
-			}
-		}
-*/		
 		super.viewDidLoad()
 		navigationItem.title = NSLocalizedString("UpcomingLong", comment: "")
 	}
@@ -44,7 +19,12 @@ class UpcomingTableViewController: MovieTableViewController {
 	
 	func addMovie(newMovie: MovieRecord) {
 		tableView.beginUpdates()
-
+		addMoviePrivate(newMovie)
+		tableView.endUpdates()
+	}
+	
+	
+	private func addMoviePrivate(newMovie: MovieRecord) {
 		// search apropriate section for the new movie
 		var sectionToSearchFor = newMovie.releaseDateStringLong
 		var foundSectionIndex: Int?
@@ -64,8 +44,77 @@ class UpcomingTableViewController: MovieTableViewController {
 			// the section doesn't exist yet
 			addMovieToNewSection(sectionToSearchFor, newMovie: newMovie)
 		}
+	}
+	
+	
+	func removeMovie(movieToRemove: MovieRecord) {
+		tableView.beginUpdates()
+		
+		var indexPathForExistingMovie: NSIndexPath?
+		
+		for (sectionIndex, section) in enumerate(moviesInSections) {
+			for (movieIndex, movie) in enumerate(section) {
+				if (movie.id == movieToRemove.id) {
+					indexPathForExistingMovie = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
+					break
+				}
+			}
+		}
 
+		if let indexPathForExistingMovie = indexPathForExistingMovie {
+			moviesInSections[indexPathForExistingMovie.section].removeAtIndex(indexPathForExistingMovie.row)
+			tableView.deleteRowsAtIndexPaths([indexPathForExistingMovie], withRowAnimation: UITableViewRowAnimation.Automatic)
+		}
+		
 		tableView.endUpdates()
 	}
+
+	
+	func updateMovie(updatedMovie: MovieRecord) {
+		tableView.beginUpdates()
+		
+		// find the index of the existing movie in the table
+		
+		var indexPathForExistingMovie: NSIndexPath?
+		
+		for (sectionIndex, section) in enumerate(moviesInSections) {
+			for (movieIndex, movie) in enumerate(section) {
+				if (movie.id == updatedMovie.id) {
+					indexPathForExistingMovie = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
+					break
+				}
+			}
+		}
+		
+		// check for changes
+		
+		if let indexPathForExistingMovie = indexPathForExistingMovie {
+			if ((moviesInSections[indexPathForExistingMovie.section][indexPathForExistingMovie.row].title != updatedMovie.title) ||
+				(moviesInSections[indexPathForExistingMovie.section][indexPathForExistingMovie.row].releaseDate != updatedMovie.releaseDate))
+			{
+				// the title or the date has changed. we have to move the table cell to a new position.
+				
+				// remove movie from old position
+				moviesInSections[indexPathForExistingMovie.section].removeAtIndex(indexPathForExistingMovie.row)
+				tableView.deleteRowsAtIndexPaths([indexPathForExistingMovie], withRowAnimation: UITableViewRowAnimation.Automatic)
+				
+				// add it at new position
+				addMoviePrivate(updatedMovie)
+			}
+			else if (moviesInSections[indexPathForExistingMovie.section][indexPathForExistingMovie.row].hasVisibleChanges(updatedMovie)) {
+				// some data has changed which is shown in the table cell -> change the cell with an animation
+				moviesInSections[indexPathForExistingMovie.section][indexPathForExistingMovie.row] = updatedMovie
+				tableView.reloadRowsAtIndexPaths([indexPathForExistingMovie], withRowAnimation: UITableViewRowAnimation.Automatic)
+			}
+			else {
+				// some data has changed which is now visible in the table cell -> change the cell, no animation
+				moviesInSections[indexPathForExistingMovie.section][indexPathForExistingMovie.row] = updatedMovie
+				tableView.reloadRowsAtIndexPaths([indexPathForExistingMovie], withRowAnimation: UITableViewRowAnimation.None)
+			}
+		}
+		
+		tableView.endUpdates()
+	}
+
 }
 
