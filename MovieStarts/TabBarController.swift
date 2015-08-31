@@ -268,6 +268,24 @@ class TabBarController: UITabBarController {
 						self.favoriteController?.updateFavorite(movie)
 					}
 				}
+			},
+			
+			completionHandler: { (movies: [MovieRecord]?) in
+			},
+
+			errorHandler: { (errorMessage: String) in
+				println(errorMessage)
+			},
+			
+			updatePosterHandler: { (tmdbId: Int) in
+				// update thumbnail poster if needed
+				dispatch_async(dispatch_get_main_queue()) {
+					if (self.nowPlayingController?.updateThumbnail(tmdbId) == false) {
+						self.upcomingController?.updateThumbnail(tmdbId)
+					}
+					
+					self.favoriteController?.updateThumbnail(tmdbId)
+				}
 			}
 		)
 	}
