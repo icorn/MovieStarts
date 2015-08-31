@@ -18,9 +18,9 @@ public struct Constants {
 	static let THUMBNAIL_FOLDER				= "/Thumbnails"
 	static let BIG_POSTER_FOLDER			= "/BigPoster"
 	
-	static let PREFS_LATEST_DB_MODIFICATION = "modificationDate"
-	static let PREFS_LATEST_DB_UPDATE_CHECK = "lastestCheck"
-	static let PREFS_FAVORITES				= "favorites"
+	static let PREFS_LATEST_DB_MODIFICATION 		= "modificationDate"
+	static let PREFS_LATEST_DB_SUCCESSFULL_UPDATE 	= "lastestCheck"
+	static let PREFS_FAVORITES						= "favorites"
 
 	static let SUBSCRIPTION_ID_USA			= "MovieStartsSubscriptionUSA"
 	static let SUBSCRIPTION_ID_GERMANY		= "MovieStartsSubscriptionGermany"
@@ -28,11 +28,11 @@ public struct Constants {
 	static let RECORD_TYPE_USA				= "MoviesUSA"
 	static let RECORD_TYPE_GERMANY			= "MoviesGermany"
 
-	static let RECORD_TYPE_RESULT_USA	= "ResultMoviesUSA"
-	static let RECORD_ID_RESULT_USA		= "ResultUSA"
-	static let DB_ID_NUMBER_OF_RECORDS	= "numberOfRecords"
+	static let RECORD_TYPE_RESULT_USA		= "ResultMoviesUSA"
+	static let RECORD_ID_RESULT_USA			= "ResultUSA"
+	static let DB_ID_NUMBER_OF_RECORDS		= "numberOfRecords"
 	
-	static let DAYS_TILL_DB_UPDATE			= 7
+	static let HOURS_BETWEEN_DB_UPDATES		= 24
 	static let MAX_DAYS_IN_THE_PAST			= 28.0
 	
 	static let tagFavoriteView: Int			= 10000
