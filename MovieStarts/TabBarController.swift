@@ -16,6 +16,8 @@ class TabBarController: UITabBarController {
 	var favoriteMovies: [[MovieRecord]] = []
 	var favoriteSections: [String] = []
 	
+	let userDefaults = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)
+
 	@IBOutlet weak var movieTabBar: UITabBar!
 
 	
@@ -195,7 +197,20 @@ class TabBarController: UITabBarController {
 	
 	func updateMovies(allMovies: [MovieRecord]) {
 		
-		// TODO : check if last update-check was more than 24 hours ago. if yes, check for update.
+		if (userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) != nil) {
+			var latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as! NSDate?
+		
+			if let latestUpdate = latestUpdate {
+				var hoursSinceLastUpdate = abs(Int(latestUpdate.timeIntervalSinceNow)) / 60 / 60
+				
+				if (hoursSinceLastUpdate < Constants.HOURS_BETWEEN_DB_UPDATES) {
+					// last update was inside the tolerance: don't get new update
+					return
+				}
+			}
+		}
+		
+		// get updated movies
 		
 		var database = Database(recordType: Constants.RECORD_TYPE_USA)
 		
