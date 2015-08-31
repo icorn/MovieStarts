@@ -15,7 +15,6 @@ class Database {
 	var recordType: String
 	var moviesPlistPath: String?
 	var moviesPlistFile: String?
-//	var loadedDictArray: [NSDictionary]?
 	var loadedMovieRecordArray: [MovieRecord]?
 	
 	var totalNumberOfRecordsFromCloud: Int?
@@ -31,6 +30,7 @@ class Database {
 	
 	var addNewMovieHandler: ((movie: MovieRecord) -> ())?
 	var updateMovieHandler: ((movie: MovieRecord) -> ())?
+	var updatePosterHandler: ((tmdbId: Int) -> ())?
 	
 	var allCKRecords: [CKRecord] = []
 	var updatedCKRecords: [CKRecord] = []
@@ -39,7 +39,7 @@ class Database {
 	let desiredQueryKeysForUpdate = [Constants.DB_ID_TMDB_ID, Constants.DB_ID_TITLE, Constants.DB_ID_ORIG_TITLE, Constants.DB_ID_RUNTIME, Constants.DB_ID_VOTE_AVERAGE, Constants.DB_ID_SYNOPSIS,
 		Constants.DB_ID_RELEASE, Constants.DB_ID_GENRES, Constants.DB_ID_CERTIFICATION, Constants.DB_ID_POSTER_URL, Constants.DB_ID_PRODUCTION_COUNTRIES,
 		Constants.DB_ID_IMDB_ID, Constants.DB_ID_DIRECTORS, Constants.DB_ID_ACTORS, Constants.DB_ID_TRAILER_NAMES, Constants.DB_ID_TRAILER_IDS,
-		Constants.DB_ID_ASSET, Constants.DB_ID_HIDDEN, Constants.DB_ID_POSTER_ASSET]
+		Constants.DB_ID_ASSET, Constants.DB_ID_HIDDEN /*, Constants.DB_ID_POSTER_ASSET*/ ]
 	let desiredQueryKeysForAll = [Constants.DB_ID_TMDB_ID, Constants.DB_ID_TITLE, Constants.DB_ID_ORIG_TITLE, Constants.DB_ID_RUNTIME, Constants.DB_ID_VOTE_AVERAGE, Constants.DB_ID_SYNOPSIS,
 		Constants.DB_ID_RELEASE, Constants.DB_ID_GENRES, Constants.DB_ID_CERTIFICATION, Constants.DB_ID_POSTER_URL, Constants.DB_ID_PRODUCTION_COUNTRIES,
 		Constants.DB_ID_IMDB_ID, Constants.DB_ID_DIRECTORS, Constants.DB_ID_ACTORS, Constants.DB_ID_TRAILER_NAMES, Constants.DB_ID_TRAILER_IDS,
@@ -60,7 +60,14 @@ class Database {
 		
 		self.cloudKitContainer = CKContainer(identifier: Constants.CLOUDKIT_CONTAINER_ID)
 		self.cloudKitDatabase = cloudKitContainer.publicCloudDatabase
+		
+		if let saveMoviesPlistPath = self.moviesPlistPath {
+			self.moviesPlistFile = saveMoviesPlistPath.stringByAppendingPathComponent(self.recordType + ".plist")
+		}
 	}
+	
+	
+	// MARK: - Functions for reading all movies
 	
 	
 	/**
@@ -86,7 +93,6 @@ class Database {
 		
 		if let saveMoviesPlistPath = self.moviesPlistPath {
 			// try to load movies from device
-			self.moviesPlistFile = saveMoviesPlistPath.stringByAppendingPathComponent(self.recordType + ".plist")
 			var loadedDictArray = NSArray(contentsOfFile: moviesPlistFile!) as? [NSDictionary]
 
 			if let loadedDictArray = loadedDictArray {
@@ -182,93 +188,9 @@ class Database {
 		}
 		else {
 			println("No group folder found")
-			errorHandler(errorMessage: "No group folder found")
+			errorHandler(errorMessage: "*** No group folder found")
 		}
 	}
-
-	
-	/**
-		Checks if there are new or updates movies in the cloud and gets them.
-	*/
-	func getUpdatedMovies(allMovies: [MovieRecord], addNewMovieHandler: (movie: MovieRecord) -> (), updateMovieHandler: (movie: MovieRecord) -> ()) {
-		self.addNewMovieHandler = addNewMovieHandler
-		self.updateMovieHandler = updateMovieHandler
-		self.loadedMovieRecordArray = allMovies
-		
-		var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as! NSDate?
-		
-		if let saveModDate: NSDate = latestModDate {
-			
-			println("Getting records after modification date \(saveModDate)")
-/*
-			if let saveShowIndicator = self.showIndicator {
-				dispatch_async(dispatch_get_main_queue()) {
-					saveShowIndicator(updating: true, showProgress: false)
-				}
-			}
-*/
-			var predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
-			var query = CKQuery(recordType: self.recordType, predicate: predicate)
-			
-			let queryOperation = CKQueryOperation(query: query)
-			queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
-			queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
-			queryOperation.desiredKeys = desiredQueryKeysForUpdate
-			self.cloudKitDatabase.addOperation(queryOperation)
-		}
-		else {
-			println("ERROR: mo last mod.data of db")
-		}
-	}
-	
-	
-	/**
-		Writes the movies and the modification date to file.
-	
-		:param: allMovieRecords				The array with all movies
-		:param: updatedMoviesAsRecordArray	The array with all updated movies (used to find out latest modification date)
-		:param: completionHandler			The handler which is called upon completion
-		:param: errorHandler				The handler which is called if an error occurs
-	*/
-	func writeMovies(allMovieRecords: [MovieRecord], updatedMoviesAsRecordArray: [CKRecord], completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
-
-		// write it to device
-		
-		if let filename = self.moviesPlistFile {
-			if ((DatabaseHelper.movieRecordArrayToDictArray(allMovieRecords) as NSArray).writeToFile(filename, atomically: true) == false) {
-				if let saveStopIndicator = self.stopIndicator {
-					dispatch_async(dispatch_get_main_queue()) {
-						saveStopIndicator()
-					}
-				}
-				
-				errorHandler(errorMessage: "Error writing movies-file")
-				return
-			}
-		}
-		else {
-			errorHandler(errorMessage: "Filename for movies-list is broken")
-			return
-		}
-		
-		// and store the latest modification-date of the records
-		if (updatedMoviesAsRecordArray.count > 0) {
-			DatabaseHelper.storeLastModification(updatedMoviesAsRecordArray)
-		}
-		
-		// success
-		if let saveStopIndicator = self.stopIndicator {
-			dispatch_async(dispatch_get_main_queue()) {
-				saveStopIndicator()
-			}
-		}
-		
-		completionHandler(movies: allMovieRecords)
-	}
-	
-	
-	// MARK: - callbacks for getting all movies
-
 
 	/**
 		Adds the record to an array to save it for later processing.
@@ -305,7 +227,7 @@ class Database {
 	func queryCompleteAllMoviesCallback(cursor: CKQueryCursor!, error: NSError!) {
 		if (cursor == nil) {
 			// all objects are here!
-
+			
 			if (error != nil) {
 				if let saveStopIndicator = self.stopIndicator {
 					dispatch_async(dispatch_get_main_queue()) {
@@ -322,7 +244,7 @@ class Database {
 				// received all records from the cloud
 				
 				var movieRecordArray: [MovieRecord] = []
-
+				
 				// generate array of MovieRecord objects and store the thumbnail posters to "disc"
 				for ckRecord in self.allCKRecords {
 					movieRecordArray.append(MovieRecord(ckRecord: ckRecord))
@@ -368,8 +290,53 @@ class Database {
 		}
 	}
 	
+	
+	// MARK: - Functions for reading only updated movies
 
-	// MARK: - callbacks for getting updated movies
+	
+	/**
+		Checks if there are new or updates movies in the cloud and gets them.
+	*/
+	func getUpdatedMovies(	allMovies: [MovieRecord],
+							addNewMovieHandler: (movie: MovieRecord) -> (),
+							updateMovieHandler: (movie: MovieRecord) -> (),
+							completionHandler: (movies: [MovieRecord]?) -> (),
+							errorHandler: (errorMessage: String) -> (),
+							updatePosterHandler: (tmdbId: Int) -> ())
+	{
+		self.addNewMovieHandler = addNewMovieHandler
+		self.updateMovieHandler = updateMovieHandler
+		self.completionHandler  = completionHandler
+		self.errorHandler		= errorHandler
+		self.updatePosterHandler = updatePosterHandler
+		
+		self.loadedMovieRecordArray = allMovies
+		
+		var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as! NSDate?
+		
+		if let saveModDate: NSDate = latestModDate {
+			
+			println("Getting records after modification date \(saveModDate)")
+/*
+			if let saveShowIndicator = self.showIndicator {
+				dispatch_async(dispatch_get_main_queue()) {
+					saveShowIndicator(updating: true, showProgress: false)
+				}
+			}
+*/
+			var predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
+			var query = CKQuery(recordType: self.recordType, predicate: predicate)
+			
+			let queryOperation = CKQueryOperation(query: query)
+			queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
+			queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
+			queryOperation.desiredKeys = desiredQueryKeysForUpdate
+			self.cloudKitDatabase.addOperation(queryOperation)
+		}
+		else {
+			println("ERROR: mo last mod.data of db")
+		}
+	}
 	
 	
 	/**
@@ -379,7 +346,7 @@ class Database {
 		:param: record	The record from the CloudKit database
 	*/
 	func recordFetchedUpdatedMoviesCallback(record: CKRecord!) {
-
+		
 		var newMovieRecord = MovieRecord(ckRecord: record)
 		var movieAlreadyExists: Bool = false
 		
@@ -387,29 +354,22 @@ class Database {
 			for existingMovieRecord in existingMovieRecords {
 				if (existingMovieRecord.id == newMovieRecord.id) {
 					movieAlreadyExists = true
-					
-					if (existingMovieRecord.posterUrl != newMovieRecord.posterUrl) {
-						// movie exists, but has new poster: get thumbnail of poster
-						newMovieRecord.storeThumbnailPoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
-						// TODO: delete old thumbnail and big poster
-					}
-					
 					break
 				}
 			}
 		}
 		
 		if (movieAlreadyExists) {
-//			println("Updated movie: \(newMovieRecord.title!)")
 			self.updateMovieHandler?(movie: newMovieRecord)
 		}
 		else {
-//			println("New movie: \(newMovieRecord.title!)")
 			newMovieRecord.storeThumbnailPoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
 			self.addNewMovieHandler?(movie: newMovieRecord)
 		}
+		
+		updatedCKRecords.append(record)
 	}
-
+	
 	
 	/**
 		Checks if all updated movies are read or if there are more pages of movies to read from the CloudKit database.
@@ -422,26 +382,14 @@ class Database {
 	func queryCompleteUpdatedMoviesCallback(cursor: CKQueryCursor!, error: NSError!) {
 		if (cursor == nil) {
 			// all updated records are here!
-
 			
-			
-			
-			
-/*
 			if (error != nil) {
 				// there was an error
-				
-				if let saveStopIndicator = self.stopIndicator {
-					dispatch_async(dispatch_get_main_queue()) {
-						saveStopIndicator()
-					}
-				}
 				self.errorHandler?(errorMessage: "Error querying updated records: \(error!.code) (\(error!.localizedDescription))")
 				return
 			}
 			else {
 				// received records from the cloud
-				
 				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_UPDATE_CHECK)
 				userDefaults?.synchronize()
 				
@@ -456,17 +404,13 @@ class Database {
 					// merge both arrays (the existing movies and the updated movies)
 					DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
 				}
-
+				
 				// delete all movies which are too old
-
 				cleanUpExistingMovies(&loadedMovieRecordArray!)
 				
 				// clean up posters
-				
 				cleanUpPosters()
 			}
-*/
-			
 		}
 		else {
 			// some objects are here, ask for more
@@ -478,8 +422,53 @@ class Database {
 		}
 	}
 	
+
+	// MARK: - Private helper functions
 	
-	// MARK: - cleaning up posters
+	
+	/**
+		Writes the movies and the modification date to file.
+	
+		:param: allMovieRecords				The array with all movies. This will be written to file.
+		:param: updatedMoviesAsRecordArray	The array with all updated movies (used to find out latest modification date)
+		:param: completionHandler			The handler which is called upon completion
+		:param: errorHandler				The handler which is called if an error occurs
+	*/
+	private func writeMovies(allMovieRecords: [MovieRecord], updatedMoviesAsRecordArray: [CKRecord], completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
+
+		// write it to device
+		
+		if let filename = self.moviesPlistFile {
+			if ((DatabaseHelper.movieRecordArrayToDictArray(allMovieRecords) as NSArray).writeToFile(filename, atomically: true) == false) {
+				if let saveStopIndicator = self.stopIndicator {
+					dispatch_async(dispatch_get_main_queue()) {
+						saveStopIndicator()
+					}
+				}
+				
+				errorHandler(errorMessage: "*** Error writing movies-file")
+				return
+			}
+		}
+		else {
+			errorHandler(errorMessage: "*** Filename for movies-list is broken")
+			return
+		}
+		
+		// and store the latest modification-date of the records
+		if (updatedMoviesAsRecordArray.count > 0) {
+			DatabaseHelper.storeLastModification(updatedMoviesAsRecordArray)
+		}
+		
+		// success
+		if let saveStopIndicator = self.stopIndicator {
+			dispatch_async(dispatch_get_main_queue()) {
+				saveStopIndicator()
+			}
+		}
+		
+		completionHandler(movies: allMovieRecords)
+	}
 
 	
 	/**
@@ -561,7 +550,7 @@ class Database {
 	
 		:param: record	The record from the CloudKit database
 	*/
-	func recordFetchedMissingPostersCallback(record: CKRecord!) {
+	private func recordFetchedMissingPostersCallback(record: CKRecord!) {
 		
 		// poster fetched: store it to disk
 		
@@ -571,6 +560,7 @@ class Database {
 			for movie in movies {
 				if let tmdbId = movie.tmdbId where tmdbId == tmdbIdToFind {
 					movie.storeThumbnailPoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
+					updatePosterHandler?(tmdbId: tmdbId)
 				}
 			}
 		}
@@ -583,7 +573,7 @@ class Database {
 		:param: cursor	The paging cursor used to find out if there are more pages of movies to load
 		:param: error	The error object
 	*/
-	func queryCompleteMissingPostersCallback(cursor: CKQueryCursor!, error: NSError!) {
+	private func queryCompleteMissingPostersCallback(cursor: CKQueryCursor!, error: NSError!) {
 		if (cursor == nil) {
 			if (error != nil) {
 				if let saveStopIndicator = self.stopIndicator {
@@ -613,8 +603,6 @@ class Database {
 	}
 	
 	
-	// MARK: - private helper functions
-
 	
 	/**
 		Checks if there are movies which are too old and removes them.
