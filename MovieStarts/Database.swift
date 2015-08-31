@@ -100,54 +100,7 @@ class Database {
 				// successfully loaded movies from device
 				
 				loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray)
-				
-
-				
-/*
-				// Should we search for updated movies?
-
-				var getUpdatesFlag = true
-				var latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_UPDATE_CHECK) as NSDate?
-				
-				if let saveLatestUpdate: NSDate = latestUpdate {
-					var daysSinceLastUpdate = abs(Int(saveLatestUpdate.timeIntervalSinceNow)) / 60 / 60 / 24
-					
-					if (daysSinceLastUpdate < Constants.DAYS_TILL_DB_UPDATE) {
-						getUpdatesFlag = false
-					}
-				}
-
-				if (getUpdatesFlag) {
-					// get updates from the cloud
-					var latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as! NSDate?
-
-					if let saveModDate: NSDate = latestModDate {
-
-						println("Getting records after modification date \(saveModDate)")
-						
-						if let saveShowIndicator = self.showIndicator {
-							dispatch_async(dispatch_get_main_queue()) {
-								saveShowIndicator(updating: true, showProgress: false)
-							}
-						}
-						
-						var predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
-						var query = CKQuery(recordType: self.recordType, predicate: predicate)
-						
-						let queryOperation = CKQueryOperation(query: query)
-						queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
-						queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
-						queryOperation.desiredKeys = desiredQueryKeysForUpdate
-						self.cloudKitDatabase.addOperation(queryOperation)
-					}
-				}
-				else {
-					// no updates wanted, just return the stuff from the file
-*/
-					completionHandler(movies: loadedMovieRecordArray)
-/*
-				}
-*/
+				completionHandler(movies: loadedMovieRecordArray)
 			}
 			else {
 				// movies are not on the device: get them from the cloud
@@ -262,7 +215,7 @@ class Database {
 					return
 				}
 				
-				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_UPDATE_CHECK)
+				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE)
 				userDefaults?.synchronize()
 				
 				// finish movies
@@ -390,7 +343,7 @@ class Database {
 			}
 			else {
 				// received records from the cloud
-				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_UPDATE_CHECK)
+				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE)
 				userDefaults?.synchronize()
 				
 				if (updatedCKRecords.count > 0) {
