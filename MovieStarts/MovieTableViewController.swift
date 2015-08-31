@@ -371,5 +371,24 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		}
 	}
 
+	
+	func updateThumbnail(tmdbId: Int) -> Bool {
+		var updated = false
+		
+		for (sectionIndex, section) in enumerate(moviesInSections) {
+			for (movieIndex, movie) in enumerate(section) {
+				if (movie.tmdbId == tmdbId) {
+					tableView.beginUpdates()
+					tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: movieIndex, inSection: sectionIndex)], withRowAnimation: UITableViewRowAnimation.None)
+					tableView.endUpdates()
+					updated = true
+					break
+				}
+			}
+		}
+		
+		return updated
+	}
+
 }
 

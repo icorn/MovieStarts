@@ -133,4 +133,22 @@ class NowTableViewController: MovieTableViewController {
 		tableView.endUpdates()
 	}
 
+	
+	override func updateThumbnail(tmdbId: Int) -> Bool {
+		var updated = false
+		
+		for (index, movie) in enumerate(movies) {
+			if (movie.tmdbId == tmdbId) {
+				tableView.beginUpdates()
+				tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+				tableView.endUpdates()
+				updated = true
+				break
+			}
+		}
+		
+		return updated
+	}
+
 }
+
