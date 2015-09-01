@@ -12,7 +12,7 @@ class StartViewController: UIViewController {
 	
 	var aboutView: UIView?
 	var activityView: UIView?
-	var progressView: UIProgressView?
+	var progressView: UILabel?
 	
 	
 	// MARK: - UIViewController
@@ -43,6 +43,7 @@ class StartViewController: UIViewController {
 			
 				// show the next view controller
 				
+				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 				var tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
 			
 				if let tabBarController = tabBarController, allMovies = movies {
@@ -67,6 +68,7 @@ class StartViewController: UIViewController {
 			},
 			
 			errorHandler: { (errorMessage: String) in
+				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 				println(errorMessage)
 			},
 			
@@ -77,9 +79,11 @@ class StartViewController: UIViewController {
 				self.activityView = nil
 			},
 			
-			updateIndicator: { (progress: Float) in
-				if let saveProgressView = self.progressView {
-					saveProgressView.setProgress(progress, animated: true)
+			updateIndicator: { (title: String) in
+				if let progressView = self.progressView {
+					dispatch_async(dispatch_get_main_queue()) {
+						progressView.text = title
+					}
 				}
 			}
 		)
@@ -95,30 +99,18 @@ class StartViewController: UIViewController {
 	
 	/**
 		Opens a progress indicator view.
-	
-		:param: updating		The flag saying if we update the movies (TRUE) or loading (FALSE)
-		:param: showProgress	The flag saying if we show the progress indicator or not
 	*/
-	func startActivityIndicator(updating: Bool, showProgress: Bool) {
+	func startActivityIndicator() {
 		
 		var title = NSLocalizedString("LoadingMovies", comment: "")
-		var viewHeight = 40
-		
-		if (updating) {
-			title = NSLocalizedString("UpdatingMovies", comment: "")
-		}
-		
-		if (showProgress) {
-			viewHeight = 60
-		}
+		var viewHeight = 40 // 60 with progress view
 		
 		var labelWidth = (title as NSString).sizeWithAttributes([NSFontAttributeName : UIFont.systemFontOfSize(16)]).width
 		var viewWidth = labelWidth + 60
 		
-		self.activityView = UIView(frame:
-			CGRect(x: self.view.frame.width / 2 - viewWidth / 2, y: self.view.frame.height / 2 + 75, width: viewWidth, height: CGFloat(viewHeight)))
-		self.activityView?.layer.cornerRadius = 15
-		self.activityView?.backgroundColor = UIColor.blackColor()
+		activityView = UIView(frame: CGRect(x: self.view.frame.width / 2 - viewWidth / 2, y: self.view.frame.height / 2 + 75, width: viewWidth, height: CGFloat(viewHeight)))
+		activityView?.layer.cornerRadius = 15
+		activityView?.backgroundColor = UIColor.blackColor()
 		
 		var spinner = UIActivityIndicatorView(frame: CGRect(x: 15, y: 10, width: 20, height: 20))
 		spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
@@ -131,19 +123,33 @@ class StartViewController: UIViewController {
 		msg.textColor = UIColor.whiteColor()
 		msg.backgroundColor = UIColor.clearColor()
 		
-		self.activityView?.opaque = false
-		self.activityView?.backgroundColor = UIColor.blackColor()
-		self.activityView?.addSubview(spinner)
-		self.activityView?.addSubview(msg)
-		self.view.addSubview(self.activityView!)
+		activityView?.opaque = false
+		activityView?.backgroundColor = UIColor.blackColor()
+		activityView?.addSubview(spinner)
+		activityView?.addSubview(msg)
+		view.addSubview(self.activityView!)
 		
-		if (showProgress) {
-			self.progressView = UIProgressView(frame: CGRect(x: 15, y: 40, width: labelWidth + 30, height: 10))
-			self.progressView!.progressViewStyle = UIProgressViewStyle.Bar
-			self.progressView!.progressTintColor = UIColor.whiteColor()
-			self.progressView!.trackTintColor = UIColor.grayColor()
-			self.activityView!.addSubview(self.progressView!)
+		// progress views (currently unused)
+		
+/*
+		progressView = UILabel(frame: CGRect(x: 15, y: 40, width: labelWidth + 30, height: 10))
+		
+		if let progressView = progressView {
+			progressView.text = "..."
+			progressView.textAlignment = NSTextAlignment.Center
+			progressView.textColor = UIColor.whiteColor()
+			progressView.font = UIFont.systemFontOfSize(14)
+			activityView?.addSubview(progressView)
 		}
+*/
+		
+/*
+		self.progressView = UIProgressView(frame: CGRect(x: 15, y: 40, width: labelWidth + 30, height: 10))
+		self.progressView!.progressViewStyle = UIProgressViewStyle.Bar
+		self.progressView!.progressTintColor = UIColor.whiteColor()
+		self.progressView!.trackTintColor = UIColor.grayColor()
+		self.activityView!.addSubview(self.progressView!)
+*/
 	}
 
 

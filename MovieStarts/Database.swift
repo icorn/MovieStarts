@@ -8,6 +8,7 @@
 
 import Foundation
 import CloudKit
+import UIKit
 
 
 class Database {
@@ -17,16 +18,14 @@ class Database {
 	var moviesPlistFile: String?
 	var loadedMovieRecordArray: [MovieRecord]?
 	
-	var totalNumberOfRecordsFromCloud: Int?
-
 	var cloudKitContainer: CKContainer
 	var cloudKitDatabase: CKDatabase
 	
 	var completionHandler: ((movies: [MovieRecord]?) -> ())?
 	var errorHandler: ((errorMessage: String) -> ())?
-	var showIndicator: ((updating: Bool, showProgress: Bool) -> ())?
+	var showIndicator: (() -> ())?
 	var stopIndicator: (() -> ())?
-	var updateIndicator: ((progress: Float) -> ())?
+	var updateIndicator: ((title: String) -> ())?
 	
 	var addNewMovieHandler: ((movie: MovieRecord) -> ())?
 	var updateMovieHandler: ((movie: MovieRecord) -> ())?
@@ -81,9 +80,9 @@ class Database {
 	*/
 	func getAllMovies(	completionHandler: (movies: [MovieRecord]?) -> (),
 						errorHandler: (errorMessage: String) -> (),
-						showIndicator: ((updating: Bool, showProgress: Bool) -> ())?,
+						showIndicator: (() -> ())?,
 						stopIndicator: (() -> ())?,
-						updateIndicator: ((progress: Float) -> ())?)
+						updateIndicator: ((title: String) -> ())?)
 	{
 		self.completionHandler 	= completionHandler
 		self.errorHandler 		= errorHandler
@@ -105,38 +104,23 @@ class Database {
 			else {
 				// movies are not on the device: get them from the cloud
 				
-				// first get number of records for nice progress display
-
-				var recordId = CKRecordID(recordName: Constants.RECORD_ID_RESULT_USA)
+				UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 				
-				self.cloudKitDatabase.fetchRecordWithID(recordId, completionHandler: { (record: CKRecord!, error: NSError!) in
-					
-					if (error != nil) {
-						
-						// TODO error 1 wenn nicht in iCloud eingeloggt (checken)
-						
-						println("Error getting number of records: \(error!.code) (\(error!.localizedDescription))")
-					}
-					else if (record != nil) {
-						self.totalNumberOfRecordsFromCloud = record!.objectForKey(Constants.DB_ID_NUMBER_OF_RECORDS) as? Int
-					}
+				dispatch_async(dispatch_get_main_queue()) {
+					showIndicator?()
+				}
 
-					if let saveShowIndicator = self.showIndicator {
-						dispatch_async(dispatch_get_main_queue()) {
-							saveShowIndicator(updating: false, showProgress: self.totalNumberOfRecordsFromCloud != nil)
-						}
-					}
-					
-					let predicate = NSPredicate(value: true)
-					let query = CKQuery(recordType: self.recordType, predicate: predicate)
-					
-					let queryOperation = CKQueryOperation(query: query)
-					queryOperation.recordFetchedBlock = self.recordFetchedAllMoviesCallback
-					queryOperation.queryCompletionBlock = self.queryCompleteAllMoviesCallback
-					queryOperation.resultsLimit = 10
-					queryOperation.desiredKeys = self.desiredQueryKeysForAll
-					self.cloudKitDatabase.addOperation(queryOperation)
-				})
+				// get all movies which started a month ago or later
+				var compareDate = NSDate().dateByAddingTimeInterval(-30 * 24 * 60 * 60)
+				let predicate = NSPredicate(format: "release > %@", argumentArray: [compareDate])
+				let query = CKQuery(recordType: self.recordType, predicate: predicate)
+				
+				let queryOperation = CKQueryOperation(query: query)
+				queryOperation.recordFetchedBlock = self.recordFetchedAllMoviesCallback
+				queryOperation.queryCompletionBlock = self.queryCompleteAllMoviesCallback
+				queryOperation.resultsLimit = 10
+				queryOperation.desiredKeys = self.desiredQueryKeysForAll
+				self.cloudKitDatabase.addOperation(queryOperation)
 			}
 		}
 		else {
@@ -153,19 +137,14 @@ class Database {
 	*/
 	func recordFetchedAllMoviesCallback(record: CKRecord!) {
 		self.allCKRecords.append(record)
+
+		var title: String = ""
 		
-		if let saveRecordNumber = self.totalNumberOfRecordsFromCloud {
-			if ((self.allCKRecords.count % 5 == 0) || (self.allCKRecords.count == saveRecordNumber)) {
-				var percent = Float(self.allCKRecords.count) / Float(saveRecordNumber)
-				percent = (percent > 1.0) ? 1.0 : percent
-				
-				if let saveUpdateIndicator = self.updateIndicator {
-					dispatch_async(dispatch_get_main_queue()) {
-						saveUpdateIndicator(progress: percent)
-					}
-				}
-			}
+		if (record.objectForKey(Constants.DB_ID_TITLE) != nil) {
+			title = record.objectForKey(Constants.DB_ID_TITLE) as! String
 		}
+		
+		updateIndicator?(title: title)
 	}
 	
 	
@@ -270,14 +249,17 @@ class Database {
 		if let saveModDate: NSDate = latestModDate {
 			
 			println("Getting records after modification date \(saveModDate)")
-/*
-			if let saveShowIndicator = self.showIndicator {
-				dispatch_async(dispatch_get_main_queue()) {
-					saveShowIndicator(updating: true, showProgress: false)
-				}
-			}
-*/
-			var predicate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
+			
+			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+			
+			// get records modifies after the last modification of the local database, and only from movies
+			// whose release date is younger than 30 days.
+			
+			var compareDate = NSDate().dateByAddingTimeInterval(-30 * 24 * 60 * 60)
+			let predicateReleaseDate = NSPredicate(format: "release > %@", argumentArray: [compareDate])
+			let predicateModificationDate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
+			let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [predicateReleaseDate, predicateModificationDate])
+			
 			var query = CKQuery(recordType: self.recordType, predicate: predicate)
 			
 			let queryOperation = CKQueryOperation(query: query)

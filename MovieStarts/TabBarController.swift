@@ -286,9 +286,11 @@ class TabBarController: UITabBarController {
 			},
 			
 			completionHandler: { (movies: [MovieRecord]?) in
+				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 			},
 
 			errorHandler: { (errorMessage: String) in
+				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 				println(errorMessage)
 			},
 			
