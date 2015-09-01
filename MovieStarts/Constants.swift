@@ -30,7 +30,6 @@ public struct Constants {
 
 	static let RECORD_TYPE_RESULT_USA		= "ResultMoviesUSA"
 	static let RECORD_ID_RESULT_USA			= "ResultUSA"
-	static let DB_ID_NUMBER_OF_RECORDS		= "numberOfRecords"
 	
 	static let HOURS_BETWEEN_DB_UPDATES		= 24
 	static let MAX_DAYS_IN_THE_PAST			= 28.0
