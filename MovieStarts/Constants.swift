@@ -44,6 +44,7 @@ public struct Constants {
 	public static let DB_ID_RUNTIME					= "runtime"
 	public static let DB_ID_VOTE_AVERAGE			= "voteAverage"
 	public static let DB_ID_TITLE					= "title"
+	public static let DB_ID_SORT_TITLE				= "sortTitle"
 	public static let DB_ID_SYNOPSIS				= "synopsis"
 	public static let DB_ID_RELEASE					= "release"
 	public static let DB_ID_GENRES					= "genres"

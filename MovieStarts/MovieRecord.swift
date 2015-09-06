@@ -25,6 +25,8 @@ public class MovieRecord : Printable {
 	public var voteAverage:Double = 0.0
 	/// the movie title
 	public var title:String?
+	/// the movie title for sorting
+	public var sortTitle:String?
 	/// the synopsis of the movie
 	public var synopsis:String?
 	/// the release date of the movie
@@ -58,6 +60,7 @@ public class MovieRecord : Printable {
 		if (dict[Constants.DB_ID_TMDB_ID] != nil) 		{ self.tmdbId 			= dict[Constants.DB_ID_TMDB_ID] 		as? Int }
 		if (dict[Constants.DB_ID_ORIG_TITLE] != nil)	{ self.origTitle 		= dict[Constants.DB_ID_ORIG_TITLE] 		as? String }
 		if (dict[Constants.DB_ID_TITLE] != nil) 		{ self.title 			= dict[Constants.DB_ID_TITLE] 			as? String }
+		if (dict[Constants.DB_ID_SORT_TITLE] != nil) 	{ self.sortTitle 		= dict[Constants.DB_ID_SORT_TITLE]		as? String }
 		if (dict[Constants.DB_ID_SYNOPSIS] != nil) 		{ self.synopsis 		= dict[Constants.DB_ID_SYNOPSIS] 		as? String }
 		if (dict[Constants.DB_ID_RELEASE] != nil) 		{ self.releaseDate 		= dict[Constants.DB_ID_RELEASE] 		as? NSDate }
 		if (dict[Constants.DB_ID_CERTIFICATION] != nil) { self.certification 	= dict[Constants.DB_ID_CERTIFICATION] 	as? String }
@@ -93,6 +96,7 @@ public class MovieRecord : Printable {
 		if (ckRecord.objectForKey(Constants.DB_ID_TMDB_ID) != nil) 		{ self.tmdbId 			= ckRecord.objectForKey(Constants.DB_ID_TMDB_ID) 		as? Int }
 		if (ckRecord.objectForKey(Constants.DB_ID_ORIG_TITLE) != nil)	{ self.origTitle 		= ckRecord.objectForKey(Constants.DB_ID_ORIG_TITLE) 	as? String }
 		if (ckRecord.objectForKey(Constants.DB_ID_TITLE) != nil) 		{ self.title 			= ckRecord.objectForKey(Constants.DB_ID_TITLE) 			as? String }
+		if (ckRecord.objectForKey(Constants.DB_ID_SORT_TITLE) != nil) 	{ self.sortTitle 		= ckRecord.objectForKey(Constants.DB_ID_SORT_TITLE) 	as? String }
 		if (ckRecord.objectForKey(Constants.DB_ID_SYNOPSIS) != nil) 	{ self.synopsis 		= ckRecord.objectForKey(Constants.DB_ID_SYNOPSIS) 		as? String }
 		if (ckRecord.objectForKey(Constants.DB_ID_RELEASE) != nil) 		{ self.releaseDate 		= ckRecord.objectForKey(Constants.DB_ID_RELEASE) 		as? NSDate }
 		if (ckRecord.objectForKey(Constants.DB_ID_CERTIFICATION) != nil){ self.certification 	= ckRecord.objectForKey(Constants.DB_ID_CERTIFICATION) 	as? String }
@@ -128,6 +132,7 @@ public class MovieRecord : Printable {
 		if let tmdbId 		 = tmdbId 		 { retval[Constants.DB_ID_TMDB_ID] 		 = tmdbId }
 		if let origTitle 	 = origTitle 	 { retval[Constants.DB_ID_ORIG_TITLE] 	 = origTitle }
 		if let title 		 = title 		 { retval[Constants.DB_ID_TITLE] 		 = title }
+		if let sortTitle 	 = sortTitle 	 { retval[Constants.DB_ID_SORT_TITLE] 	 = sortTitle }
 		if let synopsis 	 = synopsis 	 { retval[Constants.DB_ID_SYNOPSIS] 	 = synopsis }
 		if let releaseDate 	 = releaseDate 	 { retval[Constants.DB_ID_RELEASE] 		 = releaseDate }
 		if let certification = certification { retval[Constants.DB_ID_CERTIFICATION] = certification }
@@ -413,6 +418,12 @@ public class MovieRecord : Printable {
 			retval += "title: nil | "
 		}
 
+		if let sortTitle = sortTitle {
+			retval += "sortTitle: \(sortTitle) | "
+		} else {
+			retval += "sortTitle: nil | "
+		}
+		
 		if let origTitle = origTitle {
 			retval += "origTitle: \(origTitle) | "
 		} else {

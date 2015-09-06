@@ -23,7 +23,7 @@ class NowTableViewController: MovieTableViewController {
 		var indexForInsert: Int?
 		
 		for (index, movie) in enumerate(movies) {
-			if let titleFromArray = movie.title, newMovieTitle = newMovie.title {
+			if let titleFromArray = movie.sortTitle, newMovieTitle = newMovie.sortTitle {
 				if newMovieTitle.localizedCaseInsensitiveCompare(titleFromArray) == NSComparisonResult.OrderedAscending {
 					// we found the right index for the new movie
 					indexForInsert = index
@@ -97,9 +97,9 @@ class NowTableViewController: MovieTableViewController {
 				var indexForUpdatedMovie: Int?
 				
 				for (index, movie) in enumerate(movies) {
-					if let movieTitle = movie.title {
+					if let movieTitle = movie.sortTitle {
 					
-						if updatedMovie.title?.localizedCaseInsensitiveCompare(movieTitle) == NSComparisonResult.OrderedAscending {
+						if updatedMovie.sortTitle?.localizedCaseInsensitiveCompare(movieTitle) == NSComparisonResult.OrderedAscending {
 							// we found the right index for the new movie
 							indexForUpdatedMovie = index
 							break

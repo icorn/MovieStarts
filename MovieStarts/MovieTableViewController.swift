@@ -311,8 +311,8 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		// add new movie to the section, then sort it
 		moviesInSections[foundSectionIndex].append(newMovie)
 		moviesInSections[foundSectionIndex].sort {
-			if let otherTitle = $1.title {
-				return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
+			if let otherTitle = $1.sortTitle {
+				return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
 			return true
 		}

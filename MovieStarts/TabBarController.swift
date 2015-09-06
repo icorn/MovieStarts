@@ -90,8 +90,8 @@ class TabBarController: UITabBarController {
 		}
 		
 		nowMovies.sort {
-			if let otherTitle = $1.title {
-				return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
+			if let otherTitle = $1.sortTitle {
+				return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
 			return true
 		}
@@ -116,8 +116,8 @@ class TabBarController: UITabBarController {
 			//			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
 			
 /*
-			if let otherTitle = $1.title {
-				return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
+			if let otherTitle = $1.sortTitle {
+				return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
 			
 			return true
@@ -145,8 +145,8 @@ class TabBarController: UITabBarController {
 			
 			// sort current section by name
 			upcomingMovies[currentSection].sort {
-				if let otherTitle = $1.title {
-					return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
+				if let otherTitle = $1.sortTitle {
+					return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 				}
 				return true
 			}
@@ -184,8 +184,8 @@ class TabBarController: UITabBarController {
 			
 			// sort current section by name
 			favoriteMovies[currentSection].sort {
-				if let otherTitle = $1.title {
-					return $0.title?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
+				if let otherTitle = $1.sortTitle {
+					return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 				}
 				return true
 			}
