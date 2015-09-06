@@ -113,11 +113,11 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	// MARK: - UITableViewDataSource
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-		if moviesInSections.count > 0 {
-			return sections.count
+		if (currentTab == MovieTab.NowPlaying) {
+			return 1
 		}
 		else {
-			return 1
+			return sections.count
 		}
     }
 
