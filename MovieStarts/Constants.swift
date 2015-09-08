@@ -21,15 +21,9 @@ public struct Constants {
 	static let PREFS_LATEST_DB_MODIFICATION 		= "modificationDate"
 	static let PREFS_LATEST_DB_SUCCESSFULL_UPDATE 	= "lastestCheck"
 	static let PREFS_FAVORITES						= "favorites"
-
-	static let SUBSCRIPTION_ID_USA			= "MovieStartsSubscriptionUSA"
-	static let SUBSCRIPTION_ID_GERMANY		= "MovieStartsSubscriptionGermany"
 	
 	static let RECORD_TYPE_USA				= "MoviesUSA"
 	static let RECORD_TYPE_GERMANY			= "MoviesGermany"
-
-	static let RECORD_TYPE_RESULT_USA		= "ResultMoviesUSA"
-	static let RECORD_ID_RESULT_USA			= "ResultUSA"
 	
 	static let HOURS_BETWEEN_DB_UPDATES		= 24
 	static let MAX_DAYS_IN_THE_PAST			= 30.0
