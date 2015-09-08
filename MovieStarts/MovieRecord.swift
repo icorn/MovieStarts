@@ -316,7 +316,9 @@ public class MovieRecord : Printable {
 				var error: NSErrorPointer = nil
 				
 				if (NSFileManager.defaultManager().moveItemAtPath(sourcePathString, toPath: targetPathString, error: error) == false) {
-					println("Error moving thumbnail image from \(sourcePathString) to \(targetPathString)")
+					// this also happens if the file already exists
+					
+//					println("Error moving thumbnail image from \(sourcePathString) to \(targetPathString)")
 					
 					if (error != nil) {
 						println(error.debugDescription)
