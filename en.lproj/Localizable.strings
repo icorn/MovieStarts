@@ -35,3 +35,8 @@
 "RemoveFromFavorites"	= "Remove from Favorites";
 "AddToFavoritesShort"		= "Add to\nFavorites";
 "RemoveFromFavoritesShort"	= "Remove from\nFavorites";
+
+"WelcomeTitle"		= "Welcome";
+"WelcomeText"		= "This is your first launch of MovieStarts. Tap on the button below to start downloading movie data. Future movie updates will be downloaded automatically at the launch of the app.";
+"WelcomeButton"		= "Download movie data";
+"WelcomeProgress"	= "movies downloaded...";

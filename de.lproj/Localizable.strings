@@ -35,3 +35,8 @@
 "RemoveFromFavorites"	= "Aus Favoriten entfernen";
 "AddToFavoritesShort"		= "Als Favorit\nmarkieren";
 "RemoveFromFavoritesShort"	= "Aus Favoriten\nentfernen";
+
+"WelcomeTitle"		= "Willkommen";
+"WelcomeText"		= "Das ist dein erster Start von MovieStarts. Tippe auf den Button unten, um die Filmdaten zu laden. Zukünftige Film-Updates werden automatisch nach dem Start der App durchgeführt.";
+"WelcomeButton"		= "Filmdaten laden";
+"WelcomeProgress"	= "Filme geladen...";

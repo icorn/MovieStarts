@@ -25,7 +25,7 @@ class Database {
 	var errorHandler: ((errorMessage: String) -> ())?
 	var showIndicator: (() -> ())?
 	var stopIndicator: (() -> ())?
-	var updateIndicator: ((title: String) -> ())?
+	var updateIndicator: ((counter: Int) -> ())?
 	
 	var addNewMovieHandler: ((movie: MovieRecord) -> ())?
 	var updateMovieHandler: ((movie: MovieRecord) -> ())?
@@ -66,6 +66,17 @@ class Database {
 	}
 	
 	
+	func isDatabaseOnDevice() -> Bool {
+		if let moviesPlistFile = moviesPlistFile {
+			if (NSFileManager.defaultManager().fileExistsAtPath(moviesPlistFile)) {
+				return true
+			}
+		}
+		
+		return false
+	}
+	
+	
 	// MARK: - Functions for reading all movies
 	
 	
@@ -82,7 +93,7 @@ class Database {
 						errorHandler: (errorMessage: String) -> (),
 						showIndicator: (() -> ())?,
 						stopIndicator: (() -> ())?,
-						updateIndicator: ((title: String) -> ())?)
+						updateIndicator: ((counter: Int) -> ())?)
 	{
 		self.completionHandler 	= completionHandler
 		self.errorHandler 		= errorHandler
@@ -90,14 +101,12 @@ class Database {
 		self.stopIndicator		= stopIndicator
 		self.updateIndicator	= updateIndicator
 		
-		if let saveMoviesPlistPath = self.moviesPlistPath {
+		if let moviesPlistFile = moviesPlistFile {
 			// try to load movies from device
-			var loadedDictArray = NSArray(contentsOfFile: moviesPlistFile!) as? [NSDictionary]
+			var loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary]
 
 			if let loadedDictArray = loadedDictArray {
-				
 				// successfully loaded movies from device
-				
 				loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray)
 				completionHandler(movies: loadedMovieRecordArray)
 			}
@@ -137,14 +146,7 @@ class Database {
 	*/
 	func recordFetchedAllMoviesCallback(record: CKRecord!) {
 		self.allCKRecords.append(record)
-
-		var title: String = ""
-		
-		if (record.objectForKey(Constants.DB_ID_TITLE) != nil) {
-			title = record.objectForKey(Constants.DB_ID_TITLE) as! String
-		}
-		
-		updateIndicator?(title: title)
+		updateIndicator?(counter: self.allCKRecords.count)
 	}
 	
 	
