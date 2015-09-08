@@ -103,7 +103,6 @@ class TabBarController: UITabBarController {
 			else {
 				return true
 			}
-//			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
 		}
 
 		favorites.sort {
@@ -113,15 +112,6 @@ class TabBarController: UITabBarController {
 			else {
 				return true
 			}
-			//			return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
-			
-/*
-			if let otherTitle = $1.sortTitle {
-				return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
-			}
-			
-			return true
-*/
 		}
 		
 		// put upcoming movies in sections
