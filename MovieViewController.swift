@@ -104,8 +104,6 @@ class MovieViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-
-//		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame)" )
 		
 		contentViewWidthConstraint.constant = view.frame.width
 		
@@ -354,11 +352,24 @@ class MovieViewController: UIViewController {
 		:param: sender	The tapped button
 	*/
 	func imdbButtonTapped(sender:UIButton!) {
-		var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
 		
-		if let saveImdbId = movie?.imdbId {
-			webViewController.urlString = "http://www.imdb.com/title/\(saveImdbId)"
-			navigationController?.pushViewController(webViewController, animated: true)
+		// check if we open the idmb app or the webview
+		
+		var useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as! Bool?
+		
+		if let imdbId = movie?.imdbId {
+			var url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
+
+			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
+				// use the app instead of the webview
+				UIApplication.sharedApplication().openURL(url)
+			}
+			else {
+				// use the webview
+				var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
+				webViewController.urlString = "http://www.imdb.com/title/\(imdbId)"
+				navigationController?.pushViewController(webViewController, animated: true)
+			}
 		}
 	}
 
@@ -385,13 +396,24 @@ class MovieViewController: UIViewController {
 			index++
 		}
 		
-		var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
-
+		// check if we open the youtube app or the webview
+		
+		var useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as! Bool?
+		
 		if let trailerId = movie?.trailerIds[index] {
-			webViewController.urlString = "http://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
-			navigationController?.pushViewController(webViewController, animated: true)
+			var url: NSURL? = NSURL(string: "http://www.youtube.com/v/\(trailerId)/")
+			
+			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
+				// use the app instead of the webview
+				UIApplication.sharedApplication().openURL(url)
+			}
+			else {
+				// use the webview
+				var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
+				webViewController.urlString = "http://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
+				navigationController?.pushViewController(webViewController, animated: true)
+			}
 		}
-
 	}
 	
 	

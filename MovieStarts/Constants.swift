@@ -21,6 +21,8 @@ public struct Constants {
 	static let PREFS_LATEST_DB_MODIFICATION 		= "modificationDate"
 	static let PREFS_LATEST_DB_SUCCESSFULL_UPDATE 	= "lastestCheck"
 	static let PREFS_FAVORITES						= "favorites"
+	static let PREFS_USE_IMDB_APP					= "useImdbApp"
+	static let PREFS_USE_YOUTUBE_APP				= "userYoutubeApp"
 	
 	static let RECORD_TYPE_USA				= "MoviesUSA"
 	static let RECORD_TYPE_GERMANY			= "MoviesGermany"

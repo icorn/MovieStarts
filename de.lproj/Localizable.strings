@@ -40,3 +40,9 @@
 "WelcomeText"		= "Das ist dein erster Start von MovieStarts. Tippe auf den Button unten, um die Filmdaten zu laden. Zukünftige Film-Updates werden automatisch nach dem Start der App durchgeführt.";
 "WelcomeButton"		= "Filmdaten laden";
 "WelcomeProgress"	= "Filme geladen...";
+
+"SettingsUseApps"		= "Benutze Apps statt Browser";
+"SettingsUseImdb"		= "Benutze IMDb-App";
+"SettingsUseYoutube"	= "Benutze YouTube-App";
+"SettingsUseAppsFooter"	= "Wenn diese Schalter aktiviert sind, werden die Apps aufgerufen, anstatt die jeweilige Webseite im Browser. Die Schalter sind nur aktivierbar, wenn die entsprechende App installiert ist.";
+"SettingsAbout"			= "Über MovieStarts";

@@ -57,6 +57,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UINavigationBar.appearance().tintColor = UIColor.whiteColor()
 		UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
 		
+		// check if use-app-prefs are stored. If not, set them to "false"
+		var useImdbApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as! Bool?
+		var useYoutubeApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as! Bool?
+		
+		if useImdbApp == nil {
+			NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(false, forKey: Constants.PREFS_USE_IMDB_APP)
+		}
+		
+		if useYoutubeApp == nil {
+			NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(false, forKey: Constants.PREFS_USE_YOUTUBE_APP)
+		}
+		
 		return true
 	}
 
