@@ -195,11 +195,11 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 			
 			if moviesInSections.count > 0 {
 				movieController.movie = moviesInSections[indexPath.section][indexPath.row]
-				println("Selected movie: \(moviesInSections[indexPath.section][indexPath.row])")
+				NSLog("Selected movie: \(moviesInSections[indexPath.section][indexPath.row])")
 			}
 			else {
 				movieController.movie = movies[indexPath.row]
-				println("Selected movie: \(movies[indexPath.row])")
+				NSLog("Selected movie: \(movies[indexPath.row])")
 			}
 			
 			navigationController?.pushViewController(movieController, animated: true)

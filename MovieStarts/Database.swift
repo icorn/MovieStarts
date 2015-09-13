@@ -54,7 +54,7 @@ class Database {
 		}
         else {
             // TODO error handling
-            println("Error getting url for app-group.")
+            NSLog("Error getting url for app-group.")
         }
 		
 		self.cloudKitContainer = CKContainer(identifier: Constants.CLOUDKIT_CONTAINER_ID)
@@ -133,7 +133,7 @@ class Database {
 			}
 		}
 		else {
-			println("No group folder found")
+			NSLog("No group folder found")
 			errorHandler(errorMessage: "*** No group folder found")
 		}
 	}
@@ -250,7 +250,7 @@ class Database {
 		
 		if let saveModDate: NSDate = latestModDate {
 			
-			println("Getting records after modification date \(saveModDate)")
+			NSLog("Getting records after modification date \(saveModDate)")
 			
 			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 			
@@ -271,7 +271,7 @@ class Database {
 			self.cloudKitDatabase.addOperation(queryOperation)
 		}
 		else {
-			println("ERROR: mo last mod.data of db")
+			NSLog("ERROR: mo last mod.data of db")
 		}
 	}
 	
@@ -439,7 +439,7 @@ class Database {
 						
 						// posterfile is not in any database record anymore: delete poster(s)
 						
-						println("Deleting unneeded poster image \(posterfilename as! String)")
+						NSLog("Deleting unneeded poster image \(posterfilename as! String)")
 						NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.THUMBNAIL_FOLDER + "/" + (posterfilename as! String), error: error)
 						NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.BIG_POSTER_FOLDER + "/" + (posterfilename as! String), error: error)
 					}
@@ -471,7 +471,7 @@ class Database {
 				queryOperation.desiredKeys = [Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_TMDB_ID]
 				self.cloudKitDatabase.addOperation(queryOperation)
 				
-				println("Loading \(idsOfMissindPosters.count) missing posters.")
+				NSLog("Loading \(idsOfMissindPosters.count) missing posters.")
 			}
 			else {
 				// no posters missing
@@ -551,7 +551,7 @@ class Database {
 		var compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.MAX_DAYS_IN_THE_PAST) // 30 days ago
 		var oldNumberOfMovies = existingMovies.count
 		
-		println("Cleaning up old movies...")
+		NSLog("Cleaning up old movies...")
 		
 		for (var index = existingMovies.count-1; index >= 0; index--) {
 			var releaseDate = existingMovies[index].releaseDate
@@ -559,13 +559,13 @@ class Database {
 			if let saveDate = releaseDate {
 				if (saveDate.compare(compareDate) == NSComparisonResult.OrderedAscending) {
 					// movie is too old
-					println("   '\(existingMovies[index].title)' (\(saveDate)) removed")
+					NSLog("   '\(existingMovies[index].title)' (\(saveDate)) removed")
 					existingMovies.removeAtIndex(index)
 				}
 			}
 		}
 		
-		println("Clean up over, removed \(oldNumberOfMovies - existingMovies.count) movies from local file. Now we have \(existingMovies.count) movies.")
+		NSLog("Clean up over, removed \(oldNumberOfMovies - existingMovies.count) movies from local file. Now we have \(existingMovies.count) movies.")
 	}
 
 	
