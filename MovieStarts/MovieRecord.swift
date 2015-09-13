@@ -85,7 +85,7 @@ public class MovieRecord : Printable {
 		}
 		else {
 			// this should never happen
-			println("Id for movie \(title) is empty!")
+			NSLog("Id for movie \(title) is empty!")
 			id = ""
 		}
 	}
@@ -319,7 +319,7 @@ public class MovieRecord : Printable {
 					// this also happens if the file already exists
 					
 					if (error != nil) {
-						println(error.debugDescription)
+						NSLog(error.debugDescription)
 					}
 				}
 			}
