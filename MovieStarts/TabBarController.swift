@@ -211,11 +211,11 @@ class TabBarController: UITabBarController {
 				
 				dispatch_async(dispatch_get_main_queue()) {
 					if movie.isNowPlaying() {
-						NSLog("Adding \(movie.title!) to NOW PLAYING")
+						println("Adding \(movie.title!) to NOW PLAYING")
 						self.nowPlayingController?.addMovie(movie)
 					}
 					else {
-						NSLog("Adding \(movie.title!) to UPCOMING")
+						println("Adding \(movie.title!) to UPCOMING")
 						self.upcomingController?.addMovie(movie)
 					}
 				}
@@ -246,30 +246,30 @@ class TabBarController: UITabBarController {
 				dispatch_async(dispatch_get_main_queue()) {
 					if (movie.isNowPlaying() && movieIsInNowPlayingList) {
 						// movie was and is now-playing
-						NSLog("Updating \(movie.title!) in NOW PLAYING")
+						println("Updating \(movie.title!) in NOW PLAYING")
 						self.nowPlayingController?.updateMovie(movie)
 					}
 					else if (!movie.isNowPlaying() && movieIsInUpcomingList) {
 						// movie was and is upcoming
-						NSLog("Updating \(movie.title!) in UPCOMING")
+						println("Updating \(movie.title!) in UPCOMING")
 						self.upcomingController?.updateMovie(movie)
 					}
 					else if (!movie.isNowPlaying() && movieIsInNowPlayingList) {
 						// movie was now-playing, is now upcoming
-						NSLog("Moving \(movie.title!) in from NOW PLAYING to UPCOMING")
+						println("Moving \(movie.title!) in from NOW PLAYING to UPCOMING")
 						self.nowPlayingController?.removeMovie(movie)
 						self.upcomingController?.addMovie(movie)
 					}
 					else if (movie.isNowPlaying() && movieIsInUpcomingList) {
 						// movie was upcoming, is now now-playing
-						NSLog("Moving \(movie.title!) in from UPCOMING to NOW PLAYING")
+						println("Moving \(movie.title!) in from UPCOMING to NOW PLAYING")
 						self.upcomingController?.removeMovie(movie)
 						self.nowPlayingController?.addMovie(movie)
 					}
 					
 					if (contains(Favorites.IDs, movie.id)) {
 						// also, update the favorites
-						NSLog("Updating \(movie.title!) in FAVORITES")
+						println("Updating \(movie.title!) in FAVORITES")
 						self.favoriteController?.updateFavorite(movie)
 					}
 				}
@@ -281,7 +281,7 @@ class TabBarController: UITabBarController {
 
 			errorHandler: { (errorMessage: String) in
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				NSLog(errorMessage)
+				println(errorMessage)
 			},
 			
 			updatePosterHandler: { (tmdbId: Int) in

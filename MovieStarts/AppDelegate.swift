@@ -28,18 +28,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			// create thumbnail folder
 			
 			if (fileManager.createDirectoryAtPath(absolutePath + Constants.THUMBNAIL_FOLDER, withIntermediateDirectories: true, attributes: nil, error: error) == false) {
-				NSLog("Error creating folder for thumbnails at \(absolutePath + Constants.THUMBNAIL_FOLDER).")
+				println("Error creating folder for thumbnails at \(absolutePath + Constants.THUMBNAIL_FOLDER).")
 				if (error != nil) {
-					NSLog(error.debugDescription)
+					println(error.debugDescription)
 				}
 			}
 			
 			// create big poster folder
 			
 			if (fileManager.createDirectoryAtPath(absolutePath + Constants.BIG_POSTER_FOLDER, withIntermediateDirectories: true, attributes: nil, error: error) == false) {
-				NSLog("Error creating folder for big posters at \(absolutePath + Constants.BIG_POSTER_FOLDER).")
+				println("Error creating folder for big posters at \(absolutePath + Constants.BIG_POSTER_FOLDER).")
 				if (error != nil) {
-					NSLog(error.debugDescription)
+					println(error.debugDescription)
 				}
 			}
 		}

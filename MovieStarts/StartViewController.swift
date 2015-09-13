@@ -93,7 +93,7 @@ class StartViewController: UIViewController {
 			
 			errorHandler: { (errorMessage: String) in
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				NSLog(errorMessage)
+				println(errorMessage)
 			},
 			
 			showIndicator: {

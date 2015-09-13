@@ -45,7 +45,7 @@ public class DatabaseHelper {
 				retval.append(MovieRecord(dict: dict))
 			}
 			else {
-				NSLog("Error converting dictionary")
+				println("Error converting dictionary")
 			}
 		}
 		
