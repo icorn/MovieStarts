@@ -333,9 +333,6 @@ class MovieViewController: UIViewController {
 		if let maxY = bottomButton?.frame.maxY {
 			scrollView.contentSize = CGSize(width: scrollView.frame.width, height: maxY + 30)
 		}
-
-//		println("view: \(view.frame), scrollview: \(scrollView.frame), content: \(contentView.frame) ENDE" )
-		
 	}
 	
 	override func didReceiveMemoryWarning() {

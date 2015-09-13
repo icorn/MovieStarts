@@ -31,7 +31,6 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 
 		heightConstraint.constant = view.frame.height
 		widthConstraint.constant = view.frame.width
-//		println("nav: \(navigationController?.view.bounds) view: \(view.bounds), webview: \(webview.bounds), webscroll: \(webview.scrollView.bounds) BEGIN")
 		
 		webview.delegate = self
 
@@ -83,8 +82,6 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 		
 		heightConstraint.constant = view.frame.height
 		widthConstraint.constant = view.frame.width
-		
-//		println("nav: \(navigationController?.view.bounds) view: \(view.bounds), webview: \(webview.bounds), webscroll: \(webview.scrollView.bounds) END")
 	}
 	
     override func didReceiveMemoryWarning() {

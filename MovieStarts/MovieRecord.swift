@@ -318,8 +318,6 @@ public class MovieRecord : Printable {
 				if (NSFileManager.defaultManager().moveItemAtPath(sourcePathString, toPath: targetPathString, error: error) == false) {
 					// this also happens if the file already exists
 					
-//					println("Error moving thumbnail image from \(sourcePathString) to \(targetPathString)")
-					
 					if (error != nil) {
 						println(error.debugDescription)
 					}
