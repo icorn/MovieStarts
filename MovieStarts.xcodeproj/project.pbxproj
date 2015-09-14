@@ -125,6 +125,8 @@
 		4FEF429E1B1F701F00AF0E16 /* certificateNC-17.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEF429A1B1F701F00AF0E16 /* certificateNC-17.png */; };
 		4FEF429F1B1F701F00AF0E16 /* certificateNC-17@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEF429B1B1F701F00AF0E16 /* certificateNC-17@4x.png */; };
 		4FEF42A01B1F701F00AF0E16 /* certificateNC-17@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FEF429C1B1F701F00AF0E16 /* certificateNC-17@2x.png */; };
+		4FFE43461BA5D1420080D9F3 /* IJReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE43451BA5D1420080D9F3 /* IJReachability.swift */; };
+		4FFE43481BA6B4D10080D9F3 /* MessageWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FFE43471BA6B4D10080D9F3 /* MessageWindow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -290,6 +292,8 @@
 		4FEF429A1B1F701F00AF0E16 /* certificateNC-17.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNC-17.png"; sourceTree = "<group>"; };
 		4FEF429B1B1F701F00AF0E16 /* certificateNC-17@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNC-17@4x.png"; sourceTree = "<group>"; };
 		4FEF429C1B1F701F00AF0E16 /* certificateNC-17@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certificateNC-17@2x.png"; sourceTree = "<group>"; };
+		4FFE43451BA5D1420080D9F3 /* IJReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IJReachability.swift; sourceTree = "<group>"; };
+		4FFE43471BA6B4D10080D9F3 /* MessageWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageWindow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -585,6 +589,8 @@
 				4FECDF1F1A8FE27D00F84A52 /* Database.swift */,
 				4F63E61D1A992BCA00528FB3 /* DatabaseHelper.swift */,
 				4F2C91171B6374810044A27B /* Favorites.swift */,
+				4FFE43451BA5D1420080D9F3 /* IJReachability.swift */,
+				4FFE43471BA6B4D10080D9F3 /* MessageWindow.swift */,
 				4FECDF211A9096A700F84A52 /* MovieRecord.swift */,
 				4FEAAED41B8797940074C3AF /* MovieTab.swift */,
 				4F8ED3EA1B4442C7008C24FE /* MovieTableViewCell.swift */,
@@ -919,10 +925,12 @@
 				4F87F9261A8DEE31001869A1 /* Constants.swift in Sources */,
 				4FAE075B1B555615009C7507 /* NowTableViewController.swift in Sources */,
 				4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */,
+				4FFE43461BA5D1420080D9F3 /* IJReachability.swift in Sources */,
 				4F8ED3EC1B4442C7008C24FE /* MovieTableViewCell.swift in Sources */,
 				4F63E6421A9D2A8B00528FB3 /* TabBarController.swift in Sources */,
 				4FEAAED51B8797940074C3AF /* MovieTab.swift in Sources */,
 				4F6914961A8C09BA00B8FFCE /* UpcomingTableViewController.swift in Sources */,
+				4FFE43481BA6B4D10080D9F3 /* MessageWindow.swift in Sources */,
 				4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */,
 				4F63E61E1A992BCA00528FB3 /* DatabaseHelper.swift in Sources */,
 				4F63E6401A9D24BA00528FB3 /* StartViewController.swift in Sources */,

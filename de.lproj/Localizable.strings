@@ -6,6 +6,7 @@
   Copyright (c) 2015 Oliver Eichhorn. All rights reserved.
 */
 
+"Close"				= "Schließen";
 "NowPlayingTabBar"	= "Jetzt";
 "NowPlayingLong"	= "Jetzt im Kino";
 "UpcomingTabBar"	= "Demnächst";
@@ -40,6 +41,18 @@
 "WelcomeText"		= "Das ist dein erster Start von MovieStarts. Tippe auf den Button unten, um die Filmdaten zu laden. Zukünftige Film-Updates werden automatisch nach dem Start der App durchgeführt.";
 "WelcomeButton"		= "Filmdaten laden";
 "WelcomeProgress"	= "Filme geladen...";
+
+"iCloudError"				= "iCloud-Fehler";
+"iCloudNoAccount"			= "MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte gehe in die App 'Einstellungen', melde dich bei deinem iCloud-Konto an und schalte 'iCloud Drive' ein.";
+"iCloudCouldNotDetermine"	= "MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte versuche es zu einem späteren Zeitpunkt noch einmal.";
+"iCloudRestricted"			= "Dein iCloud-Konto ist nicht verfügbar. Der Zugriff wurde wegen Jugendschutz-Einstellungen oder Einschränkungen durch Mobile Device Management (MDM) verweigert.";
+
+"iCloudNoAccountUpdate"			= "Filmdaten-Update unmöglich. MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte gehe in die App 'Einstellungen', melde dich bei deinem iCloud-Konto an und schalte 'iCloud Drive' ein.";
+"iCloudCouldNotDetermineUpdate"	= "Filmdaten-Update unmöglich. MovieStarts konnte nicht auf dein iCloud-Konto zugreifen.";
+"iCloudRestrictedUpdate"		= "Filmdaten-Update unmöglich. Dein iCloud-Konto ist nicht verfügbar. Der Zugriff wurde wegen Jugendschutz-Einstellungen oder Einschränkungen durch Mobile Device Management (MDM) verweigert.";
+
+"NoNetworkTitle"		= "Kein Netz";
+"NoNetworkText"			= "Dein iPhone hat derzeit keine Internetverbindung. Evtl. ist der Flugmodus aktiviert. Bitte probiere es erneut, wenn es wieder verbunden ist.";
 
 "SettingsUseApps"		= "Benutze Apps statt Browser";
 "SettingsUseImdb"		= "Benutze IMDb-App";

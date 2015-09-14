@@ -76,6 +76,11 @@ class Database {
 		return false
 	}
 	
+
+	func checkCloudKit(handler: (CKAccountStatus, NSError!) -> ()) {
+		cloudKitContainer.accountStatusWithCompletionHandler(handler)
+	}
+
 	
 	// MARK: - Functions for reading all movies
 	

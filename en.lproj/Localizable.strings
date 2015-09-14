@@ -6,6 +6,7 @@
   Copyright (c) 2015 Oliver Eichhorn. All rights reserved.
 */
 
+"Close"				= "Close";
 "NowPlayingTabBar"	= "Now Playing";
 "NowPlayingLong"	= "Now Playing in Theaters";
 "UpcomingTabBar"	= "Upcoming";
@@ -40,6 +41,18 @@
 "WelcomeText"		= "This is your first launch of MovieStarts. Tap on the button below to start downloading movie data. Future movie updates will be downloaded automatically at the launch of the app.";
 "WelcomeButton"		= "Download movie data";
 "WelcomeProgress"	= "movies downloaded...";
+
+"iCloudError"				= "iCloud Error";
+"iCloudNoAccount"			= "MovieStarts couldn't access your iCloud account. Please go to the Settings app, sign in to iCloud, and turn on iCloud Drive.";
+"iCloudCouldNotDetermine"	= "MovieStarts couldn't access your iCloud account. Please try it later.";
+"iCloudRestricted"			= "Your iCloud account is not available. Access was denied due to Parental Controls or Mobile Device Management restrictions.";
+
+"iCloudNoAccountUpdate"			= "Movie update impossible. MovieStarts couldn't access your iCloud account. Please go to the Settings app, sign in to iCloud, and turn on iCloud Drive.";
+"iCloudCouldNotDetermineUpdate"	= "Movie update impossible. MovieStarts couldn't access your iCloud account.";
+"iCloudRestrictedUpdate"		= "Movie update impossible. Your iCloud account is not available. Access was denied due to Parental Controls or Mobile Device Management restrictions.";
+
+"NoNetworkTitle"		= "No Network";
+"NoNetworkText"			= "Your iPhone has no internet connection. Is the airplane mode active? Please try again when your iPhone is connected to the internet.";
 
 "SettingsUseApps"		= "Use apps instead of browser";
 "SettingsUseImdb"		= "Use IMDb app";

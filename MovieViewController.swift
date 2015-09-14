@@ -350,6 +350,14 @@ class MovieViewController: UIViewController {
 	*/
 	func imdbButtonTapped(sender:UIButton!) {
 		
+		// check internet connection
+		
+		if IJReachability.isConnectedToNetwork() == false {
+			NSLog("IMDb view: no network")
+			noInternetConnection()
+			return
+		}
+		
 		// check if we open the idmb app or the webview
 		
 		var useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as! Bool?
@@ -377,6 +385,14 @@ class MovieViewController: UIViewController {
 		:param: sender	The tapped button
 	*/
 	func trailerButtonTapped(sender:UIButton!) {
+		
+		// check internet connection
+		
+		if IJReachability.isConnectedToNetwork() == false {
+			NSLog("Trailer: no network")
+			noInternetConnection()
+			return
+		}
 		
 		// find out which trailer was tapped
 		
@@ -530,6 +546,19 @@ class MovieViewController: UIViewController {
 				textButtons[favoriteButtonIndex].addTarget(self, action: Selector("addFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
 				textButtons[favoriteButtonIndex].setTitle(NSLocalizedString("AddToFavorites", comment: ""), forState: UIControlState.Normal)
 			}
+		}
+	}
+	
+	private final func noInternetConnection() {
+		var errorWindow: MessageWindow?
+			
+		dispatch_async(dispatch_get_main_queue()) {
+			self.scrollView.scrollEnabled = false
+			
+			errorWindow = MessageWindow(parent: self.scrollView, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringId: "Close", handler: {
+				errorWindow?.close()
+				self.scrollView.scrollEnabled = true
+			})
 		}
 	}
 }

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CloudKit
+
 
 class TabBarController: UITabBarController {
 
@@ -185,8 +187,7 @@ class TabBarController: UITabBarController {
 	}
 	
 	
-	func updateMovies(allMovies: [MovieRecord]) {
-		
+	func updateMovies(allMovies: [MovieRecord], database: Database?) {
 		if (userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) != nil) {
 			var latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as! NSDate?
 		
@@ -199,12 +200,55 @@ class TabBarController: UITabBarController {
 				}
 			}
 		}
+
+		// check internet connection
 		
-		// get updated movies
+		if IJReachability.isConnectedToNetwork() == false {
+			NSLog("Movie update: no network, we just don't update")
+			return
+		}
+
+		// check iCloud status
 		
-		var database = Database(recordType: Constants.RECORD_TYPE_USA)
+		database?.checkCloudKit({ (status: CKAccountStatus, error: NSError!) -> () in
+			
+			var errorWindow: MessageWindow?
+			
+			switch status {
+			case .Available:
+				self.getUpdatedMoviesFromDatabase(allMovies, database: database)
+				
+			case .NoAccount:
+				NSLog("CloudKit error on update: no account")
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccountUpdate", buttonStringId: "Close", handler: {
+						errorWindow?.close()
+					})
+				}
+				
+			case .Restricted:
+				NSLog("CloudKit error on update: Restricted")
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestrictedUpdate", buttonStringId: "Close", handler: {
+						errorWindow?.close()
+					})
+				}
+				
+			case .CouldNotDetermine:
+				NSLog("CloudKit error on update: CouldNotDetermine")
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermineUpdate", buttonStringId: "Close", handler: {
+						errorWindow?.close()
+					})
+				}
+			}
+		})
+	}
+	
+	
+	private func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord], database: Database?) {
 		
-		database.getUpdatedMovies(allMovies,
+		database?.getUpdatedMovies(allMovies,
 			addNewMovieHandler: { (movie: MovieRecord) in
 				
 				// add new movie
