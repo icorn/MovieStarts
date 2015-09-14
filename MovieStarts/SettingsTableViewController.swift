@@ -22,6 +22,8 @@ class SettingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+		navigationItem.title = NSLocalizedString("SettingsLong", comment: "")
+		
 		imdbLabel.text = NSLocalizedString("SettingsUseImdb", comment: "")
 		youtubeLabel.text = NSLocalizedString("SettingsUseYoutube", comment: "")
 		aboutLabel.text = NSLocalizedString("SettingsAbout", comment: "")
@@ -32,10 +34,6 @@ class SettingsTableViewController: UITableViewController {
 	
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
-
-		// set status bar style to dark
-		UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
-		setNeedsStatusBarAppearanceUpdate()
 		
 		// set up the two switches
 		setUpSwitch(Constants.PREFS_USE_IMDB_APP, switcher: imdbSwitch, label: imdbLabel, urlString: "imdb:")

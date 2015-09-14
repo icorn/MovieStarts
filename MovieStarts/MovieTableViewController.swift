@@ -108,10 +108,6 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 
-		// set status bar style to light
-		UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
-		setNeedsStatusBarAppearanceUpdate()
-
 		// reload to update favorite-icon if we come back from detail view.
 		tableView.reloadData()
 	}

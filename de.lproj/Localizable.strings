@@ -14,6 +14,7 @@
 "FavoritesTabBar"	= "Favoriten";
 "FavoritesLong"		= "Favoriten";
 "SettingsTabBar"	= "Einstellungen";
+"SettingsLong"		= "Einstellungen";
 "UpdatingMovies"	= "Filme aktualisieren...";
 "LoadingMovies"		= "Filme laden...";
 "NoFavorites"		= "Keine Favoriten";

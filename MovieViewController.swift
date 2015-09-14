@@ -324,10 +324,6 @@ class MovieViewController: UIViewController {
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		
-		// set status bar style to light
-		UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
-		setNeedsStatusBarAppearanceUpdate()
-		
 		// Set the height of ohe content size of the scrollview.
 /*
 		let value = UIInterfaceOrientation.Portrait.rawValue

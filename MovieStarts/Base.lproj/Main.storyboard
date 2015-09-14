@@ -1470,7 +1470,7 @@
                         <segue destination="kK1-8l-NS4" kind="relationship" relationship="viewControllers" id="oNY-v0-RWe"/>
                         <segue destination="hD1-in-9iX" kind="relationship" relationship="viewControllers" id="K4o-ts-F3Y"/>
                         <segue destination="S4U-1Q-lHo" kind="relationship" relationship="viewControllers" id="47h-tr-TJJ"/>
-                        <segue destination="ga5-U8-Txn" kind="relationship" relationship="viewControllers" id="Ira-zG-NaA"/>
+                        <segue destination="4Ah-gM-WwL" kind="relationship" relationship="viewControllers" id="aSw-zm-ZMz"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -1495,12 +1495,33 @@
             </objects>
             <point key="canvasLocation" x="-697" y="1"/>
         </scene>
+        <!--SettingsNavigationController-->
+        <scene sceneID="z53-VI-vcc">
+            <objects>
+                <navigationController title="SettingsNavigationController" id="4Ah-gM-WwL" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" tag="3" title="Settings" image="Settings.png" id="PAq-6e-U3F"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="FBv-tm-rXl">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.0" green="0.78576755519999997" blue="0.7883266807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ga5-U8-Txn" kind="relationship" relationship="rootViewController" id="oi0-HY-8e4"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JcH-cU-kiZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="721" y="1668"/>
+        </scene>
         <!--SettingsTableViewController-->
         <scene sceneID="HmP-77-KJ1">
             <objects>
                 <tableViewController storyboardIdentifier="SettingsTableViewController" title="SettingsTableViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ga5-U8-Txn" customClass="SettingsTableViewController" customModule="MovieStarts" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="jAA-vJ-V73">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
@@ -1589,6 +1610,7 @@
                         </connections>
                     </tableView>
                     <tabBarItem key="tabBarItem" tag="3" title="Settings" image="Settings.png" id="NN6-eC-XmP"/>
+                    <navigationItem key="navigationItem" id="Db9-Ib-geM"/>
                     <connections>
                         <outlet property="aboutLabel" destination="iAa-SH-HfO" id="F0J-Gq-GMN"/>
                         <outlet property="imdbLabel" destination="BNa-Ax-Brf" id="0AM-bk-g0x"/>
@@ -1599,7 +1621,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iH1-mR-mAr" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="716" y="1654"/>
+            <point key="canvasLocation" x="1437" y="1668"/>
         </scene>
     </scenes>
     <resources>
