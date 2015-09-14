@@ -555,7 +555,7 @@ class MovieViewController: UIViewController {
 		dispatch_async(dispatch_get_main_queue()) {
 			self.scrollView.scrollEnabled = false
 			
-			errorWindow = MessageWindow(parent: self.scrollView, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringId: "Close", handler: {
+			errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringId: "Close", handler: {
 				errorWindow?.close()
 				self.scrollView.scrollEnabled = true
 			})
