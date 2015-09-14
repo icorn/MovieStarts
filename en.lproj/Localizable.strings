@@ -44,15 +44,19 @@
 
 "iCloudError"				= "iCloud Error";
 "iCloudNoAccount"			= "MovieStarts couldn't access your iCloud account. Please go to the Settings app, sign in to iCloud, and turn on iCloud Drive.";
-"iCloudCouldNotDetermine"	= "MovieStarts couldn't access your iCloud account. Please try it later.";
+"iCloudCouldNotDetermine"	= "MovieStarts couldn't access your iCloud account. Please try again later.";
 "iCloudRestricted"			= "Your iCloud account is not available. Access was denied due to Parental Controls or Mobile Device Management restrictions.";
 
 "iCloudNoAccountUpdate"			= "Movie update impossible. MovieStarts couldn't access your iCloud account. Please go to the Settings app, sign in to iCloud, and turn on iCloud Drive.";
 "iCloudCouldNotDetermineUpdate"	= "Movie update impossible. MovieStarts couldn't access your iCloud account.";
 "iCloudRestrictedUpdate"		= "Movie update impossible. Your iCloud account is not available. Access was denied due to Parental Controls or Mobile Device Management restrictions.";
+"iCloudQueryError"				= "Error loading data from the cloud. Please try again later.";
 
 "NoNetworkTitle"		= "No Network";
 "NoNetworkText"			= "Your iPhone has no internet connection. Is the airplane mode active? Please try again when your iPhone is connected to the internet.";
+
+"InternalError"			= "Internal Error";
+"NoAppGroup"			= "No app-group found. Please try again later.";
 
 "SettingsUseApps"		= "Use apps instead of browser";
 "SettingsUseImdb"		= "Use IMDb app";

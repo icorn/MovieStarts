@@ -50,9 +50,13 @@
 "iCloudNoAccountUpdate"			= "Filmdaten-Update unmöglich. MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte gehe in die App 'Einstellungen', melde dich bei deinem iCloud-Konto an und schalte 'iCloud Drive' ein.";
 "iCloudCouldNotDetermineUpdate"	= "Filmdaten-Update unmöglich. MovieStarts konnte nicht auf dein iCloud-Konto zugreifen.";
 "iCloudRestrictedUpdate"		= "Filmdaten-Update unmöglich. Dein iCloud-Konto ist nicht verfügbar. Der Zugriff wurde wegen Jugendschutz-Einstellungen oder Einschränkungen durch Mobile Device Management (MDM) verweigert.";
+"iCloudQueryError"				= "Fehler beim Laden der Daten aus der Cloud. Bitte versuche es später noch einmal.";
 
 "NoNetworkTitle"		= "Kein Netz";
 "NoNetworkText"			= "Dein iPhone hat derzeit keine Internetverbindung. Evtl. ist der Flugmodus aktiviert. Bitte probiere es erneut, wenn es wieder verbunden ist.";
+
+"InternalError"			= "Interner Fehler";
+"NoAppGroup"			= "App-Group nicht gefunden. Bitte versuche es später noch einmal.";
 
 "SettingsUseApps"		= "Benutze Apps statt Browser";
 "SettingsUseImdb"		= "Benutze IMDb-App";

@@ -17,6 +17,7 @@ class Database {
 	var moviesPlistPath: String?
 	var moviesPlistFile: String?
 	var loadedMovieRecordArray: [MovieRecord]?
+	var viewForError: UIView
 	
 	var cloudKitContainer: CKContainer
 	var cloudKitDatabase: CKDatabase
@@ -45,16 +46,24 @@ class Database {
 		Constants.DB_ID_ASSET, Constants.DB_ID_HIDDEN, Constants.DB_ID_SORT_TITLE, Constants.DB_ID_POSTER_ASSET]
 
 	
-	init(recordType: String) {
+	init(recordType: String, viewForError: UIView) {
 		self.recordType = recordType
+		self.viewForError = viewForError
+		
 		var fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
 
 		if ((fileUrl != nil) && (fileUrl!.path != nil)) {
 			self.moviesPlistPath = fileUrl!.path!
 		}
         else {
-            // TODO error handling
             NSLog("Error getting url for app-group.")
+			var errorWindow: MessageWindow?
+
+			dispatch_async(dispatch_get_main_queue()) {
+				errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringId: "Close", handler: {
+					errorWindow?.close()
+				})
+			}
         }
 		
 		self.cloudKitContainer = CKContainer(identifier: Constants.CLOUDKIT_CONTAINER_ID)
@@ -167,16 +176,22 @@ class Database {
 		if (cursor == nil) {
 			// all objects are here!
 			
-			if (error != nil) {
+			if let error = error {
 				if let saveStopIndicator = self.stopIndicator {
 					dispatch_async(dispatch_get_main_queue()) {
 						saveStopIndicator()
 					}
 				}
 				
-				// TODO: Error-Code 1 heißt u. a., dass der User nicht in iCloud eingeloggt ist
+				self.errorHandler?(errorMessage: "Error querying records: \(error.code) (\(error.description))")
+				var errorWindow: MessageWindow?
 				
-				self.errorHandler?(errorMessage: "Error querying records: \(error!.code) (\(error!.localizedDescription))")
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringId: "Close", handler: {
+						errorWindow?.close()
+					})
+				}
+				
 				return
 			}
 			else {
@@ -325,9 +340,9 @@ class Database {
 		if (cursor == nil) {
 			// all updated records are here!
 			
-			if (error != nil) {
+			if let error = error {
 				// there was an error
-				self.errorHandler?(errorMessage: "Error querying updated records: \(error!.code) (\(error!.localizedDescription))")
+				self.errorHandler?(errorMessage: "Error querying updated records: \(error.code) (\(error.description))")
 				return
 			}
 			else {
@@ -517,16 +532,14 @@ class Database {
 	*/
 	private func queryCompleteMissingPostersCallback(cursor: CKQueryCursor!, error: NSError!) {
 		if (cursor == nil) {
-			if (error != nil) {
+			if let error = error {
 				if let saveStopIndicator = self.stopIndicator {
 					dispatch_async(dispatch_get_main_queue()) {
 						saveStopIndicator()
 					}
 				}
 				
-				// TODO: Error-Code 1 heißt u. a., dass der User nicht in iCloud eingeloggt ist
-				
-				self.errorHandler?(errorMessage: "Error querying posters: \(error!.code) (\(error!.localizedDescription))")
+				self.errorHandler?(errorMessage: "Error querying posters: \(error.code) (\(error.description))")
 				return
 			}
 			else {

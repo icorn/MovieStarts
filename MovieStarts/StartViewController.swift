@@ -38,7 +38,7 @@ class StartViewController: UIViewController {
 		
 		// read movies from device or from cloud
 
-		database = Database(recordType: Constants.RECORD_TYPE_USA)
+		database = Database(recordType: Constants.RECORD_TYPE_USA, viewForError: view)
 		
 		if (database?.isDatabaseOnDevice() == true) {
 			// the database is on the device: load movies
@@ -50,9 +50,7 @@ class StartViewController: UIViewController {
 			welcomeWindow = MessageWindow(parent: view, darkenBackground: false, titleStringId: "WelcomeTitle", textStringId: "WelcomeText", buttonStringId: "WelcomeButton", handler: {
 
 				if IJReachability.isConnectedToNetwork() == false {
-					
 					NSLog("Initial start: no network")
-					
 					var errorWindow: MessageWindow?
 
 					dispatch_async(dispatch_get_main_queue()) {
@@ -90,6 +88,8 @@ class StartViewController: UIViewController {
 						
 					case .CouldNotDetermine:
 						NSLog("CloudKit error: CouldNotDetermine")
+						NSLog("CloudKit error description: \(error.description)")
+						
 						dispatch_async(dispatch_get_main_queue()) {
 							errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermine", buttonStringId: "Close", handler: {
 								errorWindow?.close()

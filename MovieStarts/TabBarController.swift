@@ -188,6 +188,7 @@ class TabBarController: UITabBarController {
 	
 	
 	func updateMovies(allMovies: [MovieRecord], database: Database?) {
+/*
 		if (userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) != nil) {
 			var latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as! NSDate?
 		
@@ -200,6 +201,7 @@ class TabBarController: UITabBarController {
 				}
 			}
 		}
+*/
 
 		// check internet connection
 		
