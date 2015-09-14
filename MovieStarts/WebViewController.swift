@@ -11,8 +11,6 @@ import UIKit
 class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegate {
 
 	@IBOutlet weak var webview: UIWebView!
-	@IBOutlet weak var heightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var widthConstraint: NSLayoutConstraint!
 	
 	var urlString: String?
 	var activityIndicatorParent: UIView?
@@ -28,10 +26,6 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 	
     override func viewDidLoad() {
         super.viewDidLoad()
-
-		heightConstraint.constant = view.frame.height
-		widthConstraint.constant = view.frame.width
-		
 		webview.delegate = self
 
 		// avoid white flash
@@ -71,34 +65,10 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 	}
 	
 	
-	override func viewDidAppear(animated: Bool) {
-		super.viewDidAppear(animated)
-
-//		let value = UIInterfaceOrientation.LandscapeLeft.rawValue
-//		UIDevice.currentDevice().setValue(value, forKey: "orientation")
-
-//		view.setNeedsLayout()
-//		updateViewConstraints()
-		
-		heightConstraint.constant = view.frame.height
-		widthConstraint.constant = view.frame.width
-	}
-	
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-	
-/*
-	override func shouldAutorotate() -> Bool {
-		return false
-	}
-*/
-	
-/*
-	override func supportedInterfaceOrientations() -> Int {
-		return Int(UIInterfaceOrientationMask.LandscapeLeft.rawValue)
-	}
-*/
+
 	
 	// MARK: - UIWebViewDelegate
 	

@@ -1225,64 +1225,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" ambiguous="YES" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hEf-Dr-oUb">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="800" id="RRY-dt-Ldg"/>
-                                    <constraint firstAttribute="width" constant="600" id="d3d-Fu-NO2"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="RRY-dt-Ldg"/>
-                                        <exclude reference="d3d-Fu-NO2"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular">
-                                    <mask key="constraints">
-                                        <include reference="RRY-dt-Ldg"/>
-                                        <include reference="d3d-Fu-NO2"/>
-                                    </mask>
-                                </variation>
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hEf-Dr-oUb">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <variation key="widthClass=regular" ambiguous="YES">
                                     <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
                                 </variation>
                             </webView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="hEf-Dr-oUb" secondAttribute="bottom" id="5C2-UV-EfD">
-                                <variation key="heightClass=regular" constant="0.0"/>
-                            </constraint>
-                            <constraint firstItem="hEf-Dr-oUb" firstAttribute="top" secondItem="MJe-pA-2ut" secondAttribute="top" id="NSR-KE-VOc">
-                                <variation key="heightClass=regular" constant="0.0"/>
-                            </constraint>
-                            <constraint firstItem="hEf-Dr-oUb" firstAttribute="leading" secondItem="MJe-pA-2ut" secondAttribute="leading" id="Xaa-gJ-8dC">
-                                <variation key="heightClass=regular" constant="0.0"/>
-                            </constraint>
-                            <constraint firstAttribute="trailing" secondItem="hEf-Dr-oUb" secondAttribute="trailing" id="c8p-gs-EsG">
-                                <variation key="heightClass=regular" constant="0.0"/>
-                            </constraint>
+                            <constraint firstAttribute="bottom" secondItem="hEf-Dr-oUb" secondAttribute="bottom" id="12h-Vf-kah"/>
+                            <constraint firstItem="hEf-Dr-oUb" firstAttribute="leading" secondItem="MJe-pA-2ut" secondAttribute="leading" id="6Cf-Rq-0Ji"/>
+                            <constraint firstItem="hEf-Dr-oUb" firstAttribute="top" secondItem="MJe-pA-2ut" secondAttribute="top" id="Krp-z7-DpG"/>
+                            <constraint firstAttribute="trailing" secondItem="hEf-Dr-oUb" secondAttribute="trailing" id="WCJ-hO-7LO"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="5C2-UV-EfD"/>
-                                <exclude reference="NSR-KE-VOc"/>
-                                <exclude reference="Xaa-gJ-8dC"/>
-                                <exclude reference="c8p-gs-EsG"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular">
-                            <mask key="constraints">
-                                <exclude reference="5C2-UV-EfD"/>
-                                <include reference="NSR-KE-VOc"/>
-                                <include reference="Xaa-gJ-8dC"/>
-                                <exclude reference="c8p-gs-EsG"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
-                        <outlet property="heightConstraint" destination="RRY-dt-Ldg" id="HsP-rr-Rsm"/>
                         <outlet property="webview" destination="hEf-Dr-oUb" id="JkJ-dw-VsG"/>
-                        <outlet property="widthConstraint" destination="d3d-Fu-NO2" id="vP9-nE-Q8Z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qPR-Rl-aso" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1406,18 +1364,12 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
-                                            <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                                <rect key="frame" x="70" y="34" width="616" height="14"/>
-                                            </variation>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kfF-e9-nFE">
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
-                                            <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
-                                                <rect key="frame" x="70" y="8" width="616" height="20"/>
-                                            </variation>
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
