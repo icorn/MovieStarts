@@ -31,6 +31,11 @@ class SettingsTableViewController: UITableViewController {
     }
 	
 	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+
+		// set status bar style to dark
+		UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
+		setNeedsStatusBarAppearanceUpdate()
 		
 		// set up the two switches
 		setUpSwitch(Constants.PREFS_USE_IMDB_APP, switcher: imdbSwitch, label: imdbLabel, urlString: "imdb:")

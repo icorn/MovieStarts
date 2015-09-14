@@ -16,7 +16,7 @@ class NowTableViewController: MovieTableViewController {
         super.viewDidLoad()
 		navigationItem.title = NSLocalizedString("NowPlayingLong", comment: "")
     }
-
+	
 	func addMovie(newMovie: MovieRecord) {
 		tableView.beginUpdates()
 		

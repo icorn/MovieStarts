@@ -74,6 +74,10 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		
+		// set status bar style to light
+		UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
+		setNeedsStatusBarAppearanceUpdate()
+
 //		let value = UIInterfaceOrientation.LandscapeLeft.rawValue
 //		UIDevice.currentDevice().setValue(value, forKey: "orientation")
 
