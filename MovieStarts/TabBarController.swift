@@ -52,6 +52,8 @@ class TabBarController: UITabBarController {
         super.didReceiveMemoryWarning()
     }
 
+	
+/*
 	override func supportedInterfaceOrientations() -> Int {
 		
 		if let svc = selectedViewController {
@@ -61,6 +63,7 @@ class TabBarController: UITabBarController {
 			return Int(UIInterfaceOrientationMask.Portrait.rawValue)
 		}
 	}
+*/
 	
 	
 	/**

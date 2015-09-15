@@ -79,7 +79,6 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 	
-	@IBOutlet weak var line10BottomSpace: NSLayoutConstraint!
 	
 	var movieTabBarController: TabBarController? {
 		get {
@@ -90,7 +89,6 @@ class MovieViewController: UIViewController {
 	var bigPosterView: UIImageView?
 	var movie: MovieRecord?
 	var textButtons = [UIButton]()
-//	var bottomButton: UIButton?
 	var favoriteButtonIndex: Int = 0
 	var certificationDict: [String: CertificateLogo] = [
 		"R" 	: CertificateLogo(filename: "certificateR.png", height: 30),
@@ -107,7 +105,7 @@ class MovieViewController: UIViewController {
 		super.viewDidLoad()
 		
 		// start to show all movie details
-		
+
 		var actorLabels = [actorLabel1, actorLabel2, actorLabel3, actorLabel4, actorLabel5]
 		var directorLabels = [directorLabel, directorLabel2]
 		
@@ -291,9 +289,10 @@ class MovieViewController: UIViewController {
 				buttonLines[hideId-1].hidden = true
 			}
 
-			// Set nice distance between line 10 and the bottom of the content view.
-			
-			line10BottomSpace.constant = -30 - (5 - CGFloat(textButtonIndex)) * 50
+			// Set nice distance between lowest line and the bottom of the content view.
+
+			contentView.addConstraint(NSLayoutConstraint(item: buttonLines[textButtonIndex - 2], attribute: NSLayoutAttribute.Bottom,
+				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 20))
 		}
 	}
 	
