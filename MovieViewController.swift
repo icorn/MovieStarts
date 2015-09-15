@@ -50,7 +50,6 @@ class MovieViewController: UIViewController {
 	// constraints
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var contentViewWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var certificateImageHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorHeadlineLabelHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2HeightConstraint: NSLayoutConstraint!
@@ -80,6 +79,8 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 	
+	@IBOutlet weak var line10BottomSpace: NSLayoutConstraint!
+	
 	var movieTabBarController: TabBarController? {
 		get {
 			return navigationController?.parentViewController as? TabBarController
@@ -89,7 +90,7 @@ class MovieViewController: UIViewController {
 	var bigPosterView: UIImageView?
 	var movie: MovieRecord?
 	var textButtons = [UIButton]()
-	var bottomButton: UIButton?
+//	var bottomButton: UIButton?
 	var favoriteButtonIndex: Int = 0
 	var certificationDict: [String: CertificateLogo] = [
 		"R" 	: CertificateLogo(filename: "certificateR.png", height: 30),
@@ -104,8 +105,6 @@ class MovieViewController: UIViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		contentViewWidthConstraint.constant = view.frame.width
 		
 		// start to show all movie details
 		
@@ -122,7 +121,7 @@ class MovieViewController: UIViewController {
 				rec.numberOfTapsRequired = 1
 				posterImageView.addGestureRecognizer(rec)
 			}
-			
+
 			// fill labels
 			
 			titleLabel?.text = saveMovie.title
@@ -140,11 +139,11 @@ class MovieViewController: UIViewController {
 			for (var index = saveMovie.subtitleArray.count; index < subtitleLabels.count; index++) {
 				subtitleLabels[index]?.hidden = true
 			}
-			
+
 			// vertically "center" the labels
 			var moveY = (subtitleLabels.count - saveMovie.subtitleArray.count) * 19
 			titleLabelTopSpaceConstraint.constant = CGFloat(moveY / 2) * -1 + 4
-			
+
 			// show release date
 			
 			releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
@@ -282,18 +281,6 @@ class MovieViewController: UIViewController {
 
 			favoriteButtonIndex = textButtonIndex
 			setUpFavoriteButton()
-/*
-			if (contains(Constants.favorites, saveMovie.id)) {
-				// this movie is a favorite: show remove-button
-				textButtons[textButtonIndex].addTarget(self, action: Selector("removeFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-				textButtons[textButtonIndex].setTitle(NSLocalizedString("RemoveFromFavorites", comment: ""), forState: UIControlState.Normal)
-			}
-			else {
-				// this movie is not a favorite: show add-button
-				textButtons[textButtonIndex].addTarget(self, action: Selector("addFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-				textButtons[textButtonIndex].setTitle(NSLocalizedString("AddToFavorites", comment: ""), forState: UIControlState.Normal)
-			}
-*/
 			
 			textButtonIndex++
 
@@ -303,37 +290,13 @@ class MovieViewController: UIViewController {
 				textButtons[hideId].hidden = true
 				buttonLines[hideId-1].hidden = true
 			}
+
+			// Set nice distance between line 10 and the bottom of the content view.
 			
-			bottomButton = textButtons[textButtonIndex-1]
-			
-			updateViewConstraints()
+			line10BottomSpace.constant = -30 - (5 - CGFloat(textButtonIndex)) * 50
 		}
 	}
 	
-	override func viewDidLayoutSubviews() {
-		super.viewDidLayoutSubviews()
-		
-		if let navBarHeight = navigationController?.navigationBar.frame.height {
-			// Move the content down a bit: the height of the navbar plus the height of the status bar plus 20 (looks nicer).
-			// This is necessary, because both the status bar and the navbar are transparent.
-			
-//			posterImageTopSpaceConstraint.constant = 20 + navBarHeight + UIApplication.sharedApplication().statusBarFrame.size.height
-		}
-	}
-	
-	override func viewDidAppear(animated: Bool) {
-		super.viewDidAppear(animated)
-		
-		// Set the height of ohe content size of the scrollview.
-/*
-		let value = UIInterfaceOrientation.Portrait.rawValue
-		UIDevice.currentDevice().setValue(value, forKey: "orientation")
-*/
-		
-		if let maxY = bottomButton?.frame.maxY {
-			scrollView.contentSize = CGSize(width: scrollView.frame.width, height: maxY + 30)
-		}
-	}
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
@@ -510,12 +473,6 @@ class MovieViewController: UIViewController {
 			)
 		}
 	}
-
-/*
-	override func supportedInterfaceOrientations() -> Int {
-		return Int(UIInterfaceOrientationMask.Portrait.rawValue)
-	}
-*/
 	
 	
 	// MARK: - Helpers
