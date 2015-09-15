@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsTableViewController: UITableViewController {
+class SettingsTableViewController: UITableViewController, UITableViewDelegate {
 
 	@IBOutlet weak var imdbLabel: UILabel!
 	@IBOutlet weak var youtubeLabel: UILabel!
@@ -75,14 +75,17 @@ class SettingsTableViewController: UITableViewController {
 		}
 	}
 	
-	func imdbSwitchTapped() {
-		NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(imdbSwitch.on, forKey: Constants.PREFS_USE_IMDB_APP)
+	
+	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+		
+		if (indexPath.section == sectionAbout) {
+			if let saveStoryboard = self.storyboard {
+				var aboutController: AboutViewController = saveStoryboard.instantiateViewControllerWithIdentifier("AboutViewController") as! AboutViewController
+				navigationController?.pushViewController(aboutController, animated: true)
+			}
+		}
 	}
-
-	func youtubeSwitchTapped() {
-		NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(youtubeSwitch.on, forKey: Constants.PREFS_USE_YOUTUBE_APP)
-	}
-
+	
 	
     /*
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -128,6 +131,14 @@ class SettingsTableViewController: UITableViewController {
 	
 	// MARK: - Private helper functions
 
+	
+	func imdbSwitchTapped() {
+		NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(imdbSwitch.on, forKey: Constants.PREFS_USE_IMDB_APP)
+	}
+	
+	func youtubeSwitchTapped() {
+		NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(youtubeSwitch.on, forKey: Constants.PREFS_USE_YOUTUBE_APP)
+	}
 	
 	private func setUpSwitch(prefKey: String, switcher: UISwitch, label: UILabel, urlString: String) {
 		
