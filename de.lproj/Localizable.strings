@@ -124,3 +124,18 @@
 "Switzerland"				= "Schweiz";
 "Trinidad and Tobago"		= "Trinidad und Tobago";
 "United Arab Emirates"		= "Vereinigte Arabische Emirate";
+
+// Genres
+
+"Adventure"					= "Abenteuer";
+"Comedy"					= "Komödie";
+"Crime"						= "Krimi";
+"Documentary"				= "Dokumentation";
+"Family"					= "Familienfilm";
+"Foreign"					= "Ausländisch";
+"History"					= "Historienfilm";
+"Music"						= "Musik";
+"Romance"					= "Romantik";
+"TV Movie"					= "TV-Film";
+"War"						= "Kriegsfilm";
+

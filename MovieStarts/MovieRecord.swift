@@ -177,7 +177,7 @@ public class MovieRecord : Printable {
 		
 		if (genres.count > 0) {
 			for genre in genres {
-				genreText += genre + ", "
+				genreText += NSLocalizedString(genre, comment: "") + ", "
 			}
 			
 			return genreText.substringToIndex(genreText.endIndex.predecessor().predecessor())
