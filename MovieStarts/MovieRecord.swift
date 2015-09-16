@@ -336,17 +336,8 @@ public class MovieRecord : Printable {
 		var retval = false
 		
 		if let saveDate = releaseDate {
-			
 			var today = NSDate()
-			
-			if (saveDate.compare(today) == NSComparisonResult.OrderedDescending) {
-				// upcoming movie
-				retval = false
-			}
-			else {
-				// now playing
-				retval = true
-			}
+			retval = (saveDate.compare(today) != NSComparisonResult.OrderedDescending)
 		}
 		
 		return retval
