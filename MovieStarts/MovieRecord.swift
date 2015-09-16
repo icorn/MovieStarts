@@ -216,6 +216,12 @@ public class MovieRecord : Printable {
 			detailText += "\(runtime) \(minutesShort) | "
 		}
 		
+		// add mpaa rating
+		
+		if let certification = certification where count(certification) > 0 {
+			detailText += "\(certification) | "
+		}
+		
 		// add countries
 
 		if let countries = countryString {

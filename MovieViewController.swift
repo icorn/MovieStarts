@@ -20,7 +20,6 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var subtitleText1: UILabel!
 	@IBOutlet weak var subtitleText2: UILabel!
 	@IBOutlet weak var subtitleText3: UILabel!
-	@IBOutlet weak var certificateImageView: UIImageView!
 	@IBOutlet weak var releaseDateHeadlineLabel: UILabel!
 	@IBOutlet weak var releaseDateLabel: UILabel!
 	@IBOutlet weak var ratingHeadlineLabel: UILabel!
@@ -50,7 +49,6 @@ class MovieViewController: UIViewController {
 	// constraints
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var certificateImageHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorHeadlineLabelHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2VerticalSpaceConstraint: NSLayoutConstraint!
@@ -154,7 +152,7 @@ class MovieViewController: UIViewController {
 			}
 			
 			// show rating
-
+			
 			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
 			if (saveMovie.voteAverage > 0.1) {
 				var numberFormatter = NSNumberFormatter()
@@ -165,7 +163,7 @@ class MovieViewController: UIViewController {
 				var voteMaximum = numberFormatter.stringFromNumber(10.0)
 
 				if let saveVoteAverage = voteAverage, saveVoteMaximum = voteMaximum {
-					ratingLabel?.text = "\(saveVoteAverage) / \(saveVoteMaximum)"
+					ratingLabel?.text =  "\(saveVoteAverage)" // "\(saveVoteAverage) / \(saveVoteMaximum)"
 				}
 				else {
 					// vote was no number, shouldn't happen
@@ -175,24 +173,6 @@ class MovieViewController: UIViewController {
 			else {
 				// no or not enough votes
 				ratingLabel?.text = "-"
-			}
-			
-			// show certificate
-			
-			var certificationImageName: String?
-			
-			if let saveCertification = saveMovie.certification, saveDict = certificationDict[saveCertification] {
-				certificationImageName = saveDict.filename
-				certificateImageHeightConstraint.constant = CGFloat(saveDict.height)
-			}
-			
-			if let saveImageName = certificationImageName {
-				certificateImageView?.image = UIImage(named: saveImageName)
-			}
-			else {
-				// no valid image name for the certification found
-				certificateImageView?.image = UIImage(named: "certificateNR.png")
-				certificateImageHeightConstraint.constant = 30
 			}
 			
 			// show director(s)
