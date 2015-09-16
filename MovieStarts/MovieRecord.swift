@@ -194,7 +194,7 @@ public class MovieRecord : Printable {
 		
 		if (productionCountries.count > 0) {
 			for country in productionCountries {
-				countryText += shortenCountryname(country) + ", "
+				countryText += NSLocalizedString(country, comment: "") + ", "
 			}
 			
 			return countryText.substringToIndex(countryText.endIndex.predecessor().predecessor())
@@ -327,26 +327,6 @@ public class MovieRecord : Printable {
 	}
 	
 	
-	/**
-		Shortens the given country name.
-	
-		:param:	name	The country name to be shortened
-	
-		:returns: The shortened country name (often the same as the input name).
-	*/
-	private func shortenCountryname(name: String) -> String {
-		
-		switch(name) {
-		case "United States of America":
-			return "USA"
-		case "United Kingdom":
-			return "UK"
-		default:
-			return name
-		}
-	}
-
-
 	/**
 		Checks if the movie is now playing in theaters.
 
