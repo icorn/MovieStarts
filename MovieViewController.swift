@@ -46,6 +46,9 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var line9: UIView!
 	@IBOutlet weak var line10: UIView!
 	
+	@IBOutlet weak var starsgrey: UIImageView!
+	@IBOutlet weak var starsgold: UIImageView!
+	
 	// constraints
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
@@ -77,6 +80,17 @@ class MovieViewController: UIViewController {
 	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 	
+	@IBOutlet weak var starsgoldWidthConstraint: NSLayoutConstraint!
+	@IBOutlet weak var starsgreyWidthConstraint: NSLayoutConstraint!
+	@IBOutlet weak var starsgoldHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var starsgoldTrailingConstraint: NSLayoutConstraint!
+	@IBOutlet weak var starsgreyHeightConstraint: NSLayoutConstraint!
+	
+	@IBOutlet weak var ratingLabelHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var ratingHeadlineLabelHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var ratingHeadlineLabelTopConstraint: NSLayoutConstraint!
+	@IBOutlet weak var ratingLabelTopConstraint: NSLayoutConstraint!
+	
 	
 	var movieTabBarController: TabBarController? {
 		get {
@@ -107,12 +121,12 @@ class MovieViewController: UIViewController {
 		var actorLabels = [actorLabel1, actorLabel2, actorLabel3, actorLabel4, actorLabel5]
 		var directorLabels = [directorLabel, directorLabel2]
 		
-		if let saveMovie = movie {
+		if let movie = movie {
 			
 			// show poster
 			
-			if (saveMovie.thumbnailImage.1) {
-				posterImageView.image = saveMovie.thumbnailImage.0
+			if (movie.thumbnailImage.1) {
+				posterImageView.image = movie.thumbnailImage.0
 				var rec = UITapGestureRecognizer(target: self, action: Selector("thumbnailTapped:"))
 				rec.numberOfTapsRequired = 1
 				posterImageView.addGestureRecognizer(rec)
@@ -120,31 +134,31 @@ class MovieViewController: UIViewController {
 
 			// fill labels
 			
-			titleLabel?.text = saveMovie.title
+			titleLabel?.text = movie.title
 
 			// show labels with subtitles
 			
 			var subtitleLabels = [subtitleText1, subtitleText2, subtitleText3]
 			
-			for (index, subtitle) in enumerate(saveMovie.subtitleArray) {
+			for (index, subtitle) in enumerate(movie.subtitleArray) {
 				subtitleLabels[index]?.text = subtitle
 			}
 			
 			// hide unused labels
 			
-			for (var index = saveMovie.subtitleArray.count; index < subtitleLabels.count; index++) {
+			for (var index = movie.subtitleArray.count; index < subtitleLabels.count; index++) {
 				subtitleLabels[index]?.hidden = true
 			}
 
 			// vertically "center" the labels
-			var moveY = (subtitleLabels.count - saveMovie.subtitleArray.count) * 19
+			var moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
 			titleLabelTopSpaceConstraint.constant = CGFloat(moveY / 2) * -1 + 4
 
 			// show release date
 			
 			releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
-			if let saveDate = saveMovie.releaseDate {
-				releaseDateLabel?.text = saveMovie.releaseDateString
+			if let saveDate = movie.releaseDate {
+				releaseDateLabel?.text = movie.releaseDateString
 			}
 			else {
 				// no release date (cannot happen)
@@ -154,48 +168,59 @@ class MovieViewController: UIViewController {
 			// show rating
 			
 			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
-			if (saveMovie.voteAverage > 0.1) {
+			if (movie.voteAverage >= 0.1) {
 				var numberFormatter = NSNumberFormatter()
 				numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
 				numberFormatter.minimumFractionDigits = 1
 
-				var voteAverage = numberFormatter.stringFromNumber(saveMovie.voteAverage)
+				var voteAverage = numberFormatter.stringFromNumber(movie.voteAverage)
 				var voteMaximum = numberFormatter.stringFromNumber(10.0)
 
 				if let saveVoteAverage = voteAverage, saveVoteMaximum = voteMaximum {
-					ratingLabel?.text =  "\(saveVoteAverage)" // "\(saveVoteAverage) / \(saveVoteMaximum)"
+					ratingLabel?.text =  "\(saveVoteAverage)"
 				}
 				else {
 					// vote was no number, shouldn't happen
-					ratingLabel?.text = "-"
+					ratingLabel?.text = "?"
 				}
+				
+				starsgoldWidthConstraint.constant = 0
+				starsgoldTrailingConstraint.constant = 150
 			}
 			else {
-				// no or not enough votes
-				ratingLabel?.text = "-"
+				// no or not enough votes, hide it
+				
+				ratingHeadlineLabelHeightConstraint.constant = 0
+				ratingLabelHeightConstraint.constant = 0
+				starsgoldHeightConstraint.constant = 0
+				starsgreyHeightConstraint.constant = 0
+				line2VerticalSpaceConstraint.constant = 0
+				line2HeightConstraint.constant = 0
+				ratingLabelTopConstraint.constant = 0
+				ratingHeadlineLabelTopConstraint.constant = 0
 			}
 			
 			// show director(s)
 
 			directorHeadlineLabel.text = NSLocalizedString("Director", comment: "") + ":"
-			if (saveMovie.directors.count > 1) {
+			if (movie.directors.count > 1) {
 				directorHeadlineLabel.text = NSLocalizedString("Directors", comment: "") + ":"
 			}
 			
-			if (saveMovie.directors.count > 0) {
-				for index in 0...saveMovie.directors.count-1 {
+			if (movie.directors.count > 0) {
+				for index in 0...movie.directors.count-1 {
 					if (index < 2) {
-						directorLabels[index].text = saveMovie.directors[index]
+						directorLabels[index].text = movie.directors[index]
 					}
 				}
 			}
 			
 			// hide unused director-fields
 			
-			if (saveMovie.directors.count < 2) {
+			if (movie.directors.count < 2) {
 				setConstraintsToZero(directorLabel2HeightConstraint, directorLabel2VerticalSpaceConstraint)
 			}
-			if (saveMovie.directors.count < 1) {
+			if (movie.directors.count < 1) {
 				setConstraintsToZero(directorLabelHeightConstraint, directorLabelVerticalSpaceConstraint, directorHeadlineLabelHeightConstraint,
 					directorHeadlineLabelVerticalSpaceConstraint, line2HeightConstraint, line2VerticalSpaceConstraint)
 			}
@@ -203,29 +228,29 @@ class MovieViewController: UIViewController {
 			// show actor(s)
 			
 			actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "") + ":"
-			if (saveMovie.actors.count > 0) {
-				for index in 0...saveMovie.actors.count-1 {
+			if (movie.actors.count > 0) {
+				for index in 0...movie.actors.count-1 {
 					if (index < 5) {
-						actorLabels[index].text = saveMovie.actors[index]
+						actorLabels[index].text = movie.actors[index]
 					}
 				}
 			}
 			
 			// hide unused actor-fields
 			
-			if (saveMovie.actors.count < 5) {
+			if (movie.actors.count < 5) {
 				setConstraintsToZero(actorLabel5HeightConstraint, actorLabel5VerticalSpaceConstraint)
 			}
-			if (saveMovie.actors.count < 4) {
+			if (movie.actors.count < 4) {
 				setConstraintsToZero(actorLabel4HeightConstraint, actorLabel4VerticalSpaceConstraint)
 			}
-			if (saveMovie.actors.count < 3) {
+			if (movie.actors.count < 3) {
 				setConstraintsToZero(actorLabel3HeightConstraint, actorLabel3VerticalSpaceConstraint)
 			}
-			if (saveMovie.actors.count < 2) {
+			if (movie.actors.count < 2) {
 				setConstraintsToZero(actorLabel2HeightConstraint, actorLabel2VerticalSpaceConstraint)
 			}
-			if (saveMovie.actors.count < 1) {
+			if (movie.actors.count < 1) {
 				setConstraintsToZero(actorLabel1HeightConstraint, actorLabel1VerticalSpaceConstraint, actorHeadlineLabelHeightConstraint,
 					actorHeadlineLabelVerticalSpaceConstraint, line3HeightConstraint, line3VerticalSpaceConstraint)
 			}
@@ -233,7 +258,7 @@ class MovieViewController: UIViewController {
 			// show story
 			
 			storyHeadlineLabel.text = NSLocalizedString("Synopsis", comment: "") + ":"
-			if let synopsis = saveMovie.synopsis {
+			if let synopsis = movie.synopsis {
 				storyLabel.text = synopsis
 			}
 
@@ -243,13 +268,13 @@ class MovieViewController: UIViewController {
 			var textButtonIndex = 0
 			var buttonLines = [line7, line8, line9, line10]
 			
-			if let imdbId = saveMovie.imdbId {
+			if let imdbId = movie.imdbId {
 				textButtons[textButtonIndex].addTarget(self, action: Selector("imdbButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
 				textButtons[textButtonIndex].setTitle(NSLocalizedString("ShowOnImdb", comment: ""), forState: UIControlState.Normal)
 				textButtonIndex++
 			}
 			
-			for trailerName in saveMovie.trailerNames {
+			for trailerName in movie.trailerNames {
 				textButtons[textButtonIndex].addTarget(self, action: Selector("trailerButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
 				textButtons[textButtonIndex].setTitle(NSLocalizedString("ShowTrailer", comment: "") + "'" + trailerName + "'", forState: UIControlState.Normal)
 				textButtonIndex++
@@ -281,6 +306,24 @@ class MovieViewController: UIViewController {
 		super.didReceiveMemoryWarning()
 	}
 	
+
+	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+		view.layoutIfNeeded()
+		
+		if let voteAverage = movie?.voteAverage where voteAverage >= 0.1 {
+			UIView.animateWithDuration(0.8, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn,
+				animations: {
+					self.starsgreyWidthConstraint.constant = 150 - 15 * CGFloat(voteAverage)
+					self.starsgoldWidthConstraint.constant = 15 * CGFloat(voteAverage)
+					self.starsgoldTrailingConstraint.constant = 150 - 15 * CGFloat(voteAverage)
+					self.view.layoutIfNeeded()
+				},
+				completion:  { _ in }
+			)
+		}
+	}
+
 	
 	// MARK: - Button callbacks
 	
