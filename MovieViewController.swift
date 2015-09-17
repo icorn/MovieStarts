@@ -101,7 +101,6 @@ class MovieViewController: UIViewController {
 	var bigPosterView: UIImageView?
 	var movie: MovieRecord?
 	var textButtons = [UIButton]()
-	var favoriteButtonIndex: Int = 0
 	var certificationDict: [String: CertificateLogo] = [
 		"R" 	: CertificateLogo(filename: "certificateR.png", height: 30),
 		"G" 	: CertificateLogo(filename: "certificateG.png", height: 30),
@@ -281,12 +280,7 @@ class MovieViewController: UIViewController {
 				textButtonIndex++
 			}
 			
-			// generate favorite button
-
-			favoriteButtonIndex = textButtonIndex
 			setUpFavoriteButton()
-			
-			textButtonIndex++
 
 			// hide unused button(s)
 			
@@ -297,8 +291,8 @@ class MovieViewController: UIViewController {
 
 			// Set nice distance between lowest line and the bottom of the content view.
 
-			contentView.addConstraint(NSLayoutConstraint(item: buttonLines[textButtonIndex - 2], attribute: NSLayoutAttribute.Bottom,
-				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 20))
+			contentView.addConstraint(NSLayoutConstraint(item: buttonLines[textButtonIndex - 1], attribute: NSLayoutAttribute.Bottom,
+				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 80))
 		}
 	}
 	
@@ -327,7 +321,7 @@ class MovieViewController: UIViewController {
 
 	
 	// MARK: - Button callbacks
-	
+
 	
 	/**
 		Calls the webview with the imdb page for the movie.
@@ -514,17 +508,17 @@ class MovieViewController: UIViewController {
 
 	private final func setUpFavoriteButton() {
 		if let movie = movie {
-			textButtons[favoriteButtonIndex].removeTarget(nil, action: nil, forControlEvents: UIControlEvents.AllEvents)
-			
 			if (contains(Favorites.IDs, movie.id)) {
 				// this movie is a favorite: show remove-button
-				textButtons[favoriteButtonIndex].addTarget(self, action: Selector("removeFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-				textButtons[favoriteButtonIndex].setTitle(NSLocalizedString("RemoveFromFavorites", comment: ""), forState: UIControlState.Normal)
+				if let navigationController = navigationController {
+					navigationController.topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("removeFavoriteButtonTapped:"))
+				}
 			}
 			else {
 				// this movie is not a favorite: show add-button
-				textButtons[favoriteButtonIndex].addTarget(self, action: Selector("addFavoriteButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-				textButtons[favoriteButtonIndex].setTitle(NSLocalizedString("AddToFavorites", comment: ""), forState: UIControlState.Normal)
+				if let navigationController = navigationController {
+					navigationController.topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favoriteframe.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("addFavoriteButtonTapped:"))
+				}
 			}
 		}
 	}

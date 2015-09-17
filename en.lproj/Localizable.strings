@@ -18,7 +18,7 @@
 "UpdatingMovies"	= "Updating movies...";
 "LoadingMovies"		= "Loading movies...";
 "NoFavorites"		= "No Favorites";
-"HowToAddFavorites" = "You can add favorites either in a movie list by swiping to the left, or in a detail view by tapping the favorite button.";
+"HowToAddFavorites" = "You can add favorites either in a movie list by swiping to the left, or in a detail view by tapping the heart shaped favorite button.";
 
 "ReleaseDate"		= "Release Date";
 "UserRating"		= "User Rating";

@@ -41,6 +41,9 @@
 		4F3EC70A1B24B35B003C48E4 /* WebViewForward.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7041B24B35B003C48E4 /* WebViewForward.png */; };
 		4F3EC70B1B24B35B003C48E4 /* WebViewRefresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7051B24B35B003C48E4 /* WebViewRefresh.png */; };
 		4F3EC70C1B24B35B003C48E4 /* WebViewBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7061B24B35B003C48E4 /* WebViewBack.png */; };
+		4F583D561BAB1DBD000EF489 /* favoriteframe@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F583D531BAB1DBD000EF489 /* favoriteframe@3x.png */; };
+		4F583D571BAB1DBD000EF489 /* favoriteframe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F583D541BAB1DBD000EF489 /* favoriteframe@2x.png */; };
+		4F583D581BAB1DBD000EF489 /* favoriteframe.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F583D551BAB1DBD000EF489 /* favoriteframe.png */; };
 		4F5EB0771BAA210200B1EFA0 /* starsgold.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5EB0711BAA210200B1EFA0 /* starsgold.png */; };
 		4F5EB0781BAA210200B1EFA0 /* starsgold@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5EB0721BAA210200B1EFA0 /* starsgold@2x.png */; };
 		4F5EB0791BAA210200B1EFA0 /* starsgrey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5EB0731BAA210200B1EFA0 /* starsgrey.png */; };
@@ -189,6 +192,9 @@
 		4F3EC7041B24B35B003C48E4 /* WebViewForward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WebViewForward.png; sourceTree = "<group>"; };
 		4F3EC7051B24B35B003C48E4 /* WebViewRefresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WebViewRefresh.png; sourceTree = "<group>"; };
 		4F3EC7061B24B35B003C48E4 /* WebViewBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WebViewBack.png; sourceTree = "<group>"; };
+		4F583D531BAB1DBD000EF489 /* favoriteframe@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoriteframe@3x.png"; sourceTree = "<group>"; };
+		4F583D541BAB1DBD000EF489 /* favoriteframe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoriteframe@2x.png"; sourceTree = "<group>"; };
+		4F583D551BAB1DBD000EF489 /* favoriteframe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoriteframe.png; sourceTree = "<group>"; };
 		4F5EB0711BAA210200B1EFA0 /* starsgold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = starsgold.png; sourceTree = "<group>"; };
 		4F5EB0721BAA210200B1EFA0 /* starsgold@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "starsgold@2x.png"; sourceTree = "<group>"; };
 		4F5EB0731BAA210200B1EFA0 /* starsgrey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = starsgrey.png; sourceTree = "<group>"; };
@@ -397,6 +403,9 @@
 				4F2C92B01B66EC840044A27B /* favoritecorner.png */,
 				4F2C92AF1B66EC840044A27B /* favoritecorner@2x.png */,
 				4F2C92B11B66EC840044A27B /* favoritecorner@3x.png */,
+				4F583D551BAB1DBD000EF489 /* favoriteframe.png */,
+				4F583D541BAB1DBD000EF489 /* favoriteframe@2x.png */,
+				4F583D531BAB1DBD000EF489 /* favoriteframe@3x.png */,
 				4F8ED3EE1B444B43008C24FE /* noposter.png */,
 				4F69148A1A8C085300B8FFCE /* Settings.png */,
 				4F6914871A8C085300B8FFCE /* Settings@2x.png */,
@@ -774,6 +783,7 @@
 				4F6914911A8C085300B8FFCE /* Video.png in Resources */,
 				4F63E63C1A9A8CD100528FB3 /* icon60@3x.png in Resources */,
 				4F7203831B9D9463006A4282 /* welcome@3x.png in Resources */,
+				4F583D581BAB1DBD000EF489 /* favoriteframe.png in Resources */,
 				4F6914941A8C085300B8FFCE /* Video@2x.png in Resources */,
 				4F6914931A8C085300B8FFCE /* Settings.png in Resources */,
 				4F8ED3EF1B444B43008C24FE /* noposter.png in Resources */,
@@ -785,6 +795,7 @@
 				4F2C92AC1B64E4710044A27B /* favorite.png in Resources */,
 				4F2C92B41B66EC840044A27B /* favoritecorner@3x.png in Resources */,
 				4F2C92B21B66EC840044A27B /* favoritecorner@2x.png in Resources */,
+				4F583D561BAB1DBD000EF489 /* favoriteframe@3x.png in Resources */,
 				4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */,
 				4F5EB07B1BAA210200B1EFA0 /* starsgrey@3x.png in Resources */,
 				4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */,
@@ -801,6 +812,7 @@
 				4F3EC7071B24B35B003C48E4 /* WebViewRefresh@2x.png in Resources */,
 				4F3EC70A1B24B35B003C48E4 /* WebViewForward.png in Resources */,
 				4F63E62F1A9A416100528FB3 /* LaunchLogo.png in Resources */,
+				4F583D571BAB1DBD000EF489 /* favoriteframe@2x.png in Resources */,
 				4FAFF8D51A8BFFE500864078 /* LaunchScreen.xib in Resources */,
 				4F7203811B9D9463006A4282 /* welcome.png in Resources */,
 				4FAFF8D21A8BFFE500864078 /* Images.xcassets in Resources */,
