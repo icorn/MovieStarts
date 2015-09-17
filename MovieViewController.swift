@@ -125,8 +125,9 @@ class MovieViewController: UIViewController {
 			
 			// show poster
 			
+			posterImageView.image = movie.thumbnailImage.0
+
 			if (movie.thumbnailImage.1) {
-				posterImageView.image = movie.thumbnailImage.0
 				var rec = UITapGestureRecognizer(target: self, action: Selector("thumbnailTapped:"))
 				rec.numberOfTapsRequired = 1
 				posterImageView.addGestureRecognizer(rec)
