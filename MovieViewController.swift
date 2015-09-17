@@ -313,7 +313,7 @@ class MovieViewController: UIViewController {
 		view.layoutIfNeeded()
 		
 		if let voteAverage = movie?.voteAverage, voteCount = movie?.voteCount where voteCount > 2 {
-			UIView.animateWithDuration(0.8, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn,
+			UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveLinear,
 				animations: {
 					self.starsgreyWidthConstraint.constant = 150 - 15 * CGFloat(voteAverage)
 					self.starsgoldWidthConstraint.constant = 15 * CGFloat(voteAverage)
