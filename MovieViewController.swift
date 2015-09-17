@@ -168,7 +168,7 @@ class MovieViewController: UIViewController {
 			// show rating
 			
 			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
-			if (movie.voteAverage >= 0.1) {
+			if (movie.voteCount > 2) {
 				var numberFormatter = NSNumberFormatter()
 				numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
 				numberFormatter.minimumFractionDigits = 1
@@ -311,7 +311,7 @@ class MovieViewController: UIViewController {
 		super.viewDidAppear(animated)
 		view.layoutIfNeeded()
 		
-		if let voteAverage = movie?.voteAverage where voteAverage >= 0.1 {
+		if let voteAverage = movie?.voteAverage, voteCount = movie?.voteCount where voteCount > 2 {
 			UIView.animateWithDuration(0.8, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn,
 				animations: {
 					self.starsgreyWidthConstraint.constant = 150 - 15 * CGFloat(voteAverage)

@@ -51,9 +51,10 @@ public class MovieRecord : Printable {
 	public var trailerNames:[String] = []
 	/// an array of trailer IDs (IDs for youtube)
 	public var trailerIds:[String] = []
-
-	//	var popularity:Int = 0
-	//	var voteCount:Int = 0
+	/// the popularity of the movie on tmdb.org
+	public var popularity:Int = 0
+	/// the number of votes for this movie on tmdb
+	public var voteCount:Int = 0
 
 	public init(dict: [String: AnyObject]) {
 		
@@ -76,9 +77,9 @@ public class MovieRecord : Printable {
 		if (dict[Constants.DB_ID_TRAILER_IDS] != nil) 	{ self.trailerIds 		= dict[Constants.DB_ID_TRAILER_IDS] 	as! [String] }
 
 		if (dict[Constants.DB_ID_PRODUCTION_COUNTRIES] != nil) { self.productionCountries = dict[Constants.DB_ID_PRODUCTION_COUNTRIES] as! [String] }
-		
-//		if (dict[Constants.DB_ID_POPULARITY] != nil) 	{ self.popularity 		= dict[Constants.DB_ID_POPULARITY] 		as! Int }
-//		if (dict[Constants.DB_ID_VOTE_COUNT] != nil) 	{ self.voteCount 		= dict[Constants.DB_ID_VOTE_COUNT] 		as! Int }
+
+		if (dict[Constants.DB_ID_POPULARITY] != nil) 	{ self.popularity 		= dict[Constants.DB_ID_POPULARITY] 		as! Int }
+		if (dict[Constants.DB_ID_VOTE_COUNT] != nil) 	{ self.voteCount 		= dict[Constants.DB_ID_VOTE_COUNT] 		as! Int }
 		
 		if let saveId = dict[Constants.DB_ID_ID] as? String {
 			id = saveId
@@ -113,8 +114,8 @@ public class MovieRecord : Printable {
 		
 		if (ckRecord.objectForKey(Constants.DB_ID_PRODUCTION_COUNTRIES) != nil) { self.productionCountries = ckRecord.objectForKey(Constants.DB_ID_PRODUCTION_COUNTRIES) as! [String] }
 		
-//		if (ckRecord.objectForKey(Constants.DB_ID_POPULARITY) != nil) 	{ self.popularity 		= ckRecord.objectForKey(Constants.DB_ID_POPULARITY) 	as! Int }
-//		if (ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) != nil) 	{ self.voteCount 		= ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) 	as! Int }
+		if (ckRecord.objectForKey(Constants.DB_ID_POPULARITY) != nil) 	{ self.popularity 		= ckRecord.objectForKey(Constants.DB_ID_POPULARITY) 	as! Int }
+		if (ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) != nil) 	{ self.voteCount 		= ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) 	as! Int }
 		
 		id = ckRecord.recordID.recordName
 	}
@@ -147,9 +148,8 @@ public class MovieRecord : Printable {
 		retval[Constants.DB_ID_TRAILER_NAMES] 			= trailerNames
 		retval[Constants.DB_ID_TRAILER_IDS] 			= trailerIds
 		retval[Constants.DB_ID_PRODUCTION_COUNTRIES] 	= productionCountries
-		
-//		retval[Constants.DB_ID_POPULARITY] = popularity
-//		retval[Constants.DB_ID_VOTE_COUNT] = voteCount
+		retval[Constants.DB_ID_POPULARITY] 				= popularity
+		retval[Constants.DB_ID_VOTE_COUNT] 				= voteCount
 		
 		retval[Constants.DB_ID_ID] = id
 		
@@ -376,6 +376,8 @@ public class MovieRecord : Printable {
 		retval += "id: \(id) | "
 		retval += "runtime: \(runtime) | "
 		retval += "voteAvg: \(voteAverage) | "
+		retval += "voteCount: \(voteCount) | "
+		retval += "popularity: \(popularity) | "
 
 		if let tmdbId = tmdbId {
 			retval += "tmdbId: \(tmdbId) | "

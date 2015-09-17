@@ -60,7 +60,7 @@ public struct Constants {
 	
 	public static let DB_ID_ID						= "id"
 
-//	public static let DB_ID_POPULARITY				= "popularity"
-//	public static let DB_ID_VOTE_COUNT				= "voteCount"
+	public static let DB_ID_POPULARITY				= "popularity"
+	public static let DB_ID_VOTE_COUNT				= "voteCount"
 
 }
