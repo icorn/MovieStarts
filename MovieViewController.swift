@@ -399,7 +399,7 @@ class MovieViewController: UIViewController {
 		var useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as! Bool?
 		
 		if let trailerId = movie?.trailerIds[index] {
-			var url: NSURL? = NSURL(string: "http://www.youtube.com/v/\(trailerId)/")
+			var url: NSURL? = NSURL(string: "https://www.youtube.com/v/\(trailerId)/")
 			
 			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
 				// use the app instead of the webview
@@ -408,7 +408,7 @@ class MovieViewController: UIViewController {
 			else {
 				// use the webview
 				var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
-				webViewController.urlString = "http://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
+				webViewController.urlString = "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
 				navigationController?.pushViewController(webViewController, animated: true)
 			}
 		}
