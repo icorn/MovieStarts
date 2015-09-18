@@ -721,7 +721,7 @@
         <scene sceneID="VyT-Oz-EW5">
             <objects>
                 <navigationController title="FavoritesNavigationController" id="S4U-1Q-lHo" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="2" title="Favorites" image="favorite.png" id="wqa-LQ-bZm"/>
+                    <tabBarItem key="tabBarItem" tag="2" title="Favorites" image="favoritetab.png" id="wqa-LQ-bZm"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="J79-vK-JJM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1048,7 +1048,7 @@
         <image name="LaunchBackground.jpg" width="200" height="2208"/>
         <image name="Settings.png" width="20" height="20"/>
         <image name="Video.png" width="20" height="20"/>
-        <image name="favorite.png" width="20" height="19"/>
+        <image name="favoritetab.png" width="31" height="25"/>
         <image name="noposter.png" width="200" height="300"/>
         <image name="starsgold.png" width="150" height="15"/>
         <image name="starsgrey.png" width="150" height="15"/>
