@@ -6,7 +6,9 @@
   Copyright (c) 2015 Oliver Eichhorn. All rights reserved.
 */
 
-"Close"				= "Close";
+
+// Tabs
+
 "NowPlayingTabBar"	= "Now Playing";
 "NowPlayingLong"	= "Now Playing in Theaters";
 "UpcomingTabBar"	= "Upcoming";
@@ -20,6 +22,8 @@
 "NoFavorites"		= "No Favorites";
 "HowToAddFavorites" = "You can add favorites either in a movie list by swiping to the left, or in a detail view by tapping the heart shaped favorite button.";
 
+// Details view
+
 "ReleaseDate"		= "Release Date";
 "UserRating"		= "User Rating";
 "Actors"			= "Actors";
@@ -27,21 +31,24 @@
 "Director"			= "Director";
 "Synopsis"			= "Story";
 "NoReleaseDate" 	= "unknown";
-
 "MinutesShort"		= "min";
 "aka"				= "aka";
 
-"ShowOnImdb"			= "Show Details on IMDb";
-"ShowTrailer"			= "Show ";
-"AddToFavorites"		= "Add to Favorites";
-"RemoveFromFavorites"	= "Remove from Favorites";
+"ShowOnImdb"				= "Show Details on IMDb";
+"ShowTrailer"				= "Show ";
+"AddToFavorites"			= "Add to Favorites";
+"RemoveFromFavorites"		= "Remove from Favorites";
 "AddToFavoritesShort"		= "Add to\nFavorites";
 "RemoveFromFavoritesShort"	= "Remove from\nFavorites";
+
+// Welcome
 
 "WelcomeTitle"		= "Welcome";
 "WelcomeText"		= "This is your first launch of MovieStarts. Tap on the button below to start downloading movie data. Future movie updates will be downloaded automatically at the launch of the app.";
 "WelcomeButton"		= "Download movie data";
 "WelcomeProgress"	= "movies downloaded...";
+
+// Error messages
 
 "iCloudError"				= "iCloud Error";
 "iCloudNoAccount"			= "MovieStarts couldn't access your iCloud account. Please go to the Settings app, sign in to iCloud, and turn on iCloud Drive.";
@@ -59,11 +66,31 @@
 "InternalError"			= "Internal Error";
 "NoAppGroup"			= "No app-group found. Please try again later.";
 
+// Settings
+
 "SettingsUseApps"		= "Use apps instead of browser";
 "SettingsUseImdb"		= "Use IMDb app";
 "SettingsUseYoutube"	= "Use YouTube app";
 "SettingsUseAppsFooter"	= "If these switches are turned on, the app is launched instead of the the browser with the website. The switches can only be turned on if the appropriate app is installed.";
 "SettingsAbout"			= "About MovieStarts";
+
+// About
+
+"Version"				= "Version";
+"TagLine"				= "All the latest movie release dates at a glance.";
+"developerHeadline"		= "App development and design:";
+"supportHeadline"		= "Support:";
+"webHeadline"			= "Web:";
+"emailHeadline"			= "Email";
+"twitterHeadline"		= "Twitter:";
+"swift"					= "MovieStarts was proudly written in 100% Swift.";
+"appzgear"				= "This app uses graphics from http://appzgear.com";
+"reachability"			= "This app uses 'IJReachability' from Isuru Nanayakkara. It uses the following license:";
+"mitLicense"			= "The MIT License (MIT)\n\nCopyright (c) 2014 Isuru Nanayakkara\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+
+// Misc.
+
+"Close"				= "Close";
 
 // Country names
 
