@@ -11,16 +11,12 @@ import CloudKit
 import UIKit
 
 
-class Database {
+class Database : DatabaseParent {
 	
-	var recordType: String
 	var moviesPlistPath: String?
 	var moviesPlistFile: String?
 	var loadedMovieRecordArray: [MovieRecord]?
 	var viewForError: UIView
-	
-	var cloudKitContainer: CKContainer
-	var cloudKitDatabase: CKDatabase
 	
 	var completionHandler: ((movies: [MovieRecord]?) -> ())?
 	var errorHandler: ((errorMessage: String) -> ())?
@@ -47,8 +43,8 @@ class Database {
 
 	
 	init(recordType: String, viewForError: UIView) {
-		self.recordType = recordType
 		self.viewForError = viewForError
+		super.init(recordType: recordType)
 		
 		var fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
 
@@ -65,9 +61,6 @@ class Database {
 				})
 			}
         }
-		
-		self.cloudKitContainer = CKContainer(identifier: Constants.CLOUDKIT_CONTAINER_ID)
-		self.cloudKitDatabase = cloudKitContainer.publicCloudDatabase
 		
 		if let saveMoviesPlistPath = self.moviesPlistPath {
 			self.moviesPlistFile = saveMoviesPlistPath.stringByAppendingPathComponent(self.recordType + ".plist")
@@ -86,11 +79,6 @@ class Database {
 	}
 	
 
-	func checkCloudKit(handler: (CKAccountStatus, NSError!) -> ()) {
-		cloudKitContainer.accountStatusWithCompletionHandler(handler)
-	}
-
-	
 	// MARK: - Functions for reading all movies
 	
 	
@@ -202,7 +190,7 @@ class Database {
 				// generate array of MovieRecord objects and store the thumbnail posters to "disc"
 				for ckRecord in self.allCKRecords {
 					movieRecordArray.append(MovieRecord(ckRecord: ckRecord))
-					movieRecordArray.last?.storeThumbnailPoster(ckRecord.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
+					movieRecordArray.last?.storePoster(ckRecord.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
 				}
 				
 				if (movieRecordArray.isEmpty) {
@@ -320,7 +308,7 @@ class Database {
 			self.updateMovieHandler?(movie: newMovieRecord)
 		}
 		else {
-			newMovieRecord.storeThumbnailPoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
+			newMovieRecord.storePoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
 			self.addNewMovieHandler?(movie: newMovieRecord)
 		}
 		
@@ -516,7 +504,7 @@ class Database {
 		if let movies = loadedMovieRecordArray {
 			for movie in movies {
 				if let tmdbId = movie.tmdbId where tmdbId == tmdbIdToFind {
-					movie.storeThumbnailPoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset)
+					movie.storePoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
 					updatePosterHandler?(tmdbId: tmdbId)
 				}
 			}
@@ -604,6 +592,7 @@ class Database {
 			errorHandler?(errorMessage: "One of the handlers is nil!")
 			return
 		}
-
 	}
+
 }
+
