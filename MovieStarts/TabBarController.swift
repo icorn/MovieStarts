@@ -52,20 +52,7 @@ class TabBarController: UITabBarController {
         super.didReceiveMemoryWarning()
     }
 
-	
-/*
-	override func supportedInterfaceOrientations() -> Int {
 		
-		if let svc = selectedViewController {
-			return svc.supportedInterfaceOrientations()
-		}
-		else {
-			return Int(UIInterfaceOrientationMask.Portrait.rawValue)
-		}
-	}
-*/
-	
-	
 	/**
 		Puts all movies into the categories now, upcoming, and/or favorites.
 	
