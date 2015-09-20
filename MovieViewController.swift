@@ -9,7 +9,7 @@
 import UIKit
 
 
-class MovieViewController: UIViewController {
+class MovieViewController: UIViewController, UIScrollViewDelegate {
 
 	// outlets
 	
@@ -98,7 +98,11 @@ class MovieViewController: UIViewController {
 		}
 	}
 
-	var bigPosterView: UIImageView?
+	var bigPosterBackView: UIView?
+	var bigPosterImageView: UIImageView?
+	var bigPosterScrollView: UIScrollView?
+
+	var totalBarHeight: CGFloat = 0
 	var movie: MovieRecord?
 	var textButtons = [UIButton]()
 	var certificationDict: [String: CertificateLogo] = [
@@ -294,6 +298,10 @@ class MovieViewController: UIViewController {
 			contentView.addConstraint(NSLayoutConstraint(item: buttonLines[textButtonIndex - 1], attribute: NSLayoutAttribute.Bottom,
 				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 80))
 		}
+		
+		if let navigationController = navigationController {
+			totalBarHeight = navigationController.navigationBar.frame.height + navigationController.navigationBar.frame.origin.y
+		}
 	}
 	
 	
@@ -443,27 +451,46 @@ class MovieViewController: UIViewController {
 	*/
 	func thumbnailTapped(recognizer: UITapGestureRecognizer) {
 		
-		if let saveMovie = movie, thumbnailImage = saveMovie.thumbnailImage.0 {
-			
-			// add new image view
-			
-			bigPosterView = UIImageView(frame: CGRect(x: posterImageView.frame.minX, y: posterImageView.frame.minY,
+		if let movie = movie, thumbnailImage = movie.thumbnailImage.0, navigationController = navigationController {
+			var bigPosterBackRect = navigationController.view.frame
+		
+			bigPosterBackView = UIView(frame: bigPosterBackRect)
+			bigPosterScrollView = UIScrollView(frame: CGRect(x: posterImageView.frame.minX, y: posterImageView.frame.minY + totalBarHeight,
 				width: posterImageView.frame.width, height: posterImageView.frame.height))
+			bigPosterImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: posterImageView.frame.width, height: posterImageView.frame.height))
 			
-			if let bigPosterView = bigPosterView {
-				bigPosterView.contentMode = UIViewContentMode.ScaleAspectFit
-				bigPosterView.image = thumbnailImage
-				bigPosterView.userInteractionEnabled = true
-				bigPosterView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("bigPosterTapped:")))
-				self.view.addSubview(bigPosterView)
+			if let bigPosterImageView = bigPosterImageView, bigPosterScrollView = bigPosterScrollView, bigPosterBackView = bigPosterBackView {
+				bigPosterBackView.backgroundColor = UIColor.clearColor()
+				
+				bigPosterScrollView.minimumZoomScale = 1.0
+				bigPosterScrollView.maximumZoomScale = 6.0
+				bigPosterScrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
+				bigPosterScrollView.delegate = self
+
+				bigPosterImageView.contentMode = UIViewContentMode.ScaleAspectFit
+				bigPosterImageView.image = thumbnailImage
+				bigPosterImageView.userInteractionEnabled = true
+				bigPosterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("bigPosterTapped:")))
+				
+				bigPosterScrollView.addSubview(bigPosterImageView)
+				bigPosterBackView.addSubview(bigPosterScrollView)
+
+				self.view.addSubview(bigPosterBackView)
 				
 				// animate it to a bigger poster
-				
+		
+				navigationController.setNavigationBarHidden(true, animated: false)
+				self.tabBarController?.tabBar.hidden = true
+				posterImageTopSpaceConstraint.constant += navigationController.navigationBar.frame.height
+
 				UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut,
 					animations: {
-						bigPosterView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+						bigPosterBackView.backgroundColor = UIColor.blackColor()
+						bigPosterScrollView.frame = bigPosterBackRect
+						bigPosterImageView.frame = bigPosterBackRect
 					},
-					completion: { finished in }
+					completion: { finished in
+					}
 				)
 			}
 		}
@@ -477,18 +504,35 @@ class MovieViewController: UIViewController {
 	*/
 	func bigPosterTapped(recognizer: UITapGestureRecognizer) {
 		
-		if let bigPosterView = bigPosterView {
+		if let bigPosterImageView = bigPosterImageView, bigPosterScrollView = bigPosterScrollView, bigPosterBackView = bigPosterBackView, navigationController = navigationController {
+			
 			UIView.animateWithDuration(0.1, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut,
 				animations: {
-					bigPosterView.frame = CGRect(x: self.posterImageView.frame.minX, y: self.posterImageView.frame.minY,
+					bigPosterBackView.backgroundColor = UIColor.clearColor()
+					bigPosterImageView.frame = CGRect(x: self.posterImageView.frame.minX, y: self.posterImageView.frame.minY + self.totalBarHeight - navigationController.navigationBar.frame.height,
 						width: self.posterImageView.frame.width, height: self.posterImageView.frame.height)
 				},
 				completion: { finished in
-					bigPosterView.removeFromSuperview()
-					self.bigPosterView = nil
+					navigationController.setNavigationBarHidden(false, animated: false)
+					self.tabBarController?.tabBar.hidden = false
+					self.posterImageTopSpaceConstraint.constant -= navigationController.navigationBar.frame.height
+					
+					bigPosterImageView.removeFromSuperview()
+					bigPosterScrollView.removeFromSuperview()
+					bigPosterBackView.removeFromSuperview()
+					self.bigPosterImageView = nil
+					self.bigPosterScrollView = nil
+					self.bigPosterBackView = nil
 				}
 			)
 		}
+	}
+	
+	
+	// MARK: - UIScrollViewDelegate (for big poster view)
+	
+	func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+		return bigPosterImageView
 	}
 	
 	

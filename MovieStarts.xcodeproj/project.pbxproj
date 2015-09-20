@@ -89,6 +89,7 @@
 		4F7A99A41BACC4EB00ED38C9 /* tmdb@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A99A11BACC4EB00ED38C9 /* tmdb@2x.png */; };
 		4F7A99A51BACC4EB00ED38C9 /* tmdb@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A99A21BACC4EB00ED38C9 /* tmdb@3x.png */; };
 		4F7A99A61BACC4EB00ED38C9 /* tmdb.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A99A31BACC4EB00ED38C9 /* tmdb.png */; };
+		4F7A99A81BAE1A6700ED38C9 /* AnimatedTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A99A71BAE1A6700ED38C9 /* AnimatedTabBar.swift */; };
 		4F7B49D51B04B77100F54454 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7B49D41B04B77100F54454 /* MovieViewController.swift */; };
 		4F7CCA581AB5ED6600A81FA8 /* DetailRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7CCA571AB5ED6600A81FA8 /* DetailRow.swift */; };
 		4F7CCA5A1AB5EE0000A81FA8 /* DetailInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7CCA591AB5EE0000A81FA8 /* DetailInterfaceController.swift */; };
@@ -250,6 +251,7 @@
 		4F7A99A11BACC4EB00ED38C9 /* tmdb@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tmdb@2x.png"; sourceTree = "<group>"; };
 		4F7A99A21BACC4EB00ED38C9 /* tmdb@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tmdb@3x.png"; sourceTree = "<group>"; };
 		4F7A99A31BACC4EB00ED38C9 /* tmdb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tmdb.png; sourceTree = "<group>"; };
+		4F7A99A71BAE1A6700ED38C9 /* AnimatedTabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedTabBar.swift; sourceTree = "<group>"; };
 		4F7B49D41B04B77100F54454 /* MovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieViewController.swift; path = ../MovieViewController.swift; sourceTree = "<group>"; };
 		4F7CCA571AB5ED6600A81FA8 /* DetailRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailRow.swift; sourceTree = "<group>"; };
 		4F7CCA591AB5EE0000A81FA8 /* DetailInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailInterfaceController.swift; sourceTree = "<group>"; };
@@ -591,6 +593,7 @@
 		4FAFF8EF1A8C036A00864078 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4F7A99A71BAE1A6700ED38C9 /* AnimatedTabBar.swift */,
 				4FAFF8C81A8BFFE500864078 /* AppDelegate.swift */,
 				4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */,
 				4F87F9251A8DEE31001869A1 /* Constants.swift */,
@@ -894,6 +897,7 @@
 				4F7B49D51B04B77100F54454 /* MovieViewController.swift in Sources */,
 				4FECDF201A8FE27D00F84A52 /* Database.swift in Sources */,
 				4FBB03CC1BA862B50053CE99 /* AboutViewController.swift in Sources */,
+				4F7A99A81BAE1A6700ED38C9 /* AnimatedTabBar.swift in Sources */,
 				4F87F9261A8DEE31001869A1 /* Constants.swift in Sources */,
 				4FAE075B1B555615009C7507 /* NowTableViewController.swift in Sources */,
 				4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */,
