@@ -170,6 +170,21 @@ public class MovieRecord : Printable {
 		return (UIImage(named: "noposter.png"), false)
 	}
 	
+	/// The big poster image object as optional image object
+	
+	var bigPoster: UIImage? {
+		var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		var retval: UIImage?
+		
+		if let pathUrl = pathUrl, basePath = pathUrl.path {
+			if let posterUrl = posterUrl {
+				retval = UIImage(contentsOfFile: basePath + Constants.BIG_POSTER_FOLDER + posterUrl)
+			}
+		}
+		
+		return retval
+	}
+	
 	/// The string of genres of the movie.
 	
 	public var genreString: String? {
@@ -306,16 +321,20 @@ public class MovieRecord : Printable {
 	
 	
 	/**
-		Moves a downloaded thumbnail poster from the temporar folder to the final one.
+		Moves a downloaded poster from the temporary folder to the final one.
 	
-		:param: thumbnailAsset	The asset of the poster coming from CloudKit
+		:param: asset		The asset of the poster coming from CloudKit
+		:param: thumbnail	The kind of poster (thumbnail or big)
 	*/
-	func storeThumbnailPoster(thumbnailAsset: CKAsset?) {
-		if let thumbnailAsset = thumbnailAsset, posterUrl = posterUrl {
+	func storePoster(asset: CKAsset?, thumbnail: Bool) {
+		
+		var folder: String = (thumbnail ? Constants.THUMBNAIL_FOLDER : Constants.BIG_POSTER_FOLDER)
+		
+		if let asset = asset, posterUrl = posterUrl {
 			var targetPathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
 			
-			if let targetPathUrl = targetPathUrl, targetBasePath = targetPathUrl.path, sourcePathString = thumbnailAsset.fileURL.path {
-				var targetPathString = targetBasePath + Constants.THUMBNAIL_FOLDER + posterUrl
+			if let targetPathUrl = targetPathUrl, targetBasePath = targetPathUrl.path, sourcePathString = asset.fileURL.path {
+				var targetPathString = targetBasePath + folder + posterUrl
 
 				// now we have both paths: copy the file
 				
