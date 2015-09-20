@@ -52,7 +52,7 @@
 
 "iCloudError"				= "iCloud-Fehler";
 "iCloudNoAccount"			= "MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte gehe in die App 'Einstellungen', melde dich bei deinem iCloud-Konto an und schalte 'iCloud Drive' ein.";
-"iCloudCouldNotDetermine"	= "MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte versuche es zu einem späteren Zeitpunkt noch einmal.";
+"iCloudCouldNotDetermine"	= "MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte versuche es später noch einmal.";
 "iCloudRestricted"			= "Dein iCloud-Konto ist nicht verfügbar. Der Zugriff wurde wegen Jugendschutz-Einstellungen oder Einschränkungen durch Mobile Device Management (MDM) verweigert.";
 
 "iCloudNoAccountUpdate"			= "Filmdaten-Update unmöglich. MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte gehe in die App 'Einstellungen', melde dich bei deinem iCloud-Konto an und schalte 'iCloud Drive' ein.";
@@ -65,6 +65,9 @@
 
 "InternalError"			= "Interner Fehler";
 "NoAppGroup"			= "App-Group nicht gefunden. Bitte versuche es später noch einmal.";
+
+"BigPosterErrorTitle"	= "Lade-Fehler";
+"BigPosterErrorText"	= "Beim Laden des Posters ist ein Fehler aufgetreten. Bitte versuche es später noch einmal.";
 
 // Settings
 

@@ -66,6 +66,9 @@
 "InternalError"			= "Internal Error";
 "NoAppGroup"			= "No app-group found. Please try again later.";
 
+"BigPosterErrorTitle"	= "Load Error";
+"BigPosterErrorText"	= "Error loading the poster. Please try again later.";
+
 // Settings
 
 "SettingsUseApps"		= "Use apps instead of browser";
