@@ -41,6 +41,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	@IBOutlet weak var textButton4: UIButton!
 	@IBOutlet weak var textButton5: UIButton!
 	
+	@IBOutlet weak var line6: UIView!
 	@IBOutlet weak var line7: UIView!
 	@IBOutlet weak var line8: UIView!
 	@IBOutlet weak var line9: UIView!
@@ -270,7 +271,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			
 			textButtons = [textButton1, textButton2, textButton3, textButton4, textButton5]
 			var textButtonIndex = 0
-			var buttonLines = [line7, line8, line9, line10]
+			var buttonLines = [line6, line7, line8, line9, line10]
 			
 			if let imdbId = movie.imdbId {
 				textButtons[textButtonIndex].addTarget(self, action: Selector("imdbButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -290,13 +291,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			
 			for (var hideId = textButtonIndex; hideId < textButtons.count; hideId++) {
 				textButtons[hideId].hidden = true
-				buttonLines[hideId-1].hidden = true
+				buttonLines[hideId].hidden = true
 			}
 
 			// Set nice distance between lowest line and the bottom of the content view.
-
+			
 			contentView.addConstraint(NSLayoutConstraint(item: buttonLines[textButtonIndex - 1], attribute: NSLayoutAttribute.Bottom,
-				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 80))
+				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 10))
 		}
 		
 		if let navigationController = navigationController {
