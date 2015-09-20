@@ -49,54 +49,15 @@ class StartViewController: UIViewController {
 			
 			welcomeWindow = MessageWindow(parent: view, darkenBackground: false, titleStringId: "WelcomeTitle", textStringId: "WelcomeText", buttonStringId: "WelcomeButton", handler: {
 
-				if IJReachability.isConnectedToNetwork() == false {
-					NSLog("Initial start: no network")
-					var errorWindow: MessageWindow?
-
-					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringId: "Close", handler: {
-							errorWindow?.close()
-						})
-					}
-					
+				if (NetworkChecker.checkReachability(self.view) == false) {
 					return
 				}
-				
-				self.database?.checkCloudKit({ (status: CKAccountStatus, error: NSError!) -> () in
-					
-					var errorWindow: MessageWindow?
-					
-					switch status {
-					case .Available:
-						self.loadDatabase()
-						
-					case .NoAccount:
-						NSLog("CloudKit error: no account")
-						dispatch_async(dispatch_get_main_queue()) {
-							errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccount", buttonStringId: "Close", handler: {
-								errorWindow?.close()
-							})
-						}
 
-					case .Restricted:
-						NSLog("CloudKit error: Restricted")
-						dispatch_async(dispatch_get_main_queue()) {
-							errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestricted", buttonStringId: "Close", handler: {
-								errorWindow?.close()
-							})
-						}
-						
-					case .CouldNotDetermine:
-						NSLog("CloudKit error: CouldNotDetermine")
-						NSLog("CloudKit error description: \(error.description)")
-						
-						dispatch_async(dispatch_get_main_queue()) {
-							errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermine", buttonStringId: "Close", handler: {
-								errorWindow?.close()
-							})
-						}
-					}
-				})
+				if let database = self.database {
+					NetworkChecker.checkCloudKit(self.view, database: database, okCallback: { () -> () in
+						self.loadDatabase()
+					})
+				}
 			})
 		}
 	}
