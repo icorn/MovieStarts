@@ -92,6 +92,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	@IBOutlet weak var ratingHeadlineLabelTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ratingLabelTopConstraint: NSLayoutConstraint!
 	
+	var posterImageViewTopConstraint: NSLayoutConstraint?
+	var posterImageViewLeadingConstraint: NSLayoutConstraint?
+	var posterImageViewWidthConstraint: NSLayoutConstraint?
+	var posterImageViewHeightConstraint: NSLayoutConstraint?
 	
 	var movieTabBarController: TabBarController? {
 		get {
@@ -103,7 +107,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	var bigPosterImageView: UIImageView?
 	var bigPosterScrollView: UIScrollView?
 
-	var totalBarHeight: CGFloat = 0
+	var spinnerBackground: UIView?
+	var spinner: UIActivityIndicatorView?
+
 	var movie: MovieRecord?
 	var textButtons = [UIButton]()
 	var certificationDict: [String: CertificateLogo] = [
@@ -298,10 +304,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			
 			contentView.addConstraint(NSLayoutConstraint(item: buttonLines[textButtonIndex - 1], attribute: NSLayoutAttribute.Bottom,
 				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 10))
-		}
-		
-		if let navigationController = navigationController {
-			totalBarHeight = navigationController.navigationBar.frame.height + navigationController.navigationBar.frame.origin.y
 		}
 	}
 	
