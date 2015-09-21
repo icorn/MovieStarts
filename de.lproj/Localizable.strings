@@ -47,7 +47,7 @@
 // Welcome
 
 "WelcomeTitle"		= "Willkommen";
-"WelcomeText"		= "Das ist dein erster Start von MovieStarts. Tippe auf den Button unten, um die Filmdaten zu laden. Zukünftige Film-Updates werden automatisch nach dem Start der App durchgeführt.";
+"WelcomeText"		= "Das ist dein erster Start von MovieStarts. Tippe auf den Button unten, um die Filmdaten für die USA zu laden. Zukünftige Daten-Updates werden automatisch nach dem Start der App durchgeführt. Deutsche Filmtermine folgen in einer späteren Version der App.";
 "WelcomeButton"		= "Filmdaten laden";
 "WelcomeProgress"	= "Filme geladen...";
 
