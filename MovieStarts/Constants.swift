@@ -23,6 +23,7 @@ public struct Constants {
 	static let PREFS_FAVORITES						= "favorites"
 	static let PREFS_USE_IMDB_APP					= "useImdbApp"
 	static let PREFS_USE_YOUTUBE_APP				= "userYoutubeApp"
+	static let PREFS_POSTER_HINT_ALREADY_SHOWN		= "posterHintAlreadyShown"
 	
 	static let RECORD_TYPE_USA				= "MoviesUSA"
 	static let RECORD_TYPE_GERMANY			= "MoviesGermany"

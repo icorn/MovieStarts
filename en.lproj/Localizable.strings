@@ -41,6 +41,9 @@
 "AddToFavoritesShort"		= "Add to\nFavorites";
 "RemoveFromFavoritesShort"	= "Remove from\nFavorites";
 
+"HintTitle"				= "Hint";
+"PosterHintText"		= "To load a big version of the movie poster, just tap on the thumbnail in the upper left corner.";
+
 // Welcome
 
 "WelcomeTitle"		= "Welcome";

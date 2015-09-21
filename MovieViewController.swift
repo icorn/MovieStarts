@@ -317,6 +317,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 		super.viewDidAppear(animated)
 		view.layoutIfNeeded()
 		
+		// show vote average
+		
 		if let voteAverage = movie?.voteAverage, voteCount = movie?.voteCount where voteCount > 2 {
 			UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveLinear,
 				animations: {
@@ -328,6 +330,28 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 				completion:  { _ in }
 			)
 		}
+		
+		if (movie?.thumbnailImage.1 == true) {
+			
+			// if needed: show poster-hint
+		
+			var posterHintAlreadyShown: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_POSTER_HINT_ALREADY_SHOWN) as! Bool?
+
+			if (posterHintAlreadyShown == nil) {
+				// hint not already shown: show it
+			
+				var errorWindow: MessageWindow?
+				
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "HintTitle", textStringId: "PosterHintText", buttonStringId: "Close", handler: {
+						errorWindow?.close()
+					})
+				}
+				
+				NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(true, forKey: Constants.PREFS_POSTER_HINT_ALREADY_SHOWN)
+			}
+		}
+		
 	}
 
 	
