@@ -56,7 +56,7 @@ class StartViewController: UIViewController {
 				if let database = self.database {
 					NetworkChecker.checkCloudKit(self.view, database: database, okCallback: { () -> () in
 						self.loadDatabase()
-					})
+					}, errorCallback: nil)
 				}
 			})
 		}

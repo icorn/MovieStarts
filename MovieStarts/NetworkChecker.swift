@@ -45,8 +45,9 @@ class NetworkChecker {
 		:param: viewForError	The parent view for error windows
 		:param: database		The database object to use
 		:param: okCallback		The callback which is called on success
+		:param: errorCallback	The optional callback which is called on failure (even before the user has clicked "close" in the error-window)
 	*/
-	class func checkCloudKit(viewForError: UIView, database: DatabaseParent, okCallback: () -> ()) {
+	class func checkCloudKit(viewForError: UIView, database: DatabaseParent, okCallback: () -> (), errorCallback: (() -> ())?) {
 
 		database.checkCloudKit({ (status: CKAccountStatus, error: NSError!) -> () in
 			
@@ -58,6 +59,7 @@ class NetworkChecker {
 				
 			case .NoAccount:
 				NSLog("CloudKit error: no account")
+				errorCallback?()
 				dispatch_async(dispatch_get_main_queue()) {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccount", buttonStringId: "Close", handler: {
 						errorWindow?.close()
@@ -66,6 +68,7 @@ class NetworkChecker {
 				
 			case .Restricted:
 				NSLog("CloudKit error: Restricted")
+				errorCallback?()
 				dispatch_async(dispatch_get_main_queue()) {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestricted", buttonStringId: "Close", handler: {
 						errorWindow?.close()
@@ -75,7 +78,7 @@ class NetworkChecker {
 			case .CouldNotDetermine:
 				NSLog("CloudKit error: CouldNotDetermine")
 				NSLog("CloudKit error description: \(error.description)")
-				
+				errorCallback?()
 				dispatch_async(dispatch_get_main_queue()) {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermine", buttonStringId: "Close", handler: {
 						errorWindow?.close()
