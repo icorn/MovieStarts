@@ -50,7 +50,7 @@ class AboutViewController: UIViewController {
 	}
 
 	@IBAction func webLinkTouched(sender: AnyObject) {
-		var url = NSURL(string: "http://calibrateapp.com")
+		var url = NSURL(string: "http://MovieStartsApp.com")
 
 		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
 			UIApplication.sharedApplication().openURL(url)
@@ -58,7 +58,7 @@ class AboutViewController: UIViewController {
 	}
 	
 	@IBAction func emailLinkTouched(sender: AnyObject) {
-		var url = NSURL(string: "mailto:info@calibrateapp.com")
+		var url = NSURL(string: "mailto:info@MovieStartsApp.com")
 		
 		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
 			UIApplication.sharedApplication().openURL(url)
@@ -66,7 +66,7 @@ class AboutViewController: UIViewController {
 	}
 	
 	@IBAction func twitterLinkgTouched(sender: AnyObject) {
-		var url = NSURL(string: "https://twitter.com/CalibrateApp")
+		var url = NSURL(string: "https://twitter.com/MovieStartsApp")
 		
 		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
 			UIApplication.sharedApplication().openURL(url)
