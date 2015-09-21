@@ -559,6 +559,8 @@
                         <outlet property="directorLabelHeightConstraint" destination="30Z-Vh-qKo" id="IF7-sX-pHY"/>
                         <outlet property="directorLabelVerticalSpaceConstraint" destination="Z1D-UO-yn3" id="CDV-4I-9I6"/>
                         <outlet property="line10" destination="Iff-xr-iIA" id="Pxa-Bs-azr"/>
+                        <outlet property="line1bHeightConstraint" destination="6SG-11-Ggj" id="Kqj-9F-1YH"/>
+                        <outlet property="line1bVerticalSpaceConstraint" destination="5AC-rr-U6h" id="boE-4H-Zdt"/>
                         <outlet property="line2HeightConstraint" destination="RK7-WA-Pox" id="ieP-2U-w6e"/>
                         <outlet property="line2VerticalSpaceConstraint" destination="l5T-jw-yDa" id="O1u-YT-A2s"/>
                         <outlet property="line3HeightConstraint" destination="a7A-F2-Pmp" id="aI8-hg-A3C"/>

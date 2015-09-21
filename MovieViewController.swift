@@ -54,6 +54,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorHeadlineLabelHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var line1bHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var line1bVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2VerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line3HeightConstraint: NSLayoutConstraint!
@@ -233,7 +235,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			}
 			if (movie.directors.count < 1) {
 				setConstraintsToZero(directorLabelHeightConstraint, directorLabelVerticalSpaceConstraint, directorHeadlineLabelHeightConstraint,
-					directorHeadlineLabelVerticalSpaceConstraint, line2HeightConstraint, line2VerticalSpaceConstraint)
+					directorHeadlineLabelVerticalSpaceConstraint, line2HeightConstraint, line2VerticalSpaceConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint)
 			}
 			
 			// show actor(s)
