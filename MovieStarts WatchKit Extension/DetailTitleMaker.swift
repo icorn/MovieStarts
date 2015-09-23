@@ -1,5 +1,5 @@
 //
-//  WatchKitUtil.swift
+//  DetailTitleMaker.swift
 //  MovieStarts
 //
 //  Created by Oliver Eichhorn on 13.03.15.
@@ -9,11 +9,11 @@
 import Foundation
 
 
-class WatchKitUtil {
+class DetailTitleMaker {
 
 	class func makeMovieDetailTitle(movie: MovieRecord) -> String {
 		
-		var detailText = WatchKitUtil.makeMinuteAndCertificationString(movie)
+		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
 		
 		if (movie.genres.count > 0) {
 			detailText += "\(movie.genres.first!) | "
@@ -29,7 +29,7 @@ class WatchKitUtil {
 	
 	class func makeMovieDetailTitleComplete(movie: MovieRecord) -> String {
 
-		var detailText = WatchKitUtil.makeMinuteAndCertificationString(movie)
+		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
 
 		// add genres
 		

@@ -95,7 +95,7 @@ class MovieInterfaceController: WKInterfaceController {
 				var movie = (content as! MovieRecord)
 				let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
 				row?.titleLabel.setText((movie.title != nil) ? movie.title! : movie.origTitle!)
-				row?.detailLabel.setText(WatchKitUtil.makeMovieDetailTitle(movie))
+				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
 				row?.posterImage.setImage(movie.thumbnailImage.0)
 				row?.movie = movie
 			}

@@ -49,7 +49,7 @@ class DetailInterfaceController: WKInterfaceController {
 		}
 		
 		// data-label
-		dataLabel.setText(WatchKitUtil.makeMovieDetailTitleComplete(movie))
+		dataLabel.setText(DetailTitleMaker.makeMovieDetailTitleComplete(movie))
 
 		// directors
 		if (movie.directors.count > 0) {
