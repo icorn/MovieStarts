@@ -53,7 +53,24 @@ class MovieInterfaceController: WKInterfaceController {
 				}
 				
 				favoriteMovies.sort {
-					return $0.releaseDate!.compare($1.releaseDate!) == NSComparisonResult.OrderedAscending
+					if let date0 = $0.releaseDate, date1 = $1.releaseDate, title0 = $0.sortTitle, title1 = $1.sortTitle {
+						if ($0.isNowPlaying() && $1.isNowPlaying()) {
+							// both movies are playing now: sort by title
+							return title0.compare(title1) == NSComparisonResult.OrderedAscending
+						}
+						else if (date0 != date1) {
+							// dates are different: compare dates
+							return date0.compare(date1) == NSComparisonResult.OrderedAscending
+						}
+						else {
+							// dates are equal: compare titles
+							return title0.compare(title1) == NSComparisonResult.OrderedAscending
+						}
+					}
+					else {
+						// this should never happen
+						return true
+					}
 				}
 				
 			}
@@ -62,54 +79,8 @@ class MovieInterfaceController: WKInterfaceController {
 		// set up the table
 
 		if (favoriteMovies.count > 0) {
-			var oldDate: NSDate? = nil
-			var rowTypeArray: [String] = []
-			var rowContentArray: [AnyObject] = []
-
-			// find out the necessary row-types
-			
-			for (movieIndex, movie) in enumerate(favoriteMovies) {
-				if let releaseDate = movie.releaseDate {
-					if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
-						// it's a current movie, but there is no section yet
-						rowContentArray.append(NSLocalizedString("WatchNowPlaying", comment: ""))
-						rowTypeArray.append(ROW_TYPE_DATE)
-					}
-					else if ((movie.isNowPlaying() == false) && ((oldDate == nil) || (oldDate != movie.releaseDate))) {
-						// upcoming movies: a new sections starts
-						rowContentArray.append(movie.releaseDateString)
-						rowTypeArray.append(ROW_TYPE_DATE)
-						oldDate = releaseDate
-					}
-					
-					// add movie-row
-					rowContentArray.append(movie)
-					rowTypeArray.append(ROW_TYPE_MOVIE)
-				}
-			}
-			
-			// set row-types and fill table
-			
-			self.movieTable.setRowTypes(rowTypeArray)
-
-			for (index, content) in enumerate(rowContentArray) {
-				if (content is String) {
-					let row: MovieDateRow? = movieTable.rowControllerAtIndex(index) as? MovieDateRow
-					
-					if let dateString: String? = content as? String {
-						row?.dateLabel.setText(dateString)
-					}
-					
-				}
-				else if (content is MovieRecord) {
-					var movie = (content as! MovieRecord)
-					let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
-					row?.titleLabel.setText((movie.title != nil) ? movie.title! : movie.origTitle!)
-					row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
-					row?.posterImage.setImage(movie.thumbnailImage.0)
-					row?.movie = movie
-				}
-			}
+			// set up table with favorite movies
+			setUpFavorites(favoriteMovies)
 		}
 		else {
 			// no favorite movies, tell the user
@@ -143,6 +114,57 @@ class MovieInterfaceController: WKInterfaceController {
 
 	// MARK: - Private helper-functions
 	
+	
+	private func setUpFavorites(movies: [MovieRecord]) {
+		var oldDate: NSDate? = nil
+		var rowTypeArray: [String] = []
+		var rowContentArray: [AnyObject] = []
+	
+		// find out the necessary row-types
+	
+		for (movieIndex, movie) in enumerate(movies) {
+			if let releaseDate = movie.releaseDate {
+				if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
+					// it's a current movie, but there is no section yet
+					rowContentArray.append(NSLocalizedString("WatchNowPlaying", comment: ""))
+					rowTypeArray.append(ROW_TYPE_DATE)
+				}
+				else if ((movie.isNowPlaying() == false) && ((oldDate == nil) || (oldDate != movie.releaseDate))) {
+					// upcoming movies: a new sections starts
+					rowContentArray.append(movie.releaseDateString)
+					rowTypeArray.append(ROW_TYPE_DATE)
+					oldDate = releaseDate
+				}
+	
+				// add movie-row
+				rowContentArray.append(movie)
+				rowTypeArray.append(ROW_TYPE_MOVIE)
+			}
+		}
+	
+		// set row-types and fill table
+	
+		self.movieTable.setRowTypes(rowTypeArray)
+	
+		for (index, content) in enumerate(rowContentArray) {
+			if (content is String) {
+				let row: MovieDateRow? = movieTable.rowControllerAtIndex(index) as? MovieDateRow
+	
+				if let dateString: String? = content as? String {
+					row?.dateLabel.setText(dateString)
+				}
+	
+			}
+			else if (content is MovieRecord) {
+				var movie = (content as! MovieRecord)
+				let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
+				row?.titleLabel.setText((movie.title != nil) ? movie.title! : movie.origTitle!)
+				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
+				row?.posterImage.setImage(movie.thumbnailImage.0)
+				row?.movie = movie
+			}
+		}
+	}
 	
 	private func movieDateToString(releaseDate: NSDate) -> String {
 		
