@@ -16,6 +16,7 @@ class MovieInterfaceController: WKInterfaceController {
 	
 	let ROW_TYPE_MOVIE	= "MovieRow"
 	let ROW_TYPE_DATE	= "MovieDateRow"
+	let ROW_TYPE_EMPTY	= "MovieEmptyRow"
 
 	
 	// MARK: - Functions of WKInterfaceController
@@ -60,45 +61,61 @@ class MovieInterfaceController: WKInterfaceController {
 		
 		// set up the table
 
-		var oldDate = NSDate(timeIntervalSince1970: 0)
-		
-		var rowTypeArray: [String] = []
-		var rowContentArray: [AnyObject] = []
+		if (favoriteMovies.count > 0) {
+			var oldDate: NSDate? = nil
+			var rowTypeArray: [String] = []
+			var rowContentArray: [AnyObject] = []
 
-		// find out the necessary row-types
-		
-		for (movieIndex, movie) in enumerate(favoriteMovies) {
-			if let saveDate = movie.releaseDate {
-				if (saveDate != oldDate) {
-					// different date than the movie before in the list: add date-row
-					rowContentArray.append(saveDate)
-					rowTypeArray.append(ROW_TYPE_DATE)
-					oldDate = saveDate
+			// find out the necessary row-types
+			
+			for (movieIndex, movie) in enumerate(favoriteMovies) {
+				if let releaseDate = movie.releaseDate {
+					if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
+						// it's a current movie, but there is no section yet
+						rowContentArray.append(NSLocalizedString("WatchNowPlaying", comment: ""))
+						rowTypeArray.append(ROW_TYPE_DATE)
+					}
+					else if ((movie.isNowPlaying() == false) && ((oldDate == nil) || (oldDate != movie.releaseDate))) {
+						// upcoming movies: a new sections starts
+						rowContentArray.append(movie.releaseDateString)
+						rowTypeArray.append(ROW_TYPE_DATE)
+						oldDate = releaseDate
+					}
+					
+					// add movie-row
+					rowContentArray.append(movie)
+					rowTypeArray.append(ROW_TYPE_MOVIE)
 				}
-				
-				// add movie-row
-				rowContentArray.append(movie)
-				rowTypeArray.append(ROW_TYPE_MOVIE)
+			}
+			
+			// set row-types and fill table
+			
+			self.movieTable.setRowTypes(rowTypeArray)
+
+			for (index, content) in enumerate(rowContentArray) {
+				if (content is String) {
+					let row: MovieDateRow? = movieTable.rowControllerAtIndex(index) as? MovieDateRow
+					
+					if let dateString: String? = content as? String {
+						row?.dateLabel.setText(dateString)
+					}
+					
+				}
+				else if (content is MovieRecord) {
+					var movie = (content as! MovieRecord)
+					let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
+					row?.titleLabel.setText((movie.title != nil) ? movie.title! : movie.origTitle!)
+					row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
+					row?.posterImage.setImage(movie.thumbnailImage.0)
+					row?.movie = movie
+				}
 			}
 		}
-
-		// set row-types and fill table
-		
-		self.movieTable.setRowTypes(rowTypeArray)
-
-		for (index, content) in enumerate(rowContentArray) {
-			if (content is NSDate) {
-				let row: MovieDateRow? = movieTable.rowControllerAtIndex(index) as? MovieDateRow
-				row?.dateLabel.setText(movieDateToString(content as! NSDate))
-			}
-			else if (content is MovieRecord) {
-				var movie = (content as! MovieRecord)
-				let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
-				row?.titleLabel.setText((movie.title != nil) ? movie.title! : movie.origTitle!)
-				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
-				row?.posterImage.setImage(movie.thumbnailImage.0)
-				row?.movie = movie
-			}
+		else {
+			// no favorite movies, tell the user
+			movieTable.setRowTypes([ROW_TYPE_EMPTY])
+			let row: MovieEmptyRow? = movieTable.rowControllerAtIndex(0) as? MovieEmptyRow
+			row?.textLabel.setText(NSLocalizedString("WatchNoFavorites", comment: ""))
 		}
     }
 	

@@ -12,25 +12,20 @@
                     <items>
                         <table alignment="left" id="saw-I9-tC7">
                             <items>
-                                <tableRow identifier="MovieListRowUpcoming" id="4MM-6s-DOZ" customClass="MovieListRowUpcoming" customModule="MovieStarts_WatchKit_Extension">
+                                <tableRow identifier="MovieEmptyRow" selectable="NO" id="4MM-6s-DOZ" customClass="MovieEmptyRow" customModule="MovieStarts_WatchKit_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" spacing="0.0" id="WUP-Ln-16Y">
                                         <items>
-                                            <label width="1" alignment="left" verticalAlignment="center" text="TitleLabel" textAlignment="left" numberOfLines="3" id="8PV-R6-m4h">
-                                                <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
-                                            </label>
-                                            <label width="1" alignment="left" verticalAlignment="center" text="DetailLabel" textAlignment="left" id="4PV-SL-JeI">
-                                                <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                            <label width="1" alignment="left" verticalAlignment="center" text="TextLabel" textAlignment="left" numberOfLines="0" id="4PV-SL-JeI">
+                                                <fontDescription key="font" style="UICTFontTextStyleBody"/>
                                             </label>
                                         </items>
-                                        <edgeInsets key="margins" left="4" right="0.0" top="1" bottom="1"/>
+                                        <edgeInsets key="margins" left="6" right="4" top="4" bottom="4"/>
                                     </group>
                                     <connections>
-                                        <outlet property="detailLabel" destination="4PV-SL-JeI" id="hGt-DX-jfa"/>
-                                        <outlet property="titleLabel" destination="8PV-R6-m4h" id="dM2-66-AsV"/>
+                                        <outlet property="textLabel" destination="4PV-SL-JeI" id="Nhy-m5-cAT"/>
                                     </connections>
                                 </tableRow>
-                                <tableRow identifier="MovieDateRow" id="k9G-cQ-LJ4" customClass="MovieDateRow" customModule="MovieStarts_WatchKit_Extension">
+                                <tableRow identifier="MovieDateRow" selectable="NO" id="k9G-cQ-LJ4" customClass="MovieDateRow" customModule="MovieStarts_WatchKit_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" id="JaT-je-8bO">
                                         <items>
                                             <label alignment="left" text="DateLabel" id="mGs-Lz-d5H">

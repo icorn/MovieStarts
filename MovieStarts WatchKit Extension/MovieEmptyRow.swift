@@ -11,9 +11,8 @@ import WatchKit
 import Foundation
 
 
-class MovieListRowUpcoming: NSObject {
+class MovieEmptyRow: NSObject {
 
-	@IBOutlet weak var titleLabel: WKInterfaceLabel!
-	@IBOutlet weak var detailLabel: WKInterfaceLabel!
+	@IBOutlet weak var textLabel: WKInterfaceLabel!
 
 }
