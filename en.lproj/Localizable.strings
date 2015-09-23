@@ -98,6 +98,11 @@
 
 "Close"				= "Close";
 
+// Watch
+
+"WatchNoFavorites"			= "You haven't set any favorites yet. You can do that in the MovieStarts app on your iPhone.";
+"WatchNowPlaying"			= "Now Playing";
+
 // Country names
 
 "United States of America"	= "USA";

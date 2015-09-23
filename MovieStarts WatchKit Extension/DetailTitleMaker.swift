@@ -14,9 +14,10 @@ class DetailTitleMaker {
 	class func makeMovieDetailTitle(movie: MovieRecord) -> String {
 		
 		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
+		var genre = movie.genres.first
 		
-		if (movie.genres.count > 0) {
-			detailText += "\(movie.genres.first!) | "
+		if let genre = genre {
+			detailText += NSLocalizedString(genre, comment: "") + " | "
 		}
 		
 		if (count(detailText) > 0) {
@@ -35,7 +36,7 @@ class DetailTitleMaker {
 		
 		if (movie.genres.count > 0) {
 			for genre in movie.genres {
-				detailText += genre + ", "
+				detailText += NSLocalizedString(genre, comment: "") + ", "
 			}
 			
 			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor()) + " | "
