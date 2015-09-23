@@ -18,7 +18,4 @@ class MovieRow: NSObject {
 	@IBOutlet weak var detailLabel: WKInterfaceLabel!
 
 	var movie: MovieRecord?
-	
-//	var image: UIImage?
-//	var imageFound: Bool = false
 }
