@@ -55,6 +55,10 @@ public class MovieRecord : Printable {
 	public var popularity:Int = 0
 	/// the number of votes for this movie on tmdb
 	public var voteCount:Int = 0
+	
+	private var _thumbnailImage: UIImage?
+	private var _thumbnailFound: Bool = false
+	
 
 	public init(dict: [String: AnyObject]) {
 		
@@ -159,15 +163,23 @@ public class MovieRecord : Printable {
 	/// The thumbnail image object as a tuple: the image object and the "found" flag indicating if a poster image was returned or if it only is the default image.
 	
 	var thumbnailImage: (UIImage?, Bool) {
+		if _thumbnailImage != nil {
+			return (_thumbnailImage, _thumbnailFound)
+		}
+		
 		var pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
 		
 		if let pathUrl = pathUrl, basePath = pathUrl.path {
 			if let posterUrl = posterUrl {
-				return (UIImage(contentsOfFile: basePath + Constants.THUMBNAIL_FOLDER + posterUrl), true)
+				_thumbnailImage = UIImage(contentsOfFile: basePath + Constants.THUMBNAIL_FOLDER + posterUrl)
+				_thumbnailFound = true
+				return (_thumbnailImage, _thumbnailFound)
 			}
 		}
 		
-		return (UIImage(named: "noposter.png"), false)
+		_thumbnailImage = UIImage(named: "noposter.png")
+		_thumbnailFound = false
+		return (_thumbnailImage, _thumbnailFound)
 	}
 	
 	/// The big poster image object as optional image object

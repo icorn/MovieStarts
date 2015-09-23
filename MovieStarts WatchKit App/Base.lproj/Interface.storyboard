@@ -1,79 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="sQz-hR-BVP">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="3737"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="7701"/>
     </dependencies>
     <scenes>
         <!--MovieStarts-->
-        <scene sceneID="aou-V4-d1y">
-            <objects>
-                <controller identifier="StartScene" title="MovieStarts" id="AgC-eL-Hgc" customClass="InterfaceController" customModule="MovieStarts_WatchKit_App" customModuleProvider="target">
-                    <items>
-                        <table alignment="left" id="CzZ-gN-qr0">
-                            <items>
-                                <tableRow identifier="StartSceneTableRow" id="xEK-tc-xZx" customClass="StartSceneTableRow" customModule="MovieStarts_WatchKit_Extension">
-                                    <group key="rootItem" width="1" alignment="left" id="3Mu-tL-SaC">
-                                        <items>
-                                            <imageView width="30" height="30" alignment="left" verticalAlignment="center" contentMode="center" id="8S9-Dl-8uM"/>
-                                            <label alignment="left" verticalAlignment="center" text="Label" numberOfLines="2" id="uXJ-Rf-Ode"/>
-                                        </items>
-                                        <edgeInsets key="margins" left="2" right="0.0" top="0.0" bottom="0.0"/>
-                                    </group>
-                                    <connections>
-                                        <outlet property="rowImage" destination="8S9-Dl-8uM" id="4Ds-u5-Ulx"/>
-                                        <outlet property="rowLabel" destination="uXJ-Rf-Ode" id="wft-9t-ygK"/>
-                                    </connections>
-                                </tableRow>
-                            </items>
-                        </table>
-                    </items>
-                    <connections>
-                        <outlet property="menuTable" destination="CzZ-gN-qr0" id="haH-Gp-3bS"/>
-                    </connections>
-                </controller>
-            </objects>
-            <point key="canvasLocation" x="-112" y="445"/>
-        </scene>
-        <!--Now-->
-        <scene sceneID="fgc-Ka-DdK">
-            <objects>
-                <controller identifier="NowController" title="Now" id="Xgf-dg-tAv" customClass="NowInterfaceController" customModule="MovieStarts_WatchKit_Extension">
-                    <items>
-                        <table alignment="left" id="wuU-9T-uiJ">
-                            <items>
-                                <tableRow identifier="MovieListRowNow" id="s4E-Vc-uau" customClass="MovieListRowNow" customModule="MovieStarts_WatchKit_Extension">
-                                    <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" spacing="0.0" id="I5I-l0-64K">
-                                        <items>
-                                            <label width="1" alignment="left" verticalAlignment="center" text="TitleLabel" textAlignment="left" numberOfLines="2" id="faQ-65-knf">
-                                                <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
-                                            </label>
-                                            <label width="1" alignment="left" verticalAlignment="center" text="DetailLabel" textAlignment="left" id="DuB-qy-UfO">
-                                                <color key="textColor" red="0.0" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
-                                            </label>
-                                        </items>
-                                        <edgeInsets key="margins" left="4" right="0.0" top="1" bottom="1"/>
-                                    </group>
-                                    <connections>
-                                        <outlet property="detailLabel" destination="DuB-qy-UfO" id="otS-e9-soC"/>
-                                        <outlet property="titleLabel" destination="faQ-65-knf" id="Tme-ti-K8f"/>
-                                    </connections>
-                                </tableRow>
-                            </items>
-                        </table>
-                    </items>
-                    <connections>
-                        <outlet property="nowTable" destination="wuU-9T-uiJ" id="JSt-7o-R1v"/>
-                    </connections>
-                </controller>
-            </objects>
-            <point key="canvasLocation" x="88" y="317"/>
-        </scene>
-        <!--Upcoming-->
         <scene sceneID="aTJ-1n-GMR">
             <objects>
-                <controller identifier="UpcomingController" title="Upcoming" id="sQz-hR-BVP" customClass="UpcomingInterfaceController" customModule="MovieStarts_WatchKit_Extension">
+                <controller identifier="UpcomingController" title="MovieStarts" id="sQz-hR-BVP" customClass="MovieInterfaceController" customModule="MovieStarts_WatchKit_Extension">
                     <items>
                         <table alignment="left" id="saw-I9-tC7">
                             <items>
@@ -109,15 +44,39 @@
                                         <outlet property="dateLabel" destination="mGs-Lz-d5H" id="74O-WI-I2w"/>
                                     </connections>
                                 </tableRow>
+                                <tableRow identifier="MovieRow" id="8iJ-mJ-5at" customClass="MovieRow" customModule="MovieStarts_WatchKit_Extension">
+                                    <group key="rootItem" width="1" height="0.0" alignment="left" spacing="4" id="nBZ-zV-BgS" userLabel="MainGroup">
+                                        <items>
+                                            <imageView width="24" height="35" alignment="left" verticalAlignment="center" id="gSk-QL-54l" userLabel="PosterImage"/>
+                                            <group alignment="left" layout="vertical" id="eHR-Px-go2" userLabel="TextGroup">
+                                                <items>
+                                                    <label width="1" alignment="left" verticalAlignment="center" text="TitleLabel" textAlignment="left" id="POz-hn-Oj7" userLabel="TitleLabel">
+                                                        <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
+                                                    </label>
+                                                    <label width="1" alignment="left" verticalAlignment="center" text="DetailLabel" textAlignment="left" id="4pC-jE-4EA" userLabel="DetailLabel">
+                                                        <color key="textColor" red="0.0" green="0.78576755523681641" blue="0.7883266806602478" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
+                                                    </label>
+                                                </items>
+                                            </group>
+                                        </items>
+                                        <edgeInsets key="margins" left="4" right="1" top="2" bottom="2"/>
+                                    </group>
+                                    <connections>
+                                        <outlet property="detailLabel" destination="4pC-jE-4EA" id="Yw4-sU-7Kh"/>
+                                        <outlet property="posterImage" destination="gSk-QL-54l" id="t1p-aH-vjK"/>
+                                        <outlet property="titleLabel" destination="POz-hn-Oj7" id="4a1-1k-WP2"/>
+                                    </connections>
+                                </tableRow>
                             </items>
                         </table>
                     </items>
                     <connections>
-                        <outlet property="upcomingTable" destination="saw-I9-tC7" id="JtN-If-K5f"/>
+                        <outlet property="movieTable" destination="saw-I9-tC7" id="MSy-Iy-WIB"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="88" y="564"/>
+            <point key="canvasLocation" x="77" y="456"/>
         </scene>
         <!--Details-->
         <scene sceneID="GLE-nl-OLe">

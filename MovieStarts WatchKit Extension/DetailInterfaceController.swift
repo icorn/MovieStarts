@@ -96,11 +96,9 @@ class DetailInterfaceController: WKInterfaceController {
 			synopsisGroup.setHidden(true)
 		}
 		
-		if (movie.posterUrl != nil) {
-			
-		}
-		else {
-			coverImage.setHidden(true)
+		// poster
+		if movie.thumbnailImage.1 {
+			coverImage.setImage(movie.thumbnailImage.0)
 		}
     }
 
