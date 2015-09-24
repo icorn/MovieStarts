@@ -23,6 +23,7 @@ class Database : DatabaseParent {
 	var showIndicator: (() -> ())?
 	var stopIndicator: (() -> ())?
 	var updateIndicator: ((counter: Int) -> ())?
+	var finishHandler: (() -> ())?
 	
 	var addNewMovieHandler: ((movie: MovieRecord) -> ())?
 	var updateMovieHandler: ((movie: MovieRecord) -> ())?
@@ -95,13 +96,15 @@ class Database : DatabaseParent {
 						errorHandler: (errorMessage: String) -> (),
 						showIndicator: (() -> ())?,
 						stopIndicator: (() -> ())?,
-						updateIndicator: ((counter: Int) -> ())?)
+						updateIndicator: ((counter: Int) -> ())?,
+						finishHandler: (() -> ())?)
 	{
 		self.completionHandler 	= completionHandler
 		self.errorHandler 		= errorHandler
 		self.showIndicator		= showIndicator
 		self.stopIndicator		= stopIndicator
 		self.updateIndicator	= updateIndicator
+		self.finishHandler		= finishHandler
 		
 		if let moviesPlistFile = moviesPlistFile {
 			// try to load movies from device
@@ -200,7 +203,16 @@ class Database : DatabaseParent {
 						}
 					}
 					
-					self.errorHandler?(errorMessage: "Error reading assets")
+					self.errorHandler?(errorMessage: "First start: No records found in Cloud.")
+					
+					var errorWindow: MessageWindow?
+					
+					dispatch_async(dispatch_get_main_queue()) {
+						errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle", textStringId: "NoRecordsInCloudText", buttonStringId: "Close", handler: {
+							errorWindow?.close()
+						})
+					}
+					
 					return
 				}
 				
@@ -208,8 +220,8 @@ class Database : DatabaseParent {
 				userDefaults?.synchronize()
 				
 				// finish movies
-				if ((self.completionHandler != nil) && (self.errorHandler != nil)) {
-					self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: self.completionHandler!, errorHandler: self.errorHandler!)
+				if let completionHander = self.completionHandler, errorHandler = self.errorHandler {
+					self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler)
 				}
 				else {
 					if let saveStopIndicator = self.stopIndicator {
@@ -218,6 +230,14 @@ class Database : DatabaseParent {
 						}
 					}
 					self.errorHandler?(errorMessage: "One of the handlers is nil!")
+					
+					var errorWindow: MessageWindow?
+					
+					dispatch_async(dispatch_get_main_queue()) {
+						errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringId: "Close", handler: {
+							errorWindow?.close()
+						})
+					}
 					return
 				}
 			}
@@ -392,6 +412,14 @@ class Database : DatabaseParent {
 				}
 				
 				errorHandler(errorMessage: "*** Error writing movies-file")
+				var errorWindow: MessageWindow?
+				
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "InternalErrorText", textStringId: "ErrorWritingFile", buttonStringId: "Close", handler: {
+						errorWindow?.close()
+					})
+				}
+
 				return
 			}
 		}
@@ -406,9 +434,9 @@ class Database : DatabaseParent {
 		}
 		
 		// success
-		if let saveStopIndicator = self.stopIndicator {
+		if let finishHandler = self.finishHandler {
 			dispatch_async(dispatch_get_main_queue()) {
-				saveStopIndicator()
+				finishHandler()
 			}
 		}
 		
@@ -521,12 +549,6 @@ class Database : DatabaseParent {
 	private func queryCompleteMissingPostersCallback(cursor: CKQueryCursor!, error: NSError!) {
 		if (cursor == nil) {
 			if let error = error {
-				if let saveStopIndicator = self.stopIndicator {
-					dispatch_async(dispatch_get_main_queue()) {
-						saveStopIndicator()
-					}
-				}
-				
 				self.errorHandler?(errorMessage: "Error querying posters: \(error.code) (\(error.description))")
 				return
 			}
@@ -584,11 +606,6 @@ class Database : DatabaseParent {
 			writeMovies(loadedMovieRecordArray!, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler!)
 		}
 		else {
-			if let saveStopIndicator = stopIndicator {
-				dispatch_async(dispatch_get_main_queue()) {
-					saveStopIndicator()
-				}
-			}
 			errorHandler?(errorMessage: "One of the handlers is nil!")
 			return
 		}

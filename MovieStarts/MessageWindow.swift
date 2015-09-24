@@ -224,6 +224,13 @@ class MessageWindow: NSObject {
 	}
 	
 	
+	func hideProgressIndicator() {
+		spinner.stopAnimating()
+		progressView.hidden = true
+		button.hidden = false
+	}
+	
+	
 	func updateProgressIndicator(progressText: String) {
 		
 		dispatch_async(dispatch_get_main_queue()) {

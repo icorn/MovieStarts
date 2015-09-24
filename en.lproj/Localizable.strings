@@ -72,6 +72,13 @@
 "BigPosterErrorTitle"	= "Load Error";
 "BigPosterErrorText"	= "Error loading the poster. Please try again later.";
 
+"NoRecordsInCloudTitle"	= "No Movies";
+"NoRecordsInCloudText"	= "Oops, there are no movies on the server. Please try again later.";
+
+"InternalErrorTitle"	= "Internal Error";
+"InternalErrorText"		= "There was an internal error. Please try again later.";
+"ErrorWritingFile"		= "Error writing a file. Maybe your iPhone is full.";
+
 // Settings
 
 "SettingsUseApps"		= "Use apps instead of browser";

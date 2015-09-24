@@ -109,13 +109,17 @@ class StartViewController: UIViewController {
 				welcomeWindow?.showProgressIndicator("0 " + NSLocalizedString("WelcomeProgress", comment: ""))
 			},
 			
-			stopIndicator: { () in
-				self.welcomeWindow?.close()
-				self.welcomeWindow = nil
+			stopIndicator: {
+				welcomeWindow?.hideProgressIndicator()
 			},
 			
 			updateIndicator: { (counter: Int) in
 				welcomeWindow?.updateProgressIndicator("\(counter) " + NSLocalizedString("WelcomeProgress", comment: ""))
+			},
+			
+			finishHandler: {
+				self.welcomeWindow?.close()
+				self.welcomeWindow = nil
 			}
 		)
 	}
