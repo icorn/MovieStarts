@@ -28,7 +28,7 @@ public struct Constants {
 	static let RECORD_TYPE_USA				= "MoviesUSA"
 	static let RECORD_TYPE_GERMANY			= "MoviesGermany"
 	
-	static let HOURS_BETWEEN_DB_UPDATES		= 24
+	static let HOURS_BETWEEN_DB_UPDATES		= 1
 	static let MAX_DAYS_IN_THE_PAST			= 30.0
 	
 	static let tagFavoriteView: Int			= 10000
