@@ -96,7 +96,8 @@
 
 // Misc.
 
-"Close"				= "Close";
+"Close"					= "Close";
+"menuItemRefresh"		= "Refresh";
 
 // Watch
 

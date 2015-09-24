@@ -96,12 +96,13 @@
 
 // Misc.
 
-"Close"	= "Schließen";
+"Close"					= "Schließen";
+"menuItemRefresh"		= "Aktualisieren";
 
 // Watch
 
-"WatchNoFavorites"			= "Du hast noch keine Favoriten festgelegt. Das kannst du in der MovieStarts-App auf dem iPhone machen.";
-"WatchNowPlaying"			= "Jetzt im Kino";
+"WatchNoFavorites"		= "Du hast noch keine Favoriten festgelegt. Das kannst du in der MovieStarts-App auf dem iPhone machen.";
+"WatchNowPlaying"		= "Jetzt im Kino";
 
 // Country names
 

@@ -24,6 +24,7 @@
 		4F0CBB0C1A9DC0BD00C63FAF /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAFF8EB1A8C002B00864078 /* CloudKit.framework */; };
 		4F108CD41BB1F681009E4A75 /* MovieRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F108CD31BB1F681009E4A75 /* MovieRow.swift */; };
 		4F108CD51BB20A1F009E4A75 /* noposter.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8ED3EE1B444B43008C24FE /* noposter.png */; };
+		4F1F33791BB3F38C00E1F486 /* refreshMenuItem@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F1F33781BB3F38C00E1F486 /* refreshMenuItem@2x.png */; };
 		4F2C91141B621BE70044A27B /* DatabaseHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C91131B621BE70044A27B /* DatabaseHelperTests.swift */; };
 		4F2C91161B622FC40044A27B /* MovieRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C91151B622FC40044A27B /* MovieRecordTests.swift */; };
 		4F2C91181B6374810044A27B /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C91171B6374810044A27B /* Favorites.swift */; };
@@ -177,6 +178,7 @@
 		4F0CBB061A9D353800C63FAF /* icon44@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon44@2x.png"; sourceTree = "<group>"; };
 		4F0CBB0B1A9DC0A600C63FAF /* MovieStarts WatchKit Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MovieStarts WatchKit Extension.entitlements"; sourceTree = "<group>"; };
 		4F108CD31BB1F681009E4A75 /* MovieRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieRow.swift; sourceTree = "<group>"; };
+		4F1F33781BB3F38C00E1F486 /* refreshMenuItem@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "refreshMenuItem@2x.png"; sourceTree = "<group>"; };
 		4F2C91081B6216F50044A27B /* MovieStartsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieStartsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F2C910B1B6216F50044A27B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F2C91131B621BE70044A27B /* DatabaseHelperTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseHelperTests.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 			isa = PBXGroup;
 			children = (
 				4F0CBADD1A9D324800C63FAF /* Info.plist */,
+				4F1F33781BB3F38C00E1F486 /* refreshMenuItem@2x.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -724,6 +727,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F1F33791BB3F38C00E1F486 /* refreshMenuItem@2x.png in Resources */,
 				4F0CBAE51A9D324800C63FAF /* MovieStarts WatchKit App.app in Resources */,
 				4FE0FC961AB605A5008A30F5 /* Localizable.strings in Resources */,
 				4F108CD51BB20A1F009E4A75 /* noposter.png in Resources */,

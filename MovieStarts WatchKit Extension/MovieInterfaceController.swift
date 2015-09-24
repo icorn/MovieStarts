@@ -24,8 +24,21 @@ class MovieInterfaceController: WKInterfaceController {
 	
     override func awakeWithContext(context: AnyObject?) {
         super.awakeWithContext(context)
+
+		// add localized menu item to context menu
+		
+		var menuIcon = UIImage(named: "refreshMenuItem@2x.png")
+
+		if let menuIcon = menuIcon {
+			addMenuItemWithImage(menuIcon, title: NSLocalizedString("menuItemRefresh", comment: ""), action: Selector("refreshButtonTapped"))
+		}
 		
 		// load movie data
+		loadMovieData()
+	}
+	
+	
+	func loadMovieData() {
 		
 		var favoriteMovies: [MovieRecord] = []
 		var fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
@@ -110,10 +123,14 @@ class MovieInterfaceController: WKInterfaceController {
 			}
 		}
 	}
-	
 
+	
 	// MARK: - Private helper-functions
 	
+	
+	func refreshButtonTapped() {
+		loadMovieData()
+	}
 	
 	private func setUpFavorites(movies: [MovieRecord]) {
 		var oldDate: NSDate? = nil

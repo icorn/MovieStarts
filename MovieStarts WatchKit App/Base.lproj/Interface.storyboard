@@ -66,6 +66,7 @@
                             </items>
                         </table>
                     </items>
+                    <menu key="menu" id="Xgm-Tp-MwP"/>
                     <connections>
                         <outlet property="movieTable" destination="saw-I9-tC7" id="MSy-Iy-WIB"/>
                     </connections>
@@ -80,7 +81,8 @@
                     <items>
                         <group width="1" alignment="left" layout="vertical" spacing="6" id="X1k-e6-mhD" userLabel="MainGroup">
                             <items>
-                                <label width="1" alignment="left" text="titleLabel" textAlignment="left" numberOfLines="4" id="aX4-1k-Nxm">
+                                <imageView alignment="center" contentMode="scaleAspectFit" id="caO-AJ-zsm" userLabel="coverImage"/>
+                                <label width="1" alignment="center" text="titleLabel" textAlignment="center" numberOfLines="4" id="aX4-1k-Nxm">
                                     <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                 </label>
                                 <separator width="1" alignment="center" id="Qev-IP-WpN">
@@ -125,8 +127,8 @@
                                             <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
                                         </label>
                                     </items>
+                                    <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="8"/>
                                 </group>
-                                <imageView width="1" height="150" alignment="center" contentMode="scaleAspectFit" id="caO-AJ-zsm" userLabel="coverImage"/>
                             </items>
                         </group>
                     </items>
