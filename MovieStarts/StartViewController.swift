@@ -101,25 +101,35 @@ class StartViewController: UIViewController {
 			},
 			
 			errorHandler: { (errorMessage: String) in
-				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				NSLog(errorMessage)
+				dispatch_async(dispatch_get_main_queue()) {
+					UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+					NSLog(errorMessage)
+				}
 			},
 			
 			showIndicator: {
-				welcomeWindow?.showProgressIndicator("0 " + NSLocalizedString("WelcomeProgress", comment: ""))
+				dispatch_async(dispatch_get_main_queue()) {
+					self.welcomeWindow?.showProgressIndicator(NSLocalizedString("WelcomeDownloading", comment: ""))
+				}
 			},
 			
 			stopIndicator: {
-				welcomeWindow?.hideProgressIndicator()
+				dispatch_async(dispatch_get_main_queue()) {
+					self.welcomeWindow?.hideProgressIndicator()
+				}
 			},
 			
 			updateIndicator: { (counter: Int) in
-				welcomeWindow?.updateProgressIndicator("\(counter) " + NSLocalizedString("WelcomeProgress", comment: ""))
+				dispatch_async(dispatch_get_main_queue()) {
+					self.welcomeWindow?.updateProgressIndicator("\(counter) " + NSLocalizedString("WelcomeProgress", comment: ""))
+				}
 			},
 			
 			finishHandler: {
-				self.welcomeWindow?.close()
-				self.welcomeWindow = nil
+				dispatch_async(dispatch_get_main_queue()) {
+					self.welcomeWindow?.close()
+					self.welcomeWindow = nil
+				}
 			}
 		)
 	}

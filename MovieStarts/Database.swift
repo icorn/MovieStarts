@@ -132,7 +132,7 @@ class Database : DatabaseParent {
 				let queryOperation = CKQueryOperation(query: query)
 				queryOperation.recordFetchedBlock = self.recordFetchedAllMoviesCallback
 				queryOperation.queryCompletionBlock = self.queryCompleteAllMoviesCallback
-				queryOperation.resultsLimit = 10
+				queryOperation.resultsLimit = 3
 				queryOperation.desiredKeys = self.desiredQueryKeysForAll
 				self.cloudKitDatabase.addOperation(queryOperation)
 			}
