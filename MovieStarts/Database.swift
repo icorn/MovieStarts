@@ -611,14 +611,10 @@ class Database : DatabaseParent {
 		NSLog("Cleaning up old movies...")
 		
 		for (var index = existingMovies.count-1; index >= 0; index--) {
-			let releaseDate = existingMovies[index].releaseDate
-			
-			if let saveDate = releaseDate {
-				if (saveDate.compare(compareDate) == NSComparisonResult.OrderedAscending) {
-					// movie is too old
-					NSLog("   '\(existingMovies[index].title)' (\(saveDate)) removed")
-					existingMovies.removeAtIndex(index)
-				}
+			if let releaseDate = existingMovies[index].releaseDate where releaseDate.compare(compareDate) == NSComparisonResult.OrderedAscending {
+				// movie is too old
+				NSLog("   '\(existingMovies[index].title)' (\(releaseDate)) removed")
+				existingMovies.removeAtIndex(index)
 			}
 		}
 		
