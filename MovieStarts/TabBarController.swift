@@ -179,7 +179,7 @@ class TabBarController: UITabBarController {
 	
 	func updateMovies(allMovies: [MovieRecord], database: Database?) {
 		if (userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) != nil) {
-			let latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as! NSDate?
+			let latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as? NSDate
 		
 			if let latestUpdate = latestUpdate {
 				let hoursSinceLastUpdate = abs(Int(latestUpdate.timeIntervalSinceNow)) / 60 / 60
@@ -245,11 +245,15 @@ class TabBarController: UITabBarController {
 				
 				dispatch_async(dispatch_get_main_queue()) {
 					if movie.isNowPlaying() {
-						NSLog("Adding \(movie.title!) to NOW PLAYING")
+						if let title = movie.title {
+							NSLog("Adding \(title) to NOW PLAYING")
+						}
 						self.nowPlayingController?.addMovie(movie)
 					}
 					else {
-						NSLog("Adding \(movie.title!) to UPCOMING")
+						if let title = movie.title {
+							NSLog("Adding \(title) to UPCOMING")
+						}
 						self.upcomingController?.addMovie(movie)
 					}
 				}
@@ -280,30 +284,40 @@ class TabBarController: UITabBarController {
 				dispatch_async(dispatch_get_main_queue()) {
 					if (movie.isNowPlaying() && movieIsInNowPlayingList) {
 						// movie was and is now-playing
-						NSLog("Updating \(movie.title!) in NOW PLAYING")
+						if let title = movie.title {
+							NSLog("Updating \(title) in NOW PLAYING")
+						}
 						self.nowPlayingController?.updateMovie(movie)
 					}
 					else if (!movie.isNowPlaying() && movieIsInUpcomingList) {
 						// movie was and is upcoming
-						NSLog("Updating \(movie.title!) in UPCOMING")
+						if let title = movie.title {
+							NSLog("Updating \(title) in UPCOMING")
+						}
 						self.upcomingController?.updateMovie(movie)
 					}
 					else if (!movie.isNowPlaying() && movieIsInNowPlayingList) {
 						// movie was now-playing, is now upcoming
-						NSLog("Moving \(movie.title!) in from NOW PLAYING to UPCOMING")
+						if let title = movie.title {
+							NSLog("Moving \(title) in from NOW PLAYING to UPCOMING")
+						}
 						self.nowPlayingController?.removeMovie(movie)
 						self.upcomingController?.addMovie(movie)
 					}
 					else if (movie.isNowPlaying() && movieIsInUpcomingList) {
 						// movie was upcoming, is now now-playing
-						NSLog("Moving \(movie.title!) in from UPCOMING to NOW PLAYING")
+						if let title = movie.title {
+							NSLog("Moving \(title) in from UPCOMING to NOW PLAYING")
+						}
 						self.upcomingController?.removeMovie(movie)
 						self.nowPlayingController?.addMovie(movie)
 					}
 					
 					if (Favorites.IDs.contains(movie.id)) {
 						// also, update the favorites
-						NSLog("Updating \(movie.title!) in FAVORITES")
+						if let title = movie.title {
+							NSLog("Updating \(title) in FAVORITES")
+						}
 						self.favoriteController?.updateFavorite(movie)
 					}
 				}
@@ -353,8 +367,8 @@ class TabBarController: UITabBarController {
 	private func findTableViewController<T>() -> T? {
 		if let tabBarVcs = viewControllers {
 			for tabBarVc in tabBarVcs {
-				if tabBarVc is UINavigationController {
-					for navVc in (tabBarVc as! UINavigationController).viewControllers {
+				if let tabBarVc = tabBarVc as? UINavigationController {
+					for navVc in tabBarVc.viewControllers {
 						if navVc is T {
 							return navVc as? T
 						}

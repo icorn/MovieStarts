@@ -24,18 +24,21 @@ public class IJReachability {
 		
 		var Status:Bool = false
 		let url = NSURL(string: "https://google.com/")
-		let request = NSMutableURLRequest(URL: url!)
-		request.HTTPMethod = "HEAD"
-		request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData
-		request.timeoutInterval = 10.0
 		
-		var response: NSURLResponse?
-		
-		_ = (try? NSURLConnection.sendSynchronousRequest(request, returningResponse: &response)) as NSData?
-		
-		if let httpResponse = response as? NSHTTPURLResponse {
-			if httpResponse.statusCode == 200 {
-				Status = true
+		if let url = url {
+			let request = NSMutableURLRequest(URL: url)
+			request.HTTPMethod = "HEAD"
+			request.cachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalAndRemoteCacheData
+			request.timeoutInterval = 10.0
+			
+			var response: NSURLResponse?
+			
+			_ = (try? NSURLConnection.sendSynchronousRequest(request, returningResponse: &response)) as NSData?
+			
+			if let httpResponse = response as? NSHTTPURLResponse {
+				if httpResponse.statusCode == 200 {
+					Status = true
+				}
 			}
 		}
 		

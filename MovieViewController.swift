@@ -336,7 +336,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			
 			// if needed: show poster-hint
 		
-			let posterHintAlreadyShown: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_POSTER_HINT_ALREADY_SHOWN) as! Bool?
+			let posterHintAlreadyShown: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_POSTER_HINT_ALREADY_SHOWN) as? Bool
 
 			if (posterHintAlreadyShown == nil) {
 				// hint not already shown: show it
@@ -364,7 +364,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	
 		- parameter sender:	The tapped button
 	*/
-	func imdbButtonTapped(sender:UIButton!) {
+	func imdbButtonTapped(sender:UIButton) {
 		
 		// check internet connection
 		
@@ -376,7 +376,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 		
 		// check if we open the idmb app or the webview
 		
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as! Bool?
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as? Bool
 		
 		if let imdbId = movie?.imdbId {
 			let url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
@@ -387,9 +387,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			}
 			else {
 				// use the webview
-				let webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
-				webViewController.urlString = "http://www.imdb.com/title/\(imdbId)"
-				navigationController?.pushViewController(webViewController, animated: true)
+				if let webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as? WebViewController {
+					webViewController.urlString = "http://www.imdb.com/title/\(imdbId)"
+					navigationController?.pushViewController(webViewController, animated: true)
+				}
 			}
 		}
 	}
@@ -400,7 +401,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	
 		- parameter sender:	The tapped button
 	*/
-	func trailerButtonTapped(sender:UIButton!) {
+	func trailerButtonTapped(sender:UIButton) {
 		
 		// check internet connection
 		
@@ -427,7 +428,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 		
 		// check if we open the youtube app or the webview
 		
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as! Bool?
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as? Bool
 		
 		if let trailerId = movie?.trailerIds[index] {
 			let url: NSURL? = NSURL(string: "https://www.youtube.com/v/\(trailerId)/")
@@ -438,9 +439,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			}
 			else {
 				// use the webview
-				let webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
-				webViewController.urlString = "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
-				navigationController?.pushViewController(webViewController, animated: true)
+				if let webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as? WebViewController {
+					webViewController.urlString = "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
+					navigationController?.pushViewController(webViewController, animated: true)
+				}
 			}
 		}
 	}
@@ -451,7 +453,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	
 		- parameter sender:	The tapped button
 	*/
-	func addFavoriteButtonTapped(sender:UIButton!) {
+	func addFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
 			Favorites.addMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
@@ -464,7 +466,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	
 		- parameter sender:	The tapped button
 	*/
-	func removeFavoriteButtonTapped(sender:UIButton!) {
+	func removeFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
 			Favorites.removeMovieID(movie.id, tabBarController: movieTabBarController)
 			setUpFavoriteButton()

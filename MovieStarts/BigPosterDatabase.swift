@@ -38,10 +38,10 @@ class BigPosterDatabase : DatabaseParent {
 	}
 	
 	
-	private func recordFetchedBigPosterCallback(record: CKRecord!) {
-		let tmdbIdToFind: Int = record.objectForKey(Constants.DB_ID_TMDB_ID) as! Int
+	private func recordFetchedBigPosterCallback(record: CKRecord) {
+		let tmdbIdToFind: Int? = record.objectForKey(Constants.DB_ID_TMDB_ID) as? Int
 		
-		if let tmdbId = movie?.tmdbId where tmdbId == tmdbIdToFind {
+		if let tmdbId = movie?.tmdbId, tmdbIdToFind = tmdbIdToFind where tmdbId == tmdbIdToFind {
 			movie?.storePoster(record.objectForKey(Constants.DB_ID_BIG_POSTER_ASSET) as? CKAsset, thumbnail: false)
 		}
 	}

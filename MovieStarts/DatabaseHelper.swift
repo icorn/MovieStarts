@@ -85,13 +85,13 @@ public class DatabaseHelper {
 		for updatedMovie in updatedMovies {
 			let movieIndex = DatabaseHelper.findArrayIndexOfMovie(updatedMovie, array: existingMovies)
 			
-			if (movieIndex == nil) {
-				// add new movie
-				existingMovies.append(updatedMovie)
+			if let movieIndex = movieIndex {
+				// update existing movie
+				existingMovies[movieIndex] = updatedMovie
 			}
 			else {
-				// update existing movie
-				existingMovies[movieIndex!] = updatedMovie
+				// add new movie
+				existingMovies.append(updatedMovie)
 			}
 		}
 	}

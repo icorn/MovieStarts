@@ -144,7 +144,7 @@ class MovieTableViewController: UITableViewController {
 	// MARK: - UITableView
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell", forIndexPath: indexPath) as! MovieTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("MovieTableViewCell", forIndexPath: indexPath) as? MovieTableViewCell
 		
 		var movie: MovieRecord?
 		
@@ -155,7 +155,7 @@ class MovieTableViewController: UITableViewController {
 			movie = movies[indexPath.row]
 		}
 		
-		if let movie = movie {
+		if let movie = movie, cell = cell {
 			cell.posterImage.image = movie.thumbnailImage.0
 			cell.titleText.text = movie.title
 			cell.tag = Constants.tagTableCell
@@ -185,26 +185,34 @@ class MovieTableViewController: UITableViewController {
 			if Favorites.IDs.contains(movie.id) {
 				addFavoriteIconToCell(cell)
 			}
+			
+			return cell
 		}
-		
-        return cell
+		else {
+			// this should never happen
+			NSLog("*** Error: movie or cell is nil!")
+	        return UITableViewCell()
+		}
     }
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		
 		if let saveStoryboard = self.storyboard {
-			let movieController: MovieViewController = saveStoryboard.instantiateViewControllerWithIdentifier("MovieViewController") as! MovieViewController
+			let movieController: MovieViewController? = saveStoryboard.instantiateViewControllerWithIdentifier("MovieViewController") as? MovieViewController
 			
-			if moviesInSections.count > 0 {
-				movieController.movie = moviesInSections[indexPath.section][indexPath.row]
-				NSLog("Selected movie: \(moviesInSections[indexPath.section][indexPath.row])")
-			}
-			else {
-				movieController.movie = movies[indexPath.row]
-				NSLog("Selected movie: \(movies[indexPath.row])")
+			if let movieController = movieController {
+				if moviesInSections.count > 0 {
+					movieController.movie = moviesInSections[indexPath.section][indexPath.row]
+					NSLog("Selected movie: \(moviesInSections[indexPath.section][indexPath.row])")
+				}
+				else {
+					movieController.movie = movies[indexPath.row]
+					NSLog("Selected movie: \(movies[indexPath.row])")
+				}
+				
+				navigationController?.pushViewController(movieController, animated: true)
 			}
 			
-			navigationController?.pushViewController(movieController, animated: true)
 		}
 	}
 	

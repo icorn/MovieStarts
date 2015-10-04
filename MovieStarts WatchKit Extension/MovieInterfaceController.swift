@@ -65,7 +65,7 @@ class MovieInterfaceController: WKInterfaceController {
 
 				// only keep the favorite ones
 				
-				let favorites: [String]? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_FAVORITES) as! [String]?
+				let favorites: [String]? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_FAVORITES) as? [String]
 
 				if let favorites = favorites {
 					for movie in allMovies {
@@ -127,8 +127,8 @@ class MovieInterfaceController: WKInterfaceController {
 		
 		let row: AnyObject? = movieTable.rowControllerAtIndex(rowIndex)
 		
-		if (row is MovieRow) {
-			if let movie = (row as! MovieRow).movie {
+		if let row = row as? MovieRow {
+			if let movie = row.movie {
 				pushControllerWithName("DetailController", context: movie)
 			}
 		}
@@ -205,10 +205,10 @@ class MovieInterfaceController: WKInterfaceController {
 				}
 	
 			}
-			else if (content is WatchMovieRecord) {
-				let movie = (content as! WatchMovieRecord)
+			else if let content = content as? WatchMovieRecord {
+				let movie = content
 				let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
-				row?.titleLabel.setText((movie.title != nil) ? movie.title! : movie.origTitle!)
+				row?.titleLabel.setText(movie.title ?? movie.origTitle)
 				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
 				row?.posterImage.setImage(movie.thumbnailImage.0)
 				row?.movie = movie
@@ -218,15 +218,19 @@ class MovieInterfaceController: WKInterfaceController {
 	
 	private func movieDateToString(releaseDate: NSDate) -> String {
 		
-		let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-		gregorian?.timeZone = NSTimeZone(abbreviation: "GMT")!
 		var retval = ""
+		let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+		let gmtZone = NSTimeZone(abbreviation: "GMT")
 		
-		if let saveGregorian = gregorian {
-			let components = saveGregorian.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year], fromDate: releaseDate)
-			retval = "\(components.month).\(components.day).\(components.year)"
+		if let gmtZone = gmtZone {
+			gregorian?.timeZone = gmtZone
+			
+			if let saveGregorian = gregorian {
+				let components = saveGregorian.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year], fromDate: releaseDate)
+				retval = "\(components.month).\(components.day).\(components.year)"
+			}
 		}
-
+		
 		return retval
 	}
 	
@@ -234,12 +238,13 @@ class MovieInterfaceController: WKInterfaceController {
 		var movieRecordArray: [WatchMovieRecord] = []
 		
 		for dict in dictArray {
-			movieRecordArray.append(WatchMovieRecord(dict: dict as! [String : AnyObject]))
+			if let dict = dict as? [String : AnyObject] {
+				movieRecordArray.append(WatchMovieRecord(dict: dict))
+			}
 		}
 		
 		return movieRecordArray
 	}
-
 
 }
 

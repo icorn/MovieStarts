@@ -80,8 +80,9 @@ class SettingsTableViewController: UITableViewController {
 		
 		if (indexPath.section == sectionAbout) {
 			if let saveStoryboard = self.storyboard {
-				let aboutController: AboutViewController = saveStoryboard.instantiateViewControllerWithIdentifier("AboutViewController") as! AboutViewController
-				navigationController?.pushViewController(aboutController, animated: true)
+				if let aboutController: AboutViewController = saveStoryboard.instantiateViewControllerWithIdentifier("AboutViewController") as? AboutViewController {
+					navigationController?.pushViewController(aboutController, animated: true)
+				}
 			}
 		}
 	}
@@ -102,7 +103,7 @@ class SettingsTableViewController: UITableViewController {
 		
 		// set imdb switch on or off
 		
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(prefKey) as! Bool?
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(prefKey) as? Bool
 		
 		if let useApp = useApp where useApp == true {
 			switcher.on = true

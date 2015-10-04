@@ -71,18 +71,16 @@ public class WatchMovieRecord : CustomStringConvertible {
 		if (dict[Constants.DB_ID_POSTER_URL] != nil) 	{ self.posterUrl 		= dict[Constants.DB_ID_POSTER_URL] 		as? String }
 		if (dict[Constants.DB_ID_IMDB_ID] != nil) 		{ self.imdbId 			= dict[Constants.DB_ID_IMDB_ID] 		as? String }
 		
-		if (dict[Constants.DB_ID_RUNTIME] != nil) 		{ self.runtime 			= dict[Constants.DB_ID_RUNTIME] 		as! Int }
-		if (dict[Constants.DB_ID_VOTE_AVERAGE] != nil) 	{ self.voteAverage 		= dict[Constants.DB_ID_VOTE_AVERAGE] 	as! Double }
-		if (dict[Constants.DB_ID_GENRES] != nil) 		{ self.genres 			= dict[Constants.DB_ID_GENRES] 			as! [String] }
-		if (dict[Constants.DB_ID_DIRECTORS] != nil) 	{ self.directors 		= dict[Constants.DB_ID_DIRECTORS] 		as! [String] }
-		if (dict[Constants.DB_ID_ACTORS] != nil) 		{ self.actors 			= dict[Constants.DB_ID_ACTORS] 			as! [String] }
-		if (dict[Constants.DB_ID_TRAILER_NAMES] != nil) { self.trailerNames 	= dict[Constants.DB_ID_TRAILER_NAMES] 	as! [String] }
-		if (dict[Constants.DB_ID_TRAILER_IDS] != nil) 	{ self.trailerIds 		= dict[Constants.DB_ID_TRAILER_IDS] 	as! [String] }
-		
-		if (dict[Constants.DB_ID_PRODUCTION_COUNTRIES] != nil) { self.productionCountries = dict[Constants.DB_ID_PRODUCTION_COUNTRIES] as! [String] }
-		
-		if (dict[Constants.DB_ID_POPULARITY] != nil) 	{ self.popularity 		= dict[Constants.DB_ID_POPULARITY] 		as! Int }
-		if (dict[Constants.DB_ID_VOTE_COUNT] != nil) 	{ self.voteCount 		= dict[Constants.DB_ID_VOTE_COUNT] 		as! Int }
+		if let value = dict[Constants.DB_ID_RUNTIME] as? Int 					{ self.runtime				= value	}
+		if let value = dict[Constants.DB_ID_VOTE_AVERAGE] as? Double 			{ self.voteAverage			= value	}
+		if let value = dict[Constants.DB_ID_GENRES] as? [String] 				{ self.genres 				= value }
+		if let value = dict[Constants.DB_ID_DIRECTORS] as? [String] 			{ self.directors 			= value	}
+		if let value = dict[Constants.DB_ID_ACTORS] as? [String] 				{ self.actors 				= value	}
+		if let value = dict[Constants.DB_ID_TRAILER_NAMES] as? [String] 		{ self.trailerNames 		= value	}
+		if let value = dict[Constants.DB_ID_TRAILER_IDS] as? [String] 			{ self.trailerIds 			= value	}
+		if let value = dict[Constants.DB_ID_POPULARITY] as? Int					{ self.popularity 			= value	}
+		if let value = dict[Constants.DB_ID_VOTE_COUNT] as? Int 				{ self.voteCount 			= value	}
+		if let value = dict[Constants.DB_ID_PRODUCTION_COUNTRIES] as? [String]	{ self.productionCountries	= value	}
 		
 		if let saveId = dict[Constants.DB_ID_ID] as? String {
 			id = saveId

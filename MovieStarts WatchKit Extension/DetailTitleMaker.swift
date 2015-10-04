@@ -63,9 +63,8 @@ class DetailTitleMaker {
 			detailText += "\(movie.runtime) m | "
 		}
 		
-		if ((movie.certification != nil) && ((movie.certification!).characters.count > 0)) {
-			
-			var cert = movie.certification!
+		if let movieCertification = movie.certification where movie.certification?.characters.count > 0 {
+			var cert = movieCertification
 			
 			if (cert == "PG-13") {
 				// fighting for every pixel ;-)

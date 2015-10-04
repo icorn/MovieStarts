@@ -24,12 +24,15 @@ class StartViewController: UIViewController {
 		
 		// show launch screen again
 		
-		var aboutViews = NSBundle.mainBundle().loadNibNamed("LaunchScreen", owner: self, options: nil)
+		let aboutViews = NSBundle.mainBundle().loadNibNamed("LaunchScreen", owner: self, options: nil)
 		
-		if ((aboutViews != nil) && (aboutViews?.count > 0) && (aboutViews?[0] != nil) && (aboutViews?[0] is UIView)) {
-			aboutView = aboutViews![0] as? UIView
-			aboutView!.frame = CGRect(origin: self.view.frame.origin, size: self.view.frame.size)
-			self.view.addSubview(aboutViews![0] as! UIView)
+		if let aboutViews = aboutViews where (aboutViews.count > 0) && (aboutViews[0] is UIView) {
+			aboutView = aboutViews[0] as? UIView
+			
+			if let aboutView = aboutView {
+				aboutView.frame = CGRect(origin: self.view.frame.origin, size: self.view.frame.size)
+				self.view.addSubview(aboutView)
+			}
 		}
     }
 	

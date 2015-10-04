@@ -49,8 +49,8 @@ class Database : DatabaseParent {
 		
 		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
 
-		if ((fileUrl != nil) && (fileUrl!.path != nil)) {
-			self.moviesPlistPath = fileUrl!.path!
+		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
+			self.moviesPlistPath = fileUrlPath
 		}
         else {
             NSLog("Error getting url for app-group.")
@@ -154,7 +154,7 @@ class Database : DatabaseParent {
 	
 		- parameter record:	The record from the CloudKit database
 	*/
-	func recordFetchedAllMoviesCallback(record: CKRecord!) {
+	func recordFetchedAllMoviesCallback(record: CKRecord) {
 		self.allCKRecords.append(record)
 		updateIndicator?(counter: self.allCKRecords.count)
 	}
@@ -280,7 +280,7 @@ class Database : DatabaseParent {
 		
 		self.loadedMovieRecordArray = allMovies
 		
-		let latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as! NSDate?
+		let latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as? NSDate
 		
 		if let saveModDate: NSDate = latestModDate {
 			
@@ -316,7 +316,7 @@ class Database : DatabaseParent {
 	
 		- parameter record:	The record from the CloudKit database
 	*/
-	func recordFetchedUpdatedMoviesCallback(record: CKRecord!) {
+	func recordFetchedUpdatedMoviesCallback(record: CKRecord) {
 		
 		let newMovieRecord = MovieRecord(ckRecord: record)
 		var movieAlreadyExists: Bool = false
@@ -381,11 +381,15 @@ class Database : DatabaseParent {
 					}
 					
 					// merge both arrays (the existing movies and the updated movies)
-					DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
+					if (loadedMovieRecordArray != nil) {
+						DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
+					}
 				}
 				
 				// delete all movies which are too old
-				cleanUpExistingMovies(&loadedMovieRecordArray!)
+				if (loadedMovieRecordArray != nil) {
+					cleanUpExistingMovies(&loadedMovieRecordArray!)
+				}
 				
 				// clean up posters
 				cleanUpPosters()
@@ -458,12 +462,11 @@ class Database : DatabaseParent {
 		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
 		
 		if let pathUrl = pathUrl, basePath = pathUrl.path, movies = loadedMovieRecordArray {
-			let error : NSErrorPointer = nil
 			var filenames: [AnyObject]?
 			do {
 				filenames = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.THUMBNAIL_FOLDER)
-			} catch let error1 as NSError {
-				error.memory = error1
+			} catch let error as NSError {
+				NSLog("Error getting thumbnail folder: \(error.description)")
 				filenames = nil
 			}
 			
@@ -472,31 +475,35 @@ class Database : DatabaseParent {
 			if let posterfilenames = filenames {
 				for posterfilename in posterfilenames {
 					var found = false
+					let posterfilenameString = posterfilename as? String
 					
-					for movie in movies {
-						if let posterUrl = movie.posterUrl where posterUrl.characters.count > 3 {
-							
-							if ((posterfilename as! String) == posterUrl.substringWithRange(Range<String.Index>(start: posterUrl.startIndex.advancedBy(1), end: posterUrl.endIndex))) {
-								found = true
-								break
+					if let posterfilenameString = posterfilenameString {
+						for movie in movies {
+							if let posterUrl = movie.posterUrl where posterUrl.characters.count > 3 {
+								
+								if (posterfilenameString == posterUrl.substringWithRange(Range<String.Index>(start: posterUrl.startIndex.advancedBy(1), end: posterUrl.endIndex))) {
+									found = true
+									break
+								}
 							}
 						}
-					}
-					
-					if !found {
 						
-						// posterfile is not in any database record anymore: delete poster(s)
-						
-						NSLog("Deleting unneeded poster image \(posterfilename as! String)")
-						do {
-							try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.THUMBNAIL_FOLDER + "/" + (posterfilename as! String))
-						} catch let error1 as NSError {
-							error.memory = error1
-						}
-						do {
-							try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.BIG_POSTER_FOLDER + "/" + (posterfilename as! String))
-						} catch let error1 as NSError {
-							error.memory = error1
+						if (found == false) {
+							
+							// posterfile is not in any database record anymore: delete poster(s)
+							
+							NSLog("Deleting unneeded poster image \(posterfilenameString)")
+							
+							do {
+								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.THUMBNAIL_FOLDER + "/" + posterfilenameString)
+							} catch let error as NSError {
+								NSLog("Error removing thumbnail: \(error.description)")
+							}
+							do {
+								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.BIG_POSTER_FOLDER + "/" + posterfilenameString)
+							} catch let error as NSError {
+								NSLog("Error removing poster: \(error.description)")
+							}
 						}
 					}
 				}
@@ -510,7 +517,9 @@ class Database : DatabaseParent {
 				if let posterUrl = movie.posterUrl {
 					if (NSFileManager.defaultManager().fileExistsAtPath(basePath + Constants.THUMBNAIL_FOLDER + posterUrl) == false) {
 						// poster file is missing
-						idsOfMissindPosters.append(movie.tmdbId!)
+						if let tmdbId = movie.tmdbId {
+							idsOfMissindPosters.append(tmdbId)
+						}
 					}
 				}
 			}
@@ -543,13 +552,13 @@ class Database : DatabaseParent {
 	
 		- parameter record:	The record from the CloudKit database
 	*/
-	private func recordFetchedMissingPostersCallback(record: CKRecord!) {
+	private func recordFetchedMissingPostersCallback(record: CKRecord) {
 		
 		// poster fetched: store it to disk
 		
-		let tmdbIdToFind: Int = record.objectForKey(Constants.DB_ID_TMDB_ID) as! Int
+		let tmdbIdToFind: Int? = record.objectForKey(Constants.DB_ID_TMDB_ID) as? Int
 		
-		if let movies = loadedMovieRecordArray {
+		if let movies = loadedMovieRecordArray, tmdbIdToFind = tmdbIdToFind {
 			for movie in movies {
 				if let tmdbId = movie.tmdbId where tmdbId == tmdbIdToFind {
 					movie.storePoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
@@ -622,8 +631,8 @@ class Database : DatabaseParent {
 	*/
 	private func downloadsFinished() {
 		// finish movies
-		if ((completionHandler != nil) && (errorHandler != nil)) {
-			writeMovies(loadedMovieRecordArray!, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler!, errorHandler: errorHandler!)
+		if let completionHandler = completionHandler, errorHandler = errorHandler, loadedMovieRecordArray = loadedMovieRecordArray {
+			writeMovies(loadedMovieRecordArray, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
 		}
 		else {
 			errorHandler?(errorMessage: "One of the handlers is nil!")
