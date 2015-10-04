@@ -15,9 +15,9 @@ public class DatabaseHelper {
    /**
 		Converts an array of MovieRecord objects to an array of NSDictionaries.
 	
-		:param: movieRecords	The input array of MovieRecord objects
+		- parameter movieRecords:	The input array of MovieRecord objects
 	
-		:returns: An array of NSDictionarys which contain the data of the input parameter movieRecords.
+		- returns: An array of NSDictionarys which contain the data of the input parameter movieRecords.
 	*/
 	public class func movieRecordArrayToDictArray(movieRecords: [MovieRecord]) -> [NSDictionary] {
 		var retval: [NSDictionary] = []
@@ -33,9 +33,9 @@ public class DatabaseHelper {
    /**
 		Converts an array of NSDictionarys to an array of MovieRecord objects.
 	
-		:param: dictArray	The input array of NSDictionarys
+		- parameter dictArray:	The input array of NSDictionarys
 	
-		:returns: An array of MovieRecord objects, generated of the input parameter dictArray.
+		- returns: An array of MovieRecord objects, generated of the input parameter dictArray.
 	*/
 	public class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]) -> [MovieRecord] {
 		var retval: [MovieRecord] = []
@@ -56,14 +56,16 @@ public class DatabaseHelper {
    /**
 		Stores the date of the last modified CKRecord in the UserDefaults.
 	
-		:param: ckrecords	The new or updated CKRecords from the CloudKit database
+		- parameter ckrecords:	The new or updated CKRecords from the CloudKit database
 	*/
 	class func storeLastModification(ckrecords: [CKRecord]) {
 		var latestModification = NSDate(timeIntervalSince1970: 0)
 		
 		for movie in ckrecords {
-			if (latestModification.compare(movie.modificationDate) == NSComparisonResult.OrderedAscending) {
-				latestModification = movie.modificationDate
+			if let movieModDate = movie.modificationDate {
+				if (latestModification.compare(movieModDate) == NSComparisonResult.OrderedAscending) {
+					latestModification = movieModDate
+				}
 			}
 		}
 		
@@ -75,13 +77,13 @@ public class DatabaseHelper {
    /**
 		Joins the both arrays of MovieRecord with existing and updated movies.
 	
-		:param: existingMovies	The array with the existing movies
-		:param: updatedMovies	The array with the updated movies
+		- parameter existingMovies:	The array with the existing movies
+		- parameter updatedMovies:	The array with the updated movies
 	*/
 	public class func joinMovieRecordArrays(inout existingMovies: [MovieRecord], updatedMovies: [MovieRecord]) {
 		
 		for updatedMovie in updatedMovies {
-			var movieIndex = DatabaseHelper.findArrayIndexOfMovie(updatedMovie, array: existingMovies)
+			let movieIndex = DatabaseHelper.findArrayIndexOfMovie(updatedMovie, array: existingMovies)
 			
 			if (movieIndex == nil) {
 				// add new movie
@@ -98,8 +100,8 @@ public class DatabaseHelper {
    /**
 		Searches for a movie in an array of movie records. The index or null is returned.
 	
-		:param: updatedMovie	The movie record to search for
-		:param: array			The array to be searched
+		- parameter updatedMovie:	The movie record to search for
+		- parameter array:			The array to be searched
 	*/
 	public class func findArrayIndexOfMovie(updatedMovie: MovieRecord, array: [MovieRecord]) -> Int? {
 		var foundIndex: Int?

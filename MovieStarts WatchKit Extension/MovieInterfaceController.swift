@@ -27,7 +27,7 @@ class MovieInterfaceController: WKInterfaceController {
 
 		// add localized menu item to context menu
 		
-		var menuIcon = UIImage(named: "refreshMenuItem@2x.png")
+		let menuIcon = UIImage(named: "refreshMenuItem@2x.png")
 
 		if let menuIcon = menuIcon {
 			addMenuItemWithImage(menuIcon, title: NSLocalizedString("menuItemRefresh", comment: ""), action: Selector("refreshButtonTapped"))
@@ -40,32 +40,42 @@ class MovieInterfaceController: WKInterfaceController {
 	
 	func loadMovieData() {
 		
-		var favoriteMovies: [MovieRecord] = []
-		var fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		var favoriteMovies: [WatchMovieRecord] = []
+		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
 		
-		if ((fileUrl != nil) && (fileUrl!.path != nil)) {
+		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
 			
 			// get all movies from the iPhone
 			
-			var moviesPlistFile: String? = fileUrl!.path!.stringByAppendingPathComponent("MoviesUSA.plist")
-			var loadedDictArray: [NSDictionary]? = NSArray(contentsOfFile: moviesPlistFile!) as? [NSDictionary]
+//			let moviesPlistFile: String? = fileUrlPath.stringByAppendingPathComponent("MoviesUSA.plist")
+			
+			var moviesPlistFile = fileUrlPath
+			
+			if moviesPlistFile.hasSuffix("/") {
+				moviesPlistFile.appendContentsOf("MoviesUSA.plist")
+			}
+			else {
+				moviesPlistFile.appendContentsOf("/MoviesUSA.plist")
+			}
+			
+			let loadedDictArray: [NSDictionary]? = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary]
 			
 			if let loadedDictArray = loadedDictArray {
-				var allMovies: [MovieRecord] = movieDictsToMovieRecords(loadedDictArray)
+				let allMovies: [WatchMovieRecord] = movieDictsToMovieRecords(loadedDictArray)
 
 				// only keep the favorite ones
 				
-				var favorites: [String]? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_FAVORITES) as! [String]?
+				let favorites: [String]? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_FAVORITES) as! [String]?
 
 				if let favorites = favorites {
 					for movie in allMovies {
-						if contains(favorites, movie.id) {
+						if favorites.contains(movie.id) {
 							favoriteMovies.append(movie)
 						}
 					}
 				}
 				
-				favoriteMovies.sort {
+				favoriteMovies.sortInPlace {
 					if let date0 = $0.releaseDate, date1 = $1.releaseDate, title0 = $0.sortTitle, title1 = $1.sortTitle {
 						if ($0.isNowPlaying() && $1.isNowPlaying()) {
 							// both movies are playing now: sort by title
@@ -115,7 +125,7 @@ class MovieInterfaceController: WKInterfaceController {
 	
 	override func table(table: WKInterfaceTable, didSelectRowAtIndex rowIndex: Int) {
 		
-		var row: AnyObject? = movieTable.rowControllerAtIndex(rowIndex)
+		let row: AnyObject? = movieTable.rowControllerAtIndex(rowIndex)
 		
 		if (row is MovieRow) {
 			if let movie = (row as! MovieRow).movie {
@@ -132,14 +142,36 @@ class MovieInterfaceController: WKInterfaceController {
 		loadMovieData()
 	}
 	
-	private func setUpFavorites(movies: [MovieRecord]) {
+	private func setUpFavorites(movies: [WatchMovieRecord]) {
 		var oldDate: NSDate? = nil
 		var rowTypeArray: [String] = []
 		var rowContentArray: [AnyObject] = []
 	
 		// find out the necessary row-types
 	
-		for (movieIndex, movie) in enumerate(movies) {
+		for movie in movies {
+			if let releaseDate = movie.releaseDate {
+				if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
+					// it's a current movie, but there is no section yet
+					rowContentArray.append(NSLocalizedString("WatchNowPlaying", comment: ""))
+					rowTypeArray.append(ROW_TYPE_DATE)
+				}
+				else if ((movie.isNowPlaying() == false) && ((oldDate == nil) || (oldDate != movie.releaseDate))) {
+					// upcoming movies: a new sections starts
+					rowContentArray.append(movie.releaseDateString)
+					rowTypeArray.append(ROW_TYPE_DATE)
+					oldDate = releaseDate
+				}
+				
+				// add movie-row
+				rowContentArray.append(movie)
+				rowTypeArray.append(ROW_TYPE_MOVIE)
+			}
+		}
+		
+		
+/*
+		for (movieIndex, movie) in movies.enumerate() {
 			if let releaseDate = movie.releaseDate {
 				if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
 					// it's a current movie, but there is no section yet
@@ -158,12 +190,13 @@ class MovieInterfaceController: WKInterfaceController {
 				rowTypeArray.append(ROW_TYPE_MOVIE)
 			}
 		}
-	
+*/
+		
 		// set row-types and fill table
 	
 		self.movieTable.setRowTypes(rowTypeArray)
 	
-		for (index, content) in enumerate(rowContentArray) {
+		for (index, content) in rowContentArray.enumerate() {
 			if (content is String) {
 				let row: MovieDateRow? = movieTable.rowControllerAtIndex(index) as? MovieDateRow
 	
@@ -172,8 +205,8 @@ class MovieInterfaceController: WKInterfaceController {
 				}
 	
 			}
-			else if (content is MovieRecord) {
-				var movie = (content as! MovieRecord)
+			else if (content is WatchMovieRecord) {
+				let movie = (content as! WatchMovieRecord)
 				let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
 				row?.titleLabel.setText((movie.title != nil) ? movie.title! : movie.origTitle!)
 				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
@@ -185,23 +218,23 @@ class MovieInterfaceController: WKInterfaceController {
 	
 	private func movieDateToString(releaseDate: NSDate) -> String {
 		
-		var gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+		let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
 		gregorian?.timeZone = NSTimeZone(abbreviation: "GMT")!
 		var retval = ""
 		
 		if let saveGregorian = gregorian {
-			var components = saveGregorian.components(NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitYear, fromDate: releaseDate)
+			let components = saveGregorian.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year], fromDate: releaseDate)
 			retval = "\(components.month).\(components.day).\(components.year)"
 		}
 
 		return retval
 	}
 	
-	private func movieDictsToMovieRecords(dictArray: NSArray) -> [MovieRecord] {
-		var movieRecordArray: [MovieRecord] = []
+	private func movieDictsToMovieRecords(dictArray: NSArray) -> [WatchMovieRecord] {
+		var movieRecordArray: [WatchMovieRecord] = []
 		
 		for dict in dictArray {
-			movieRecordArray.append(MovieRecord(dict: dict as! [String : AnyObject]))
+			movieRecordArray.append(WatchMovieRecord(dict: dict as! [String : AnyObject]))
 		}
 		
 		return movieRecordArray

@@ -24,21 +24,21 @@ class FavoriteTableViewController: MovieTableViewController {
 	}
 	
 	private func checkForEmptyList() {
-		if (count(moviesInSections) == 0) {
+		if (moviesInSections.count == 0) {
 			// there are no favorites: show message in background view and hide separators
 			
-			var noEntriesBackView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.frame.height))
-			var headlineHeight: CGFloat = 40
-			var textInset: CGFloat = 10
+			let noEntriesBackView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.frame.height))
+			let headlineHeight: CGFloat = 40
+			let textInset: CGFloat = 10
 			
-			var headlineLabel = UILabel(frame: CGRect(x: 0, y: tableView.frame.height / 4, width: tableView.frame.width, height: headlineHeight))
+			let headlineLabel = UILabel(frame: CGRect(x: 0, y: tableView.frame.height / 4, width: tableView.frame.width, height: headlineHeight))
 			headlineLabel.textColor = UIColor.grayColor()
 			headlineLabel.font = UIFont.boldSystemFontOfSize(30)
 			headlineLabel.text = NSLocalizedString("NoFavorites", comment: "")
 			headlineLabel.textAlignment = NSTextAlignment.Center
 			noEntriesBackView.addSubview(headlineLabel)
 			
-			var textLabel = UILabel(frame: CGRect(x: textInset, y: tableView.frame.height / 4 + headlineHeight + 20, width: tableView.frame.width - 2 * textInset, height: 0))
+			let textLabel = UILabel(frame: CGRect(x: textInset, y: tableView.frame.height / 4 + headlineHeight + 20, width: tableView.frame.width - 2 * textInset, height: 0))
 			textLabel.textColor = UIColor.grayColor()
 			textLabel.font = UIFont.boldSystemFontOfSize(18)
 			textLabel.text = NSLocalizedString("HowToAddFavorites", comment: "")
@@ -120,7 +120,7 @@ class FavoriteTableViewController: MovieTableViewController {
 		
 		if let rowId = rowId, sectionId = sectionId {
 			// remove cell
-			var indexPath: NSIndexPath = NSIndexPath(forRow: rowId, inSection: sectionId)
+			let indexPath: NSIndexPath = NSIndexPath(forRow: rowId, inSection: sectionId)
 			tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
 			
 			// remove movie from datasource
@@ -133,7 +133,7 @@ class FavoriteTableViewController: MovieTableViewController {
 				sections.removeAtIndex(sectionId)
 				
 				// remove section from table
-				var indexSet: NSIndexSet = NSIndexSet(index: sectionId)
+				let indexSet: NSIndexSet = NSIndexSet(index: sectionId)
 				tableView.deleteSections(indexSet, withRowAnimation: UITableViewRowAnimation.Automatic)
 			}
 		}
@@ -147,8 +147,8 @@ class FavoriteTableViewController: MovieTableViewController {
 		
 		var indexPathForUpdateMovie: NSIndexPath?
 		
-		for (sectionIndex, section) in enumerate(moviesInSections) {
-			for (movieIndex, movie) in enumerate(section) {
+		for (sectionIndex, section) in moviesInSections.enumerate() {
+			for (movieIndex, movie) in section.enumerate() {
 				if (movie.id == updatedMovie.id) {
 					indexPathForUpdateMovie = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
 					break

@@ -8,7 +8,7 @@
 
 import UIKit
 import XCTest
-import MovieStarts
+//import MovieStarts
 
 
 class DatabaseHelperTests: XCTestCase {
@@ -22,10 +22,8 @@ class DatabaseHelperTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-
+/*
 	func testRecordsToDictFull() {
-		let movieRecords:[MovieRecord] = []
-		
 		let tmdbTestId0 = 12345
 		let imdbTestId1 = "imdb1"
 		let titleTest1  = "test1"
@@ -127,7 +125,7 @@ class DatabaseHelperTests: XCTestCase {
 		
 		XCTAssert(index == nil, "Found should be nil, but isn't.")
 	}
-
+*/
 	
 }
 

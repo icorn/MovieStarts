@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SettingsTableViewController: UITableViewController, UITableViewDelegate {
+class SettingsTableViewController: UITableViewController {
 
 	@IBOutlet weak var imdbLabel: UILabel!
 	@IBOutlet weak var youtubeLabel: UILabel!
@@ -80,7 +80,7 @@ class SettingsTableViewController: UITableViewController, UITableViewDelegate {
 		
 		if (indexPath.section == sectionAbout) {
 			if let saveStoryboard = self.storyboard {
-				var aboutController: AboutViewController = saveStoryboard.instantiateViewControllerWithIdentifier("AboutViewController") as! AboutViewController
+				let aboutController: AboutViewController = saveStoryboard.instantiateViewControllerWithIdentifier("AboutViewController") as! AboutViewController
 				navigationController?.pushViewController(aboutController, animated: true)
 			}
 		}
@@ -102,7 +102,7 @@ class SettingsTableViewController: UITableViewController, UITableViewDelegate {
 		
 		// set imdb switch on or off
 		
-		var useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(prefKey) as! Bool?
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(prefKey) as! Bool?
 		
 		if let useApp = useApp where useApp == true {
 			switcher.on = true
@@ -112,7 +112,7 @@ class SettingsTableViewController: UITableViewController, UITableViewDelegate {
 		}
 		
 		// set imdb switch to enabled or not
-		var url: NSURL? = NSURL(string: urlString)
+		let url: NSURL? = NSURL(string: urlString)
 		
 		if let url = url {
 			if UIApplication.sharedApplication().canOpenURL(url) {

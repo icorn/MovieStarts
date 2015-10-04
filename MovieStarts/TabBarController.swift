@@ -33,17 +33,17 @@ class TabBarController: UITabBarController {
 				
 				// set tab bar titles
 				
-				(saveItems[0] as! UITabBarItem).title = NSLocalizedString("NowPlayingTabBar", comment: "")
-				(saveItems[1] as! UITabBarItem).title = NSLocalizedString("UpcomingTabBar", comment: "")
-				(saveItems[2] as! UITabBarItem).title = NSLocalizedString("FavoritesTabBar", comment: "")
-				(saveItems[3] as! UITabBarItem).title = NSLocalizedString("SettingsTabBar", comment: "")
+				saveItems[0].title = NSLocalizedString("NowPlayingTabBar", comment: "")
+				saveItems[1].title = NSLocalizedString("UpcomingTabBar", comment: "")
+				saveItems[2].title = NSLocalizedString("FavoritesTabBar", comment: "")
+				saveItems[3].title = NSLocalizedString("SettingsTabBar", comment: "")
 				
 				// set tab bar images
 
-				(saveItems[0] as! UITabBarItem).image = UIImage(named: "Video.png")
-				(saveItems[1] as! UITabBarItem).image = UIImage(named: "Calendar.png")
-				(saveItems[2] as! UITabBarItem).image = UIImage(named: "favorite.png")
-				(saveItems[3] as! UITabBarItem).image = UIImage(named: "Settings.png")
+				saveItems[0].image = UIImage(named: "Video.png")
+				saveItems[1].image = UIImage(named: "Calendar.png")
+				saveItems[2].image = UIImage(named: "favorite.png")
+				saveItems[3].image = UIImage(named: "Settings.png")
 			}
 		}
     }
@@ -56,7 +56,7 @@ class TabBarController: UITabBarController {
 	/**
 		Puts all movies into the categories now, upcoming, and/or favorites.
 	
-		:param: allMovies	All the movies to put into categories
+		- parameter allMovies:	All the movies to put into categories
 	*/
 	func setUpMovies(allMovies: [MovieRecord]) {
 		
@@ -67,7 +67,7 @@ class TabBarController: UITabBarController {
 		var favorites: [MovieRecord] = []
 		
 		for movie in allMovies {
-			if let saveDate = movie.releaseDate {
+			if movie.releaseDate != nil {
 				if movie.isNowPlaying() {
 					nowMovies.append(movie)
 				}
@@ -75,20 +75,20 @@ class TabBarController: UITabBarController {
 					upcoming.append(movie)
 				}
 				
-				if (contains(Favorites.IDs, movie.id)) {
+				if (Favorites.IDs.contains(movie.id)) {
 					favorites.append(movie)
 				}
 			}
 		}
 		
-		nowMovies.sort {
+		nowMovies.sortInPlace {
 			if let otherTitle = $1.sortTitle {
 				return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
 			return true
 		}
 
-		upcoming.sort {
+		upcoming.sortInPlace {
 			if let date0 = $0.releaseDate, date1 = $1.releaseDate {
 				return date0.compare(date1) == NSComparisonResult.OrderedAscending
 			}
@@ -97,7 +97,7 @@ class TabBarController: UITabBarController {
 			}
 		}
 
-		favorites.sort {
+		favorites.sortInPlace {
 			if let date0 = $0.releaseDate, date1 = $1.releaseDate {
 				return date0.compare(date1) == NSComparisonResult.OrderedAscending
 			}
@@ -116,7 +116,7 @@ class TabBarController: UITabBarController {
 		for movie in upcoming {
 			if ((previousDate == nil) || (previousDate != movie.releaseDate)) {
 				// a new sections starts: create new array and add to film-array
-				var newMovieArray: [MovieRecord] = []
+				let newMovieArray: [MovieRecord] = []
 				upcomingMovies.append(newMovieArray)
 				upcomingSections.append(movie.releaseDateStringLong)
 				currentSection++
@@ -126,7 +126,7 @@ class TabBarController: UITabBarController {
 			upcomingMovies[currentSection].append(movie)
 			
 			// sort current section by name
-			upcomingMovies[currentSection].sort {
+			upcomingMovies[currentSection].sortInPlace {
 				if let otherTitle = $1.sortTitle {
 					return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 				}
@@ -147,7 +147,7 @@ class TabBarController: UITabBarController {
 		for movie in favorites {
 			if (movie.isNowPlaying() && (currentSection == -1)) {
 				// it's a current movie, but there is no section for it yet
-				var newMovieArray: [MovieRecord] = []
+				let newMovieArray: [MovieRecord] = []
 				favoriteMovies.append(newMovieArray)
 				favoriteSections.append(NSLocalizedString("NowPlayingLong", comment: ""))
 				currentSection++
@@ -155,7 +155,7 @@ class TabBarController: UITabBarController {
 			else if ((movie.isNowPlaying() == false) && ((previousDate == nil) || (previousDate != movie.releaseDate))) {
 				// upcoming movies:
 				// a new sections starts: create new array and add to film-array
-				var newMovieArray: [MovieRecord] = []
+				let newMovieArray: [MovieRecord] = []
 				favoriteMovies.append(newMovieArray)
 				favoriteSections.append(movie.releaseDateStringLong)
 				currentSection++
@@ -165,7 +165,7 @@ class TabBarController: UITabBarController {
 			favoriteMovies[currentSection].append(movie)
 			
 			// sort current section by name
-			favoriteMovies[currentSection].sort {
+			favoriteMovies[currentSection].sortInPlace {
 				if let otherTitle = $1.sortTitle {
 					return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 				}
@@ -179,10 +179,10 @@ class TabBarController: UITabBarController {
 	
 	func updateMovies(allMovies: [MovieRecord], database: Database?) {
 		if (userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) != nil) {
-			var latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as! NSDate?
+			let latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as! NSDate?
 		
 			if let latestUpdate = latestUpdate {
-				var hoursSinceLastUpdate = abs(Int(latestUpdate.timeIntervalSinceNow)) / 60 / 60
+				let hoursSinceLastUpdate = abs(Int(latestUpdate.timeIntervalSinceNow)) / 60 / 60
 				
 				if (hoursSinceLastUpdate < Constants.HOURS_BETWEEN_DB_UPDATES) {
 					// last update was inside the tolerance: don't get new update
@@ -200,7 +200,7 @@ class TabBarController: UITabBarController {
 
 		// check iCloud status
 		
-		database?.checkCloudKit({ (status: CKAccountStatus, error: NSError!) -> () in
+		database?.checkCloudKit({ (status: CKAccountStatus, error: NSError?) -> () in
 			
 			var errorWindow: MessageWindow?
 			
@@ -274,8 +274,8 @@ class TabBarController: UITabBarController {
 				
 				// the last two remove the cell from one *tab* and add it to another.
 				
-				var movieIsInUpcomingList = self.isMovieInUpcomingList(movie)
-				var movieIsInNowPlayingList = self.isMovieInNowPlayingList(movie)
+				let movieIsInUpcomingList = self.isMovieInUpcomingList(movie)
+				let movieIsInNowPlayingList = self.isMovieInNowPlayingList(movie)
 				
 				dispatch_async(dispatch_get_main_queue()) {
 					if (movie.isNowPlaying() && movieIsInNowPlayingList) {
@@ -301,7 +301,7 @@ class TabBarController: UITabBarController {
 						self.nowPlayingController?.addMovie(movie)
 					}
 					
-					if (contains(Favorites.IDs, movie.id)) {
+					if (Favorites.IDs.contains(movie.id)) {
 						// also, update the favorites
 						NSLog("Updating \(movie.title!) in FAVORITES")
 						self.favoriteController?.updateFavorite(movie)

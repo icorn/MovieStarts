@@ -140,7 +140,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			posterImageView.image = movie.thumbnailImage.0
 
 			if (movie.thumbnailImage.1) {
-				var rec = UITapGestureRecognizer(target: self, action: Selector("thumbnailTapped:"))
+				let rec = UITapGestureRecognizer(target: self, action: Selector("thumbnailTapped:"))
 				rec.numberOfTapsRequired = 1
 				posterImageView.addGestureRecognizer(rec)
 			}
@@ -153,7 +153,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			
 			var subtitleLabels = [subtitleText1, subtitleText2, subtitleText3]
 			
-			for (index, subtitle) in enumerate(movie.subtitleArray) {
+			for (index, subtitle) in movie.subtitleArray.enumerate() {
 				subtitleLabels[index]?.text = subtitle
 			}
 			
@@ -164,13 +164,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			}
 
 			// vertically "center" the labels
-			var moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
+			let moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
 			titleLabelTopSpaceConstraint.constant = CGFloat(moveY / 2) * -1 + 4
 
 			// show release date
 			
 			releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
-			if let saveDate = movie.releaseDate {
+			if (movie.releaseDate != nil) {
 				releaseDateLabel?.text = movie.releaseDateString
 			}
 			else {
@@ -182,14 +182,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			
 			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
 			if (movie.voteCount > 2) {
-				var numberFormatter = NSNumberFormatter()
+				let numberFormatter = NSNumberFormatter()
 				numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
 				numberFormatter.minimumFractionDigits = 1
 
-				var voteAverage = numberFormatter.stringFromNumber(movie.voteAverage)
-				var voteMaximum = numberFormatter.stringFromNumber(10.0)
+				let voteAverage = numberFormatter.stringFromNumber(movie.voteAverage)
 
-				if let saveVoteAverage = voteAverage, saveVoteMaximum = voteMaximum {
+				if let saveVoteAverage = voteAverage {
 					ratingLabel?.text =  "\(saveVoteAverage)"
 				}
 				else {
@@ -281,7 +280,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			var textButtonIndex = 0
 			var buttonLines = [line6, line7, line8, line9, line10]
 			
-			if let imdbId = movie.imdbId {
+			if (movie.imdbId != nil) {
 				textButtons[textButtonIndex].addTarget(self, action: Selector("imdbButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
 				textButtons[textButtonIndex].setTitle(NSLocalizedString("ShowOnImdb", comment: ""), forState: UIControlState.Normal)
 				textButtonIndex++
@@ -337,7 +336,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			
 			// if needed: show poster-hint
 		
-			var posterHintAlreadyShown: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_POSTER_HINT_ALREADY_SHOWN) as! Bool?
+			let posterHintAlreadyShown: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_POSTER_HINT_ALREADY_SHOWN) as! Bool?
 
 			if (posterHintAlreadyShown == nil) {
 				// hint not already shown: show it
@@ -363,7 +362,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	/**
 		Calls the webview with the imdb page for the movie.
 	
-		:param: sender	The tapped button
+		- parameter sender:	The tapped button
 	*/
 	func imdbButtonTapped(sender:UIButton!) {
 		
@@ -377,10 +376,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 		
 		// check if we open the idmb app or the webview
 		
-		var useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as! Bool?
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as! Bool?
 		
 		if let imdbId = movie?.imdbId {
-			var url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
+			let url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
 
 			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
 				// use the app instead of the webview
@@ -388,7 +387,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			}
 			else {
 				// use the webview
-				var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
+				let webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
 				webViewController.urlString = "http://www.imdb.com/title/\(imdbId)"
 				navigationController?.pushViewController(webViewController, animated: true)
 			}
@@ -399,7 +398,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	/**
 		Calls the webview with the trailer page for the movie.
 	
-		:param: sender	The tapped button
+		- parameter sender:	The tapped button
 	*/
 	func trailerButtonTapped(sender:UIButton!) {
 		
@@ -428,10 +427,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 		
 		// check if we open the youtube app or the webview
 		
-		var useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as! Bool?
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as! Bool?
 		
 		if let trailerId = movie?.trailerIds[index] {
-			var url: NSURL? = NSURL(string: "https://www.youtube.com/v/\(trailerId)/")
+			let url: NSURL? = NSURL(string: "https://www.youtube.com/v/\(trailerId)/")
 			
 			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
 				// use the app instead of the webview
@@ -439,7 +438,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			}
 			else {
 				// use the webview
-				var webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
+				let webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as! WebViewController
 				webViewController.urlString = "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
 				navigationController?.pushViewController(webViewController, animated: true)
 			}
@@ -450,7 +449,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	/**
 		Adds the current movie to favorites.
 	
-		:param: sender	The tapped button
+		- parameter sender:	The tapped button
 	*/
 	func addFavoriteButtonTapped(sender:UIButton!) {
 		if let movie = movie {
@@ -463,7 +462,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	/**
 		Removes current movie from favorites.
 	
-		:param: sender	The tapped button
+		- parameter sender:	The tapped button
 	*/
 	func removeFavoriteButtonTapped(sender:UIButton!) {
 		if let movie = movie {
@@ -479,7 +478,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	/**
 		Sets the given constraint constant to 0.
 	
-		:param: constraints		A number of NSLayoutConstraints to be set to 0
+		- parameter constraints:		A number of NSLayoutConstraints to be set to 0
 	*/
 	private final func setConstraintsToZero(constraints: NSLayoutConstraint...) {
 		for constraint in constraints {
@@ -489,16 +488,16 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 
 	private final func setUpFavoriteButton() {
 		if let movie = movie {
-			if (contains(Favorites.IDs, movie.id)) {
+			if (Favorites.IDs.contains(movie.id)) {
 				// this movie is a favorite: show remove-button
-				if let navigationController = navigationController {
-					navigationController.topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("removeFavoriteButtonTapped:"))
+				if let navigationController = navigationController, topViewController = navigationController.topViewController {
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("removeFavoriteButtonTapped:"))
 				}
 			}
 			else {
 				// this movie is not a favorite: show add-button
-				if let navigationController = navigationController {
-					navigationController.topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favoriteframe.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("addFavoriteButtonTapped:"))
+				if let navigationController = navigationController, topViewController = navigationController.topViewController {
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favoriteframe.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("addFavoriteButtonTapped:"))
 				}
 			}
 		}

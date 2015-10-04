@@ -77,7 +77,7 @@ class StartViewController: UIViewController {
 				// show the next view controller
 				
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				var tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
+				let tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
 				
 				if let tabBarController = tabBarController, allMovies = movies {
 					
@@ -108,21 +108,15 @@ class StartViewController: UIViewController {
 			},
 			
 			showIndicator: {
-				dispatch_async(dispatch_get_main_queue()) {
-					self.welcomeWindow?.showProgressIndicator(NSLocalizedString("WelcomeDownloading", comment: ""))
-				}
+				self.welcomeWindow?.showProgressIndicator(NSLocalizedString("WelcomeDownloading", comment: ""))
 			},
 			
 			stopIndicator: {
-				dispatch_async(dispatch_get_main_queue()) {
-					self.welcomeWindow?.hideProgressIndicator()
-				}
+				self.welcomeWindow?.hideProgressIndicator()
 			},
 			
 			updateIndicator: { (counter: Int) in
-				dispatch_async(dispatch_get_main_queue()) {
-					self.welcomeWindow?.updateProgressIndicator("\(counter) " + NSLocalizedString("WelcomeProgress", comment: ""))
-				}
+				self.welcomeWindow?.updateProgressIndicator("\(counter) " + NSLocalizedString("WelcomeProgress", comment: ""))
 			},
 			
 			finishHandler: {

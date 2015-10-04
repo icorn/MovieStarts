@@ -29,7 +29,6 @@ class MovieRecordTests: XCTestCase {
 		let titleTest  = "testtitle"
 		
 		let record = MovieRecord(dict: [Constants.DB_ID_TMDB_ID : tmdbTestId, Constants.DB_ID_IMDB_ID : imdbTestId, Constants.DB_ID_TITLE : titleTest])
-		let dict = record.toDictionary()
 		
 		XCTAssertNotNil(record.title,  "Title is nil")
 		XCTAssertNotNil(record.tmdbId, "tmdb-id is nil")

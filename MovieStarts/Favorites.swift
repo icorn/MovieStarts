@@ -16,7 +16,7 @@ struct Favorites {
 		Writes the favorites to the device.
 	*/
 	static func saveFavorites() {
-		var userDefaults = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)
+		let userDefaults = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)
 		userDefaults?.setObject(IDs, forKey: Constants.PREFS_FAVORITES)
 		userDefaults?.synchronize()
 	}
@@ -24,7 +24,7 @@ struct Favorites {
 	/**
 		Add a new movie ID to favorites.
 	
-		:param: id	the new favorite movie id
+		- parameter id:	the new favorite movie id
 	*/
 	static func addMovie(movie: MovieRecord, tabBarController: TabBarController?) {
 		Favorites.IDs.append(movie.id)
@@ -35,7 +35,7 @@ struct Favorites {
 	/**
 		Removes a movie ID from favorites.
 	
-		:param: id	the movie id to be removed
+		- parameter id:	the movie id to be removed
 	*/
 	static func removeMovieID(id: String, tabBarController: TabBarController?) {
 		for (var i=0; i < Favorites.IDs.count; i++) {

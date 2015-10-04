@@ -30,7 +30,7 @@ class AboutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		var appInfo = NSBundle.mainBundle().infoDictionary
+		let appInfo = NSBundle.mainBundle().infoDictionary
 		
 		if let appInfo = appInfo, version = appInfo["CFBundleShortVersionString"] as? String {
 			versionLabel.text = NSLocalizedString("Version", comment: "") + " " + version
@@ -50,7 +50,7 @@ class AboutViewController: UIViewController {
 	}
 
 	@IBAction func webLinkTouched(sender: AnyObject) {
-		var url = NSURL(string: "http://MovieStartsApp.com")
+		let url = NSURL(string: "http://MovieStartsApp.com")
 
 		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
 			UIApplication.sharedApplication().openURL(url)
@@ -58,7 +58,7 @@ class AboutViewController: UIViewController {
 	}
 	
 	@IBAction func emailLinkTouched(sender: AnyObject) {
-		var url = NSURL(string: "mailto:info@MovieStartsApp.com")
+		let url = NSURL(string: "mailto:info@MovieStartsApp.com")
 		
 		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
 			UIApplication.sharedApplication().openURL(url)
@@ -66,7 +66,7 @@ class AboutViewController: UIViewController {
 	}
 	
 	@IBAction func twitterLinkgTouched(sender: AnyObject) {
-		var url = NSURL(string: "https://twitter.com/MovieStartsApp")
+		let url = NSURL(string: "https://twitter.com/MovieStartsApp")
 		
 		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
 			UIApplication.sharedApplication().openURL(url)

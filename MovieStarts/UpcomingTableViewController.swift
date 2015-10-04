@@ -26,7 +26,7 @@ class UpcomingTableViewController: MovieTableViewController {
 	
 	private func addMoviePrivate(newMovie: MovieRecord) {
 		// search apropriate section for the new movie
-		var sectionToSearchFor = newMovie.releaseDateStringLong
+		let sectionToSearchFor = newMovie.releaseDateStringLong
 		var foundSectionIndex: Int?
 		
 		for sectionIndex in 0 ..< sections.count {
@@ -52,8 +52,8 @@ class UpcomingTableViewController: MovieTableViewController {
 		
 		var indexPathForExistingMovie: NSIndexPath?
 		
-		for (sectionIndex, section) in enumerate(moviesInSections) {
-			for (movieIndex, movie) in enumerate(section) {
+		for (sectionIndex, section) in moviesInSections.enumerate() {
+			for (movieIndex, movie) in section.enumerate() {
 				if (movie.id == movieToRemove.id) {
 					indexPathForExistingMovie = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
 					break
@@ -77,8 +77,8 @@ class UpcomingTableViewController: MovieTableViewController {
 		
 		var indexPathForExistingMovie: NSIndexPath?
 		
-		for (sectionIndex, section) in enumerate(moviesInSections) {
-			for (movieIndex, movie) in enumerate(section) {
+		for (sectionIndex, section) in moviesInSections.enumerate() {
+			for (movieIndex, movie) in section.enumerate() {
 				if (movie.id == updatedMovie.id) {
 					indexPathForExistingMovie = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
 					break

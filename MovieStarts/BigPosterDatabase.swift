@@ -19,16 +19,16 @@ class BigPosterDatabase : DatabaseParent {
 	/**
 		Initiate the download of a big poster.
 	
-		:param: movie			The movie which the poster belongs to
-		:param: finishCallback	The callback which is called after the finished download (or error)
+		- parameter movie:			The movie which the poster belongs to
+		- parameter finishCallback:	The callback which is called after the finished download (or error)
 	*/
 	func downloadBigPoster(movie: MovieRecord, finishCallback: (error: NSError?) -> ()) {
 		self.movie = movie
 		self.finishCallback = finishCallback
 		
 		if let tmdbId = movie.tmdbId {
-			var predicate = NSPredicate(format: "tmdbId == %i", tmdbId)
-			var query = CKQuery(recordType: self.recordType, predicate: predicate)
+			let predicate = NSPredicate(format: "tmdbId == %i", tmdbId)
+			let query = CKQuery(recordType: self.recordType, predicate: predicate)
 			let queryOperation = CKQueryOperation(query: query)
 			queryOperation.recordFetchedBlock = recordFetchedBigPosterCallback
 			queryOperation.queryCompletionBlock = queryCompleteBigPosterCallback
@@ -39,7 +39,7 @@ class BigPosterDatabase : DatabaseParent {
 	
 	
 	private func recordFetchedBigPosterCallback(record: CKRecord!) {
-		var tmdbIdToFind: Int = record.objectForKey(Constants.DB_ID_TMDB_ID) as! Int
+		let tmdbIdToFind: Int = record.objectForKey(Constants.DB_ID_TMDB_ID) as! Int
 		
 		if let tmdbId = movie?.tmdbId where tmdbId == tmdbIdToFind {
 			movie?.storePoster(record.objectForKey(Constants.DB_ID_BIG_POSTER_ASSET) as? CKAsset, thumbnail: false)
@@ -47,7 +47,7 @@ class BigPosterDatabase : DatabaseParent {
 	}
 
 	
-	private func queryCompleteBigPosterCallback(cursor: CKQueryCursor!, error: NSError!) {
+	private func queryCompleteBigPosterCallback(cursor: CKQueryCursor?, error: NSError?) {
 		finishCallback?(error: error)
 	}
 	

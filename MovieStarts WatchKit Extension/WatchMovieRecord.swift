@@ -7,11 +7,10 @@
 //
 
 import Foundation
-import CloudKit
 import UIKit
 
 
-public class MovieRecord : CustomStringConvertible {
+public class WatchMovieRecord : CustomStringConvertible {
 	
 	/// the unique ID from CKAsset
 	public var id:String
@@ -59,7 +58,7 @@ public class MovieRecord : CustomStringConvertible {
 	private var _thumbnailImage: UIImage?
 	private var _thumbnailFound: Bool = false
 	
-
+	
 	public init(dict: [String: AnyObject]) {
 		
 		if (dict[Constants.DB_ID_TMDB_ID] != nil) 		{ self.tmdbId 			= dict[Constants.DB_ID_TMDB_ID] 		as? Int }
@@ -79,9 +78,9 @@ public class MovieRecord : CustomStringConvertible {
 		if (dict[Constants.DB_ID_ACTORS] != nil) 		{ self.actors 			= dict[Constants.DB_ID_ACTORS] 			as! [String] }
 		if (dict[Constants.DB_ID_TRAILER_NAMES] != nil) { self.trailerNames 	= dict[Constants.DB_ID_TRAILER_NAMES] 	as! [String] }
 		if (dict[Constants.DB_ID_TRAILER_IDS] != nil) 	{ self.trailerIds 		= dict[Constants.DB_ID_TRAILER_IDS] 	as! [String] }
-
+		
 		if (dict[Constants.DB_ID_PRODUCTION_COUNTRIES] != nil) { self.productionCountries = dict[Constants.DB_ID_PRODUCTION_COUNTRIES] as! [String] }
-
+		
 		if (dict[Constants.DB_ID_POPULARITY] != nil) 	{ self.popularity 		= dict[Constants.DB_ID_POPULARITY] 		as! Int }
 		if (dict[Constants.DB_ID_VOTE_COUNT] != nil) 	{ self.voteCount 		= dict[Constants.DB_ID_VOTE_COUNT] 		as! Int }
 		
@@ -94,40 +93,12 @@ public class MovieRecord : CustomStringConvertible {
 			id = ""
 		}
 	}
-
 	
-	init(ckRecord: CKRecord) {
-		
-		if (ckRecord.objectForKey(Constants.DB_ID_TMDB_ID) != nil) 		{ self.tmdbId 			= ckRecord.objectForKey(Constants.DB_ID_TMDB_ID) 		as? Int }
-		if (ckRecord.objectForKey(Constants.DB_ID_ORIG_TITLE) != nil)	{ self.origTitle 		= ckRecord.objectForKey(Constants.DB_ID_ORIG_TITLE) 	as? String }
-		if (ckRecord.objectForKey(Constants.DB_ID_TITLE) != nil) 		{ self.title 			= ckRecord.objectForKey(Constants.DB_ID_TITLE) 			as? String }
-		if (ckRecord.objectForKey(Constants.DB_ID_SORT_TITLE) != nil) 	{ self.sortTitle 		= ckRecord.objectForKey(Constants.DB_ID_SORT_TITLE) 	as? String }
-		if (ckRecord.objectForKey(Constants.DB_ID_SYNOPSIS) != nil) 	{ self.synopsis 		= ckRecord.objectForKey(Constants.DB_ID_SYNOPSIS) 		as? String }
-		if (ckRecord.objectForKey(Constants.DB_ID_RELEASE) != nil) 		{ self.releaseDate 		= ckRecord.objectForKey(Constants.DB_ID_RELEASE) 		as? NSDate }
-		if (ckRecord.objectForKey(Constants.DB_ID_CERTIFICATION) != nil){ self.certification 	= ckRecord.objectForKey(Constants.DB_ID_CERTIFICATION) 	as? String }
-		if (ckRecord.objectForKey(Constants.DB_ID_POSTER_URL) != nil) 	{ self.posterUrl 		= ckRecord.objectForKey(Constants.DB_ID_POSTER_URL) 	as? String }
-		if (ckRecord.objectForKey(Constants.DB_ID_IMDB_ID) != nil) 		{ self.imdbId 			= ckRecord.objectForKey(Constants.DB_ID_IMDB_ID) 		as? String }
-		
-		if (ckRecord.objectForKey(Constants.DB_ID_RUNTIME) != nil) 		{ self.runtime 			= ckRecord.objectForKey(Constants.DB_ID_RUNTIME) 		as! Int }
-		if (ckRecord.objectForKey(Constants.DB_ID_VOTE_AVERAGE) != nil) { self.voteAverage 		= ckRecord.objectForKey(Constants.DB_ID_VOTE_AVERAGE) 	as! Double }
-		if (ckRecord.objectForKey(Constants.DB_ID_GENRES) != nil) 		{ self.genres 			= ckRecord.objectForKey(Constants.DB_ID_GENRES) 		as! [String] }
-		if (ckRecord.objectForKey(Constants.DB_ID_DIRECTORS) != nil) 	{ self.directors 		= ckRecord.objectForKey(Constants.DB_ID_DIRECTORS) 		as! [String] }
-		if (ckRecord.objectForKey(Constants.DB_ID_ACTORS) != nil) 		{ self.actors 			= ckRecord.objectForKey(Constants.DB_ID_ACTORS) 		as! [String] }
-		if (ckRecord.objectForKey(Constants.DB_ID_TRAILER_NAMES) != nil){ self.trailerNames 	= ckRecord.objectForKey(Constants.DB_ID_TRAILER_NAMES) 	as! [String] }
-		if (ckRecord.objectForKey(Constants.DB_ID_TRAILER_IDS) != nil) 	{ self.trailerIds 		= ckRecord.objectForKey(Constants.DB_ID_TRAILER_IDS) 	as! [String] }
-		
-		if (ckRecord.objectForKey(Constants.DB_ID_PRODUCTION_COUNTRIES) != nil) { self.productionCountries = ckRecord.objectForKey(Constants.DB_ID_PRODUCTION_COUNTRIES) as! [String] }
-		
-		if (ckRecord.objectForKey(Constants.DB_ID_POPULARITY) != nil) 	{ self.popularity 		= ckRecord.objectForKey(Constants.DB_ID_POPULARITY) 	as! Int }
-		if (ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) != nil) 	{ self.voteCount 		= ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) 	as! Int }
-		
-		id = ckRecord.recordID.recordName
-	}
-
+	
 	/**
-		Converts this object to a dictionary for serialization.
-
-		- returns: A dictionary with all non-null members of this object.
+	Converts this object to a dictionary for serialization.
+	
+	- returns: A dictionary with all non-null members of this object.
 	*/
 	
 	public func toDictionary() -> [String: AnyObject] {
@@ -143,7 +114,7 @@ public class MovieRecord : CustomStringConvertible {
 		if let certification = certification { retval[Constants.DB_ID_CERTIFICATION] = certification }
 		if let posterUrl 	 = posterUrl 	 { retval[Constants.DB_ID_POSTER_URL] 	 = posterUrl }
 		if let imdbId 		 = imdbId 		 { retval[Constants.DB_ID_IMDB_ID] 		 = imdbId }
-
+		
 		retval[Constants.DB_ID_RUNTIME] 				= runtime
 		retval[Constants.DB_ID_VOTE_AVERAGE] 			= voteAverage
 		retval[Constants.DB_ID_GENRES] 					= genres
@@ -232,7 +203,7 @@ public class MovieRecord : CustomStringConvertible {
 	}
 	
 	/// The subtitle for the detail view of the movie.
-
+	
 	public var detailSubtitle: String? {
 		var detailText = ""
 		
@@ -250,7 +221,7 @@ public class MovieRecord : CustomStringConvertible {
 		}
 		
 		// add countries
-
+		
 		if let countries = countryString {
 			detailText += countries
 		}
@@ -333,38 +304,9 @@ public class MovieRecord : CustomStringConvertible {
 	
 	
 	/**
-		Moves a downloaded poster from the temporary folder to the final one.
+	Checks if the movie is now playing in theaters.
 	
-		- parameter asset:		The asset of the poster coming from CloudKit
-		- parameter thumbnail:	The kind of poster (thumbnail or big)
-	*/
-	func storePoster(asset: CKAsset?, thumbnail: Bool) {
-		
-		let folder: String = (thumbnail ? Constants.THUMBNAIL_FOLDER : Constants.BIG_POSTER_FOLDER)
-		
-		if let asset = asset, posterUrl = posterUrl {
-			let targetPathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
-			
-			if let targetPathUrl = targetPathUrl, targetBasePath = targetPathUrl.path, sourcePathString = asset.fileURL.path {
-				let targetPathString = targetBasePath + folder + posterUrl
-
-				// now we have both paths: copy the file
-				
-				do {
-					try NSFileManager.defaultManager().moveItemAtPath(sourcePathString, toPath: targetPathString)
-				}
-				catch let error as NSError {
-					NSLog(error.description)
-				}
-			}
-		}
-	}
-	
-	
-	/**
-		Checks if the movie is now playing in theaters.
-
-		- returns: TRUE if it is now playing, FALSE otherwise
+	- returns: TRUE if it is now playing, FALSE otherwise
 	*/
 	func isNowPlaying() -> Bool {
 		var retval = false
@@ -376,13 +318,13 @@ public class MovieRecord : CustomStringConvertible {
 		
 		return retval
 	}
-
+	
 	
 	/**
-		Checks if the updated version of the movie record has changes
-		which are visible in the table cell.
-    */
-	func hasVisibleChanges(updatedMovie: MovieRecord) -> Bool {
+	Checks if the updated version of the movie record has changes
+	which are visible in the table cell.
+	*/
+	func hasVisibleChanges(updatedMovie: WatchMovieRecord) -> Bool {
 		
 		if ((title != updatedMovie.title) || (origTitle != updatedMovie.origTitle) || (runtime != updatedMovie.runtime) ||
 			(productionCountries != updatedMovie.productionCountries) || (genres != updatedMovie.genres))
@@ -406,7 +348,7 @@ public class MovieRecord : CustomStringConvertible {
 		retval += "voteAvg: \(voteAverage) | "
 		retval += "voteCount: \(voteCount) | "
 		retval += "popularity: \(popularity) | "
-
+		
 		if let tmdbId = tmdbId {
 			retval += "tmdbId: \(tmdbId) | "
 		} else {
@@ -418,13 +360,13 @@ public class MovieRecord : CustomStringConvertible {
 		} else {
 			retval += "imdbId: nil | "
 		}
-
+		
 		if let title = title {
 			retval += "title: \(title) | "
 		} else {
 			retval += "title: nil | "
 		}
-
+		
 		if let sortTitle = sortTitle {
 			retval += "sortTitle: \(sortTitle) | "
 		} else {
@@ -436,19 +378,19 @@ public class MovieRecord : CustomStringConvertible {
 		} else {
 			retval += "origTitle: nil | "
 		}
-
+		
 		if let releaseDate = releaseDate {
 			retval += "releaseDate: \(releaseDate) | "
 		} else {
 			retval += "releaseDate: nil | "
 		}
-
+		
 		if let posterUrl = posterUrl {
 			retval += "posterUrl: \(posterUrl) | "
 		} else {
 			retval += "posterUrl: nil | "
 		}
-
+		
 		return retval
 		
 		/* ignored:

@@ -43,34 +43,34 @@ class MessageWindow: NSObject {
 
 		// set up views
 		
-		view.setTranslatesAutoresizingMaskIntoConstraints(false)
+		view.translatesAutoresizingMaskIntoConstraints = false
 		view.layer.cornerRadius = 6
 		view.backgroundColor = UIColor.whiteColor()
 		view.opaque = false
 		
-		backView.setTranslatesAutoresizingMaskIntoConstraints(false)
+		backView.translatesAutoresizingMaskIntoConstraints = false
 		if darkenBackground {
 			backView.backgroundColor = UIColor.blackColor()
 			backView.alpha = 0.7
 		}
 		
-		var logoImage = UIImage(named: "welcome")
+		let logoImage = UIImage(named: "welcome")
 		if let logoImage = logoImage {
 			logoImageView = UIImageView()
-			logoImageView?.setTranslatesAutoresizingMaskIntoConstraints(false)
+			logoImageView?.translatesAutoresizingMaskIntoConstraints = false
 			logoImageView?.image = logoImage
 		}
 		
-		var title = UILabel()
-		title.setTranslatesAutoresizingMaskIntoConstraints(false)
+		let title = UILabel()
+		title.translatesAutoresizingMaskIntoConstraints = false
 		title.text = NSLocalizedString(titleStringId, comment: "")
 		title.font = UIFont.systemFontOfSize(24)
 		title.textAlignment = NSTextAlignment.Center
 		title.textColor = UIColor.blackColor()
 		title.backgroundColor = UIColor.clearColor()
 
-		var msg = UILabel()
-		msg.setTranslatesAutoresizingMaskIntoConstraints(false)
+		let msg = UILabel()
+		msg.translatesAutoresizingMaskIntoConstraints = false
 		msg.text = NSLocalizedString(textStringId, comment: "")
 		msg.font = UIFont.systemFontOfSize(16)
 		msg.textAlignment = NSTextAlignment.Center
@@ -79,21 +79,21 @@ class MessageWindow: NSObject {
 		msg.numberOfLines = 0
 		msg.sizeToFit()
 		
-		button.setTranslatesAutoresizingMaskIntoConstraints(false)
+		button.translatesAutoresizingMaskIntoConstraints = false
 		button.setTitle(NSLocalizedString(buttonStringId, comment: ""), forState: UIControlState.Normal)
 		button.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0), forState: UIControlState.Normal)
 		button.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0), forState: UIControlState.Highlighted)
 		button.addTarget(self, action: Selector("buttonPressed"), forControlEvents: UIControlEvents.TouchUpInside)
 		
-		progressView.setTranslatesAutoresizingMaskIntoConstraints(false)
+		progressView.translatesAutoresizingMaskIntoConstraints = false
 		progressView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
 		progressView.hidden = true
 		
-		spinner.setTranslatesAutoresizingMaskIntoConstraints(false)
+		spinner.translatesAutoresizingMaskIntoConstraints = false
 		spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray
 		spinner.hidesWhenStopped = false
 		
-		progressLabel.setTranslatesAutoresizingMaskIntoConstraints(false)
+		progressLabel.translatesAutoresizingMaskIntoConstraints = false
 		progressLabel.text = "Hi"
 		progressLabel.font = UIFont.systemFontOfSize(16)
 		progressLabel.textAlignment = NSTextAlignment.Left
@@ -120,11 +120,11 @@ class MessageWindow: NSObject {
 		
 		// create easy constraints in visual format
 		
-		var viewsDictionary = ["view": view, "backView": backView, "progressView": progressView]
+		let viewsDictionary = ["view": view, "backView": backView, "progressView": progressView]
 		
-		parent.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[backView]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary))
-		parent.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[backView]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary))
-		parent.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-20-[view]-20-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary))
+		parent.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[backView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
+		parent.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[backView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
+		parent.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-20-[view]-20-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
 		
 		// create the more complicated constraints in code
 

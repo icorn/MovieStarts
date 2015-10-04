@@ -10,7 +10,7 @@ import UIKit
 import CloudKit
 
 
-class MovieTableViewController: UITableViewController, UITableViewDelegate, UITableViewDataSource {
+class MovieTableViewController: UITableViewController {
 	
 	var currentTab: MovieTab?
 
@@ -94,7 +94,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	override func viewDidLoad() {
         super.viewDidLoad()
 
-		if let movieTabBarController = movieTabBarController {
+		if movieTabBarController != nil {
 			self.tableView.reloadData()
 		}
 		
@@ -164,7 +164,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 
 			var subtitleLabels = [cell.subtitleText1, cell.subtitleText2, cell.subtitleText3]
 			
-			for (index, subtitle) in enumerate(movie.subtitleArray) {
+			for (index, subtitle) in movie.subtitleArray.enumerate() {
 				subtitleLabels[index]?.hidden = false
 				subtitleLabels[index]?.text = subtitle
 			}
@@ -176,13 +176,13 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 			}
 		
 			// vertically "center" the labels
-			var moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
+			let moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
 			cell.titleTextTopSpaceConstraint.constant = CGFloat(moveY / 2) - 4
 			
 			// add favorite-icon
 			removeFavoriteIconFromCell(cell)
 			
-			if contains(Favorites.IDs, movie.id) {
+			if Favorites.IDs.contains(movie.id) {
 				addFavoriteIconToCell(cell)
 			}
 		}
@@ -193,7 +193,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
 		
 		if let saveStoryboard = self.storyboard {
-			var movieController: MovieViewController = saveStoryboard.instantiateViewControllerWithIdentifier("MovieViewController") as! MovieViewController
+			let movieController: MovieViewController = saveStoryboard.instantiateViewControllerWithIdentifier("MovieViewController") as! MovieViewController
 			
 			if moviesInSections.count > 0 {
 				movieController.movie = moviesInSections[indexPath.section][indexPath.row]
@@ -212,7 +212,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		return 116
 	}
 	
-	override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
+	override func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
 		var movieID: String!
 		
 		// find ID of edited movie
@@ -229,7 +229,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		var title: String!
 		var backColor: UIColor!
 		
-		if (contains(Favorites.IDs, movieID)) {
+		if (Favorites.IDs.contains(movieID)) {
 			title = NSLocalizedString("RemoveFromFavoritesShort", comment: "")
 			backColor = UIColor.redColor()
 		}
@@ -240,8 +240,8 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		
 		// define button-action
 		
-		var favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: {
-			(action: UITableViewRowAction!, path: NSIndexPath!) -> () in
+		let favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: {
+			(action: UITableViewRowAction, path: NSIndexPath) -> () in
 
 				// find out movie id
 			
@@ -255,9 +255,9 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 			
 				// add or remove movie as favorite
 			
-				var currentCell: UITableViewCell? = self.tableView.cellForRowAtIndexPath(indexPath)
+				let currentCell: UITableViewCell? = self.tableView.cellForRowAtIndexPath(indexPath)
 
-				if (contains(Favorites.IDs, movie.id)) {
+				if (Favorites.IDs.contains(movie.id)) {
 					// movie is favorite: remove it as favorite and remove favorite-icon
 					Favorites.removeMovieID(movie.id, tabBarController: self.movieTabBarController)
 					self.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
@@ -295,7 +295,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	
 	private func addFavoriteIconToCell(cell: MovieTableViewCell?) {
 		if let cell = cell {
-			var borderWidth = cell.frame.width - cell.contentView.frame.width
+			let borderWidth = cell.frame.width - cell.contentView.frame.width
 			cell.favoriteCornerHorizontalSpace.constant = -8 - borderWidth
 			cell.favoriteCorner.hidden = false
 		}
@@ -312,7 +312,7 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 		
 		// add new movie to the section, then sort it
 		moviesInSections[foundSectionIndex].append(newMovie)
-		moviesInSections[foundSectionIndex].sort {
+		moviesInSections[foundSectionIndex].sortInPlace {
 			if let otherTitle = $1.sortTitle {
 				return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
@@ -377,8 +377,8 @@ class MovieTableViewController: UITableViewController, UITableViewDelegate, UITa
 	func updateThumbnail(tmdbId: Int) -> Bool {
 		var updated = false
 		
-		for (sectionIndex, section) in enumerate(moviesInSections) {
-			for (movieIndex, movie) in enumerate(section) {
+		for (sectionIndex, section) in moviesInSections.enumerate() {
+			for (movieIndex, movie) in section.enumerate() {
 				if (movie.tmdbId == tmdbId) {
 					tableView.beginUpdates()
 					tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: movieIndex, inSection: sectionIndex)], withRowAnimation: UITableViewRowAnimation.None)

@@ -22,7 +22,7 @@ class NowTableViewController: MovieTableViewController {
 		
 		var indexForInsert: Int?
 		
-		for (index, movie) in enumerate(movies) {
+		for (index, movie) in movies.enumerate() {
 			if let titleFromArray = movie.sortTitle, newMovieTitle = newMovie.sortTitle {
 				if newMovieTitle.localizedCaseInsensitiveCompare(titleFromArray) == NSComparisonResult.OrderedAscending {
 					// we found the right index for the new movie
@@ -53,7 +53,7 @@ class NowTableViewController: MovieTableViewController {
 		
 		var indexForExistingMovie: Int?
 		
-		for (index, movie) in enumerate(movies) {
+		for (index, movie) in movies.enumerate() {
 			if (movie.id == movieToRemove.id) {
 				indexForExistingMovie = index
 				break
@@ -76,7 +76,7 @@ class NowTableViewController: MovieTableViewController {
 		
 		var indexForExistingMovie: Int?
 		
-		for (index, movie) in enumerate(movies) {
+		for (index, movie) in movies.enumerate() {
 			if (movie.id == updatedMovie.id) {
 				indexForExistingMovie = index
 				break
@@ -96,7 +96,7 @@ class NowTableViewController: MovieTableViewController {
 				
 				var indexForUpdatedMovie: Int?
 				
-				for (index, movie) in enumerate(movies) {
+				for (index, movie) in movies.enumerate() {
 					if let movieTitle = movie.sortTitle {
 					
 						if updatedMovie.sortTitle?.localizedCaseInsensitiveCompare(movieTitle) == NSComparisonResult.OrderedAscending {
@@ -137,7 +137,7 @@ class NowTableViewController: MovieTableViewController {
 	override func updateThumbnail(tmdbId: Int) -> Bool {
 		var updated = false
 		
-		for (index, movie) in enumerate(movies) {
+		for (index, movie) in movies.enumerate() {
 			if (movie.tmdbId == tmdbId) {
 				tableView.beginUpdates()
 				tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)

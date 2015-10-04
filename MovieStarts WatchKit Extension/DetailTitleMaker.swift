@@ -11,16 +11,16 @@ import Foundation
 
 class DetailTitleMaker {
 
-	class func makeMovieDetailTitle(movie: MovieRecord) -> String {
+	class func makeMovieDetailTitle(movie: WatchMovieRecord) -> String {
 		
 		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
-		var genre = movie.genres.first
+		let genre = movie.genres.first
 		
 		if let genre = genre {
 			detailText += NSLocalizedString(genre, comment: "") + " | "
 		}
 		
-		if (count(detailText) > 0) {
+		if (detailText.characters.count > 0) {
 			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor().predecessor())
 		}
 		
@@ -28,7 +28,7 @@ class DetailTitleMaker {
 	}
 
 	
-	class func makeMovieDetailTitleComplete(movie: MovieRecord) -> String {
+	class func makeMovieDetailTitleComplete(movie: WatchMovieRecord) -> String {
 
 		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
 
@@ -48,7 +48,7 @@ class DetailTitleMaker {
 			detailText += countries + " | "
 		}
 		
-		if (count(detailText) > 0) {
+		if (detailText.characters.count > 0) {
 			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor().predecessor())
 		}
 		
@@ -56,14 +56,14 @@ class DetailTitleMaker {
 	}
 
 	
-	class func makeMinuteAndCertificationString(movie: MovieRecord) -> String {
+	class func makeMinuteAndCertificationString(movie: WatchMovieRecord) -> String {
 		var detailText = ""
 		
 		if (movie.runtime > 0) {
 			detailText += "\(movie.runtime) m | "
 		}
 		
-		if ((movie.certification != nil) && (count(movie.certification!) > 0)) {
+		if ((movie.certification != nil) && ((movie.certification!).characters.count > 0)) {
 			
 			var cert = movie.certification!
 			

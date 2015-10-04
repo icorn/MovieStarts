@@ -15,13 +15,12 @@ extension MovieViewController {
 	/**
 		Enlarges the tapped thumbnail poster.
 	
-		:param: recognizer	The gesture recognizer - unused.
+		- parameter recognizer:	The gesture recognizer - unused.
 	*/
 	func thumbnailTapped(recognizer: UITapGestureRecognizer) {
 
 		if let movie = movie, navigationController = navigationController {
-			var bigPoster = movie.bigPoster
-			var bigPosterBackRect = navigationController.view.frame
+			let bigPoster = movie.bigPoster
 			
 			// create poster background, scrollview, and imageview
 			
@@ -37,37 +36,37 @@ extension MovieViewController {
 				// set up UI elements
 				
 				bigPosterBackView.backgroundColor = UIColor.clearColor()
-				bigPosterBackView.setTranslatesAutoresizingMaskIntoConstraints(false)
+				bigPosterBackView.translatesAutoresizingMaskIntoConstraints = false
 
 				bigPosterScrollView.minimumZoomScale = 1.0
 				bigPosterScrollView.maximumZoomScale = 6.0
 				bigPosterScrollView.contentSize = CGSize(width: view.frame.width, height: view.frame.height)
 				bigPosterScrollView.delegate = self
-				bigPosterScrollView.setTranslatesAutoresizingMaskIntoConstraints(false)
+				bigPosterScrollView.translatesAutoresizingMaskIntoConstraints = false
 				
 				bigPosterImageView.contentMode = UIViewContentMode.ScaleAspectFit
-				bigPosterImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+				bigPosterImageView.translatesAutoresizingMaskIntoConstraints = false
 				bigPosterImageView.userInteractionEnabled = true
 				bigPosterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("bigPosterTapped:")))
 				
-				if let bitPoster = bigPoster {
+				if let bigPoster = bigPoster {
 					bigPosterImageView.image = bigPoster
 				}
 				else {
 					bigPosterImageView.image = movie.thumbnailImage.0
 				}
 				
-				spinnerBackground.setTranslatesAutoresizingMaskIntoConstraints(false)
+				spinnerBackground.translatesAutoresizingMaskIntoConstraints = false
 				spinnerBackground.backgroundColor = UIColor.blackColor()
 				spinnerBackground.alpha = 0.6
 				spinnerBackground.layer.cornerRadius = 6
 				spinnerBackground.hidden = true
 				
-				spinner.setTranslatesAutoresizingMaskIntoConstraints(false)
+				spinner.translatesAutoresizingMaskIntoConstraints = false
 				spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
 				spinner.hidesWhenStopped = true
 
-				bigPosterImageView.setTranslatesAutoresizingMaskIntoConstraints(false)
+				bigPosterImageView.translatesAutoresizingMaskIntoConstraints = false
 				
 				// add subviews to views
 
@@ -79,12 +78,12 @@ extension MovieViewController {
 				
 				// set up constraints
 				
-				var viewsDictionary = ["bigPosterBackView": bigPosterBackView, "bigPosterScrollView": bigPosterScrollView, "bigPosterImageView": bigPosterImageView]
+				let viewsDictionary = ["bigPosterBackView": bigPosterBackView, "bigPosterScrollView": bigPosterScrollView, "bigPosterImageView": bigPosterImageView]
 
-				self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[bigPosterBackView]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary))
-				self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[bigPosterBackView]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary))
-				bigPosterBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[bigPosterScrollView]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary))
-				bigPosterBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[bigPosterScrollView]-0-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary))
+				self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[bigPosterBackView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
+				self.view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[bigPosterBackView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
+				bigPosterBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[bigPosterScrollView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
+				bigPosterBackView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|-0-[bigPosterScrollView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
 				
 				posterImageViewTopConstraint = NSLayoutConstraint(item: bigPosterImageView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal,
 					toItem: bigPosterScrollView, attribute: NSLayoutAttribute.Top, multiplier: 1.0,
@@ -163,7 +162,7 @@ extension MovieViewController {
 		
 		if let bigPosterImageView = bigPosterImageView, movie = movie {
 		
-			var database = BigPosterDatabase(recordType: Constants.RECORD_TYPE_USA)
+			let database = BigPosterDatabase(recordType: Constants.RECORD_TYPE_USA)
 			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 		
 			NetworkChecker.checkCloudKit(self.view, database: database, okCallback: { () -> () in
@@ -185,7 +184,7 @@ extension MovieViewController {
 					}
 					
 					// check if poster has been loaded
-					var bigPoster = movie.bigPoster
+					let bigPoster = movie.bigPoster
 					
 					if let bigPoster = bigPoster {
 						dispatch_async(dispatch_get_main_queue()) {
@@ -220,7 +219,7 @@ extension MovieViewController {
 	/**
 		Closes the enlarged poster.
 	
-		:param: recognizer	The gesture recognizer - unused.
+		- parameter recognizer:	The gesture recognizer - unused.
 	*/
 	func bigPosterTapped(recognizer: UITapGestureRecognizer) {
 		

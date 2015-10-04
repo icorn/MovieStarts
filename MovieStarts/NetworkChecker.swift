@@ -16,9 +16,9 @@ class NetworkChecker {
 	/**
 		Checks the reachability of the network.
 	
-		:param: viewForError	The parent view for error windows
+		- parameter viewForError:	The parent view for error windows
 	
-		:returns: TRUE if the network is available, FALSE otherwise
+		- returns: TRUE if the network is available, FALSE otherwise
 	*/
 	class func checkReachability(viewForError: UIView) -> Bool {
 		
@@ -42,14 +42,14 @@ class NetworkChecker {
 	/**
 		Checks the availibility of CloudKit.
 	
-		:param: viewForError	The parent view for error windows
-		:param: database		The database object to use
-		:param: okCallback		The callback which is called on success
-		:param: errorCallback	The optional callback which is called on failure (even before the user has clicked "close" in the error-window)
+		- parameter viewForError:	The parent view for error windows
+		- parameter database:		The database object to use
+		- parameter okCallback:		The callback which is called on success
+		- parameter errorCallback:	The optional callback which is called on failure (even before the user has clicked "close" in the error-window)
 	*/
 	class func checkCloudKit(viewForError: UIView, database: DatabaseParent, okCallback: () -> (), errorCallback: (() -> ())?) {
 
-		database.checkCloudKit({ (status: CKAccountStatus, error: NSError!) -> () in
+		database.checkCloudKit({ (status: CKAccountStatus, error: NSError?) -> () in
 			
 			var errorWindow: MessageWindow?
 			
@@ -77,7 +77,11 @@ class NetworkChecker {
 				
 			case .CouldNotDetermine:
 				NSLog("CloudKit error: CouldNotDetermine")
-				NSLog("CloudKit error description: \(error.description)")
+				
+				if let error = error {
+					NSLog("CloudKit error description: \(error.description)")
+				}
+				
 				errorCallback?()
 				dispatch_async(dispatch_get_main_queue()) {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermine", buttonStringId: "Close", handler: {

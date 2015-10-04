@@ -33,7 +33,7 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 
 		if let saveUrlString = urlString, saveNSUrl = NSURL(string: saveUrlString) {
 		
-			var request = NSURLRequest(URL: saveNSUrl)
+			let request = NSURLRequest(URL: saveNSUrl)
 			webview.loadRequest(request)
 		
 			// create buttons in navigation bar
@@ -83,8 +83,8 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 	
 			if let saveNavController = navigationController, saveActIndiParent = activityIndicatorParent, saveActIndi = activityIndicator {
 			
-				var totalHeight: CGFloat = webview.frame.size.height + webview.frame.origin.y
-				var verticalCenter: CGFloat = totalHeight / 2 - webview.frame.origin.y - saveNavController.navigationBar.frame.size.height
+				let totalHeight: CGFloat = webview.frame.size.height + webview.frame.origin.y
+				let verticalCenter: CGFloat = totalHeight / 2 - webview.frame.origin.y - saveNavController.navigationBar.frame.size.height
 	
 				saveActIndi.center = CGPoint(x: saveActIndiParent.frame.size.width/2, y: verticalCenter - (saveActIndi.frame.size.height / 2))
 	
@@ -116,12 +116,11 @@ class WebViewController: UIViewController, UIWebViewDelegate, UIAlertViewDelegat
 	}
 	
 	
-	func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
-		if ((error.code != NSURLErrorCancelled) && (count(error.localizedDescription) > 0)) {
-		
+	func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+		if let error = error where (error.code != NSURLErrorCancelled) && (error.localizedDescription.characters.count > 0) {
 			// error (not cancelled by user): show alert
 
-			var alert = UIAlertView(title: "NetworkErrorSstring", message: error.localizedDescription, delegate: self, cancelButtonTitle: "OK")
+			let alert = UIAlertView(title: "NetworkErrorSstring", message: error.localizedDescription, delegate: self, cancelButtonTitle: "OK")
 			alert.show()
 		}
 	

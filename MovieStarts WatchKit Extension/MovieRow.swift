@@ -17,5 +17,5 @@ class MovieRow: NSObject {
 	@IBOutlet weak var titleLabel: WKInterfaceLabel!
 	@IBOutlet weak var detailLabel: WKInterfaceLabel!
 
-	var movie: MovieRecord?
+	var movie: WatchMovieRecord?
 }
