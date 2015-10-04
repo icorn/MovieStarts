@@ -480,7 +480,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	/**
 		Sets the given constraint constant to 0.
 	
-		- parameter constraints:		A number of NSLayoutConstraints to be set to 0
+		- parameter constraints: A number of NSLayoutConstraints to be set to 0
 	*/
 	private final func setConstraintsToZero(constraints: NSLayoutConstraint...) {
 		for constraint in constraints {

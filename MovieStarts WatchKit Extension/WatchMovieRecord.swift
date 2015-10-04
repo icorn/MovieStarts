@@ -94,9 +94,9 @@ public class WatchMovieRecord : CustomStringConvertible {
 	
 	
 	/**
-	Converts this object to a dictionary for serialization.
+		Converts this object to a dictionary for serialization.
 	
-	- returns: A dictionary with all non-null members of this object.
+		- returns: A dictionary with all non-null members of this object.
 	*/
 	
 	public func toDictionary() -> [String: AnyObject] {
@@ -302,9 +302,9 @@ public class WatchMovieRecord : CustomStringConvertible {
 	
 	
 	/**
-	Checks if the movie is now playing in theaters.
+		Checks if the movie is now playing in theaters.
 	
-	- returns: TRUE if it is now playing, FALSE otherwise
+		- returns: TRUE if it is now playing, FALSE otherwise
 	*/
 	func isNowPlaying() -> Bool {
 		var retval = false
@@ -319,8 +319,8 @@ public class WatchMovieRecord : CustomStringConvertible {
 	
 	
 	/**
-	Checks if the updated version of the movie record has changes
-	which are visible in the table cell.
+		Checks if the updated version of the movie record has changes
+		which are visible in the table cell.
 	*/
 	func hasVisibleChanges(updatedMovie: WatchMovieRecord) -> Bool {
 		

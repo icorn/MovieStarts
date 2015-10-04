@@ -95,7 +95,7 @@ class Database : DatabaseParent {
 		- parameter errorHandler:		The handler which is called if an error occurs
 		- parameter showIndicator:		Callback which is called to show a progress indicator
 		- parameter stopIndicator:		Callback which is called to stop the progress indicator
-		- parameter updateIndicator:		Callback which is called to update the progress indicator with a new progress
+		- parameter updateIndicator:	Callback which is called to update the progress indicator with a new progress
 	*/
 	func getAllMovies(	completionHandler: (movies: [MovieRecord]?) -> (),
 						errorHandler: (errorMessage: String) -> (),
@@ -404,7 +404,7 @@ class Database : DatabaseParent {
 	/**
 		Writes the movies and the modification date to file.
 	
-		- parameter allMovieRecords:				The array with all movies. This will be written to file.
+		- parameter allMovieRecords:			The array with all movies. This will be written to file.
 		- parameter updatedMoviesAsRecordArray:	The array with all updated movies (used to find out latest modification date)
 		- parameter completionHandler:			The handler which is called upon completion
 		- parameter errorHandler:				The handler which is called if an error occurs

@@ -18,7 +18,7 @@ public enum IJReachabilityType {
 public class IJReachability {
 	
 	/**
-	:see: Original post - http://www.chrisdanielson.com/2009/07/22/iphone-network-connectivity-test-example/
+		:see: Original post - http://www.chrisdanielson.com/2009/07/22/iphone-network-connectivity-test-example/
 	*/
 	public class func isConnectedToNetwork() -> Bool {
 		
