@@ -119,6 +119,11 @@ class Database : DatabaseParent {
 			if let loadedDictArray = loadedDictArray {
 				// successfully loaded movies from device
 				loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray)
+				
+				if loadedMovieRecordArray != nil {
+					cleanUpExistingMovies(&(loadedMovieRecordArray!))
+				}
+				
 				completionHandler(movies: loadedMovieRecordArray)
 			}
 			else {
