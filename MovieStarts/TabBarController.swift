@@ -323,6 +323,19 @@ class TabBarController: UITabBarController {
 				}
 			},
 			
+			removeMovieHandler: { (movie: MovieRecord) in
+				
+				// remove movie
+				dispatch_async(dispatch_get_main_queue()) {
+					self.nowPlayingController?.removeMovie(movie)
+					self.upcomingController?.removeMovie(movie)
+				
+					if (Favorites.IDs.contains(movie.id)) {
+						self.favoriteController?.removeFavorite(movie.id)
+					}
+				}
+			},
+			
 			completionHandler: { (movies: [MovieRecord]?) in
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 			},

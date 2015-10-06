@@ -27,6 +27,7 @@ class Database : DatabaseParent {
 	
 	var addNewMovieHandler: ((movie: MovieRecord) -> ())?
 	var updateMovieHandler: ((movie: MovieRecord) -> ())?
+	var removeMovieHandler: ((movie: MovieRecord) -> ())?
 	var updatePosterHandler: ((tmdbId: Int) -> ())?
 	
 	var allCKRecords: [CKRecord] = []
@@ -268,12 +269,14 @@ class Database : DatabaseParent {
 	func getUpdatedMovies(	allMovies: [MovieRecord],
 							addNewMovieHandler: (movie: MovieRecord) -> (),
 							updateMovieHandler: (movie: MovieRecord) -> (),
+							removeMovieHandler: (movie: MovieRecord) -> (),
 							completionHandler: (movies: [MovieRecord]?) -> (),
 							errorHandler: (errorMessage: String) -> (),
 							updatePosterHandler: (tmdbId: Int) -> ())
 	{
 		self.addNewMovieHandler = addNewMovieHandler
 		self.updateMovieHandler = updateMovieHandler
+		self.removeMovieHandler = removeMovieHandler
 		self.completionHandler  = completionHandler
 		self.errorHandler		= errorHandler
 		self.updatePosterHandler = updatePosterHandler
@@ -291,10 +294,10 @@ class Database : DatabaseParent {
 			// get records modifies after the last modification of the local database, and only from movies
 			// whose release date is younger than 30 days.
 			
-			let compareDate = NSDate().dateByAddingTimeInterval(-30 * 24 * 60 * 60)
-			let predicateReleaseDate = NSPredicate(format: "release > %@", argumentArray: [compareDate])
+//			let compareDate = NSDate().dateByAddingTimeInterval(-30 * 24 * 60 * 60)
+//			let predicateReleaseDate = NSPredicate(format: "release > %@", argumentArray: [compareDate])
 			let predicateModificationDate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
-			let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [predicateReleaseDate, predicateModificationDate])
+			let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [/*predicateReleaseDate,*/ predicateModificationDate])
 			
 			let query = CKQuery(recordType: self.recordType, predicate: predicate)
 			
@@ -613,6 +616,7 @@ class Database : DatabaseParent {
 		for (var index = existingMovies.count-1; index >= 0; index--) {
 			if let releaseDate = existingMovies[index].releaseDate where releaseDate.compare(compareDate) == NSComparisonResult.OrderedAscending {
 				// movie is too old
+				removeMovieHandler?(movie: existingMovies[index])
 				NSLog("   '\(existingMovies[index].title)' (\(releaseDate)) removed")
 				existingMovies.removeAtIndex(index)
 			}
