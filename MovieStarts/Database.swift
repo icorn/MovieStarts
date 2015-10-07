@@ -509,8 +509,9 @@ class Database : DatabaseParent {
 							}
 							do {
 								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.BIG_POSTER_FOLDER + "/" + posterfilenameString)
-							} catch let error as NSError {
-								NSLog("Error removing poster: \(error.description)")
+							} catch {
+								// this happens all the time, when no hi-res poster was loaded
+								// NSLog("Error removing poster: \(error.description)")
 							}
 						}
 					}
