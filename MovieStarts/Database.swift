@@ -16,7 +16,7 @@ class Database : DatabaseParent {
 	var moviesPlistPath: String?
 	var moviesPlistFile: String?
 	var loadedMovieRecordArray: [MovieRecord]?
-	var viewForError: UIView
+	var viewForError: UIView?
 	
 	var completionHandler: ((movies: [MovieRecord]?) -> ())?
 	var errorHandler: ((errorMessage: String) -> ())?
@@ -44,7 +44,7 @@ class Database : DatabaseParent {
 		Constants.DB_ID_ASSET, Constants.DB_ID_HIDDEN, Constants.DB_ID_SORT_TITLE, Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_VOTE_COUNT, Constants.DB_ID_POPULARITY]
 
 	
-	init(recordType: String, viewForError: UIView) {
+	init(recordType: String, viewForError: UIView?) {
 		self.viewForError = viewForError
 		super.init(recordType: recordType)
 		
@@ -57,10 +57,12 @@ class Database : DatabaseParent {
             NSLog("Error getting url for app-group.")
 			var errorWindow: MessageWindow?
 
-			dispatch_async(dispatch_get_main_queue()) {
-				errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringId: "Close", handler: {
-					errorWindow?.close()
-				})
+			if let viewForError = viewForError {
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringId: "Close", handler: {
+						errorWindow?.close()
+					})
+				}
 			}
         }
 		
@@ -197,10 +199,12 @@ class Database : DatabaseParent {
 				self.errorHandler?(errorMessage: "Error querying records: Code=\(error.code) Domain=\(error.domain) Error: (\(error.localizedDescription))")
 				var errorWindow: MessageWindow?
 				
-				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringId: "Close", error: error, handler: {
-						errorWindow?.close()
-					})
+				if let viewForError = viewForError {
+					dispatch_async(dispatch_get_main_queue()) {
+						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringId: "Close", error: error, handler: {
+							errorWindow?.close()
+						})
+					}
 				}
 				
 				return
@@ -229,12 +233,14 @@ class Database : DatabaseParent {
 					
 					var errorWindow: MessageWindow?
 					
-					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle",
-							textStringId: "NoRecordsInCloudText", buttonStringId: "Close", handler:
-						{
-							errorWindow?.close()
-						})
+					if let viewForError = viewForError {
+						dispatch_async(dispatch_get_main_queue()) {
+							errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle",
+								textStringId: "NoRecordsInCloudText", buttonStringId: "Close", handler:
+							{
+								errorWindow?.close()
+							})
+						}
 					}
 					
 					return
@@ -257,15 +263,35 @@ class Database : DatabaseParent {
 					
 					var errorWindow: MessageWindow?
 					
-					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringId: "Close", handler: {
-							errorWindow?.close()
-						})
+					if let viewForError = viewForError {
+						dispatch_async(dispatch_get_main_queue()) {
+							errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringId: "Close", handler: {
+								errorWindow?.close()
+							})
+						}
 					}
 					return
 				}
 			}
 		}
+	}
+	
+	
+	/**
+		Reads the movie database from local file and returns it.
+	
+		- returns: All movies as array of MovieRecord objects, or nil on error
+	*/
+	func readDatabaseFromFile() -> [MovieRecord]? {
+		if let moviesPlistFile = moviesPlistFile {
+			// try to load movies from device
+			if let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary] {
+				// successfully loaded movies from device
+				return DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray)
+			}
+		}
+		
+		return nil
 	}
 	
 	
@@ -439,12 +465,14 @@ class Database : DatabaseParent {
 				errorHandler(errorMessage: "*** Error writing movies-file")
 				var errorWindow: MessageWindow?
 				
-				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "InternalErrorText", textStringId: "ErrorWritingFile", buttonStringId: "Close", handler: {
-						errorWindow?.close()
-					})
+				if let viewForError = viewForError {
+					dispatch_async(dispatch_get_main_queue()) {
+						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorText", textStringId: "ErrorWritingFile", buttonStringId: "Close", handler: {
+							errorWindow?.close()
+						})
+					}
 				}
-
+				
 				return
 			}
 		}

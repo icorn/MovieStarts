@@ -110,6 +110,15 @@ class MovieTableViewController: UITableViewController {
 
 		// reload to update favorite-icon if we come back from detail view.
 		tableView.reloadData()
+		
+		// if last update is long enough ago: check CloudKit for update
+		
+		guard let tbc = movieTabBarController else { return }
+		let database = Database(recordType: Constants.RECORD_TYPE_USA, viewForError: nil)
+
+		if let movies = database.readDatabaseFromFile() {
+			tbc.updateMovies(movies, database: database)
+		}
 	}
 
 	// MARK: - UITableViewDataSource

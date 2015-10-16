@@ -178,14 +178,15 @@ class TabBarController: UITabBarController {
 	
 	
 	func updateMovies(allMovies: [MovieRecord], database: Database?) {
+
 		if (userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) != nil) {
-			let latestUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as? NSDate
+			let latestSuccessfullUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as? NSDate
 		
-			if let latestUpdate = latestUpdate {
-				let hoursSinceLastUpdate = abs(Int(latestUpdate.timeIntervalSinceNow)) / 60 / 60
+			if let latestSuccessfullUpdate = latestSuccessfullUpdate {
+				let hoursSinceLastSuccessfullUpdate = abs(Int(latestSuccessfullUpdate.timeIntervalSinceNow)) / 60 / 60
 				
-				if (hoursSinceLastUpdate < Constants.HOURS_BETWEEN_DB_UPDATES) {
-					// last update was inside the tolerance: don't get new update
+				if (hoursSinceLastSuccessfullUpdate < Constants.HOURS_BETWEEN_DB_UPDATES) {
+					// last successfull update was inside the tolerance: don't get new update
 					return
 				}
 			}

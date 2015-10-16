@@ -92,7 +92,9 @@ class StartViewController: UIViewController {
 					self.presentViewController(tabBarController, animated: true, completion: { () in
 						if let saveAboutView = self.aboutView {
 							saveAboutView.removeFromSuperview()
-							tabBarController.updateMovies(allMovies, database: self.database)
+							
+							// no longer needed. is now done in MovieTableViewController.
+							// tabBarController.updateMovies(allMovies, database: self.database)
 						}
 					})
 					
