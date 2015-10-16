@@ -20,7 +20,6 @@
 		4F2CE8B31BC93FE200D66319 /* DetailInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2CE8B21BC93FE200D66319 /* DetailInterfaceController.swift */; settings = {ASSET_TAGS = (); }; };
 		4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3AA9891B71FEFD00640D04 /* FavoriteTableViewController.swift */; };
 		4F3EC6D41B20ACB4003C48E4 /* CertificateLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */; };
-		4F3EC7001B24A147003C48E4 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3EC6FF1B24A147003C48E4 /* WebViewController.swift */; };
 		4F3EC7071B24B35B003C48E4 /* WebViewRefresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7011B24B35B003C48E4 /* WebViewRefresh@2x.png */; };
 		4F3EC7081B24B35B003C48E4 /* WebViewForward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7021B24B35B003C48E4 /* WebViewForward@2x.png */; };
 		4F3EC7091B24B35B003C48E4 /* WebViewBack@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7031B24B35B003C48E4 /* WebViewBack@2x.png */; };
@@ -184,7 +183,6 @@
 		4F2CE8B21BC93FE200D66319 /* DetailInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailInterfaceController.swift; sourceTree = "<group>"; };
 		4F3AA9891B71FEFD00640D04 /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
 		4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CertificateLogo.swift; sourceTree = "<group>"; };
-		4F3EC6FF1B24A147003C48E4 /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		4F3EC7011B24B35B003C48E4 /* WebViewRefresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WebViewRefresh@2x.png"; sourceTree = "<group>"; };
 		4F3EC7021B24B35B003C48E4 /* WebViewForward@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WebViewForward@2x.png"; sourceTree = "<group>"; };
 		4F3EC7031B24B35B003C48E4 /* WebViewBack@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WebViewBack@2x.png"; sourceTree = "<group>"; };
@@ -331,9 +329,9 @@
 		4F4A26841BC934000077AEF5 /* watchOS2app */ = {
 			isa = PBXGroup;
 			children = (
-				4F4A26851BC934000077AEF5 /* Interface.storyboard */,
 				4F4A26881BC934000077AEF5 /* Assets.xcassets */,
 				4F4A268A1BC934000077AEF5 /* Info.plist */,
+				4F4A26851BC934000077AEF5 /* Interface.storyboard */,
 			);
 			path = watchOS2app;
 			sourceTree = "<group>";
@@ -346,9 +344,9 @@
 				4F4A26B11BC936B40077AEF5 /* DetailTitleMaker.swift */,
 				4F4A26961BC934000077AEF5 /* ExtensionDelegate.swift */,
 				4F4A269C1BC934000077AEF5 /* Info.plist */,
-				4F2CE8B01BC93FB500D66319 /* refreshMenuItem@2x.png */,
 				4F934C981BCE9BB000BCAFB0 /* LaunchStatus.swift */,
 				4F4A26A71BC934770077AEF5 /* MovieInterfaceController.swift */,
+				4F2CE8B01BC93FB500D66319 /* refreshMenuItem@2x.png */,
 				4F4A26B81BC93AA00077AEF5 /* Rows */,
 				4F4A26A91BC936090077AEF5 /* WatchMovieRecord.swift */,
 				4F70ACC11BCC461A00E34987 /* WatchSessionManager.swift */,
@@ -359,8 +357,8 @@
 		4F4A26B81BC93AA00077AEF5 /* Rows */ = {
 			isa = PBXGroup;
 			children = (
-				4F4A26B91BC93AC10077AEF5 /* EmptyRow.swift */,
 				4F4A26BB1BC93AD20077AEF5 /* DateRow.swift */,
+				4F4A26B91BC93AC10077AEF5 /* EmptyRow.swift */,
 				4F4A26BD1BC93AE90077AEF5 /* MovieRow.swift */,
 			);
 			name = Rows;
@@ -443,8 +441,8 @@
 		4F7A99A91BAE9AF700ED38C9 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */,
 				4F7A99A71BAE1A6700ED38C9 /* AnimatedTabBar.swift */,
+				4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -461,7 +459,6 @@
 				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
 				4F63E6411A9D2A8B00528FB3 /* TabBarController.swift */,
 				4F6914951A8C09BA00B8FFCE /* UpcomingTableViewController.swift */,
-				4F3EC6FF1B24A147003C48E4 /* WebViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -520,7 +517,6 @@
 			isa = PBXGroup;
 			children = (
 				4FAFF8C81A8BFFE500864078 /* AppDelegate.swift */,
-				4F70ACBF1BCC419100E34987 /* WatchSessionManager.swift */,
 				4FFC9FB01BAF14CF007A24CA /* BigPosterDatabase.swift */,
 				4F3EC6D31B20ACB4003C48E4 /* CertificateLogo.swift */,
 				4F87F9251A8DEE31001869A1 /* Constants.swift */,
@@ -537,6 +533,7 @@
 				4F7A99AC1BAEA0CE00ED38C9 /* MovieViewControllerPosters.swift */,
 				4F7A99AE1BAF01E600ED38C9 /* NetworkChecker.swift */,
 				4F87F9271A8DF0C1001869A1 /* View Controllers */,
+				4F70ACBF1BCC419100E34987 /* WatchSessionManager.swift */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -830,7 +827,6 @@
 				4F2C91181B6374810044A27B /* Favorites.swift in Sources */,
 				4F6914821A8C041D00B8FFCE /* MovieTableViewController.swift in Sources */,
 				4F0953411B9F17D50040BBC9 /* SettingsTableViewController.swift in Sources */,
-				4F3EC7001B24A147003C48E4 /* WebViewController.swift in Sources */,
 				4F7A99AF1BAF01E600ED38C9 /* NetworkChecker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

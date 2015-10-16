@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import SafariServices
 
 
-class MovieViewController: UIViewController, UIScrollViewDelegate {
+class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate {
 
 	// outlets
 	
@@ -356,6 +357,14 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	}
 
 	
+	// MARK: - UIViewController
+
+	
+	func safariViewControllerDidFinish(controller: SFSafariViewController) {
+		controller.dismissViewControllerAnimated(true, completion: nil)
+	}
+	
+	
 	// MARK: - Button callbacks
 
 	
@@ -387,10 +396,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 			}
 			else {
 				// use the webview
-				if let webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as? WebViewController {
-					webViewController.urlString = "http://www.imdb.com/title/\(imdbId)"
-					navigationController?.pushViewController(webViewController, animated: true)
-				}
+				guard let webUrl = NSURL(string: "http://www.imdb.com/title/\(imdbId)") else { return }
+				let webVC = SFSafariViewController(URL: webUrl)
+				webVC.delegate = self
+				self.presentViewController(webVC, animated: true, completion: nil)
 			}
 		}
 	}
@@ -438,11 +447,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 				UIApplication.sharedApplication().openURL(url)
 			}
 			else {
-				// use the webview
-				if let webViewController = storyboard?.instantiateViewControllerWithIdentifier("WebViewController") as? WebViewController {
-					webViewController.urlString = "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1"
-					navigationController?.pushViewController(webViewController, animated: true)
-				}
+				guard let webUrl = NSURL(string: "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1&o=U&noapp=1") else { return }
+				let webVC = SFSafariViewController(URL: webUrl)
+				webVC.delegate = self
+				self.presentViewController(webVC, animated: true, completion: nil)
 			}
 		}
 	}

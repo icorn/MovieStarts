@@ -648,42 +648,6 @@
             </objects>
             <point key="canvasLocation" x="2103" y="-354"/>
         </scene>
-        <!--Web View Controller-->
-        <scene sceneID="bSA-b4-h11">
-            <objects>
-                <viewController storyboardIdentifier="WebViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="OAO-Ov-8VU" customClass="WebViewController" customModule="MovieStarts" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="vXf-tb-I2G"/>
-                        <viewControllerLayoutGuide type="bottom" id="r4a-yO-Bmb"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="MJe-pA-2ut">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hEf-Dr-oUb">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <animations/>
-                                <variation key="widthClass=regular" ambiguous="YES">
-                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="0.0"/>
-                                </variation>
-                            </webView>
-                        </subviews>
-                        <animations/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="hEf-Dr-oUb" secondAttribute="bottom" id="12h-Vf-kah"/>
-                            <constraint firstItem="hEf-Dr-oUb" firstAttribute="leading" secondItem="MJe-pA-2ut" secondAttribute="leading" id="6Cf-Rq-0Ji"/>
-                            <constraint firstItem="hEf-Dr-oUb" firstAttribute="top" secondItem="MJe-pA-2ut" secondAttribute="top" id="Krp-z7-DpG"/>
-                            <constraint firstAttribute="trailing" secondItem="hEf-Dr-oUb" secondAttribute="trailing" id="WCJ-hO-7LO"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="webview" destination="hEf-Dr-oUb" id="JkJ-dw-VsG"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qPR-Rl-aso" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2782" y="-354"/>
-        </scene>
         <!--UpcomingNavigationController-->
         <scene sceneID="ts5-aq-tbx">
             <objects>
