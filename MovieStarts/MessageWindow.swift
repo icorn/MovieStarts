@@ -79,7 +79,13 @@ class MessageWindow: NSObject {
 		msg.text = NSLocalizedString(textStringId, comment: "")
 		
 		if let error = error {
-			msg.text = NSLocalizedString(textStringId, comment: "") + " " + error.description
+			var messageText = NSLocalizedString(textStringId, comment: "") + " " + error.localizedDescription
+			
+			if let recoverySuggestion = error.localizedRecoverySuggestion {
+				messageText = messageText + " " + recoverySuggestion
+			}
+
+			msg.text = messageText
 			msg.font = UIFont.systemFontOfSize(14)
 		}
 		else {
