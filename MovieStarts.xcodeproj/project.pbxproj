@@ -633,6 +633,7 @@
 					};
 					4F4A268E1BC934000077AEF5 = {
 						CreatedOnToolsVersion = 7.0.1;
+						DevelopmentTeam = FTX9FBCWZ9;
 					};
 					4FAFF8C21A8BFFE500864078 = {
 						CreatedOnToolsVersion = 6.3;
@@ -933,6 +934,7 @@
 		4F4A26A11BC934000077AEF5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "watchOS2app Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
@@ -948,6 +950,7 @@
 		4F4A26A21BC934000077AEF5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "watchOS2app Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
