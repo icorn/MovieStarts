@@ -30,6 +30,7 @@ struct Favorites {
 		Favorites.IDs.append(movie.id)
 		Favorites.saveFavorites()
 		tabBarController?.favoriteController?.addFavorite(movie)
+		WatchSessionManager.sharedManager.sendNewFavoriteToWatch(movie)
 	}
 	
 	/**
@@ -37,12 +38,13 @@ struct Favorites {
 	
 		- parameter id:	the movie id to be removed
 	*/
-	static func removeMovieID(id: String, tabBarController: TabBarController?) {
+	static func removeMovie(movie: MovieRecord, tabBarController: TabBarController?) {
 		for (var i=0; i < Favorites.IDs.count; i++) {
-			if (Favorites.IDs[i] == id) {
+			if (Favorites.IDs[i] == movie.id) {
 				Favorites.IDs.removeAtIndex(i)
 				Favorites.saveFavorites()
-				tabBarController?.favoriteController?.removeFavorite(id)
+				tabBarController?.favoriteController?.removeFavorite(movie.id)
+				WatchSessionManager.sharedManager.sendRemoveFavoriteToWatch(movie)
 				return
 			}
 		}

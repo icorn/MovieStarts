@@ -179,6 +179,8 @@ class FavoriteTableViewController: MovieTableViewController {
 		}
 		
 		tableView.endUpdates()
+		
+		WatchSessionManager.sharedManager.updateFavoritesOnWatch()
 	}
 	
 }

@@ -194,11 +194,11 @@ class Database : DatabaseParent {
 					}
 				}
 				
-				self.errorHandler?(errorMessage: "Error querying records: \(error.code) (\(error.description))")
+				self.errorHandler?(errorMessage: "Error querying records: Code=\(error.code) Domain=\(error.domain) Error: (\(error.localizedDescription))")
 				var errorWindow: MessageWindow?
 				
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringId: "Close", handler: {
+					errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringId: "Close", error: error, handler: {
 						errorWindow?.close()
 					})
 				}
@@ -207,12 +207,14 @@ class Database : DatabaseParent {
 			}
 			else {
 				// received all records from the cloud
-				
+
 				var movieRecordArray: [MovieRecord] = []
-				
+
 				// generate array of MovieRecord objects and store the thumbnail posters to "disc"
 				for ckRecord in self.allCKRecords {
-					movieRecordArray.append(MovieRecord(ckRecord: ckRecord))
+					let newRecord = MovieRecord()
+					newRecord.initWithCKRecord(ckRecord)
+					movieRecordArray.append(newRecord)
 					movieRecordArray.last?.storePoster(ckRecord.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
 				}
 				
@@ -228,7 +230,9 @@ class Database : DatabaseParent {
 					var errorWindow: MessageWindow?
 					
 					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle", textStringId: "NoRecordsInCloudText", buttonStringId: "Close", handler: {
+						errorWindow = MessageWindow(parent: self.viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle",
+							textStringId: "NoRecordsInCloudText", buttonStringId: "Close", handler:
+						{
 							errorWindow?.close()
 						})
 					}
@@ -326,7 +330,8 @@ class Database : DatabaseParent {
 	*/
 	func recordFetchedUpdatedMoviesCallback(record: CKRecord) {
 		
-		let newMovieRecord = MovieRecord(ckRecord: record)
+		let newMovieRecord = MovieRecord()
+		newMovieRecord.initWithCKRecord(record)
 		var movieAlreadyExists: Bool = false
 		
 		if let existingMovieRecords = loadedMovieRecordArray {
@@ -385,7 +390,9 @@ class Database : DatabaseParent {
 					var updatedMovieRecordArray: [MovieRecord] = []
 					
 					for ckRecord in updatedCKRecords {
-						updatedMovieRecordArray.append(MovieRecord(ckRecord: ckRecord))
+						let newRecord = MovieRecord()
+						newRecord.initWithCKRecord(ckRecord)
+						updatedMovieRecordArray.append(newRecord)
 					}
 					
 					// merge both arrays (the existing movies and the updated movies)
@@ -628,7 +635,14 @@ class Database : DatabaseParent {
 			}
 		}
 		
-		NSLog("Clean up over, removed \(oldNumberOfMovies - existingMovies.count) movies from local file. Now we have \(existingMovies.count) movies.")
+		let removedMovies = oldNumberOfMovies - existingMovies.count
+		
+		if (removedMovies > 0) {
+			// udpate the watch
+			WatchSessionManager.sharedManager.sendAllFavoritesToWatch(true, sendThumbnails: false)
+		}
+		
+		NSLog("Clean up over, removed \(removedMovies) movies from local file. Now we have \(existingMovies.count) movies.")
 	}
 
 	

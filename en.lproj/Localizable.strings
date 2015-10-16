@@ -62,7 +62,7 @@
 "iCloudNoAccountUpdate"			= "Movie update impossible. MovieStarts couldn't access your iCloud account. Please go to the Settings app, sign in to iCloud, and turn on iCloud Drive.";
 "iCloudCouldNotDetermineUpdate"	= "Movie update impossible. MovieStarts couldn't access your iCloud account.";
 "iCloudRestrictedUpdate"		= "Movie update impossible. Your iCloud account is not available. Access was denied due to Parental Controls or Mobile Device Management restrictions.";
-"iCloudQueryError"				= "Error loading data from the cloud. Please try again later.";
+"iCloudQueryError"				= "Error loading data from the iCloud. Please try again later.\n\nDetails:";
 
 "NoNetworkTitle"		= "No Network";
 "NoNetworkText"			= "Your iPhone has no internet connection. Is the airplane mode active? Please try again when your iPhone is connected to the internet.";
@@ -104,13 +104,15 @@
 
 // Misc.
 
-"Close"					= "Close";
-"menuItemRefresh"		= "Refresh";
+"Close"						= "Close";
+"menuItemRefresh"			= "Refresh";
 
 // Watch
 
-"WatchNoFavorites"			= "You haven't set any favorites yet. You can do that in the MovieStarts app on your iPhone.";
+"WatchNoFavorites"			= "Please set your favorite movies in the MovieStarts app on your iPhone.";
 "WatchNowPlaying"			= "Now Playing";
+"WatchConnectError"			= "Error connecting to the iPhone. Please check your network and/or try again later.";
+"WatchUserShouldStartPhone"	= "Please open the MovieStarts iPhone app so that the Watch can access your favorite movies from the iPhone. Future movie updates will be done automatically.";
 
 // Country names
 

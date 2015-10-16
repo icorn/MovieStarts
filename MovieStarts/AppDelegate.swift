@@ -69,6 +69,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(false, forKey: Constants.PREFS_USE_YOUTUBE_APP)
 		}
 		
+		// start watch session (if there is a watch)
+		
+		WatchSessionManager.sharedManager.startSession()
+		
 		return true
 	}
 

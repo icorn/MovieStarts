@@ -468,7 +468,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate {
 	*/
 	func removeFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
-			Favorites.removeMovieID(movie.id, tabBarController: movieTabBarController)
+			Favorites.removeMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
 		}
 	}

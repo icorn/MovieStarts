@@ -33,7 +33,19 @@ public struct Constants {
 	
 	static let tagFavoriteView: Int			= 10000
 	static let tagTableCell: Int			= 10001
+	
+	// MARK: - Watch communication
+	
+	static let watchMovieFileName			= "movies.plist"
 
+	static let watchMetadataThumbnail		= "thumbnail"
+	static let watchMetadataMovieList		= "movieList"
+
+	static let watchAppContextGetAllMovies			= "getAllMovies"
+	static let watchAppContextValueEveryting		= "everything"
+	static let watchAppContextValueListOnly			= "listOnly"
+	static let watchAppContextValueThumbnailsOnly	= "thumbsOnly"
+	
 	// MARK: - Keys for records fromt the cloud
 	
 	public static let DB_ID_TMDB_ID					= "tmdbId"

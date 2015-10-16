@@ -13,7 +13,7 @@ import UIKit
 public class WatchMovieRecord : CustomStringConvertible {
 	
 	/// the unique ID from CKAsset
-	public var id:String
+	public var id:String = ""
 	/// the ID from tmdb.org
 	public var tmdbId:Int?
 	/// the original movie title
@@ -55,10 +55,15 @@ public class WatchMovieRecord : CustomStringConvertible {
 	/// the number of votes for this movie on tmdb
 	public var voteCount:Int = 0
 	
-	private var _thumbnailImage: UIImage?
-	private var _thumbnailFound: Bool = false
+	var _thumbnailImage: UIImage?
+	var _thumbnailFound: Bool = false
 	
 	
+	public init() {
+		// empty constructor
+	}
+	
+
 	public init(dict: [String: AnyObject]) {
 		
 		if (dict[Constants.DB_ID_TMDB_ID] != nil) 		{ self.tmdbId 			= dict[Constants.DB_ID_TMDB_ID] 		as? Int }
@@ -88,11 +93,10 @@ public class WatchMovieRecord : CustomStringConvertible {
 		else {
 			// this should never happen
 			NSLog("Id for movie \(title) is empty!")
-			id = ""
 		}
 	}
-	
-	
+
+
 	/**
 		Converts this object to a dictionary for serialization.
 	
@@ -129,6 +133,19 @@ public class WatchMovieRecord : CustomStringConvertible {
 		return retval
 	}
 	
+	/// The thumbnail image as NSURL
+	
+	var thumbnailURL: (NSURL?) {
+		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		var url: NSURL?
+		
+		if let posterUrl = posterUrl {
+			url = pathUrl?.URLByAppendingPathComponent(Constants.THUMBNAIL_FOLDER + posterUrl)
+		}
+		
+		return url
+	}
+	
 	/// The thumbnail image object as a tuple: the image object and the "found" flag indicating if a poster image was returned or if it only is the default image.
 	
 	var thumbnailImage: (UIImage?, Bool) {
@@ -136,11 +153,14 @@ public class WatchMovieRecord : CustomStringConvertible {
 			return (_thumbnailImage, _thumbnailFound)
 		}
 		
-		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		let fileManager = NSFileManager.defaultManager()
+		let documentDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first
 		
-		if let pathUrl = pathUrl, basePath = pathUrl.path {
-			if let posterUrl = posterUrl {
-				_thumbnailImage = UIImage(contentsOfFile: basePath + Constants.THUMBNAIL_FOLDER + posterUrl)
+		if let documentDir = documentDir, posterUrl = posterUrl {
+			let movieFileNamePath = documentDir.URLByAppendingPathComponent(posterUrl).path
+
+			if let movieFileNamePath = movieFileNamePath {
+				_thumbnailImage = UIImage(contentsOfFile: movieFileNamePath)
 				_thumbnailFound = true
 				return (_thumbnailImage, _thumbnailFound)
 			}

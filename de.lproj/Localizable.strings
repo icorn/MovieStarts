@@ -62,7 +62,7 @@
 "iCloudNoAccountUpdate"			= "Filmdaten-Update unmöglich. MovieStarts konnte nicht auf dein iCloud-Konto zugreifen. Bitte gehe in die App 'Einstellungen', melde dich bei deinem iCloud-Konto an und schalte 'iCloud Drive' ein.";
 "iCloudCouldNotDetermineUpdate"	= "Filmdaten-Update unmöglich. MovieStarts konnte nicht auf dein iCloud-Konto zugreifen.";
 "iCloudRestrictedUpdate"		= "Filmdaten-Update unmöglich. Dein iCloud-Konto ist nicht verfügbar. Der Zugriff wurde wegen Jugendschutz-Einstellungen oder Einschränkungen durch Mobile Device Management (MDM) verweigert.";
-"iCloudQueryError"				= "Fehler beim Laden der Daten aus der Cloud. Bitte versuche es später noch einmal.";
+"iCloudQueryError"				= "Fehler beim Laden aus der iCloud. Bitte versuche es später noch einmal.\n\nDetails:";
 
 "NoNetworkTitle"		= "Kein Netz";
 "NoNetworkText"			= "Dein iPhone hat derzeit keine Internetverbindung. Evtl. ist der Flugmodus aktiviert. Bitte probiere es erneut, wenn es wieder verbunden ist.";
@@ -109,8 +109,10 @@
 
 // Watch
 
-"WatchNoFavorites"		= "Du hast noch keine Favoriten festgelegt. Das kannst du in der MovieStarts-App auf dem iPhone machen.";
+"WatchNoFavorites"		= "Bitte lege in der MovieStarts iPhone-App deine Favoriten an, um sie hier auf der Watch sehen zu können.";
 "WatchNowPlaying"		= "Jetzt im Kino";
+"WatchConnectError"		= "Fehler beim Verbinden mit deinem iPhone. Bitte überprüfe das Netzwerk und/oder probiere es später noch einmal.";
+"WatchUserShouldStartPhone"	= "Bitte öffne die MovieStarts iPhone-App, damit die Uhr auf die dort gespeicherten Favoriten zugreifen kann. Spätere Updates werden dann automatisch durchgeführt.";
 
 // Country names
 

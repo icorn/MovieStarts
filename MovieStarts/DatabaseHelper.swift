@@ -37,15 +37,17 @@ public class DatabaseHelper {
 	
 		- returns: An array of MovieRecord objects, generated of the input parameter dictArray.
 	*/
-	public class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]) -> [MovieRecord] {
+	public class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]?) -> [MovieRecord] {
 		var retval: [MovieRecord] = []
 		
-		for dict in dictArray {
-			if let dict = (dict as? [String : AnyObject]) {
-				retval.append(MovieRecord(dict: dict))
-			}
-			else {
-				NSLog("Error converting dictionary")
+		if let dictArray = dictArray {
+			for dict in dictArray {
+				if let dict = (dict as? [String : AnyObject]) {
+					retval.append(MovieRecord(dict: dict))
+				}
+				else {
+					NSLog("Error converting dictionary")
+				}
 			}
 		}
 		

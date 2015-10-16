@@ -267,7 +267,7 @@ class MovieTableViewController: UITableViewController {
 
 				if (Favorites.IDs.contains(movie.id)) {
 					// movie is favorite: remove it as favorite and remove favorite-icon
-					Favorites.removeMovieID(movie.id, tabBarController: self.movieTabBarController)
+					Favorites.removeMovie(movie, tabBarController: self.movieTabBarController)
 					self.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
 				}
 				else {

@@ -12,26 +12,26 @@ import Foundation
 
 class DetailInterfaceController: WKInterfaceController {
 
-	@IBOutlet weak var titleLabel: WKInterfaceLabel!
 	
-	@IBOutlet weak var separator: WKInterfaceSeparator!
+	@IBOutlet var coverImage: WKInterfaceImage!
+	@IBOutlet var titleLabel: WKInterfaceLabel!
+	@IBOutlet var separator: WKInterfaceSeparator!
 	
-	@IBOutlet weak var dataGroup: WKInterfaceGroup!
-	@IBOutlet weak var dataLabel: WKInterfaceLabel!
+	@IBOutlet var dataGroup: WKInterfaceGroup!
+	@IBOutlet var dataLabel: WKInterfaceLabel!
 	
-	@IBOutlet weak var directorGroup: WKInterfaceGroup!
-	@IBOutlet weak var directorHeadlineLabel: WKInterfaceLabel!
-	@IBOutlet weak var directorLabel: WKInterfaceLabel!
+	@IBOutlet var directorGroup: WKInterfaceGroup!
+	@IBOutlet var directorHeadlineLabel: WKInterfaceLabel!
+	@IBOutlet var directorLabel: WKInterfaceLabel!
 	
-	@IBOutlet weak var actorGroup: WKInterfaceGroup!
-	@IBOutlet weak var actorHeadlineLabel: WKInterfaceLabel!
-	@IBOutlet weak var actorLabel: WKInterfaceLabel!
+	@IBOutlet var actorGroup: WKInterfaceGroup!
+	@IBOutlet var actorHeadlineLabel: WKInterfaceLabel!
+	@IBOutlet var actorLabel: WKInterfaceLabel!
 	
-	@IBOutlet weak var synopsisGroup: WKInterfaceGroup!
-	@IBOutlet weak var synopsisHeadlineLabel: WKInterfaceLabel!
-	@IBOutlet weak var synopsisLabel: WKInterfaceLabel!
+	@IBOutlet var synopsisGroup: WKInterfaceGroup!
+	@IBOutlet var synopsisHeadlineLabel: WKInterfaceLabel!
+	@IBOutlet var synopsisLabel: WKInterfaceLabel!
 	
-	@IBOutlet weak var coverImage: WKInterfaceImage!
 	
 	
     override func awakeWithContext(context: AnyObject?) {

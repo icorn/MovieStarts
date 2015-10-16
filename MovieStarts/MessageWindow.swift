@@ -23,9 +23,14 @@ class MessageWindow: NSObject {
 	
 	weak var parentView: UIView?
 	var buttonHandler: (() -> ())?
+
+	
+	convenience init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringId: String, handler: (() -> ())?) {
+		self.init(parent: parent, darkenBackground: darkenBackground, titleStringId: titleStringId, textStringId: textStringId, buttonStringId: buttonStringId, error: nil, handler: handler)
+	}
 	
 	
-	init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringId: String, handler: (() -> ())?) {
+	init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringId: String, error: NSError?, handler: (() -> ())?) {
 
 		parentView = parent
 		buttonHandler = handler
@@ -72,7 +77,16 @@ class MessageWindow: NSObject {
 		let msg = UILabel()
 		msg.translatesAutoresizingMaskIntoConstraints = false
 		msg.text = NSLocalizedString(textStringId, comment: "")
-		msg.font = UIFont.systemFontOfSize(16)
+		
+		if let error = error {
+			msg.text = NSLocalizedString(textStringId, comment: "") + " " + error.description
+			msg.font = UIFont.systemFontOfSize(14)
+		}
+		else {
+			msg.text = NSLocalizedString(textStringId, comment: "")
+			msg.font = UIFont.systemFontOfSize(16)
+		}
+		
 		msg.textAlignment = NSTextAlignment.Center
 		msg.textColor = UIColor.blackColor()
 		msg.backgroundColor = UIColor.clearColor()
