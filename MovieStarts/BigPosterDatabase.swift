@@ -33,6 +33,7 @@ class BigPosterDatabase : DatabaseParent {
 			queryOperation.recordFetchedBlock = recordFetchedBigPosterCallback
 			queryOperation.queryCompletionBlock = queryCompleteBigPosterCallback
 			queryOperation.desiredKeys = [Constants.DB_ID_BIG_POSTER_ASSET, Constants.DB_ID_TMDB_ID]
+			queryOperation.qualityOfService = NSQualityOfService.UserInitiated
 			self.cloudKitDatabase.addOperation(queryOperation)
 		}
 	}

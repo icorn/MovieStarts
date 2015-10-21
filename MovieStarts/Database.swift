@@ -77,6 +77,10 @@ class Database : DatabaseParent {
 	}
 	
 	
+	/**
+		Checks if there is a database file on the device.
+		- returns: TRUE if there is a file, FALSE otherwise
+	*/
 	func isDatabaseOnDevice() -> Bool {
 		if let moviesPlistFile = moviesPlistFile {
 			if (NSFileManager.defaultManager().fileExistsAtPath(moviesPlistFile)) {
@@ -139,15 +143,13 @@ class Database : DatabaseParent {
 
 				// get all movies which started a month ago or later
 				let compareDate = NSDate().dateByAddingTimeInterval(-30 * 24 * 60 * 60)
-				let predicate = NSPredicate(format: "release > %@", argumentArray: [compareDate])
+				let predicate = NSPredicate(format: "(release > %@) AND (hidden == 0)", argumentArray: [compareDate])
 				let query = CKQuery(recordType: self.recordType, predicate: predicate)
 				
 				let queryOperation = CKQueryOperation(query: query)
-				queryOperation.recordFetchedBlock = self.recordFetchedAllMoviesCallback
-				queryOperation.queryCompletionBlock = self.queryCompleteAllMoviesCallback
-				queryOperation.resultsLimit = 3
-				queryOperation.desiredKeys = self.desiredQueryKeysForAll
-				self.cloudKitDatabase.addOperation(queryOperation)
+				let operationQueue = NSOperationQueue()
+				
+				executeQueryOperationAllMovies(queryOperation, onOperationQueue: operationQueue)
 			}
 		}
 		else {
@@ -155,123 +157,133 @@ class Database : DatabaseParent {
 			errorHandler(errorMessage: "*** No group folder found")
 		}
 	}
-
-	/**
-		Adds the record to an array to save it for later processing.
-		This function is called when a new record was fetched from the CloudKit database.
 	
-		- parameter record:	The record from the CloudKit database
+	
+	/**
+		Sends a new CloudKit query to get new records.
+	
+		- parameter queryOperation:		The query operation containing the predicates
+		- parameter onOperationQueue:	The queue for the query operation
 	*/
-	func recordFetchedAllMoviesCallback(record: CKRecord) {
-		self.allCKRecords.append(record)
-		updateIndicator?(counter: self.allCKRecords.count)
+	func executeQueryOperationAllMovies(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
+		queryOperation.database = cloudKitDatabase
+		queryOperation.desiredKeys = self.desiredQueryKeysForAll
+		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
+
+		queryOperation.recordFetchedBlock = { (record : CKRecord) -> Void in
+			self.allCKRecords.append(record)
+			self.updateIndicator?(counter: self.allCKRecords.count)
+		}
+
+		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: NSError?) -> Void in
+			if let cursor = cursor {
+				// some objects are here, ask for more
+				let queryCursorOperation = CKQueryOperation(cursor: cursor)
+				self.executeQueryOperationAllMovies(queryCursorOperation, onOperationQueue: operationQueue)
+			}
+			else {
+				// download finished (with error or not)
+				self.queryOperationFinishedAllMovies(error)
+			}
+		}
+		
+		// Add the operation to the operation queue to execute it
+		operationQueue.addOperation(queryOperation)
 	}
 	
 	
 	/**
-		Checks if all movies are read or if there are more pages of movies to read from the CloudKit database.
-		If all movies are here, MovieRecord objects are generated and save.
-		This function is called when all records (or at least all records from a page) have been fetched from the CloudKit database.
+		This function is called when all records have been fetched from the CloudKit database.
+		MovieRecord objects are generated and saved.
 	
-		- parameter cursor:	The paging cursor used to find out if there are more pages of movies to load
 		- parameter error:	The error object
 	*/
-	func queryCompleteAllMoviesCallback(cursor: CKQueryCursor?, error: NSError?) {
-		
-		if let cursor = cursor {
-			// some objects are here, ask for more
-			let queryOperation = CKQueryOperation(cursor: cursor)
-			queryOperation.recordFetchedBlock = recordFetchedAllMoviesCallback
-			queryOperation.queryCompletionBlock = queryCompleteAllMoviesCallback
-			queryOperation.desiredKeys = desiredQueryKeysForAll
-			self.cloudKitDatabase.addOperation(queryOperation)
+	func queryOperationFinishedAllMovies(error: NSError?) {
+		if let error = error {
+			if let saveStopIndicator = self.stopIndicator {
+				dispatch_async(dispatch_get_main_queue()) {
+					saveStopIndicator()
+				}
+			}
+			
+			self.errorHandler?(errorMessage: "Error querying records: Code=\(error.code) Domain=\(error.domain) Error: (\(error.localizedDescription))")
+			var errorWindow: MessageWindow?
+			
+			if let viewForError = viewForError {
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringId: "Close", error: error, handler: {
+						errorWindow?.close()
+					})
+				}
+			}
+			
+			// Reset read-array. User might try downloading again.
+			allCKRecords = []
+			
+			return
 		}
 		else {
-			// all objects are here!
+			// received all records from the cloud
 			
-			if let error = error {
+			var movieRecordArray: [MovieRecord] = []
+			
+			// generate array of MovieRecord objects and store the thumbnail posters to "disc"
+			for ckRecord in self.allCKRecords {
+				let newRecord = MovieRecord()
+				newRecord.initWithCKRecord(ckRecord)
+				movieRecordArray.append(newRecord)
+				movieRecordArray.last?.storePoster(ckRecord.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
+			}
+			
+			if (movieRecordArray.isEmpty) {
 				if let saveStopIndicator = self.stopIndicator {
 					dispatch_async(dispatch_get_main_queue()) {
 						saveStopIndicator()
 					}
 				}
 				
-				self.errorHandler?(errorMessage: "Error querying records: Code=\(error.code) Domain=\(error.domain) Error: (\(error.localizedDescription))")
+				self.errorHandler?(errorMessage: "First start: No records found in Cloud.")
+				
 				var errorWindow: MessageWindow?
 				
 				if let viewForError = viewForError {
 					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringId: "Close", error: error, handler: {
-							errorWindow?.close()
+						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle",
+							textStringId: "NoRecordsInCloudText", buttonStringId: "Close", handler:
+							{
+								errorWindow?.close()
 						})
 					}
 				}
 				
 				return
 			}
+			
+			userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE)
+			userDefaults?.synchronize()
+			
+			// finish movies
+			if let completionHandler = self.completionHandler, errorHandler = self.errorHandler {
+				self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
+			}
 			else {
-				// received all records from the cloud
-
-				var movieRecordArray: [MovieRecord] = []
-
-				// generate array of MovieRecord objects and store the thumbnail posters to "disc"
-				for ckRecord in self.allCKRecords {
-					let newRecord = MovieRecord()
-					newRecord.initWithCKRecord(ckRecord)
-					movieRecordArray.append(newRecord)
-					movieRecordArray.last?.storePoster(ckRecord.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
+				if let saveStopIndicator = self.stopIndicator {
+					dispatch_async(dispatch_get_main_queue()) {
+						saveStopIndicator()
+					}
 				}
+				self.errorHandler?(errorMessage: "One of the handlers is nil!")
 				
-				if (movieRecordArray.isEmpty) {
-					if let saveStopIndicator = self.stopIndicator {
-						dispatch_async(dispatch_get_main_queue()) {
-							saveStopIndicator()
-						}
-					}
-					
-					self.errorHandler?(errorMessage: "First start: No records found in Cloud.")
-					
-					var errorWindow: MessageWindow?
-					
-					if let viewForError = viewForError {
-						dispatch_async(dispatch_get_main_queue()) {
-							errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle",
-								textStringId: "NoRecordsInCloudText", buttonStringId: "Close", handler:
-							{
-								errorWindow?.close()
-							})
-						}
-					}
-					
-					return
-				}
+				var errorWindow: MessageWindow?
 				
-				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE)
-				userDefaults?.synchronize()
-				
-				// finish movies
-				if let completionHandler = self.completionHandler, errorHandler = self.errorHandler {
-					self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
-				}
-				else {
-					if let saveStopIndicator = self.stopIndicator {
-						dispatch_async(dispatch_get_main_queue()) {
-							saveStopIndicator()
-						}
+				if let viewForError = viewForError {
+					dispatch_async(dispatch_get_main_queue()) {
+						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringId: "Close", handler: {
+							errorWindow?.close()
+						})
 					}
-					self.errorHandler?(errorMessage: "One of the handlers is nil!")
-					
-					var errorWindow: MessageWindow?
-					
-					if let viewForError = viewForError {
-						dispatch_async(dispatch_get_main_queue()) {
-							errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringId: "Close", handler: {
-								errorWindow?.close()
-							})
-						}
-					}
-					return
 				}
+				return
 			}
 		}
 	}
@@ -322,25 +334,19 @@ class Database : DatabaseParent {
 		
 		if let saveModDate: NSDate = latestModDate {
 			
-			NSLog("Getting records after modification date \(saveModDate)")
+			print("Getting records after modification date \(saveModDate)")
 			
 			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 			
-			// get records modifies after the last modification of the local database, and only from movies
-			// whose release date is younger than 30 days.
-			
-//			let compareDate = NSDate().dateByAddingTimeInterval(-30 * 24 * 60 * 60)
-//			let predicateReleaseDate = NSPredicate(format: "release > %@", argumentArray: [compareDate])
+			// get records modifies after the last modification of the local database
 			let predicateModificationDate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
 			let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [/*predicateReleaseDate,*/ predicateModificationDate])
 			
 			let query = CKQuery(recordType: self.recordType, predicate: predicate)
-			
 			let queryOperation = CKQueryOperation(query: query)
-			queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
-			queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
-			queryOperation.desiredKeys = desiredQueryKeysForUpdate
-			self.cloudKitDatabase.addOperation(queryOperation)
+
+			let operationQueue = NSOperationQueue()
+			executeQueryOperationUpdatedMovies(queryOperation, onOperationQueue: operationQueue)
 		}
 		else {
 			NSLog("ERROR: mo last mod.data of db")
@@ -348,6 +354,38 @@ class Database : DatabaseParent {
 	}
 	
 	
+	/**
+		Sends a new CloudKit query to get more updated records.
+	
+		- parameter queryOperation:		The query operation containing the predicates
+		- parameter onOperationQueue:	The queue for the query operation
+	*/
+	func executeQueryOperationUpdatedMovies(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
+		queryOperation.database = cloudKitDatabase
+		queryOperation.desiredKeys = self.desiredQueryKeysForUpdate
+		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
+		
+		queryOperation.recordFetchedBlock = { (record : CKRecord) -> Void in
+			self.recordFetchedUpdatedMoviesCallback(record)
+		}
+		
+		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: NSError?) -> Void in
+			if let cursor = cursor {
+				// some objects are here, ask for more
+				let queryCursorOperation = CKQueryOperation(cursor: cursor)
+				self.executeQueryOperationUpdatedMovies(queryCursorOperation, onOperationQueue: operationQueue)
+			}
+			else {
+				// download finished (with error or not)
+				self.queryOperationFinishedUpdatedMovies(error)
+			}
+		}
+		
+		// Add the operation to the operation queue to execute it
+		operationQueue.addOperation(queryOperation)
+	}
+	
+
 	/**
 		Adds the record to an array to save it for later processing.
 		This function is called when a new updated record was fetched from the CloudKit database.
@@ -382,63 +420,49 @@ class Database : DatabaseParent {
 	
 	
 	/**
-		Checks if all updated movies are read or if there are more pages of movies to read from the CloudKit database.
-		If all movies are here, MovieRecord objects are generated and save.
-		This function is called when all updated records (or at least all records from a page) have been fetched from the CloudKit database.
+		This function is called when all updated records have been fetched from the CloudKit database.
+		MovieRecord objects are generated and save.
 	
-		- parameter cursor:	The paging cursor used to find out if there are more pages of movies to load
 		- parameter error:	The error object
 	*/
-	func queryCompleteUpdatedMoviesCallback(cursor: CKQueryCursor?, error: NSError?) {
-		if let cursor = cursor {
-			// some objects are here, ask for more
-			let queryOperation = CKQueryOperation(cursor: cursor)
-			queryOperation.recordFetchedBlock = recordFetchedUpdatedMoviesCallback
-			queryOperation.queryCompletionBlock = queryCompleteUpdatedMoviesCallback
-			queryOperation.desiredKeys = desiredQueryKeysForUpdate
-			cloudKitDatabase.addOperation(queryOperation)
+	func queryOperationFinishedUpdatedMovies(error: NSError?) {
+		if let error = error {
+			// there was an error
+			self.errorHandler?(errorMessage: "Error querying updated records: \(error.code) (\(error.description))")
+			return
 		}
 		else {
-			// all updated records are here!
+			// received records from the cloud
+			userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE)
+			userDefaults?.synchronize()
 			
-			if let error = error {
-				// there was an error
-				self.errorHandler?(errorMessage: "Error querying updated records: \(error.code) (\(error.description))")
-				return
-			}
-			else {
-				// received records from the cloud
-				userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE)
-				userDefaults?.synchronize()
+			if (updatedCKRecords.count > 0) {
+				// generate an array of MovieRecords
+				var updatedMovieRecordArray: [MovieRecord] = []
 				
-				if (updatedCKRecords.count > 0) {
-					// generate an array of MovieRecords
-					var updatedMovieRecordArray: [MovieRecord] = []
-					
-					for ckRecord in updatedCKRecords {
-						let newRecord = MovieRecord()
-						newRecord.initWithCKRecord(ckRecord)
-						updatedMovieRecordArray.append(newRecord)
-					}
-					
-					// merge both arrays (the existing movies and the updated movies)
-					if (loadedMovieRecordArray != nil) {
-						DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
-					}
+				for ckRecord in updatedCKRecords {
+					let newRecord = MovieRecord()
+					newRecord.initWithCKRecord(ckRecord)
+					updatedMovieRecordArray.append(newRecord)
 				}
 				
-				// delete all movies which are too old
+				// merge both arrays (the existing movies and the updated movies)
 				if (loadedMovieRecordArray != nil) {
-					cleanUpExistingMovies(&loadedMovieRecordArray!)
+					DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
 				}
-				
-				// clean up posters
-				cleanUpPosters()
 			}
+			
+			// delete all movies which are too old
+			if (loadedMovieRecordArray != nil) {
+				cleanUpExistingMovies(&loadedMovieRecordArray!)
+			}
+			
+			// clean up posters
+			cleanUpPosters()
 		}
 	}
 	
-
+	
 	// MARK: - Private helper functions
 	
 	
@@ -535,7 +559,7 @@ class Database : DatabaseParent {
 							
 							// posterfile is not in any database record anymore: delete poster(s)
 							
-							NSLog("Deleting unneeded poster image \(posterfilenameString)")
+							print("Deleting unneeded poster image \(posterfilenameString)")
 							
 							do {
 								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.THUMBNAIL_FOLDER + "/" + posterfilenameString)
@@ -572,15 +596,16 @@ class Database : DatabaseParent {
 
 				// download missing posters
 				
-				let predicate = NSPredicate(format: "tmdbId IN %@", argumentArray: [idsOfMissindPosters])
+				let predicate = NSPredicate(format: "(tmdbId IN %@) AND (hidden == 0)", argumentArray: [idsOfMissindPosters])
 				let query = CKQuery(recordType: self.recordType, predicate: predicate)
 				let queryOperation = CKQueryOperation(query: query)
 				queryOperation.recordFetchedBlock = recordFetchedMissingPostersCallback
 				queryOperation.queryCompletionBlock = queryCompleteMissingPostersCallback
 				queryOperation.desiredKeys = [Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_TMDB_ID]
+				queryOperation.qualityOfService = NSQualityOfService.UserInitiated
 				self.cloudKitDatabase.addOperation(queryOperation)
 				
-				NSLog("Loading \(idsOfMissindPosters.count) missing posters.")
+				print("Loading \(idsOfMissindPosters.count) missing posters.")
 			}
 			else {
 				// no posters missing
@@ -626,6 +651,7 @@ class Database : DatabaseParent {
 			queryOperation.recordFetchedBlock = recordFetchedMissingPostersCallback
 			queryOperation.queryCompletionBlock = queryCompleteMissingPostersCallback
 			queryOperation.desiredKeys = [Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_TMDB_ID]
+			queryOperation.qualityOfService = NSQualityOfService.UserInitiated
 			self.cloudKitDatabase.addOperation(queryOperation)
 		}
 		else {
@@ -641,7 +667,6 @@ class Database : DatabaseParent {
 	}
 	
 	
-	
 	/**
 		Checks if there are movies which are too old and removes them.
 	
@@ -652,13 +677,13 @@ class Database : DatabaseParent {
 		let compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.MAX_DAYS_IN_THE_PAST) // 30 days ago
 		let oldNumberOfMovies = existingMovies.count
 		
-		NSLog("Cleaning up old movies...")
+		print("Cleaning up old movies...")
 		
 		for (var index = existingMovies.count-1; index >= 0; index--) {
 			if let releaseDate = existingMovies[index].releaseDate where releaseDate.compare(compareDate) == NSComparisonResult.OrderedAscending {
 				// movie is too old
 				removeMovieHandler?(movie: existingMovies[index])
-				NSLog("   '\(existingMovies[index].title)' (\(releaseDate)) removed")
+				print("   '\(existingMovies[index].title)' (\(releaseDate)) removed")
 				existingMovies.removeAtIndex(index)
 			}
 		}
@@ -670,7 +695,7 @@ class Database : DatabaseParent {
 			WatchSessionManager.sharedManager.sendAllFavoritesToWatch(true, sendThumbnails: false)
 		}
 		
-		NSLog("Clean up over, removed \(removedMovies) movies from local file. Now we have \(existingMovies.count) movies.")
+		print("Clean up over, removed \(removedMovies) movies from local file. Now we have \(existingMovies.count) movies.")
 	}
 
 	
