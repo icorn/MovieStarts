@@ -63,6 +63,18 @@ class UpcomingTableViewController: MovieTableViewController {
 
 		if let indexPathForExistingMovie = indexPathForExistingMovie {
 			moviesInSections[indexPathForExistingMovie.section].removeAtIndex(indexPathForExistingMovie.row)
+			
+			// if the section is now empty: remove it also
+			if moviesInSections[indexPathForExistingMovie.section].isEmpty {
+				// remove section from datasource
+				moviesInSections.removeAtIndex(indexPathForExistingMovie.section)
+				sections.removeAtIndex(indexPathForExistingMovie.section)
+				
+				// remove section from table
+				let indexSet: NSIndexSet = NSIndexSet(index: indexPathForExistingMovie.section)
+				tableView.deleteSections(indexSet, withRowAnimation: UITableViewRowAnimation.Automatic)
+			}
+			
 			tableView.deleteRowsAtIndexPaths([indexPathForExistingMovie], withRowAnimation: UITableViewRowAnimation.Automatic)
 		}
 		
