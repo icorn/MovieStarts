@@ -39,7 +39,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 	func sessionWatchStateDidChange(session: WCSession) {
 		if validSession != nil {
 			// watch app is installed: send all favorites to watch
-			NSLog("Watch app was installed.")
+			print("Watch app was installed.")
 			sendAllFavoritesToWatch(true, sendThumbnails: true)
 		}
 	}
@@ -61,7 +61,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			NSLog("Error transfering \(fileTransfer.file.fileURL.absoluteString): \(error.description)")
 		}
 		else {
-			NSLog("Filetransfer successfull")
+			print("Filetransfer successfull")
 			if (fileTransfer.file.metadata?[Constants.watchMetadataMovieList] != nil) {
 				// successfully transfered a movie list: removed it from phone again
 				do {
@@ -96,17 +96,17 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		
 		if (getAllMovies == Constants.watchAppContextValueEveryting) {
 			// the watch wants to get all favorites movies with list and all thumbnails
-			NSLog("Received 'GetAllMovies everything' call from Watch.")
+			print("Received 'GetAllMovies everything' call from Watch.")
 			sendAllFavoritesToWatch(true, sendThumbnails: true)
 		}
 		else if (getAllMovies == Constants.watchAppContextValueListOnly) {
 			// the watch wants to get all favorites movies, but only the list
-			NSLog("Received 'GetAllMovies list-only' call from Watch.")
+			print("Received 'GetAllMovies list-only' call from Watch.")
 			sendAllFavoritesToWatch(true, sendThumbnails: false)
 		}
 		else if (getAllMovies == Constants.watchAppContextValueThumbnailsOnly) {
 			// the watch wants to get all favorites movies, but only the thumbnails
-			NSLog("Received 'GetAllMovies list-only' call from Watch.")
+			print("Received 'GetAllMovies list-only' call from Watch.")
 			sendAllFavoritesToWatch(false, sendThumbnails: true)
 		}
 	}
@@ -132,7 +132,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		var favoritesDicts: [NSDictionary] = []
 		
 		if sendThumbnails {
-			NSLog("Transfering thumbnails to the Watch.")
+			print("Transfering thumbnails to the Watch.")
 		}
 		
 		for movie in loadedMovieRecordArray {
@@ -180,7 +180,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 				NSLog("Error sending tumbnail for \(title) to watch.")
 			}
 			else {
-				NSLog("Sent thumbnail for \(title)")
+				print("Sent thumbnail for \(title)")
 			}
 		}
 		
@@ -249,7 +249,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 	*/
 	private func sendMovieListToWatch(favoritesDicts: [NSDictionary]) {
 		
-		NSLog("Transfering movie list file to the Watch.")
+		print("Transfering movie list file to the Watch.")
 		
 		let tempFilename = NSUUID().UUIDString
 		guard let documentDirUrl = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else { return }
@@ -274,7 +274,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			for transfer in validSession.outstandingFileTransfers {
 				if (transfer.file.metadata?[Constants.watchMetadataMovieList] != nil) {
 					transfer.cancel()
-					NSLog("Removed outstanding movie list from queue.")
+					print("Removed outstanding movie list from queue.")
 				}
 			}
 		}

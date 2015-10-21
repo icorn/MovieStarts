@@ -48,7 +48,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			
 			// thumbnail received
 			
-			NSLog("Watch has received a thumbnail.")
+			print("Watch has received a thumbnail.")
 			
 			guard let inputFilename = file.fileURL.lastPathComponent else { return }
 			let documentFilename = documentDir.URLByAppendingPathComponent(inputFilename)
@@ -69,7 +69,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			
 			// movie list received - store it!
 			
-			NSLog("Watch has received a movie list.")
+			print("Watch has received a movie list.")
 
 			let documentFilename = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName)
 			

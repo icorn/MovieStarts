@@ -58,7 +58,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 		else {
 			// there are no movies on the watch. ask phone for movies (if it's there)
 			
-			NSLog("No movie list on the Watch, asking Phone to give my some.")
+			print("No movie list on the Watch, asking Phone to give my some.")
 			
 			do {
 				try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetAllMovies : Constants.watchAppContextValueEveryting])
@@ -69,7 +69,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 			}
 			
 			// Tell user to start the iPhone app
-			NSLog("iPhone is not reachable, movies will come after iPhone is turned on. Tell the user about it.")
+			print("iPhone is not reachable, movies will come after iPhone is turned on. Tell the user about it.")
 			WatchSessionManager.sharedManager.launchStatus = LaunchStatus.UserShouldStartPhone
 		}
 	}
