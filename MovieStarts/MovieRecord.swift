@@ -40,6 +40,7 @@ public class MovieRecord : WatchMovieRecord {
 		if let value = ckRecord.objectForKey(Constants.DB_ID_PRODUCTION_COUNTRIES) as? [String] { self.productionCountries 	= value }
 		if let value = ckRecord.objectForKey(Constants.DB_ID_POPULARITY) as? Int				{ self.popularity 			= value }
 		if let value = ckRecord.objectForKey(Constants.DB_ID_VOTE_COUNT) as? Int				{ self.voteCount 			= value }
+		if let value = ckRecord.objectForKey(Constants.DB_ID_HIDDEN) as? Bool					{ self.hidden 				= value }
 		
 		id = ckRecord.recordID.recordName
 	}

@@ -54,6 +54,8 @@ public class WatchMovieRecord : CustomStringConvertible {
 	public var popularity:Int = 0
 	/// the number of votes for this movie on tmdb
 	public var voteCount:Int = 0
+	/// is this movie hidden?
+	public var hidden: Bool = false
 	
 	var _thumbnailImage: UIImage?
 	var _thumbnailFound: Bool = false
@@ -86,13 +88,14 @@ public class WatchMovieRecord : CustomStringConvertible {
 		if let value = dict[Constants.DB_ID_POPULARITY] as? Int					{ self.popularity 			= value	}
 		if let value = dict[Constants.DB_ID_VOTE_COUNT] as? Int 				{ self.voteCount 			= value	}
 		if let value = dict[Constants.DB_ID_PRODUCTION_COUNTRIES] as? [String]	{ self.productionCountries	= value	}
+		if let value = dict[Constants.DB_ID_HIDDEN] as? Bool					{ self.hidden				= value	}
 		
 		if let saveId = dict[Constants.DB_ID_ID] as? String {
 			id = saveId
 		}
 		else {
 			// this should never happen
-			NSLog("Id for movie \(title) is empty!")
+			NSLog("Id for movie \(title) is empty! This cannot happen...")
 		}
 	}
 
@@ -127,6 +130,7 @@ public class WatchMovieRecord : CustomStringConvertible {
 		retval[Constants.DB_ID_PRODUCTION_COUNTRIES] 	= productionCountries
 		retval[Constants.DB_ID_POPULARITY] 				= popularity
 		retval[Constants.DB_ID_VOTE_COUNT] 				= voteCount
+		retval[Constants.DB_ID_HIDDEN] 					= hidden
 		
 		retval[Constants.DB_ID_ID] = id
 		

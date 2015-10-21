@@ -67,7 +67,7 @@ class TabBarController: UITabBarController {
 		var favorites: [MovieRecord] = []
 		
 		for movie in allMovies {
-			if movie.releaseDate != nil {
+			if (movie.releaseDate != nil) && (movie.hidden == false) {
 				if movie.isNowPlaying() {
 					nowMovies.append(movie)
 				}
@@ -247,13 +247,13 @@ class TabBarController: UITabBarController {
 				dispatch_async(dispatch_get_main_queue()) {
 					if movie.isNowPlaying() {
 						if let title = movie.title {
-							NSLog("Adding \(title) to NOW PLAYING")
+							print("Adding \(title) to NOW PLAYING")
 						}
 						self.nowPlayingController?.addMovie(movie)
 					}
 					else {
 						if let title = movie.title {
-							NSLog("Adding \(title) to UPCOMING")
+							print("Adding \(title) to UPCOMING")
 						}
 						self.upcomingController?.addMovie(movie)
 					}
@@ -285,41 +285,71 @@ class TabBarController: UITabBarController {
 				dispatch_async(dispatch_get_main_queue()) {
 					if (movie.isNowPlaying() && movieIsInNowPlayingList) {
 						// movie was and is now-playing
-						if let title = movie.title {
-							NSLog("Updating \(title) in NOW PLAYING")
+						
+						if movie.hidden {
+							self.nowPlayingController?.removeMovie(movie)
 						}
-						self.nowPlayingController?.updateMovie(movie)
+						else {
+							if let title = movie.title {
+								print("Updating \(title) in NOW PLAYING")
+							}
+							self.nowPlayingController?.updateMovie(movie)
+						}
 					}
 					else if (!movie.isNowPlaying() && movieIsInUpcomingList) {
 						// movie was and is upcoming
-						if let title = movie.title {
-							NSLog("Updating \(title) in UPCOMING")
+						
+						if movie.hidden {
+							self.upcomingController?.removeMovie(movie)
 						}
-						self.upcomingController?.updateMovie(movie)
+						else {
+							if let title = movie.title {
+								print("Updating \(title) in UPCOMING")
+							}
+							self.upcomingController?.updateMovie(movie)
+						}
 					}
 					else if (!movie.isNowPlaying() && movieIsInNowPlayingList) {
 						// movie was now-playing, is now upcoming
-						if let title = movie.title {
-							NSLog("Moving \(title) in from NOW PLAYING to UPCOMING")
+						
+						if movie.hidden {
+							self.nowPlayingController?.removeMovie(movie)
 						}
-						self.nowPlayingController?.removeMovie(movie)
-						self.upcomingController?.addMovie(movie)
+						else {
+							if let title = movie.title {
+								print("Moving \(title) in from NOW PLAYING to UPCOMING")
+							}
+							self.nowPlayingController?.removeMovie(movie)
+							self.upcomingController?.addMovie(movie)
+						}
 					}
 					else if (movie.isNowPlaying() && movieIsInUpcomingList) {
 						// movie was upcoming, is now now-playing
-						if let title = movie.title {
-							NSLog("Moving \(title) in from UPCOMING to NOW PLAYING")
+						
+						if movie.hidden {
+							self.upcomingController?.removeMovie(movie)
 						}
-						self.upcomingController?.removeMovie(movie)
-						self.nowPlayingController?.addMovie(movie)
+						else {
+							if let title = movie.title {
+								print("Moving \(title) in from UPCOMING to NOW PLAYING")
+							}
+							self.upcomingController?.removeMovie(movie)
+							self.nowPlayingController?.addMovie(movie)
+						}
 					}
 					
 					if (Favorites.IDs.contains(movie.id)) {
 						// also, update the favorites
-						if let title = movie.title {
-							NSLog("Updating \(title) in FAVORITES")
+						
+						if movie.hidden {
+							self.favoriteController?.removeFavorite(movie.id)
 						}
-						self.favoriteController?.updateFavorite(movie)
+						else {
+							if let title = movie.title {
+								print("Updating \(title) in FAVORITES")
+							}
+							self.favoriteController?.updateFavorite(movie)
+						}
 					}
 				}
 			},
