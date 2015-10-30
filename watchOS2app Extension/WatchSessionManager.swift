@@ -90,7 +90,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			// update interface controller
 			
 			dispatch_async(dispatch_get_main_queue()) {
-				rootInterfaceController?.loadMovieDataFromFile()
+				self.rootInterfaceController?.loadMovieDataFromFile()
 			}
 			
 			// Now that we have the latest movie list: Check if we have all needed thumbnails
