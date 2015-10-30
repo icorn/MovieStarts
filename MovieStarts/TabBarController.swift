@@ -241,21 +241,23 @@ class TabBarController: UITabBarController {
 		
 		database?.getUpdatedMovies(allMovies,
 			addNewMovieHandler: { (movie: MovieRecord) in
-				
-				// add new movie
-				
-				dispatch_async(dispatch_get_main_queue()) {
-					if movie.isNowPlaying() {
-						if let title = movie.title {
-							print("Adding \(title) to NOW PLAYING")
+
+				if (!movie.isHidden) {
+					// add new movie
+					
+					dispatch_async(dispatch_get_main_queue()) {
+						if movie.isNowPlaying() {
+							if let title = movie.title {
+								print("Adding \(title) to NOW PLAYING")
+							}
+							self.nowPlayingController?.addMovie(movie)
 						}
-						self.nowPlayingController?.addMovie(movie)
-					}
-					else {
-						if let title = movie.title {
-							print("Adding \(title) to UPCOMING")
+						else {
+							if let title = movie.title {
+								print("Adding \(title) to UPCOMING")
+							}
+							self.upcomingController?.addMovie(movie)
 						}
-						self.upcomingController?.addMovie(movie)
 					}
 				}
 			},
