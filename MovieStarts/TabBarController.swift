@@ -67,7 +67,7 @@ class TabBarController: UITabBarController {
 		var favorites: [MovieRecord] = []
 		
 		for movie in allMovies {
-			if (movie.releaseDate != nil) && (movie.hidden == false) {
+			if (movie.releaseDate != nil) && (movie.isHidden == false) {
 				if movie.isNowPlaying() {
 					nowMovies.append(movie)
 				}
@@ -286,7 +286,7 @@ class TabBarController: UITabBarController {
 					if (movie.isNowPlaying() && movieIsInNowPlayingList) {
 						// movie was and is now-playing
 						
-						if movie.hidden {
+						if movie.isHidden {
 							self.nowPlayingController?.removeMovie(movie)
 						}
 						else {
@@ -299,7 +299,7 @@ class TabBarController: UITabBarController {
 					else if (!movie.isNowPlaying() && movieIsInUpcomingList) {
 						// movie was and is upcoming
 						
-						if movie.hidden {
+						if movie.isHidden {
 							self.upcomingController?.removeMovie(movie)
 						}
 						else {
@@ -312,7 +312,7 @@ class TabBarController: UITabBarController {
 					else if (!movie.isNowPlaying() && movieIsInNowPlayingList) {
 						// movie was now-playing, is now upcoming
 						
-						if movie.hidden {
+						if movie.isHidden {
 							self.nowPlayingController?.removeMovie(movie)
 						}
 						else {
@@ -326,7 +326,7 @@ class TabBarController: UITabBarController {
 					else if (movie.isNowPlaying() && movieIsInUpcomingList) {
 						// movie was upcoming, is now now-playing
 						
-						if movie.hidden {
+						if movie.isHidden {
 							self.upcomingController?.removeMovie(movie)
 						}
 						else {
@@ -341,7 +341,7 @@ class TabBarController: UITabBarController {
 					if (Favorites.IDs.contains(movie.id)) {
 						// also, update the favorites
 						
-						if movie.hidden {
+						if movie.isHidden {
 							self.favoriteController?.removeFavorite(movie.id)
 						}
 						else {

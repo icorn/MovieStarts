@@ -54,8 +54,9 @@ public class WatchMovieRecord : CustomStringConvertible {
 	public var popularity:Int = 0
 	/// the number of votes for this movie on tmdb
 	public var voteCount:Int = 0
+	
 	/// is this movie hidden?
-	public var hidden: Bool = false
+	private var hidden: Bool = false
 	
 	var _thumbnailImage: UIImage?
 	var _thumbnailFound: Bool = false
@@ -135,6 +136,17 @@ public class WatchMovieRecord : CustomStringConvertible {
 		retval[Constants.DB_ID_ID] = id
 		
 		return retval
+	}
+	
+	/// Is the movie hidden?
+	
+	var isHidden: Bool {
+		get {
+			return hidden
+		}
+		set {
+			hidden = newValue
+		}
 	}
 	
 	/// The thumbnail image as NSURL
