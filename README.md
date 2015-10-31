@@ -6,7 +6,7 @@ arranged, or (and that's my main problem) they don't have good showtimes for mov
 Most apps simply rely on the data from [themoviedb.org](http://www.tmdb.org), but they are crowdsourced and 
 have no reliable german showtimes.
 
-More details will follow.
+For more details see http://MovieStartsApp.com
 
 ## Author
 
