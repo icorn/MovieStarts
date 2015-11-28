@@ -98,12 +98,12 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 	private func isThumbnailInFavorites(movieDictArray: [NSDictionary], filename: String) -> Bool {
 		for dict in movieDictArray {
 			guard let dict = (dict as? [String : AnyObject]) else { continue }
+			
+			for dbIdPosterUrl in Constants.allDbIdPosterUrls {
+				guard let posterUrl = dict[dbIdPosterUrl] as? String else { continue }
 
-			if (dict[Constants.DB_ID_POSTER_URL] != nil) {
-				if let posterUrl = dict[Constants.DB_ID_POSTER_URL] as? String {
-					if posterUrl.containsString(filename) {
-						return true
-					}
+				if posterUrl.containsString(filename) {
+					return true
 				}
 			}
 		}
