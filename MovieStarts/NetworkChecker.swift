@@ -27,9 +27,11 @@ class NetworkChecker {
 			var errorWindow: MessageWindow?
 			
 			dispatch_async(dispatch_get_main_queue()) {
-				errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringId: "Close", handler: {
-					errorWindow?.close()
-				})
+				errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringIds: ["Close"],
+					handler: { (buttonIndex) -> () in
+						errorWindow?.close()
+					}
+				)
 			}
 			
 			return false
@@ -61,18 +63,22 @@ class NetworkChecker {
 				NSLog("CloudKit error: no account")
 				errorCallback?()
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccount", buttonStringId: "Close", handler: {
-						errorWindow?.close()
-					})
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccount", buttonStringIds: ["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
 				}
 				
 			case .Restricted:
 				NSLog("CloudKit error: Restricted")
 				errorCallback?()
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestricted", buttonStringId: "Close", handler: {
-						errorWindow?.close()
-					})
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestricted", buttonStringIds: ["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
 				}
 				
 			case .CouldNotDetermine:
@@ -84,9 +90,11 @@ class NetworkChecker {
 				
 				errorCallback?()
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermine", buttonStringId: "Close", handler: {
-						errorWindow?.close()
-					})
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermine", buttonStringIds: ["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
 				}
 			}
 		})
