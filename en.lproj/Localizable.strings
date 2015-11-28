@@ -30,6 +30,8 @@
 "Directors"			= "Directors";
 "Director"			= "Director";
 "Synopsis"			= "Story";
+"SynopsisEnglish"	= "Story (english)";
+"NoSynopsis"		= "Not available.";
 "NoReleaseDate" 	= "unknown";
 "MinutesShort"		= "min";
 "aka"				= "aka";
@@ -47,10 +49,12 @@
 // Welcome
 
 "WelcomeTitle"			= "Welcome";
-"WelcomeText"			= "This is your first launch of MovieStarts. Tap on the button below to start downloading movie data. Future movie updates will be downloaded automatically at the launch of the app.";
-"WelcomeButton"			= "Download movie data";
+"WelcomeText"			= "Choose the country for which you want to load the movie data and release dates. Future updates will be downloaded automatically.";
 "WelcomeProgress"		= "movies downloaded...";
 "WelcomeDownloading"	= "Downloading movies...";
+"WelcomeUSA"			= "United States";
+"WelcomeGermany"		= "Germany";
+"WelcomeGB"				= "Great Britain";
 
 // Error messages
 

@@ -30,6 +30,8 @@
 "Directors"			= "Regie";
 "Director"			= "Regie";
 "Synopsis"			= "Inhalt";
+"SynopsisEnglish"	= "Inhalt (englisch)";
+"NoSynopsis"		= "Nicht verfügbar.";
 "NoReleaseDate" 	= "unbekannt";
 "MinutesShort"		= "Min";
 "aka"				= "Original:";
@@ -47,10 +49,12 @@
 // Welcome
 
 "WelcomeTitle"			= "Willkommen";
-"WelcomeText"			= "Das ist dein erster Start von MovieStarts. Tippe auf den Button unten, um die Filmdaten für die USA zu laden. Zukünftige Daten-Updates werden automatisch nach dem Start der App durchgeführt. Deutsche Filmtermine folgen in einer späteren Version der App.";
-"WelcomeButton"			= "Filmdaten laden";
+"WelcomeText"			= "Wähle unten das Land aus, für das du die Filmdaten und Kinotermine laden möchtest. Zukünftige Updates werden automatisch durchgeführt.";
 "WelcomeProgress"		= "Filme geladen...";
 "WelcomeDownloading"	= "Filme werden geladen...";
+"WelcomeUSA"			= "USA";
+"WelcomeGermany"		= "Deutschland";
+"WelcomeGB"				= "Großbritannien";
 
 // Error messages
 
@@ -172,6 +176,7 @@
 "Sweden"					= "Schweden";
 "Switzerland"				= "Schweiz";
 "Trinidad and Tobago"		= "Trinidad und Tobago";
+"Turkey"					= "Türkei";
 "United Arab Emirates"		= "Vereinigte Arabische Emirate";
 
 // Genres
