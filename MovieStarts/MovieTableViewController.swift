@@ -114,7 +114,7 @@ class MovieTableViewController: UITableViewController {
 		// if last update is long enough ago: check CloudKit for update
 		
 		guard let tbc = movieTabBarController else { return }
-		let database = Database(recordType: Constants.RECORD_TYPE_USA, viewForError: nil)
+		let database = Database(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
 
 		if let movies = database.readDatabaseFromFile() {
 			tbc.updateMovies(movies, database: database)

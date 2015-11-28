@@ -36,8 +36,8 @@ class SettingsTableViewController: UITableViewController {
 		super.viewDidAppear(animated)
 		
 		// set up the two switches
-		setUpSwitch(Constants.PREFS_USE_IMDB_APP, switcher: imdbSwitch, label: imdbLabel, urlString: "imdb:")
-		setUpSwitch(Constants.PREFS_USE_YOUTUBE_APP, switcher: youtubeSwitch, label: youtubeLabel, urlString: "youtube:")
+		setUpSwitch(Constants.prefsUseImdbApp, switcher: imdbSwitch, label: imdbLabel, urlString: "imdb:")
+		setUpSwitch(Constants.prefsUseYoutubeApp, switcher: youtubeSwitch, label: youtubeLabel, urlString: "youtube:")
 	}
 
     override func didReceiveMemoryWarning() {
@@ -92,18 +92,18 @@ class SettingsTableViewController: UITableViewController {
 
 	
 	func imdbSwitchTapped() {
-		NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(imdbSwitch.on, forKey: Constants.PREFS_USE_IMDB_APP)
+		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(imdbSwitch.on, forKey: Constants.prefsUseImdbApp)
 	}
 	
 	func youtubeSwitchTapped() {
-		NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(youtubeSwitch.on, forKey: Constants.PREFS_USE_YOUTUBE_APP)
+		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(youtubeSwitch.on, forKey: Constants.prefsUseYoutubeApp)
 	}
 	
 	private func setUpSwitch(prefKey: String, switcher: UISwitch, label: UILabel, urlString: String) {
 		
 		// set imdb switch on or off
 		
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(prefKey) as? Bool
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(prefKey) as? Bool
 		
 		if let useApp = useApp where useApp == true {
 			switcher.on = true

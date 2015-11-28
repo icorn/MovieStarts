@@ -20,7 +20,7 @@ class DatabaseParent {
 	init(recordType: String) {
 		self.recordType = recordType
 		
-		cloudKitContainer = CKContainer(identifier: Constants.CLOUDKIT_CONTAINER_ID)
+		cloudKitContainer = CKContainer(identifier: Constants.cloudkitContainerId)
 		cloudKitDatabase = cloudKitContainer.publicCloudDatabase
 	}
 

@@ -16,8 +16,8 @@ struct Favorites {
 		Writes the favorites to the device.
 	*/
 	static func saveFavorites() {
-		let userDefaults = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)
-		userDefaults?.setObject(IDs, forKey: Constants.PREFS_FAVORITES)
+		let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
+		userDefaults?.setObject(IDs, forKey: Constants.prefsFavorites)
 		userDefaults?.synchronize()
 	}
 

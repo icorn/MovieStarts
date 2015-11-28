@@ -41,7 +41,7 @@ class StartViewController: UIViewController {
 		
 		// read movies from device or from cloud
 
-		database = Database(recordType: Constants.RECORD_TYPE_USA, viewForError: view)
+		database = Database(recordType: Constants.dbRecordTypeMovie, viewForError: view)
 		
 		if (database?.isDatabaseOnDevice() == true) {
 			// the database is on the device: load movies

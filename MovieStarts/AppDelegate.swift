@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// create folders for image asset
 		
-		let appPathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		let appPathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 
 		if let appPathUrl = appPathUrl, absolutePath = appPathUrl.path {
 			let fileManager = NSFileManager.defaultManager()
@@ -27,26 +27,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			// create thumbnail folder
 			
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.THUMBNAIL_FOLDER, withIntermediateDirectories: true, attributes: nil)
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.thumbnailFolder, withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for thumbnails at \(absolutePath + Constants.THUMBNAIL_FOLDER).")
+				NSLog("Error creating folder for thumbnails at \(absolutePath + Constants.thumbnailFolder).")
 				NSLog(error.debugDescription)
 			}
 			
 			// create big poster folder
 			
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.BIG_POSTER_FOLDER, withIntermediateDirectories: true, attributes: nil)
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.bigPosterFolder, withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for big posters at \(absolutePath + Constants.BIG_POSTER_FOLDER).")
+				NSLog("Error creating folder for big posters at \(absolutePath + Constants.bigPosterFolder).")
 				NSLog(error.debugDescription)
 			}
 		}
 
 		// read favorites from file
-		let favorites = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_FAVORITES)
+		let favorites = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsFavorites)
 		if let favorites = favorites as? [String] {
 			Favorites.IDs = favorites
 		}
@@ -57,15 +57,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		UINavigationBar.appearance().tintColor = UIColor.whiteColor()
 
 		// check if use-app-prefs are stored. If not, set them to "false"
-		let useImdbApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as? Bool
-		let useYoutubeApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as? Bool
+		let useImdbApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
+		let useYoutubeApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseYoutubeApp) as? Bool
 		
 		if useImdbApp == nil {
-			NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(false, forKey: Constants.PREFS_USE_IMDB_APP)
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsUseImdbApp)
 		}
 		
 		if useYoutubeApp == nil {
-			NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(false, forKey: Constants.PREFS_USE_YOUTUBE_APP)
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsUseYoutubeApp)
 		}
 		
 		// start watch session (if there is a watch)
