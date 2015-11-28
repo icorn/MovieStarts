@@ -15,22 +15,27 @@ class MessageWindow: NSObject {
 	var backView: UIView
 	var view: UIView
 	var logoImageView: UIImageView?
-	var button: UIButton
+	var buttons: [UIButton]
 	var progressView: UIView
 	var progressLabel: UILabel
 	var spinner: UIActivityIndicatorView
 	var progressViewWidthConstraint: NSLayoutConstraint?
+	var buttonHeightConstraints: [NSLayoutConstraint]
+	var buttonTopConstraints: [NSLayoutConstraint]
+	
+	let buttonHeight: CGFloat = 34.0
+	let buttonTop: CGFloat = 10.0
 	
 	weak var parentView: UIView?
-	var buttonHandler: (() -> ())?
+	var buttonHandler: ((buttonIndex: Int) -> ())?
 
 	
-	convenience init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringId: String, handler: (() -> ())?) {
-		self.init(parent: parent, darkenBackground: darkenBackground, titleStringId: titleStringId, textStringId: textStringId, buttonStringId: buttonStringId, error: nil, handler: handler)
+	convenience init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringIds: [String], handler: ((buttonIndex: Int) -> ())?) {
+		self.init(parent: parent, darkenBackground: darkenBackground, titleStringId: titleStringId, textStringId: textStringId, buttonStringIds: buttonStringIds, error: nil, handler: handler)
 	}
 	
 	
-	init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringId: String, error: NSError?, handler: (() -> ())?) {
+	init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringIds: [String], error: NSError?, handler: ((buttonIndex: Int) -> ())?) {
 
 		parentView = parent
 		buttonHandler = handler
@@ -39,13 +44,20 @@ class MessageWindow: NSObject {
 
 		view = UIView()
 		backView = UIView()
-		button = UIButton()
 		progressView = UIView()
 		spinner = UIActivityIndicatorView()
 		progressLabel = UILabel()
-
+		buttons = []
+		buttonHeightConstraints = []
+		buttonTopConstraints = []
+		
 		super.init()
 
+		if (buttonStringIds.count == 0) {
+			NSLog("MessageWindow must have buttons!")
+			return
+		}
+		
 		// set up views
 		
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -99,11 +111,16 @@ class MessageWindow: NSObject {
 		msg.numberOfLines = 0
 		msg.sizeToFit()
 		
-		button.translatesAutoresizingMaskIntoConstraints = false
-		button.setTitle(NSLocalizedString(buttonStringId, comment: ""), forState: UIControlState.Normal)
-		button.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0), forState: UIControlState.Normal)
-		button.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0), forState: UIControlState.Highlighted)
-		button.addTarget(self, action: Selector("buttonPressed"), forControlEvents: UIControlEvents.TouchUpInside)
+		for (index, buttonStringId) in buttonStringIds.enumerate() {
+			let button = UIButton()
+			button.tag = index
+			button.translatesAutoresizingMaskIntoConstraints = false
+			button.setTitle(NSLocalizedString(buttonStringId, comment: ""), forState: UIControlState.Normal)
+			button.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0), forState: UIControlState.Normal)
+			button.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0), forState: UIControlState.Highlighted)
+			button.addTarget(self, action: Selector("buttonPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+			buttons.append(button)
+		}
 		
 		progressView.translatesAutoresizingMaskIntoConstraints = false
 		progressView.systemLayoutSizeFittingSize(UILayoutFittingCompressedSize)
@@ -114,7 +131,7 @@ class MessageWindow: NSObject {
 		spinner.hidesWhenStopped = false
 		
 		progressLabel.translatesAutoresizingMaskIntoConstraints = false
-		progressLabel.text = "Hi"
+		progressLabel.text = ""
 		progressLabel.font = UIFont.systemFontOfSize(16)
 		progressLabel.textAlignment = NSTextAlignment.Left
 		progressLabel.textColor = UIColor.grayColor()
@@ -128,9 +145,12 @@ class MessageWindow: NSObject {
 		
 		view.addSubview(title)
 		view.addSubview(msg)
-		view.addSubview(button)
 		view.addSubview(progressView)
 
+		for button in buttons {
+			view.addSubview(button)
+		}
+		
 		progressView.addSubview(spinner)
 		progressView.addSubview(progressLabel)
 
@@ -156,7 +176,7 @@ class MessageWindow: NSObject {
 					attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0)
 			])
 		}
-		
+
 		view.addConstraints([
 			NSLayoutConstraint(item: title, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: view,
 				attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 40),
@@ -165,7 +185,7 @@ class MessageWindow: NSObject {
 			NSLayoutConstraint(item: title, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: view,
 				attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: 0)
 		])
-				
+
 		view.addConstraints([
 			NSLayoutConstraint(item: msg, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: title,
 				attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 10),
@@ -175,15 +195,31 @@ class MessageWindow: NSObject {
 				attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: -15)
 		])
 
-		view.addConstraints([
-			NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: view,
-				attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: view,
-				attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: msg,
-				attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 20)
-		])
-		
+		for (index, button) in buttons.enumerate() {
+			view.addConstraints([
+				NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: view,
+					attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 0),
+				NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Trailing, relatedBy: NSLayoutRelation.Equal, toItem: view,
+					attribute: NSLayoutAttribute.Trailing, multiplier: 1.0, constant: 0)
+			])
+
+			if (index == 0) {
+				view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal,
+					toItem: msg, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 20))
+			}
+			else {
+				let topConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal,
+					toItem: buttons[index-1], attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: buttonTop)
+				view.addConstraint(topConstraint)
+				buttonTopConstraints.append(topConstraint)
+				
+				let heightConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal,
+					toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: buttonHeight)
+				view.addConstraint(heightConstraint)
+				buttonHeightConstraints.append(heightConstraint)
+			}
+		}
+
 		progressView.addConstraints([
 			NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.Leading, relatedBy: NSLayoutRelation.Equal, toItem: progressView,
 				attribute: NSLayoutAttribute.Leading, multiplier: 1.0, constant: 0),
@@ -195,16 +231,14 @@ class MessageWindow: NSObject {
 			NSLayoutConstraint(item: progressLabel, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: progressView,
 				attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0)
 		])
-		
+
 		view.addConstraints([
 			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view,
 				attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: button,
+			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: buttons[0],
 				attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0),
-
-			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: button,
-				attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0),
-
+			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: buttons[0],
+				attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0)
 		])
 
 		progressViewWidthConstraint =  NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil,
@@ -217,14 +251,14 @@ class MessageWindow: NSObject {
 		parent.addConstraints([
 			NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: parent,
 				attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: button,
+			NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: buttons[buttons.count-1],
 				attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 20)
 		])
 	}
 	
 	
-	func buttonPressed() {
-		buttonHandler?()
+	func buttonPressed(sender: UIButton!) {
+		buttonHandler?(buttonIndex: sender.tag)
 	}
 	
 	
@@ -236,7 +270,18 @@ class MessageWindow: NSObject {
 	
 	
 	func showProgressIndicator(progressText: String) {
-		button.hidden = true
+		for button in buttons {
+			button.hidden = true
+		}
+		
+		for constraint in buttonHeightConstraints {
+			constraint.constant = 0
+		}
+		
+		for constraint in buttonTopConstraints {
+			constraint.constant = 0
+		}
+		
 		spinner.startAnimating()
 		progressView.hidden = false
 
@@ -247,7 +292,18 @@ class MessageWindow: NSObject {
 	func hideProgressIndicator() {
 		spinner.stopAnimating()
 		progressView.hidden = true
-		button.hidden = false
+		
+		for button in buttons {
+			button.hidden = false
+		}
+		
+		for constraint in buttonHeightConstraints {
+			constraint.constant = buttonHeight
+		}
+
+		for constraint in buttonTopConstraints {
+			constraint.constant = buttonTop
+		}
 	}
 	
 	
