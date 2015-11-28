@@ -116,7 +116,10 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 				// read favorites piece by piece
 				
 				for dict in loadedDictArray {
-					guard let favPosterUrl = dict[Constants.DB_ID_POSTER_URL] as? String else { continue }
+
+// TODO: Hier nicht einfach das EN-Poster nehmen! Evtl. das country als Metadata übertragen.
+					
+					guard let favPosterUrl = dict[Constants.dbIdPosterUrlEN] as? String else { continue }
 					var thumbnailFound = false
 					
 					// check, if this thumbnail of poster-url from the favorite is on the watch

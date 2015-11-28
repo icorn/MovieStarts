@@ -14,10 +14,13 @@ class DetailTitleMaker {
 	class func makeMovieDetailTitle(movie: WatchMovieRecord) -> String {
 		
 		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
-		let genre = movie.genres.first
+
+		let genreId = movie.genreIds.first
+// TODO:	let genre = movie.genres.first
 		
-		if let genre = genre {
-			detailText += NSLocalizedString(genre, comment: "") + " | "
+		if let genreId = genreId {
+			detailText += String(genreId) + " | "
+// TODO:		detailText += NSLocalizedString(genre, comment: "") + " | "
 		}
 		
 		if (detailText.characters.count > 0) {
@@ -34,9 +37,10 @@ class DetailTitleMaker {
 
 		// add genres
 		
-		if (movie.genres.count > 0) {
-			for genre in movie.genres {
-				detailText += NSLocalizedString(genre, comment: "") + ", "
+		if (movie.genreIds.count > 0) {
+			for genreId in movie.genreIds {
+				detailText += String(genreId) + ", "
+// TODO:				detailText += NSLocalizedString(genre, comment: "") + ", "
 			}
 			
 			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor()) + " | "
@@ -59,16 +63,20 @@ class DetailTitleMaker {
 	class func makeMinuteAndCertificationString(movie: WatchMovieRecord) -> String {
 		var detailText = ""
 		
-		if (movie.runtime > 0) {
-			detailText += "\(movie.runtime) m | "
+		if (movie.runtime[movie.currentCountry.languageArrayIndex] > 0) {
+			detailText += "\(movie.runtime[movie.currentCountry.languageArrayIndex]) m | "
 		}
 		
-		if let movieCertification = movie.certification where movie.certification?.characters.count > 0 {
-			var cert = movieCertification
+		if movie.certification[movie.currentCountry.countryArrayIndex].characters.count > 0 {
+			var cert = movie.certification[movie.currentCountry.countryArrayIndex]
 			
 			if (cert == "PG-13") {
 				// fighting for every pixel ;-)
 				cert = "PG13"
+			}
+			
+			if (movie.currentCountry == MovieCountry.Germany) {
+				cert = "FSK" + cert
 			}
 			
 			detailText += "\(cert) | "

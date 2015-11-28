@@ -160,58 +160,83 @@ extension MovieViewController {
 	*/
 	func loadBigPoster() {
 		
-		if let bigPosterImageView = bigPosterImageView, movie = movie {
-		
-			let database = BigPosterDatabase(recordType: Constants.RECORD_TYPE_USA)
-			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-		
-			NetworkChecker.checkCloudKit(self.view, database: database, okCallback: { () -> () in
+		guard let bigPosterImageView = bigPosterImageView, movie = movie else { return }
+		var errorWindow: MessageWindow?
 
+		// build paths
+		guard let targetPath = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)?.path else { return }
+		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Big.rawValue
+		var posterUrl = movie.posterUrl[movie.currentCountry.languageArrayIndex]
+		
+		if (posterUrl.characters.count == 0) {
+			// if there is no poster in wanted language, try the english one
+			posterUrl = movie.posterUrl[MovieCountry.USA.languageArrayIndex]
+		}
+		
+		if (posterUrl.characters.count > 0) {
+			// poster file is missing
+			
+			if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
+				// turn on network indicator and spinner
+				UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 				dispatch_async(dispatch_get_main_queue()) {
 					self.spinnerBackground?.hidden = false
 					self.spinner?.startAnimating()
 				}
-
-				database.downloadBigPoster(movie, finishCallback: { (error) -> () in
-					
-					// download is finished!
-					
+				
+				let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
 					UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-					
 					dispatch_async(dispatch_get_main_queue()) {
 						self.spinner?.stopAnimating()
 						self.spinnerBackground?.removeFromSuperview()
 					}
 					
-					// check if poster has been loaded
-					let bigPoster = movie.bigPoster
-					
-					if let bigPoster = bigPoster {
-						dispatch_async(dispatch_get_main_queue()) {
-							bigPosterImageView.image = bigPoster
-						}
-						return
-					}
-					
-					// poster not loaded or error
-					
 					if let error = error {
-						NSLog("Error getting big poster: \(error.code) (\(error.description))")
+						NSLog("Error getting missing thumbnail: \(error.description)")
 					}
-					
-					var errorWindow: MessageWindow?
-					
-					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringId: "Close", handler: {
-							errorWindow?.close()
-						})
+					else if let receivedPath = location?.path {
+						// move received poster to target path where it belongs
+						do {
+							try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: targetPath + Constants.bigPosterFolder + posterUrl)
+						}
+						catch let error as NSError {
+							if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+								// ignoring, because it's okay it it's already there
+							}
+							else {
+								NSLog("Error moving missing poster: \(error.description)")
+								dispatch_async(dispatch_get_main_queue()) {
+									errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+										errorWindow?.close()
+									})
+								}
+								return
+							}
+						}
+						
+						// load and show poster
+						if let bigPoster = movie.bigPoster {
+							dispatch_async(dispatch_get_main_queue()) {
+								bigPosterImageView.image = bigPoster
+							}
+							return
+						}
+						
+						// poster not loaded or error
+						if let error = error {
+							NSLog("Error getting big poster: \(error.code) (\(error.description))")
+						}
+						
+						dispatch_async(dispatch_get_main_queue()) {
+							errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+								errorWindow?.close()
+							})
+						}
 					}
 				})
-			},
-			
-			errorCallback: { () -> () in
-				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-			})
+				
+				task.resume()
+			}
 		}
 	}
 

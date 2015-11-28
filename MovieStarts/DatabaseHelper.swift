@@ -34,16 +34,17 @@ public class DatabaseHelper {
 		Converts an array of NSDictionarys to an array of MovieRecord objects.
 	
 		- parameter dictArray:	The input array of NSDictionarys
+		- parameter country:	The current country for the movie
 	
 		- returns: An array of MovieRecord objects, generated of the input parameter dictArray.
 	*/
-	public class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]?) -> [MovieRecord] {
+	public class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]?, country: MovieCountry) -> [MovieRecord] {
 		var retval: [MovieRecord] = []
 		
 		if let dictArray = dictArray {
 			for dict in dictArray {
 				if let dict = (dict as? [String : AnyObject]) {
-					retval.append(MovieRecord(dict: dict))
+					retval.append(MovieRecord(country: country, dict: dict))
 				}
 				else {
 					NSLog("Error converting dictionary")

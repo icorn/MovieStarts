@@ -126,9 +126,12 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			return
 		}
 		
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		guard let country = MovieCountry(rawValue: prefsCountryString) else { return }
+		
 		// transfer favorite thumbnails to watch
 		
-		let loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadMovieListToDictArray())
+		let loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadMovieListToDictArray(), country: country)
 		var favoritesDicts: [NSDictionary] = []
 		
 		if sendThumbnails {
@@ -168,12 +171,16 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		if (validSession == nil) {
 			return
 		}
-
+		
 		removeOutstandingMovieListTransfers()
 		
 		// send thumbnail
 		
-		let title = newFavorite.title ?? "NoName"
+		var title = "NoName"
+		
+		if (newFavorite.title[newFavorite.currentCountry.languageArrayIndex].characters.count > 0) {
+			title = newFavorite.title[newFavorite.currentCountry.languageArrayIndex]
+		}
 		
 		if let thumbnailUrl = newFavorite.thumbnailURL {
 			if (transferFile(thumbnailUrl, metadata: [Constants.watchMetadataThumbnail : 1]) == nil) {
@@ -228,7 +235,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		// get plist with movie list and load it
 		
 		let fileManager = NSFileManager.defaultManager()
-		let fileUrl = fileManager.containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		let fileUrl = fileManager.containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 		var moviesPlistPath = ""
 		
 		guard let fileUrlPath = fileUrl?.path else {
@@ -236,7 +243,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			return nil
 		}
 		
-		moviesPlistPath = fileUrlPath + "/" + Constants.RECORD_TYPE_USA + ".plist"
+		moviesPlistPath = fileUrlPath + "/" + Constants.dbRecordTypeMovie + ".plist"
 
 		return NSArray(contentsOfFile: moviesPlistPath) as? [NSDictionary]
 	}

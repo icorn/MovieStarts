@@ -11,7 +11,7 @@ import Foundation
 import WatchConnectivity
 
 
-class MovieInterfaceController: WKInterfaceController { //, WCSessionDelegate {
+class MovieInterfaceController: WKInterfaceController {
 
 	@IBOutlet var movieTable: WKInterfaceTable!
 	
@@ -72,23 +72,21 @@ class MovieInterfaceController: WKInterfaceController { //, WCSessionDelegate {
 			favoriteMovies = movieDictsToMovieRecords(loadedDictArray)
 			
 			favoriteMovies.sortInPlace {
-				if let date0 = $0.releaseDate, date1 = $1.releaseDate, title0 = $0.sortTitle, title1 = $1.sortTitle {
-					if ($0.isNowPlaying() && $1.isNowPlaying()) {
-						// both movies are playing now: sort by title
-						return title0.compare(title1) == NSComparisonResult.OrderedAscending
-					}
-					else if (date0 != date1) {
-						// dates are different: compare dates
-						return date0.compare(date1) == NSComparisonResult.OrderedAscending
-					}
-					else {
-						// dates are equal: compare titles
-						return title0.compare(title1) == NSComparisonResult.OrderedAscending
-					}
+				let date0 = $0.releaseDate[$0.currentCountry.countryArrayIndex]
+				let date1 = $1.releaseDate[$1.currentCountry.countryArrayIndex]
+				let title0 = $0.sortTitle[$0.currentCountry.countryArrayIndex], title1 = $1.sortTitle[$1.currentCountry.countryArrayIndex]
+
+				if ($0.isNowPlaying() && $1.isNowPlaying()) {
+					// both movies are playing now: sort by title
+					return title0.compare(title1) == NSComparisonResult.OrderedAscending
+				}
+				else if (date0 != date1) {
+					// dates are different: compare dates
+					return date0.compare(date1) == NSComparisonResult.OrderedAscending
 				}
 				else {
-					// this should never happen
-					return true
+					// dates are equal: compare titles
+					return title0.compare(title1) == NSComparisonResult.OrderedAscending
 				}
 			}
 		}
@@ -151,23 +149,23 @@ class MovieInterfaceController: WKInterfaceController { //, WCSessionDelegate {
 		// find out the necessary row-types
 	
 		for movie in movies {
-			if let releaseDate = movie.releaseDate {
-				if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
-					// it's a current movie, but there is no section yet
-					rowContentArray.append(NSLocalizedString("WatchNowPlaying", comment: ""))
-					rowTypeArray.append(ROW_TYPE_DATE)
-				}
-				else if ((movie.isNowPlaying() == false) && ((oldDate == nil) || (oldDate != movie.releaseDate))) {
-					// upcoming movies: a new sections starts
-					rowContentArray.append(movie.releaseDateString)
-					rowTypeArray.append(ROW_TYPE_DATE)
-					oldDate = releaseDate
-				}
-				
-				// add movie-row
-				rowContentArray.append(movie)
-				rowTypeArray.append(ROW_TYPE_MOVIE)
+			let releaseDate = movie.releaseDate[movie.currentCountry.countryArrayIndex]
+			
+			if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
+				// it's a current movie, but there is no section yet
+				rowContentArray.append(NSLocalizedString("WatchNowPlaying", comment: ""))
+				rowTypeArray.append(ROW_TYPE_DATE)
 			}
+			else if ((movie.isNowPlaying() == false) && ((oldDate == nil) || (oldDate != movie.releaseDate))) {
+				// upcoming movies: a new sections starts
+				rowContentArray.append(movie.releaseDateString)
+				rowTypeArray.append(ROW_TYPE_DATE)
+				oldDate = releaseDate
+			}
+			
+			// add movie-row
+			rowContentArray.append(movie)
+			rowTypeArray.append(ROW_TYPE_MOVIE)
 		}
 		
 		// set row-types and fill table
@@ -186,7 +184,7 @@ class MovieInterfaceController: WKInterfaceController { //, WCSessionDelegate {
 			else if let content = content as? WatchMovieRecord {
 				let movie = content
 				let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
-				row?.titleLabel.setText(movie.title ?? movie.origTitle)
+				row?.titleLabel.setText(movie.title[movie.currentCountry.languageArrayIndex] ?? movie.origTitle)
 				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
 				row?.posterImage.setImage(movie.thumbnailImage.0)
 				row?.movie = movie
@@ -215,9 +213,13 @@ class MovieInterfaceController: WKInterfaceController { //, WCSessionDelegate {
 	private func movieDictsToMovieRecords(dictArray: NSArray) -> [WatchMovieRecord] {
 		var movieRecordArray: [WatchMovieRecord] = []
 		
-		for dict in dictArray {
-			if let dict = dict as? [String : AnyObject] {
-				movieRecordArray.append(WatchMovieRecord(dict: dict))
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		
+		if let country = MovieCountry(rawValue: prefsCountryString) {
+			for dict in dictArray {
+				if let dict = dict as? [String : AnyObject] {
+					movieRecordArray.append(WatchMovieRecord(country: country, dict: dict))
+				}
 			}
 		}
 		

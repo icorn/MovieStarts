@@ -166,7 +166,7 @@ class MovieTableViewController: UITableViewController {
 		
 		if let movie = movie, cell = cell {
 			cell.posterImage.image = movie.thumbnailImage.0
-			cell.titleText.text = movie.title
+			cell.titleText.text = movie.title[movie.currentCountry.languageArrayIndex]
 			cell.tag = Constants.tagTableCell
 		
 			// show labels with subtitles
@@ -330,8 +330,10 @@ class MovieTableViewController: UITableViewController {
 		// add new movie to the section, then sort it
 		moviesInSections[foundSectionIndex].append(newMovie)
 		moviesInSections[foundSectionIndex].sortInPlace {
-			if let otherTitle = $1.sortTitle {
-				return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
+			let otherTitle = $1.sortTitle[$1.currentCountry.languageArrayIndex]
+			
+			if (otherTitle.characters.count > 0) {
+				return $0.sortTitle[$0.currentCountry.languageArrayIndex].localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
 			return true
 		}
@@ -363,12 +365,13 @@ class MovieTableViewController: UITableViewController {
 			for sectionIndex in 0 ..< moviesInSections.count {
 				// from every section, get the first movie an compare releasedates
 				if (moviesInSections[sectionIndex].count > 0) {
-					if let existingDate = moviesInSections[sectionIndex][0].releaseDate, newFavoriteDate = newMovie.releaseDate {
-						if (existingDate.compare(newFavoriteDate) == NSComparisonResult.OrderedDescending) {
-							// insert the new section here
-							newSectionIndex = sectionIndex
-							break
-						}
+					let existingDate = moviesInSections[sectionIndex][0].releaseDate[moviesInSections[sectionIndex][0].currentCountry.countryArrayIndex]
+					let newFavoriteDate = newMovie.releaseDate[newMovie.currentCountry.countryArrayIndex]
+
+					if (existingDate.compare(newFavoriteDate) == NSComparisonResult.OrderedDescending) {
+						// insert the new section here
+						newSectionIndex = sectionIndex
+						break
 					}
 				}
 			}

@@ -115,14 +115,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
 	var movie: MovieRecord?
 	var textButtons = [UIButton]()
-	var certificationDict: [String: CertificateLogo] = [
-		"R" 	: CertificateLogo(filename: "certificateR.png", height: 30),
-		"G" 	: CertificateLogo(filename: "certificateG.png", height: 30),
-		"PG" 	: CertificateLogo(filename: "certificatePG.png", height: 30),
-		"PG-13" : CertificateLogo(filename: "certificatePG-13.png", height: 30),
-		"NC-17" : CertificateLogo(filename: "certificateNC-17.png", height: 30)
-	]
-
+	
 
 	// MARK: - UIViewController
 	
@@ -148,7 +141,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
 			// fill labels
 			
-			titleLabel?.text = movie.title
+			titleLabel?.text = movie.title[movie.currentCountry.languageArrayIndex]
 
 			// show labels with subtitles
 			
@@ -171,7 +164,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			// show release date
 			
 			releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
-			if (movie.releaseDate != nil) {
+			
+			if (movie.releaseDate[movie.currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending) {
 				releaseDateLabel?.text = movie.releaseDateString
 			}
 			else {
@@ -268,11 +262,21 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 					actorHeadlineLabelVerticalSpaceConstraint, line3HeightConstraint, line3VerticalSpaceConstraint)
 			}
 			
-			// show story
+			// show synopsis
 			
+			let synopsisForLanguage = movie.synopsisForLanguage
 			storyHeadlineLabel.text = NSLocalizedString("Synopsis", comment: "") + ":"
-			if let synopsis = movie.synopsis {
-				storyLabel.text = synopsis
+
+			if (synopsisForLanguage.0.characters.count > 0) {
+				storyLabel.text = synopsisForLanguage.0
+				
+				if (synopsisForLanguage.1 != movie.currentCountry.languageArrayIndex) {
+					// synopsis is english as fallback
+					storyHeadlineLabel.text = NSLocalizedString("SynopsisEnglish", comment: "") + ":"
+				}
+			}
+			else {
+				storyLabel.text = NSLocalizedString("NoSynopsis", comment: "")
 			}
 
 			// show textbuttons for imdb and trailers
@@ -287,10 +291,23 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				textButtonIndex++
 			}
 			
-			for trailerName in movie.trailerNames {
-				textButtons[textButtonIndex].addTarget(self, action: Selector("trailerButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
-				textButtons[textButtonIndex].setTitle(NSLocalizedString("ShowTrailer", comment: "") + "'" + trailerName + "'", forState: UIControlState.Normal)
-				textButtonIndex++
+			for trailerName in movie.trailerNames[movie.currentCountry.languageArrayIndex] {
+				if (textButtonIndex < textButtons.count) {
+					textButtons[textButtonIndex].addTarget(self, action: Selector("trailerButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+					textButtons[textButtonIndex].setTitle(NSLocalizedString("ShowTrailer", comment: "") + "'" + trailerName + "'", forState: UIControlState.Normal)
+					textButtonIndex++
+				}
+			}
+			
+			if (movie.currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) {
+				// Non-English: Also show english trailers
+				for trailerName in movie.trailerNames[MovieCountry.USA.languageArrayIndex] {
+					if (textButtonIndex < textButtons.count) {
+						textButtons[textButtonIndex].addTarget(self, action: Selector("trailerButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+						textButtons[textButtonIndex].setTitle(NSLocalizedString("ShowTrailer", comment: "") + "'" + trailerName + " (USA)'", forState: UIControlState.Normal)
+						textButtonIndex++
+					}
+				}
 			}
 			
 			setUpFavoriteButton()
@@ -337,7 +354,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			
 			// if needed: show poster-hint
 		
-			let posterHintAlreadyShown: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_POSTER_HINT_ALREADY_SHOWN) as? Bool
+			let posterHintAlreadyShown: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsPosterHintAlreadyShown) as? Bool
 
 			if (posterHintAlreadyShown == nil) {
 				// hint not already shown: show it
@@ -345,15 +362,16 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				var errorWindow: MessageWindow?
 				
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "HintTitle", textStringId: "PosterHintText", buttonStringId: "Close", handler: {
-						errorWindow?.close()
-					})
+					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "HintTitle", textStringId: "PosterHintText", buttonStringIds: ["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
 				}
 				
-				NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.setObject(true, forKey: Constants.PREFS_POSTER_HINT_ALREADY_SHOWN)
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(true, forKey: Constants.prefsPosterHintAlreadyShown)
 			}
 		}
-		
 	}
 
 	
@@ -385,7 +403,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		// check if we open the idmb app or the webview
 		
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_IMDB_APP) as? Bool
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
 		
 		if let imdbId = movie?.imdbId {
 			let url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
@@ -412,6 +430,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	*/
 	func trailerButtonTapped(sender:UIButton) {
 		
+		guard let movie = movie else { return }
+		
 		// check internet connection
 		
 		if IJReachability.isConnectedToNetwork() == false {
@@ -424,7 +444,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		var index = 0
 		
-		if ((movie != nil) && (movie?.imdbId != nil)) {
+		if (movie.imdbId != nil) {
 			index--
 		}
 		
@@ -436,10 +456,19 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 		
 		// check if we open the youtube app or the webview
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseYoutubeApp) as? Bool
+		var trailerId: String?
 		
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)?.objectForKey(Constants.PREFS_USE_YOUTUBE_APP) as? Bool
-		
-		if let trailerId = movie?.trailerIds[index] {
+		if (index >= movie.trailerIds[movie.currentCountry.languageArrayIndex].count) {
+			// index seems to be from the fallback-english trailers
+			trailerId = movie.trailerIds[MovieCountry.USA.languageArrayIndex][index - movie.trailerIds[movie.currentCountry.languageArrayIndex].count]
+		}
+		else {
+			// index from is from movie country
+			trailerId = movie.trailerIds[movie.currentCountry.languageArrayIndex][index]
+		}
+
+		if let trailerId = trailerId {
 			let url: NSURL? = NSURL(string: "https://www.youtube.com/v/\(trailerId)/")
 			
 			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
@@ -452,6 +481,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				webVC.delegate = self
 				self.presentViewController(webVC, animated: true, completion: nil)
 			}
+		}
+		else {
+			NSLog("No TrailerId for movie \(movie.origTitle)")
+			return
 		}
 	}
 	
@@ -519,10 +552,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		dispatch_async(dispatch_get_main_queue()) {
 			self.scrollView.scrollEnabled = false
 			
-			errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringId: "Close", handler: {
-				errorWindow?.close()
-				self.scrollView.scrollEnabled = true
-			})
+			errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringIds: ["Close"],
+				handler: { (buttonIndex) -> () in
+					errorWindow?.close()
+					self.scrollView.scrollEnabled = true
+				}
+			)
 		}
 	}
 }

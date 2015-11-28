@@ -18,7 +18,7 @@ class TabBarController: UITabBarController {
 	var favoriteMovies: [[MovieRecord]] = []
 	var favoriteSections: [String] = []
 	
-	let userDefaults = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)
+	let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 
 	@IBOutlet weak var movieTabBar: UITabBar!
 
@@ -67,7 +67,7 @@ class TabBarController: UITabBarController {
 		var favorites: [MovieRecord] = []
 		
 		for movie in allMovies {
-			if (movie.releaseDate != nil) && (movie.isHidden == false) {
+			if (movie.isHidden == false) {
 				if movie.isNowPlaying() {
 					nowMovies.append(movie)
 				}
@@ -82,28 +82,18 @@ class TabBarController: UITabBarController {
 		}
 		
 		nowMovies.sortInPlace {
-			if let otherTitle = $1.sortTitle {
-				return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
-			}
-			return true
+			let otherTitle = $1.sortTitle[$1.currentCountry.languageArrayIndex]
+			return $0.sortTitle[$0.currentCountry.languageArrayIndex].localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 		}
 
 		upcoming.sortInPlace {
-			if let date0 = $0.releaseDate, date1 = $1.releaseDate {
-				return date0.compare(date1) == NSComparisonResult.OrderedAscending
-			}
-			else {
-				return true
-			}
+			let date0 = $0.releaseDate[$0.currentCountry.countryArrayIndex], date1 = $1.releaseDate[$1.currentCountry.countryArrayIndex]
+			return date0.compare(date1) == NSComparisonResult.OrderedAscending
 		}
 
 		favorites.sortInPlace {
-			if let date0 = $0.releaseDate, date1 = $1.releaseDate {
-				return date0.compare(date1) == NSComparisonResult.OrderedAscending
-			}
-			else {
-				return true
-			}
+			let date0 = $0.releaseDate[$0.currentCountry.countryArrayIndex], date1 = $1.releaseDate[$1.currentCountry.countryArrayIndex]
+			return date0.compare(date1) == NSComparisonResult.OrderedAscending
 		}
 		
 		// put upcoming movies in sections
@@ -114,7 +104,7 @@ class TabBarController: UITabBarController {
 		upcomingSections = []
 
 		for movie in upcoming {
-			if ((previousDate == nil) || (previousDate != movie.releaseDate)) {
+			if ((previousDate == nil) || (previousDate != movie.releaseDate[movie.currentCountry.countryArrayIndex])) {
 				// a new sections starts: create new array and add to film-array
 				let newMovieArray: [MovieRecord] = []
 				upcomingMovies.append(newMovieArray)
@@ -127,13 +117,11 @@ class TabBarController: UITabBarController {
 			
 			// sort current section by name
 			upcomingMovies[currentSection].sortInPlace {
-				if let otherTitle = $1.sortTitle {
-					return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
-				}
-				return true
+				let otherTitle = $1.sortTitle[$1.currentCountry.languageArrayIndex]
+				return $0.sortTitle[$0.currentCountry.languageArrayIndex].localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
 			
-			previousDate = movie.releaseDate
+			previousDate = movie.releaseDate[movie.currentCountry.countryArrayIndex]
 		}
 		
 		
@@ -152,7 +140,7 @@ class TabBarController: UITabBarController {
 				favoriteSections.append(NSLocalizedString("NowPlayingLong", comment: ""))
 				currentSection++
 			}
-			else if ((movie.isNowPlaying() == false) && ((previousDate == nil) || (previousDate != movie.releaseDate))) {
+			else if ((movie.isNowPlaying() == false) && ((previousDate == nil) || (previousDate != movie.releaseDate[movie.currentCountry.countryArrayIndex]))) {
 				// upcoming movies:
 				// a new sections starts: create new array and add to film-array
 				let newMovieArray: [MovieRecord] = []
@@ -166,26 +154,24 @@ class TabBarController: UITabBarController {
 			
 			// sort current section by name
 			favoriteMovies[currentSection].sortInPlace {
-				if let otherTitle = $1.sortTitle {
-					return $0.sortTitle?.localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
-				}
-				return true
+				let otherTitle = $1.sortTitle[$1.currentCountry.languageArrayIndex]
+				return $0.sortTitle[$0.currentCountry.languageArrayIndex].localizedCaseInsensitiveCompare(otherTitle) == NSComparisonResult.OrderedAscending
 			}
 			
-			previousDate = movie.releaseDate
+			previousDate = movie.releaseDate[movie.currentCountry.countryArrayIndex]
 		}
 	}
 	
 	
 	func updateMovies(allMovies: [MovieRecord], database: Database?) {
 
-		if (userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) != nil) {
-			let latestSuccessfullUpdate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE) as? NSDate
+		if (userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) != nil) {
+			let latestSuccessfullUpdate: NSDate? = userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) as? NSDate
 		
 			if let latestSuccessfullUpdate = latestSuccessfullUpdate {
 				let hoursSinceLastSuccessfullUpdate = abs(Int(latestSuccessfullUpdate.timeIntervalSinceNow)) / 60 / 60
 				
-				if (hoursSinceLastSuccessfullUpdate < Constants.HOURS_BETWEEN_DB_UPDATES) {
+				if (hoursSinceLastSuccessfullUpdate < Constants.hoursBetweenDbUpdates) {
 					// last successfull update was inside the tolerance: don't get new update
 					return
 				}
@@ -212,25 +198,31 @@ class TabBarController: UITabBarController {
 			case .NoAccount:
 				NSLog("CloudKit error on update: no account")
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccountUpdate", buttonStringId: "Close", handler: {
-						errorWindow?.close()
-					})
+					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccountUpdate", buttonStringIds: ["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
 				}
 				
 			case .Restricted:
 				NSLog("CloudKit error on update: Restricted")
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestrictedUpdate", buttonStringId: "Close", handler: {
-						errorWindow?.close()
-					})
+					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestrictedUpdate", buttonStringIds: ["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
 				}
 				
 			case .CouldNotDetermine:
 				NSLog("CloudKit error on update: CouldNotDetermine")
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermineUpdate", buttonStringId: "Close", handler: {
-						errorWindow?.close()
-					})
+					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermineUpdate", buttonStringIds: ["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
 				}
 			}
 		})
@@ -239,6 +231,8 @@ class TabBarController: UITabBarController {
 	
 	private func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord], database: Database?) {
 		
+		database?.updateThumbnailHandler = updateThumbnailHandler
+
 		database?.getUpdatedMovies(allMovies,
 			addNewMovieHandler: { (movie: MovieRecord) in
 
@@ -246,16 +240,14 @@ class TabBarController: UITabBarController {
 					// add new movie
 					
 					dispatch_async(dispatch_get_main_queue()) {
+						let title = movie.title[movie.currentCountry.languageArrayIndex]
+
 						if movie.isNowPlaying() {
-							if let title = movie.title {
-								print("Adding \(title) to NOW PLAYING")
-							}
+							print("Adding \(title) to NOW PLAYING")
 							self.nowPlayingController?.addMovie(movie)
 						}
 						else {
-							if let title = movie.title {
-								print("Adding \(title) to UPCOMING")
-							}
+							print("Adding \(title) to UPCOMING")
 							self.upcomingController?.addMovie(movie)
 						}
 					}
@@ -292,9 +284,8 @@ class TabBarController: UITabBarController {
 							self.nowPlayingController?.removeMovie(movie)
 						}
 						else {
-							if let title = movie.title {
-								print("Updating \(title) in NOW PLAYING")
-							}
+							let title = movie.title[movie.currentCountry.languageArrayIndex]
+							print("Updating \(title) in NOW PLAYING")
 							self.nowPlayingController?.updateMovie(movie)
 						}
 					}
@@ -305,9 +296,8 @@ class TabBarController: UITabBarController {
 							self.upcomingController?.removeMovie(movie)
 						}
 						else {
-							if let title = movie.title {
-								print("Updating \(title) in UPCOMING")
-							}
+							let title = movie.title[movie.currentCountry.languageArrayIndex]
+							print("Updating \(title) in UPCOMING")
 							self.upcomingController?.updateMovie(movie)
 						}
 					}
@@ -318,9 +308,8 @@ class TabBarController: UITabBarController {
 							self.nowPlayingController?.removeMovie(movie)
 						}
 						else {
-							if let title = movie.title {
-								print("Moving \(title) in from NOW PLAYING to UPCOMING")
-							}
+							let title = movie.title[movie.currentCountry.languageArrayIndex]
+							print("Moving \(title) in from NOW PLAYING to UPCOMING")
 							self.nowPlayingController?.removeMovie(movie)
 							self.upcomingController?.addMovie(movie)
 						}
@@ -332,9 +321,8 @@ class TabBarController: UITabBarController {
 							self.upcomingController?.removeMovie(movie)
 						}
 						else {
-							if let title = movie.title {
-								print("Moving \(title) in from UPCOMING to NOW PLAYING")
-							}
+							let title = movie.title[movie.currentCountry.languageArrayIndex]
+							print("Moving \(title) in from UPCOMING to NOW PLAYING")
 							self.upcomingController?.removeMovie(movie)
 							self.nowPlayingController?.addMovie(movie)
 						}
@@ -347,9 +335,8 @@ class TabBarController: UITabBarController {
 							self.favoriteController?.removeFavorite(movie.id)
 						}
 						else {
-							if let title = movie.title {
-								print("Updating \(title) in FAVORITES")
-							}
+							let title = movie.title[movie.currentCountry.languageArrayIndex]
+							print("Updating \(title) in FAVORITES")
 							self.favoriteController?.updateFavorite(movie)
 						}
 					}
@@ -376,8 +363,9 @@ class TabBarController: UITabBarController {
 			errorHandler: { (errorMessage: String) in
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 				NSLog(errorMessage)
-			},
-			
+			}
+/*
+			,
 			updatePosterHandler: { (tmdbId: Int) in
 				// update thumbnail poster if needed
 				dispatch_async(dispatch_get_main_queue()) {
@@ -388,6 +376,7 @@ class TabBarController: UITabBarController {
 					self.favoriteController?.updateThumbnail(tmdbId)
 				}
 			}
+*/
 		)
 	}
 	
@@ -409,6 +398,19 @@ class TabBarController: UITabBarController {
 			return findTableViewController()
 		}
 	}
+	
+	
+	func updateThumbnailHandler(tmdbId: Int) {
+		// update thumbnail poster if needed
+		dispatch_async(dispatch_get_main_queue()) {
+			if (self.nowPlayingController?.updateThumbnail(tmdbId) == false) {
+				self.upcomingController?.updateThumbnail(tmdbId)
+			}
+	
+			self.favoriteController?.updateThumbnail(tmdbId)
+		}
+	}
+
 	
 	private func findTableViewController<T>() -> T? {
 		if let tabBarVcs = viewControllers {

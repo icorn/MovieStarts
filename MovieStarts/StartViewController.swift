@@ -50,18 +50,30 @@ class StartViewController: UIViewController {
 		else {
 			// first start, no database on the device: this is the first start, say hello to the user
 			
-			welcomeWindow = MessageWindow(parent: view, darkenBackground: false, titleStringId: "WelcomeTitle", textStringId: "WelcomeText", buttonStringId: "WelcomeButton", handler: {
+			var countries = [MovieCountry.USA, MovieCountry.Germany, MovieCountry.England]
+			var countryStringIds: [String] = []
+			
+			for country in countries {
+				countryStringIds.append(country.welcomeStringId)
+			}
+			
+			welcomeWindow = MessageWindow(parent: view, darkenBackground: false, titleStringId: "WelcomeTitle", textStringId: "WelcomeText", buttonStringIds: countryStringIds,
+				handler: { (buttonIndex) -> () in
+					// store selected country in preferences
+					NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(countries[buttonIndex].rawValue, forKey: Constants.prefsCountry)
+					NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 
-				if (NetworkChecker.checkReachability(self.view) == false) {
-					return
+					// check network, load database if all is OK
+					if (NetworkChecker.checkReachability(self.view) == false) { return }
+					guard let database = self.database else { return }
+					NetworkChecker.checkCloudKit(self.view, database: database,
+						okCallback: { () -> () in
+							self.loadDatabase()
+						},
+						errorCallback: nil
+					)
 				}
-
-				if let database = self.database {
-					NetworkChecker.checkCloudKit(self.view, database: database, okCallback: { () -> () in
-						self.loadDatabase()
-					}, errorCallback: nil)
-				}
-			})
+			)
 		}
 	}
 
@@ -83,6 +95,7 @@ class StartViewController: UIViewController {
 				let tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
 				
 				if let tabBarController = tabBarController, allMovies = movies {
+					self.database?.updateThumbnailHandler = tabBarController.updateThumbnailHandler
 					
 					// store movies in tabbarcontroller
 					tabBarController.setUpMovies(allMovies)

@@ -28,27 +28,20 @@ class Database : DatabaseParent {
 	var addNewMovieHandler: ((movie: MovieRecord) -> ())?
 	var updateMovieHandler: ((movie: MovieRecord) -> ())?
 	var removeMovieHandler: ((movie: MovieRecord) -> ())?
-	var updatePosterHandler: ((tmdbId: Int) -> ())?
+	var updateThumbnailHandler: ((tmdbId: Int) -> ())?
 	
 	var allCKRecords: [CKRecord] = []
 	var updatedCKRecords: [CKRecord] = []
 
-	let userDefaults = NSUserDefaults(suiteName: Constants.MOVIESTARTS_GROUP)
-	let desiredQueryKeysForUpdate = [Constants.DB_ID_TMDB_ID, Constants.DB_ID_TITLE, Constants.DB_ID_ORIG_TITLE, Constants.DB_ID_RUNTIME, Constants.DB_ID_VOTE_AVERAGE, Constants.DB_ID_SYNOPSIS,
-		Constants.DB_ID_RELEASE, Constants.DB_ID_GENRES, Constants.DB_ID_CERTIFICATION, Constants.DB_ID_POSTER_URL, Constants.DB_ID_PRODUCTION_COUNTRIES,
-		Constants.DB_ID_IMDB_ID, Constants.DB_ID_DIRECTORS, Constants.DB_ID_ACTORS, Constants.DB_ID_TRAILER_NAMES, Constants.DB_ID_TRAILER_IDS,
-		Constants.DB_ID_ASSET, Constants.DB_ID_HIDDEN, Constants.DB_ID_SORT_TITLE, Constants.DB_ID_VOTE_COUNT, Constants.DB_ID_POPULARITY /*, Constants.DB_ID_POSTER_ASSET*/ ]
-	let desiredQueryKeysForAll = [Constants.DB_ID_TMDB_ID, Constants.DB_ID_TITLE, Constants.DB_ID_ORIG_TITLE, Constants.DB_ID_RUNTIME, Constants.DB_ID_VOTE_AVERAGE, Constants.DB_ID_SYNOPSIS,
-		Constants.DB_ID_RELEASE, Constants.DB_ID_GENRES, Constants.DB_ID_CERTIFICATION, Constants.DB_ID_POSTER_URL, Constants.DB_ID_PRODUCTION_COUNTRIES,
-		Constants.DB_ID_IMDB_ID, Constants.DB_ID_DIRECTORS, Constants.DB_ID_ACTORS, Constants.DB_ID_TRAILER_NAMES, Constants.DB_ID_TRAILER_IDS,
-		Constants.DB_ID_ASSET, Constants.DB_ID_HIDDEN, Constants.DB_ID_SORT_TITLE, Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_VOTE_COUNT, Constants.DB_ID_POPULARITY]
-
+	let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 	
+	let queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries, Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId, Constants.dbIdTrailerNamesEN, Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN]
+
 	init(recordType: String, viewForError: UIView?) {
 		self.viewForError = viewForError
 		super.init(recordType: recordType)
 		
-		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 
 		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
 			self.moviesPlistPath = fileUrlPath
@@ -59,7 +52,7 @@ class Database : DatabaseParent {
 
 			if let viewForError = viewForError {
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringId: "Close", handler: {
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 						errorWindow?.close()
 					})
 				}
@@ -118,13 +111,16 @@ class Database : DatabaseParent {
 		self.updateIndicator	= updateIndicator
 		self.finishHandler		= finishHandler
 		
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		guard let country = MovieCountry(rawValue: prefsCountryString) else { return }
+
 		if let moviesPlistFile = moviesPlistFile {
 			// try to load movies from device
 			let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary]
 
 			if let loadedDictArray = loadedDictArray {
 				// successfully loaded movies from device
-				loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray)
+				loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
 				
 				if loadedMovieRecordArray != nil {
 					cleanUpExistingMovies(&(loadedMovieRecordArray!))
@@ -143,7 +139,7 @@ class Database : DatabaseParent {
 
 				// get all movies which started a month ago or later
 				let compareDate = NSDate().dateByAddingTimeInterval(-30 * 24 * 60 * 60)
-				let predicate = NSPredicate(format: "(release > %@) AND (hidden == 0)", argumentArray: [compareDate])
+				let predicate = NSPredicate(format: "(%K > %@) AND (hidden == 0)", argumentArray: [country.databaseKeyRelease, compareDate])
 				let query = CKQuery(recordType: self.recordType, predicate: predicate)
 				
 				let queryOperation = CKQueryOperation(query: query)
@@ -166,8 +162,16 @@ class Database : DatabaseParent {
 		- parameter onOperationQueue:	The queue for the query operation
 	*/
 	func executeQueryOperationAllMovies(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+
+		if let country = MovieCountry(rawValue: prefsCountryString) {
+			queryOperation.desiredKeys = self.queryKeys + country.languageQueryKeys + country.countryQueryKeys
+		}
+		else {
+			NSLog("executeQueryOperationAllMovies: Error getting country for country-code \(prefsCountryString)")
+		}
+		
 		queryOperation.database = cloudKitDatabase
-		queryOperation.desiredKeys = self.desiredQueryKeysForAll
 		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
 
 		queryOperation.recordFetchedBlock = { (record : CKRecord) -> Void in
@@ -211,7 +215,8 @@ class Database : DatabaseParent {
 			
 			if let viewForError = viewForError {
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringId: "Close", error: error, handler: {
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringIds: ["Close"], error: error,
+					handler: { (buttonIndex) -> () in
 						errorWindow?.close()
 					})
 				}
@@ -226,13 +231,19 @@ class Database : DatabaseParent {
 			// received all records from the cloud
 			
 			var movieRecordArray: [MovieRecord] = []
+			let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+			let country = MovieCountry(rawValue: prefsCountryString)
 			
-			// generate array of MovieRecord objects and store the thumbnail posters to "disc"
-			for ckRecord in self.allCKRecords {
-				let newRecord = MovieRecord()
-				newRecord.initWithCKRecord(ckRecord)
-				movieRecordArray.append(newRecord)
-				movieRecordArray.last?.storePoster(ckRecord.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
+			if let country = country {
+				// generate array of MovieRecord objects and store the thumbnail posters to "disc"
+				for ckRecord in self.allCKRecords {
+					let newRecord = MovieRecord(country: country)
+					newRecord.initWithCKRecord(ckRecord)
+					movieRecordArray.append(newRecord)
+				}
+			}
+			else {
+				NSLog("No MovieCountry object for country \(prefsCountryString)")
 			}
 			
 			if (movieRecordArray.isEmpty) {
@@ -249,8 +260,7 @@ class Database : DatabaseParent {
 				if let viewForError = viewForError {
 					dispatch_async(dispatch_get_main_queue()) {
 						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle",
-							textStringId: "NoRecordsInCloudText", buttonStringId: "Close", handler:
-							{
+							textStringId: "NoRecordsInCloudText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 								errorWindow?.close()
 						})
 					}
@@ -259,7 +269,51 @@ class Database : DatabaseParent {
 				return
 			}
 			
-			userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE)
+			// Get all thumbnails
+			
+			let targetPath = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)?.path
+			let sourcePath = Constants.imageBaseUrl + PosterSizePath.Small.rawValue
+			
+			if let country = country, targetPath = targetPath {
+				for movieRecord in movieRecordArray {
+					let posterUrl = movieRecord.posterUrl[country.languageArrayIndex]
+					let tmdbId = movieRecord.tmdbId
+					
+					if NSFileManager.defaultManager().fileExistsAtPath(targetPath + Constants.thumbnailFolder + posterUrl) {
+						// don't load the thumbnail if it's already here
+						continue
+					}
+
+					if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
+						let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+							if let error = error {
+								NSLog("Error getting thumbnail: \(error.description)")
+							}
+							else if let receivedPath = location?.path {
+								// move received thumbnail to target path where it belongs and update the thumbnail in the table view
+								do {
+									try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: targetPath + Constants.thumbnailFolder + posterUrl)
+									if let tmdbId = tmdbId {
+										self.updateThumbnailHandler?(tmdbId: tmdbId)
+									}
+								}
+								catch let error as NSError {
+									if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+										// ignoring, because it's okay it it's already there
+									}
+									else {
+										NSLog("Error moving poster: \(error.description)")
+									}
+								}
+							}
+						})
+						
+						task.resume()
+					}
+				}
+			}
+
+			userDefaults?.setObject(NSDate(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
 			userDefaults?.synchronize()
 			
 			// finish movies
@@ -278,9 +332,11 @@ class Database : DatabaseParent {
 				
 				if let viewForError = viewForError {
 					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringId: "Close", handler: {
+						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringIds: ["Close"],
+							handler: { (buttonIndex) -> () in
 							errorWindow?.close()
-						})
+							}
+						)
 					}
 				}
 				return
@@ -295,11 +351,14 @@ class Database : DatabaseParent {
 		- returns: All movies as array of MovieRecord objects, or nil on error
 	*/
 	func readDatabaseFromFile() -> [MovieRecord]? {
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		guard let country = MovieCountry(rawValue: prefsCountryString) else { return nil }
+
 		if let moviesPlistFile = moviesPlistFile {
 			// try to load movies from device
 			if let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary] {
 				// successfully loaded movies from device
-				return DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray)
+				return DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
 			}
 		}
 		
@@ -318,19 +377,17 @@ class Database : DatabaseParent {
 							updateMovieHandler: (movie: MovieRecord) -> (),
 							removeMovieHandler: (movie: MovieRecord) -> (),
 							completionHandler: (movies: [MovieRecord]?) -> (),
-							errorHandler: (errorMessage: String) -> (),
-							updatePosterHandler: (tmdbId: Int) -> ())
+							errorHandler: (errorMessage: String) -> ())
 	{
 		self.addNewMovieHandler = addNewMovieHandler
 		self.updateMovieHandler = updateMovieHandler
 		self.removeMovieHandler = removeMovieHandler
 		self.completionHandler  = completionHandler
 		self.errorHandler		= errorHandler
-		self.updatePosterHandler = updatePosterHandler
 		
 		self.loadedMovieRecordArray = allMovies
 		
-		let latestModDate: NSDate? = userDefaults?.objectForKey(Constants.PREFS_LATEST_DB_MODIFICATION) as? NSDate
+		let latestModDate: NSDate? = userDefaults?.objectForKey(Constants.prefsLatestDbModification) as? NSDate
 		
 		if let saveModDate: NSDate = latestModDate {
 			
@@ -361,8 +418,16 @@ class Database : DatabaseParent {
 		- parameter onOperationQueue:	The queue for the query operation
 	*/
 	func executeQueryOperationUpdatedMovies(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		
+		if let country = MovieCountry(rawValue: prefsCountryString) {
+			queryOperation.desiredKeys = self.queryKeys + country.languageQueryKeys + country.countryQueryKeys
+		}
+		else {
+			NSLog("executeQueryOperationUpdatedMovies: Error getting country for country-code \(prefsCountryString)")
+		}
+		
 		queryOperation.database = cloudKitDatabase
-		queryOperation.desiredKeys = self.desiredQueryKeysForUpdate
 		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
 		
 		queryOperation.recordFetchedBlock = { (record : CKRecord) -> Void in
@@ -394,7 +459,10 @@ class Database : DatabaseParent {
 	*/
 	func recordFetchedUpdatedMoviesCallback(record: CKRecord) {
 		
-		let newMovieRecord = MovieRecord()
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("recordFetchedUpdatedMoviesCallback: Corrupt countrycode \(prefsCountryString)"); return }
+			
+		let newMovieRecord = MovieRecord(country: country)
 		newMovieRecord.initWithCKRecord(record)
 		var movieAlreadyExists: Bool = false
 		
@@ -411,7 +479,6 @@ class Database : DatabaseParent {
 			self.updateMovieHandler?(movie: newMovieRecord)
 		}
 		else {
-			newMovieRecord.storePoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
 			self.addNewMovieHandler?(movie: newMovieRecord)
 		}
 		
@@ -433,15 +500,18 @@ class Database : DatabaseParent {
 		}
 		else {
 			// received records from the cloud
-			userDefaults?.setObject(NSDate(), forKey: Constants.PREFS_LATEST_DB_SUCCESSFULL_UPDATE)
+			userDefaults?.setObject(NSDate(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
 			userDefaults?.synchronize()
 			
 			if (updatedCKRecords.count > 0) {
 				// generate an array of MovieRecords
 				var updatedMovieRecordArray: [MovieRecord] = []
 				
+				let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+				guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("queryOperationFinishedUpdatedMovies: Corrupt countrycode \(prefsCountryString)"); return }
+				
 				for ckRecord in updatedCKRecords {
-					let newRecord = MovieRecord()
+					let newRecord = MovieRecord(country: country)
 					newRecord.initWithCKRecord(ckRecord)
 					updatedMovieRecordArray.append(newRecord)
 				}
@@ -491,9 +561,11 @@ class Database : DatabaseParent {
 				
 				if let viewForError = viewForError {
 					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorText", textStringId: "ErrorWritingFile", buttonStringId: "Close", handler: {
-							errorWindow?.close()
-						})
+						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorText", textStringId: "ErrorWritingFile", buttonStringIds: ["Close"],
+							handler: { (buttonIndex) -> () in
+								errorWindow?.close()
+							}
+						)
 					}
 				}
 				
@@ -526,12 +598,15 @@ class Database : DatabaseParent {
 	*/
 	private func cleanUpPosters() {
 		
-		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.MOVIESTARTS_GROUP)
+		let targetPath = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)?.path
+		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Small.rawValue
+		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
-		if let pathUrl = pathUrl, basePath = pathUrl.path, movies = loadedMovieRecordArray {
+		if let pathUrl = pathUrl, basePath = pathUrl.path, movies = loadedMovieRecordArray, country = MovieCountry(rawValue: prefsCountryString), targetPath = targetPath {
 			var filenames: [AnyObject]?
 			do {
-				filenames = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.THUMBNAIL_FOLDER)
+				filenames = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.thumbnailFolder)
 			} catch let error as NSError {
 				NSLog("Error getting thumbnail folder: \(error.description)")
 				filenames = nil
@@ -542,32 +617,35 @@ class Database : DatabaseParent {
 			if let posterfilenames = filenames {
 				for posterfilename in posterfilenames {
 					var found = false
+					var movieName = ""
 					let posterfilenameString = posterfilename as? String
 					
 					if let posterfilenameString = posterfilenameString {
 						for movie in movies {
-							if let posterUrl = movie.posterUrl where posterUrl.characters.count > 3 {
-								
-								if (posterfilenameString == posterUrl.substringWithRange(Range<String.Index>(start: posterUrl.startIndex.advancedBy(1), end: posterUrl.endIndex))) {
-									found = true
-									break
+							for posterUrl in movie.posterUrl {
+								if (posterUrl.characters.count > 3) {
+									if (posterfilenameString == posterUrl.substringWithRange(Range<String.Index>(start: posterUrl.startIndex.advancedBy(1), end: posterUrl.endIndex)))
+									{
+										found = true
+										movieName = movie.origTitle ?? "<unknown>"
+										break
+									}
 								}
 							}
 						}
 						
 						if (found == false) {
-							
 							// posterfile is not in any database record anymore: delete poster(s)
 							
-							print("Deleting unneeded poster image \(posterfilenameString)")
+							print("Deleting unneeded poster image \(posterfilenameString) for movie \(movieName)")
 							
 							do {
-								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.THUMBNAIL_FOLDER + "/" + posterfilenameString)
+								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.thumbnailFolder + "/" + posterfilenameString)
 							} catch let error as NSError {
 								NSLog("Error removing thumbnail: \(error.description)")
 							}
 							do {
-								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.BIG_POSTER_FOLDER + "/" + posterfilenameString)
+								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.bigPosterFolder + "/" + posterfilenameString)
 							} catch {
 								// this happens all the time, when no hi-res poster was loaded
 								// NSLog("Error removing poster: \(error.description)")
@@ -579,93 +657,49 @@ class Database : DatabaseParent {
 			
 			// second: check for missing poster files and download them
 
-			var idsOfMissindPosters : [Int] = []
-			
 			for movie in movies {
-				if let posterUrl = movie.posterUrl {
-					if (NSFileManager.defaultManager().fileExistsAtPath(basePath + Constants.THUMBNAIL_FOLDER + posterUrl) == false) {
-						// poster file is missing
-						if let tmdbId = movie.tmdbId {
-							idsOfMissindPosters.append(tmdbId)
-						}
+				var posterUrl = movie.posterUrl[country.languageArrayIndex]
+				
+				if (posterUrl.characters.count == 0) {
+					// if there is no poster in wanted language, try the english one
+					posterUrl = movie.posterUrl[MovieCountry.England.languageArrayIndex]
+				}
+				
+				if ((posterUrl.characters.count > 0) && (NSFileManager.defaultManager().fileExistsAtPath(basePath + Constants.thumbnailFolder + posterUrl) == false)) {
+					// poster file is missing
+					
+					if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
+						let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+							if let error = error {
+								NSLog("Error getting missing thumbnail: \(error.description)")
+							}
+							else if let receivedPath = location?.path {
+								// move received thumbnail to target path where it belongs and update the thumbnail in the table view
+								do {
+									try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: targetPath + Constants.thumbnailFolder + posterUrl)
+									if let tmdbId = movie.tmdbId {
+										self.updateThumbnailHandler?(tmdbId: tmdbId)
+									}
+								}
+								catch let error as NSError {
+									if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+										// ignoring, because it's okay it it's already there
+									}
+									else {
+										NSLog("Error moving missing poster: \(error.description)")
+									}
+								}
+							}
+						})
+						
+						task.resume()
 					}
 				}
 			}
-
-			if (idsOfMissindPosters.count > 0) {
-
-				// download missing posters
-				
-				let predicate = NSPredicate(format: "(tmdbId IN %@) AND (hidden == 0)", argumentArray: [idsOfMissindPosters])
-				let query = CKQuery(recordType: self.recordType, predicate: predicate)
-				let queryOperation = CKQueryOperation(query: query)
-				queryOperation.recordFetchedBlock = recordFetchedMissingPostersCallback
-				queryOperation.queryCompletionBlock = queryCompleteMissingPostersCallback
-				queryOperation.desiredKeys = [Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_TMDB_ID]
-				queryOperation.qualityOfService = NSQualityOfService.UserInitiated
-				self.cloudKitDatabase.addOperation(queryOperation)
-				
-				print("Loading \(idsOfMissindPosters.count) missing posters.")
-			}
-			else {
-				// no posters missing
-				downloadsFinished()
-			}
+		
+			downloadsFinished()
 		}
 	}
-	
-	
-	/**
-		Adds the poster record to an array to save it for later processing.
-		This function is called when a new poster record was fetched from the CloudKit database.
-	
-		- parameter record:	The record from the CloudKit database
-	*/
-	private func recordFetchedMissingPostersCallback(record: CKRecord) {
-		
-		// poster fetched: store it to disk
-		
-		let tmdbIdToFind: Int? = record.objectForKey(Constants.DB_ID_TMDB_ID) as? Int
-		
-		if let movies = loadedMovieRecordArray, tmdbIdToFind = tmdbIdToFind {
-			for movie in movies {
-				if let tmdbId = movie.tmdbId where tmdbId == tmdbIdToFind {
-					movie.storePoster(record.objectForKey(Constants.DB_ID_POSTER_ASSET) as? CKAsset, thumbnail: true)
-					updatePosterHandler?(tmdbId: tmdbId)
-				}
-			}
-		}
-	}
-
-	
-	/**
-		Is called when all missing poster files have been fetched from the CloudKit database.
-	
-		- parameter cursor:	The paging cursor used to find out if there are more pages of movies to load
-		- parameter error:	The error object
-	*/
-	private func queryCompleteMissingPostersCallback(cursor: CKQueryCursor?, error: NSError?) {
-		if let cursor = cursor {
-			// some objects are here, ask for more
-			let queryOperation = CKQueryOperation(cursor: cursor)
-			queryOperation.recordFetchedBlock = recordFetchedMissingPostersCallback
-			queryOperation.queryCompletionBlock = queryCompleteMissingPostersCallback
-			queryOperation.desiredKeys = [Constants.DB_ID_POSTER_ASSET, Constants.DB_ID_TMDB_ID]
-			queryOperation.qualityOfService = NSQualityOfService.UserInitiated
-			self.cloudKitDatabase.addOperation(queryOperation)
-		}
-		else {
-			if let error = error {
-				self.errorHandler?(errorMessage: "Error querying posters: \(error.code) (\(error.description))")
-				return
-			}
-			else {
-				// no errors
-				downloadsFinished()
-			}
-		}
-	}
-	
 	
 	/**
 		Checks if there are movies which are too old and removes them.
@@ -674,25 +708,32 @@ class Database : DatabaseParent {
 	*/
 	private func cleanUpExistingMovies(inout existingMovies: [MovieRecord]) {
 		
-		let compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.MAX_DAYS_IN_THE_PAST) // 30 days ago
+		let compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast) // 30 days ago
 		let oldNumberOfMovies = existingMovies.count
+		var removedMovies = 0
 		
 		print("Cleaning up old movies...")
 		
-		for (var index = existingMovies.count-1; index >= 0; index--) {
-			if let releaseDate = existingMovies[index].releaseDate where releaseDate.compare(compareDate) == NSComparisonResult.OrderedAscending {
-				// movie is too old
-				removeMovieHandler?(movie: existingMovies[index])
-				print("   '\(existingMovies[index].title)' (\(releaseDate)) removed")
-				existingMovies.removeAtIndex(index)
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		
+		if let country = MovieCountry(rawValue: prefsCountryString) {
+			for (var index = existingMovies.count-1; index >= 0; index--) {
+				let releaseDate = existingMovies[index].releaseDate[country.countryArrayIndex]
+				
+				if releaseDate.compare(compareDate) == NSComparisonResult.OrderedAscending {
+					// movie is too old
+					removeMovieHandler?(movie: existingMovies[index])
+					print("   '\(existingMovies[index].title)' (\(releaseDate)) removed")
+					existingMovies.removeAtIndex(index)
+				}
 			}
-		}
-		
-		let removedMovies = oldNumberOfMovies - existingMovies.count
-		
-		if (removedMovies > 0) {
-			// udpate the watch
-			WatchSessionManager.sharedManager.sendAllFavoritesToWatch(true, sendThumbnails: false)
+			
+			removedMovies = oldNumberOfMovies - existingMovies.count
+			
+			if (removedMovies > 0) {
+				// udpate the watch
+				WatchSessionManager.sharedManager.sendAllFavoritesToWatch(true, sendThumbnails: false)
+			}
 		}
 		
 		print("Clean up over, removed \(removedMovies) movies from local file. Now we have \(existingMovies.count) movies.")
