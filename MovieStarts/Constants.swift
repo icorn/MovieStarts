@@ -80,14 +80,12 @@ public struct Constants {
 	static let dbIdCertificationGB		= "certificationGB"
 	
 	// language-specific database fields (table "Movie")
-	static let dbIdTrailerNamesEN		= "trailerNamesEN"
 	static let dbIdTrailerIdsEN			= "trailerIdsEN"
 	static let dbIdTitleEN				= "titleEN"
 	static let dbIdSortTitleEN			= "sortTitleEN"
 	static let dbIdSynopsisEN			= "synopsisEN"
 	static let dbIdRuntimeEN			= "runtimeEN"
 	
-	static let dbIdTrailerNamesDE		= "trailerNamesDE"
 	static let dbIdTrailerIdsDE			= "trailerIdsDE"
 	static let dbIdTitleDE				= "titleDE"
 	static let dbIdSortTitleDE			= "sortTitleDE"

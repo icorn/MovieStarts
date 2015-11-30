@@ -48,8 +48,6 @@ public class WatchMovieRecord : CustomStringConvertible {
 	public var actors:[String] = []
 	/// an array of characters
 	public var characters:[String] = []
-	/// an array of trailer names (for display) (array with localization)
-	public var trailerNames:[[String]] = []
 	/// an array of trailer IDs (IDs for youtube) (array with localization)
 	public var trailerIds:[[String]] = []
 	/// the popularity of the movie on tmdb.org
@@ -76,7 +74,6 @@ public class WatchMovieRecord : CustomStringConvertible {
 			title.append("")
 			sortTitle.append("")
 			trailerIds.append([])
-			trailerNames.append([])
 		}
 		
 		for _ in 0 ..< MovieCountry.numberOfDifferentCountries {
@@ -113,9 +110,7 @@ public class WatchMovieRecord : CustomStringConvertible {
 		if let value = dict[Constants.dbIdRuntimeDE] as? Int { self.runtime[MovieCountry.Germany.languageArrayIndex]	= value	}
 		if let value = dict[Constants.dbIdRuntimeEN] as? Int { self.runtime[MovieCountry.USA.languageArrayIndex]		= value	}
 
-		if let value = dict[Constants.dbIdTrailerNamesDE] as? [String] 	{ self.trailerNames[MovieCountry.Germany.languageArrayIndex] 	= value	}
 		if let value = dict[Constants.dbIdTrailerIdsDE] as? [String] 	{ self.trailerIds[MovieCountry.Germany.languageArrayIndex] 		= value	}
-		if let value = dict[Constants.dbIdTrailerNamesEN] as? [String] 	{ self.trailerNames[MovieCountry.USA.languageArrayIndex] 		= value	}
 		if let value = dict[Constants.dbIdTrailerIdsEN] as? [String] 	{ self.trailerIds[MovieCountry.USA.languageArrayIndex] 			= value	}
 
 		if let value = dict[Constants.dbIdVoteAverage] as? Double 			{ self.voteAverage			= value	}
@@ -162,7 +157,6 @@ public class WatchMovieRecord : CustomStringConvertible {
 
 		retval[Constants.dbIdSortTitleDE]		= sortTitle[MovieCountry.Germany.languageArrayIndex]
 		retval[Constants.dbIdRuntimeDE] 		= runtime[MovieCountry.Germany.languageArrayIndex]
-		retval[Constants.dbIdTrailerNamesDE] 	= trailerNames[MovieCountry.Germany.languageArrayIndex]
 		retval[Constants.dbIdTrailerIdsDE] 		= trailerIds[MovieCountry.Germany.languageArrayIndex]
 		retval[Constants.dbIdTitleDE] 			= title[MovieCountry.Germany.languageArrayIndex]
 		retval[Constants.dbIdSynopsisDE] 	 	= synopsis[MovieCountry.Germany.languageArrayIndex]
@@ -170,7 +164,6 @@ public class WatchMovieRecord : CustomStringConvertible {
 
 		retval[Constants.dbIdSortTitleEN]		= sortTitle[MovieCountry.USA.languageArrayIndex]
 		retval[Constants.dbIdRuntimeEN] 		= runtime[MovieCountry.USA.languageArrayIndex]
-		retval[Constants.dbIdTrailerNamesEN] 	= trailerNames[MovieCountry.USA.languageArrayIndex]
 		retval[Constants.dbIdTrailerIdsEN] 		= trailerIds[MovieCountry.USA.languageArrayIndex]
 		retval[Constants.dbIdTitleEN] 			= title[MovieCountry.USA.languageArrayIndex]
 		retval[Constants.dbIdSynopsisEN] 	 	= synopsis[MovieCountry.USA.languageArrayIndex]
@@ -513,7 +506,6 @@ public class WatchMovieRecord : CustomStringConvertible {
 		public var genreIds:[Int] = []
 		public var directors:[String] = []
 		public var actors:[String] = []
-		public var trailerNames:[String] = []
 		public var trailerIds:[String] = []
 		*/
 	}

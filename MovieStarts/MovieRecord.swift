@@ -42,10 +42,8 @@ public class MovieRecord : WatchMovieRecord {
 		if (ckRecord.objectForKey(Constants.dbIdCertificationGB) != nil){ self.certification[MovieCountry.England.countryArrayIndex] = ckRecord.objectForKey(Constants.dbIdCertificationGB) 	as! String }
 
 		if let value = ckRecord.objectForKey(Constants.dbIdRuntimeEN) as? Int				{ self.runtime[MovieCountry.USA.languageArrayIndex] 		= value }
-		if let value = ckRecord.objectForKey(Constants.dbIdTrailerNamesEN) as? [String]		{ self.trailerNames[MovieCountry.USA.languageArrayIndex] 	= value }
 		if let value = ckRecord.objectForKey(Constants.dbIdTrailerIdsEN) as? [String] 		{ self.trailerIds[MovieCountry.USA.languageArrayIndex] 		= value }
 		if let value = ckRecord.objectForKey(Constants.dbIdRuntimeDE) as? Int				{ self.runtime[MovieCountry.Germany.languageArrayIndex] 		= value }
-		if let value = ckRecord.objectForKey(Constants.dbIdTrailerNamesDE) as? [String]		{ self.trailerNames[MovieCountry.Germany.languageArrayIndex] 	= value }
 		if let value = ckRecord.objectForKey(Constants.dbIdTrailerIdsDE) as? [String] 		{ self.trailerIds[MovieCountry.Germany.languageArrayIndex] 		= value }
 
 		if let value = ckRecord.objectForKey(Constants.dbIdVoteAverage) as? Double				{ self.voteAverage 			= value }
