@@ -107,6 +107,7 @@
 		4FAFF8D21A8BFFE500864078 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FAFF8D11A8BFFE500864078 /* Images.xcassets */; };
 		4FAFF8D51A8BFFE500864078 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FAFF8D31A8BFFE500864078 /* LaunchScreen.xib */; };
 		4FBB03CC1BA862B50053CE99 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBB03CB1BA862B50053CE99 /* AboutViewController.swift */; };
+		4FCFBA0E1C0A370E00D43C27 /* YoutubeBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCFBA0D1C0A370E00D43C27 /* YoutubeBack.png */; };
 		4FDAF8351BFBFDC100A6380F /* noposter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDAF8321BFBFDC100A6380F /* noposter@2x.png */; };
 		4FDAF8361BFBFDC100A6380F /* noposter@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDAF8331BFBFDC100A6380F /* noposter@3x.png */; };
 		4FDAF8371BFBFDC100A6380F /* noposter@4x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDAF8341BFBFDC100A6380F /* noposter@4x.png */; };
@@ -276,6 +277,7 @@
 		4FAFF8EA1A8C002800864078 /* MovieStarts.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MovieStarts.entitlements; sourceTree = "<group>"; };
 		4FAFF8EB1A8C002B00864078 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		4FBB03CB1BA862B50053CE99 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		4FCFBA0D1C0A370E00D43C27 /* YoutubeBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YoutubeBack.png; sourceTree = "<group>"; };
 		4FDAF8321BFBFDC100A6380F /* noposter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noposter@2x.png"; sourceTree = "<group>"; };
 		4FDAF8331BFBFDC100A6380F /* noposter@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noposter@3x.png"; sourceTree = "<group>"; };
 		4FDAF8341BFBFDC100A6380F /* noposter@4x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noposter@4x.png"; sourceTree = "<group>"; };
@@ -398,6 +400,7 @@
 		4F63E6321A9A8CAD00528FB3 /* In-App-Graphics */ = {
 			isa = PBXGroup;
 			children = (
+				4FCFBA0D1C0A370E00D43C27 /* YoutubeBack.png */,
 				4F7A99991BAC68D000ED38C9 /* abouticon.png */,
 				4F7A999A1BAC68D000ED38C9 /* abouticon@2x.png */,
 				4F7A999B1BAC68D000ED38C9 /* abouticon@3x.png */,
@@ -755,6 +758,7 @@
 				4F7A99A51BACC4EB00ED38C9 /* tmdb@3x.png in Resources */,
 				4F2C92B41B66EC840044A27B /* favoritecorner@3x.png in Resources */,
 				4F7A999D1BAC68D000ED38C9 /* abouticon@2x.png in Resources */,
+				4FCFBA0E1C0A370E00D43C27 /* YoutubeBack.png in Resources */,
 				4F2C92B21B66EC840044A27B /* favoritecorner@2x.png in Resources */,
 				4F583D561BAB1DBD000EF489 /* favoriteframe@3x.png in Resources */,
 				4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */,
