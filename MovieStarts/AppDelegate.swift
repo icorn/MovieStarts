@@ -43,6 +43,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				NSLog("Error creating folder for big posters at \(absolutePath + Constants.bigPosterFolder).")
 				NSLog(error.debugDescription)
 			}
+
+			// create trailer folder
+			
+			do {
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.trailerFolder, withIntermediateDirectories: true, attributes: nil)
+			}
+			catch let error as NSError {
+				NSLog("Error creating folder for trailer covers at \(absolutePath + Constants.trailerFolder).")
+				NSLog(error.debugDescription)
+			}
 		}
 
 		// read favorites from file

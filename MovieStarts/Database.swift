@@ -594,120 +594,11 @@ class Database : DatabaseParent {
 
 	
 	/**
-		Deleted unneeded poster files from the device, and reads missing poster files from the CloudKit database to the device.
-	*/
-	private func cleanUpPosters() {
-		
-		let targetPath = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)?.path
-		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Small.rawValue
-		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
-		
-		if let pathUrl = pathUrl, basePath = pathUrl.path, movies = loadedMovieRecordArray, country = MovieCountry(rawValue: prefsCountryString), targetPath = targetPath {
-			var filenames: [AnyObject]?
-			do {
-				filenames = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.thumbnailFolder)
-			} catch let error as NSError {
-				NSLog("Error getting thumbnail folder: \(error.description)")
-				filenames = nil
-			}
-			
-			// first check for all poster files if they are still needed
-			
-			if let posterfilenames = filenames {
-				for posterfilename in posterfilenames {
-					var found = false
-					var movieName = ""
-					let posterfilenameString = posterfilename as? String
-					
-					if let posterfilenameString = posterfilenameString {
-						for movie in movies {
-							for posterUrl in movie.posterUrl {
-								if (posterUrl.characters.count > 3) {
-									if (posterfilenameString == posterUrl.substringWithRange(Range<String.Index>(start: posterUrl.startIndex.advancedBy(1), end: posterUrl.endIndex)))
-									{
-										found = true
-										movieName = movie.origTitle ?? "<unknown>"
-										break
-									}
-								}
-							}
-						}
-						
-						if (found == false) {
-							// posterfile is not in any database record anymore: delete poster(s)
-							
-							print("Deleting unneeded poster image \(posterfilenameString) for movie \(movieName)")
-							
-							do {
-								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.thumbnailFolder + "/" + posterfilenameString)
-							} catch let error as NSError {
-								NSLog("Error removing thumbnail: \(error.description)")
-							}
-							do {
-								try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.bigPosterFolder + "/" + posterfilenameString)
-							} catch {
-								// this happens all the time, when no hi-res poster was loaded
-								// NSLog("Error removing poster: \(error.description)")
-							}
-						}
-					}
-				}
-			}
-			
-			// second: check for missing poster files and download them
-
-			for movie in movies {
-				var posterUrl = movie.posterUrl[country.languageArrayIndex]
-				
-				if (posterUrl.characters.count == 0) {
-					// if there is no poster in wanted language, try the english one
-					posterUrl = movie.posterUrl[MovieCountry.England.languageArrayIndex]
-				}
-				
-				if ((posterUrl.characters.count > 0) && (NSFileManager.defaultManager().fileExistsAtPath(basePath + Constants.thumbnailFolder + posterUrl) == false)) {
-					// poster file is missing
-					
-					if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
-						let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
-							if let error = error {
-								NSLog("Error getting missing thumbnail: \(error.description)")
-							}
-							else if let receivedPath = location?.path {
-								// move received thumbnail to target path where it belongs and update the thumbnail in the table view
-								do {
-									try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: targetPath + Constants.thumbnailFolder + posterUrl)
-									if let tmdbId = movie.tmdbId {
-										self.updateThumbnailHandler?(tmdbId: tmdbId)
-									}
-								}
-								catch let error as NSError {
-									if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
-										// ignoring, because it's okay it it's already there
-									}
-									else {
-										NSLog("Error moving missing poster: \(error.description)")
-									}
-								}
-							}
-						})
-						
-						task.resume()
-					}
-				}
-			}
-		
-			downloadsFinished()
-		}
-	}
-	
-	/**
 		Checks if there are movies which are too old and removes them.
 	
 		- parameter existingMovies:	The array of existing movies to check
 	*/
 	private func cleanUpExistingMovies(inout existingMovies: [MovieRecord]) {
-		
 		let compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast) // 30 days ago
 		let oldNumberOfMovies = existingMovies.count
 		var removedMovies = 0
@@ -723,7 +614,7 @@ class Database : DatabaseParent {
 				if releaseDate.compare(compareDate) == NSComparisonResult.OrderedAscending {
 					// movie is too old
 					removeMovieHandler?(movie: existingMovies[index])
-					print("   '\(existingMovies[index].title)' (\(releaseDate)) removed")
+					print("   '\(existingMovies[index].origTitle)' (\(releaseDate)) removed")
 					existingMovies.removeAtIndex(index)
 				}
 			}
@@ -739,7 +630,184 @@ class Database : DatabaseParent {
 		print("Clean up over, removed \(removedMovies) movies from local file. Now we have \(existingMovies.count) movies.")
 	}
 
+
+	/**
+		Deleted unneeded poster files from the device, and reads missing poster files from the CloudKit database to the device.
+	*/
+	private func cleanUpPosters() {
+		let pathUrl    = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		
+		if let basePath = pathUrl?.path, movies = loadedMovieRecordArray {
+			deleteUnneededPosters(basePath, movies: movies)
+			downloadMissingPosters(basePath, movies: movies)
+			deleteUnneededYoutubeImages(basePath, movies: movies)
+		}
+		
+		downloadsFinished()
+	}
 	
+
+	/**
+		Checks for all poster files if they are still needed and delete them if not.
+
+		- parameter basePath:	The local basepath for all images
+		- parameter movies:		The array with all movie records
+	*/
+	private func deleteUnneededPosters(basePath: String, movies: [MovieRecord]) {
+		
+		var filenames: [AnyObject]?
+		do {
+			filenames = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.thumbnailFolder)
+		} catch let error as NSError {
+			NSLog("Error getting thumbnail folder: \(error.description)")
+			filenames = nil
+		}
+		
+		if let posterfilenames = filenames {
+			for posterfilename in posterfilenames {
+				var found = false
+				
+				if let posterfilenameString = posterfilename as? String {
+					for movie in movies {
+						for posterUrl in movie.posterUrl {
+							if (posterUrl.characters.count > 3) {
+								if (posterfilenameString == posterUrl.substringWithRange(Range<String.Index>(start: posterUrl.startIndex.advancedBy(1), end: posterUrl.endIndex)))
+								{
+									found = true
+									break
+								}
+							}
+						}
+					}
+					
+					if (found == false) {
+						// posterfile is not in any database record anymore: delete poster(s)
+						print("Deleting unneeded poster image \(posterfilenameString)")
+
+						do {
+							try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.thumbnailFolder + "/" + posterfilenameString)
+						} catch let error as NSError {
+							NSLog("Error removing thumbnail: \(error.description)")
+						}
+						do {
+							try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.bigPosterFolder + "/" + posterfilenameString)
+						} catch {
+							// this happens all the time, when no hi-res poster was loaded
+							// NSLog("Error removing poster: \(error.description)")
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
+	/**
+		Checks for all youtube-titles-images if they are still needed and delete them if not.
+	
+		- parameter basePath:	The local basepath for all images
+		- parameter movies:		The array with all movie records
+	*/
+	private func deleteUnneededYoutubeImages(basePath: String, movies: [MovieRecord]) {
+		
+		var filenames: [AnyObject]?
+		do {
+			filenames = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.trailerFolder)
+		} catch let error as NSError {
+			NSLog("Error getting trailer folder: \(error.description)")
+			filenames = nil
+		}
+		
+		if let trailerfilenames = filenames {
+			for trailerfilename in trailerfilenames {
+				var found = false
+				
+				if let trailerfilenameString = trailerfilename as? String {
+					for movie in movies {
+						for trailerIdsForCountry in movie.trailerIds {
+							for trailerId in trailerIdsForCountry {
+								if (trailerId.characters.count > 0) {
+									if (trailerfilenameString.beginsWith(trailerId)) {
+										found = true
+										break
+									}
+								}
+							}
+						}
+					}
+
+					if (found == false) {
+						// trailerfile is not in any database record anymore: delete trailer-image
+						
+						print("Deleting unneeded trailer image \(trailerfilenameString)")
+
+						do {
+							try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.trailerFolder + "/" + trailerfilenameString)
+						} catch let error as NSError {
+							NSLog("Error removing trailer image: \(error.description)")
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	
+	/**
+		Loads missing poster files and downloads them.
+	
+		- parameter basePath:	The local basepath for all images
+		- parameter movies:		The array with all movie records
+	*/
+	private func downloadMissingPosters(basePath: String, movies: [MovieRecord]) {
+		
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Small.rawValue
+
+		guard let country = MovieCountry(rawValue: prefsCountryString) else { return }
+		
+		for movie in movies {
+			var posterUrl = movie.posterUrl[country.languageArrayIndex]
+			
+			if (posterUrl.characters.count == 0) {
+				// if there is no poster in wanted language, try the english one
+				posterUrl = movie.posterUrl[MovieCountry.England.languageArrayIndex]
+			}
+			
+			if ((posterUrl.characters.count > 0) && (NSFileManager.defaultManager().fileExistsAtPath(basePath + Constants.thumbnailFolder + posterUrl) == false)) {
+				// poster file is missing
+				
+				if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
+					let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+						if let error = error {
+							NSLog("Error getting missing thumbnail: \(error.description)")
+						}
+						else if let receivedPath = location?.path {
+							// move received thumbnail to target path where it belongs and update the thumbnail in the table view
+							do {
+								try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: basePath + Constants.thumbnailFolder + posterUrl)
+								if let tmdbId = movie.tmdbId {
+									self.updateThumbnailHandler?(tmdbId: tmdbId)
+								}
+							}
+							catch let error as NSError {
+								if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+									// ignoring, because it's okay it it's already there
+								}
+								else {
+									NSLog("Error moving missing poster: \(error.description)")
+								}
+							}
+						}
+					})
+					
+					task.resume()
+				}
+			}
+		}
+	}
+	
+
 	/**
 		Tries to write the movies to the device.
 	*/

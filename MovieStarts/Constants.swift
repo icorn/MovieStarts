@@ -18,6 +18,7 @@ public struct Constants {
 	static let movieStartsGroup				= "group.com.icorn.MovieStarts"
 	static let thumbnailFolder				= "/Thumbnails"
 	static let bigPosterFolder				= "/BigPoster"
+	static let trailerFolder				= "/Trailers"
 	
 	static let prefsLatestDbModification 		= "modificationDate"
 	static let prefsLatestDbSuccessfullUpdate 	= "lastestCheck"
@@ -35,6 +36,7 @@ public struct Constants {
 
 	static let tagFavoriteView: Int			= 10000
 	static let tagTableCell: Int			= 10001
+	static let tagTrailer: Int				= 20000
 	
 	// MARK: - Watch communication
 	

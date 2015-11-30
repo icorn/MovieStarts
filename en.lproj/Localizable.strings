@@ -37,7 +37,7 @@
 "aka"				= "aka";
 
 "ShowOnImdb"				= "Show Details on IMDb";
-"ShowTrailer"				= "Show ";
+"TrailerHeadline"			= "Trailers";
 "AddToFavorites"			= "Add to Favorites";
 "RemoveFromFavorites"		= "Remove from Favorites";
 "AddToFavoritesShort"		= "Add to\nFavorites";
