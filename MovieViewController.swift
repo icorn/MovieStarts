@@ -147,20 +147,22 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			
 			var subtitleLabels = [subtitleText1, subtitleText2, subtitleText3]
 			
-			for (index, subtitle) in movie.subtitleArray.enumerate() {
-				subtitleLabels[index]?.text = subtitle
+			if let genreDict = movieTabBarController?.genreDict {
+				for (index, subtitle) in movie.getSubtitleArray(genreDict).enumerate() {
+					subtitleLabels[index]?.text = subtitle
+				}
+				
+				// hide unused labels
+				
+				for (var index = movie.getSubtitleArray(genreDict).count; index < subtitleLabels.count; index++) {
+					subtitleLabels[index]?.hidden = true
+				}
+
+				// vertically "center" the labels
+				let moveY = (subtitleLabels.count - movie.getSubtitleArray(genreDict).count) * 19
+				titleLabelTopSpaceConstraint.constant = CGFloat(moveY / 2) * -1 + 4
 			}
 			
-			// hide unused labels
-			
-			for (var index = movie.subtitleArray.count; index < subtitleLabels.count; index++) {
-				subtitleLabels[index]?.hidden = true
-			}
-
-			// vertically "center" the labels
-			let moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
-			titleLabelTopSpaceConstraint.constant = CGFloat(moveY / 2) * -1 + 4
-
 			// show release date
 			
 			releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
@@ -307,7 +309,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			// Set nice distance between lowest line and the bottom of the content view.
 
 			contentView.addConstraint(NSLayoutConstraint(item: bottomLine, attribute: NSLayoutAttribute.Bottom,
-				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 30))
+				relatedBy: NSLayoutRelation.Equal, toItem: contentView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 10))
 		}
 	}
 	

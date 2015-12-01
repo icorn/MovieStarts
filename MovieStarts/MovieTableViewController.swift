@@ -19,6 +19,15 @@ class MovieTableViewController: UITableViewController {
 			return navigationController?.parentViewController as? TabBarController
 		}
 	}
+	
+	var genreDict: [Int: String] {
+		if let tbc = movieTabBarController {
+			return tbc.genreDict
+		}
+		else {
+			return [:]
+		}
+	}
 
 	var movies: [MovieRecord] {
 		get {
@@ -173,19 +182,19 @@ class MovieTableViewController: UITableViewController {
 
 			var subtitleLabels = [cell.subtitleText1, cell.subtitleText2, cell.subtitleText3]
 			
-			for (index, subtitle) in movie.subtitleArray.enumerate() {
+			for (index, subtitle) in movie.getSubtitleArray(genreDict).enumerate() {
 				subtitleLabels[index]?.hidden = false
 				subtitleLabels[index]?.text = subtitle
 			}
 			
 			// hide unused labels
 			
-			for (var index = movie.subtitleArray.count; index < subtitleLabels.count; index++) {
+			for (var index = movie.getSubtitleArray(genreDict).count; index < subtitleLabels.count; index++) {
 				subtitleLabels[index]?.hidden = true
 			}
 		
 			// vertically "center" the labels
-			let moveY = (subtitleLabels.count - movie.subtitleArray.count) * 19
+			let moveY = (subtitleLabels.count - movie.getSubtitleArray(genreDict).count) * 19
 			cell.titleTextTopSpaceConstraint.constant = CGFloat(moveY / 2) - 4
 			
 			// add favorite-icon

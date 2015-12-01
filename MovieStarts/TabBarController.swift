@@ -12,6 +12,7 @@ import CloudKit
 
 class TabBarController: UITabBarController {
 
+	var genreDict: [Int: String] = [:]
 	var nowMovies: [MovieRecord] = []
 	var upcomingMovies: [[MovieRecord]] = []
 	var upcomingSections: [String] = []
@@ -52,7 +53,13 @@ class TabBarController: UITabBarController {
         super.didReceiveMemoryWarning()
     }
 
-		
+	
+	func loadGenresFromFile() {
+		let genreDatabase = GenreDatabase(finishHandler: nil, errorHandler: nil)
+		genreDict = genreDatabase.readGenresFromFile()
+	}
+
+	
 	/**
 		Puts all movies into the categories now, upcoming, and/or favorites.
 	
@@ -358,6 +365,7 @@ class TabBarController: UITabBarController {
 			
 			completionHandler: { (movies: [MovieRecord]?) in
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+				self.loadGenresFromFile()
 			},
 
 			errorHandler: { (errorMessage: String) in

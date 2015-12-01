@@ -262,14 +262,14 @@ public class WatchMovieRecord : CustomStringConvertible {
 	}
 	
 	/// The string of genres of the movie.
-
-	public var genreString: String? {
+	
+	private func makeGenreString(genreDict: [Int : String]) -> String? {
 		var genreText: String = ""
 		
 		if (genreIds.count > 0) {
-			for genre in genreIds {
-				genreText += String(genre) + ", "
-// TODO				genreText += NSLocalizedString(genre, comment: "") + ", "
+			for genreId in genreIds {
+				guard let genreName = genreDict[genreId] else { continue }
+				genreText += genreName + ", "
 			}
 			
 			return genreText.substringToIndex(genreText.endIndex.predecessor().predecessor())
@@ -278,7 +278,7 @@ public class WatchMovieRecord : CustomStringConvertible {
 			return nil
 		}
 	}
-
+	
 	/// The string of production countries.
 	
 	var countryString: String? {
@@ -356,7 +356,7 @@ public class WatchMovieRecord : CustomStringConvertible {
 	
 	/// An array with up to three items for the subtitle.
 	
-	public var subtitleArray: [String] {
+	func getSubtitleArray(genreDict: [Int : String]) -> [String] {
 		var subtitles: [String] = []
 		
 		if let origText = originalTitleForDisplay {
@@ -367,7 +367,7 @@ public class WatchMovieRecord : CustomStringConvertible {
 			subtitles.append(details)
 		}
 		
-		if let genres = genreString {
+		if let genres = makeGenreString(genreDict) {
 			subtitles.append(genres)
 		}
 		
