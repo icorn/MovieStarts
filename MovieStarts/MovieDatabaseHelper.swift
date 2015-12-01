@@ -10,7 +10,7 @@ import Foundation
 import CloudKit
 
 
-public class DatabaseHelper {
+public class MovieDatabaseHelper {
 	
    /**
 		Converts an array of MovieRecord objects to an array of NSDictionaries.
@@ -86,7 +86,7 @@ public class DatabaseHelper {
 	public class func joinMovieRecordArrays(inout existingMovies: [MovieRecord], updatedMovies: [MovieRecord]) {
 		
 		for updatedMovie in updatedMovies {
-			let movieIndex = DatabaseHelper.findArrayIndexOfMovie(updatedMovie, array: existingMovies)
+			let movieIndex = MovieDatabaseHelper.findArrayIndexOfMovie(updatedMovie, array: existingMovies)
 			
 			if let movieIndex = movieIndex {
 				// update existing movie

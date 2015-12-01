@@ -11,7 +11,7 @@ import CloudKit
 import UIKit
 
 
-class Database : DatabaseParent {
+class MovieDatabase : DatabaseParent {
 	
 	var moviesPlistPath: String?
 	var moviesPlistFile: String?
@@ -44,7 +44,7 @@ class Database : DatabaseParent {
 		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 
 		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
-			self.moviesPlistPath = fileUrlPath
+			moviesPlistPath = fileUrlPath
 		}
         else {
             NSLog("Error getting url for app-group.")
@@ -61,10 +61,10 @@ class Database : DatabaseParent {
 		
 		if let saveMoviesPlistPath = self.moviesPlistPath {
 			if saveMoviesPlistPath.hasSuffix("/") {
-				self.moviesPlistFile = saveMoviesPlistPath + self.recordType + ".plist"
+				moviesPlistFile = saveMoviesPlistPath + recordType + ".plist"
 			}
 			else {
-				self.moviesPlistFile = saveMoviesPlistPath + "/" + self.recordType + ".plist"
+				moviesPlistFile = saveMoviesPlistPath + "/" + recordType + ".plist"
 			}
 		}
 	}
@@ -116,11 +116,9 @@ class Database : DatabaseParent {
 
 		if let moviesPlistFile = moviesPlistFile {
 			// try to load movies from device
-			let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary]
-
-			if let loadedDictArray = loadedDictArray {
+			if let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary] {
 				// successfully loaded movies from device
-				loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
+				loadedMovieRecordArray = MovieDatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
 				
 				if loadedMovieRecordArray != nil {
 					cleanUpExistingMovies(&(loadedMovieRecordArray!))
@@ -318,7 +316,9 @@ class Database : DatabaseParent {
 			
 			// finish movies
 			if let completionHandler = self.completionHandler, errorHandler = self.errorHandler {
-				self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
+				loadGenreDatabase({ () -> () in
+					self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
+				})
 			}
 			else {
 				if let saveStopIndicator = self.stopIndicator {
@@ -358,7 +358,7 @@ class Database : DatabaseParent {
 			// try to load movies from device
 			if let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary] {
 				// successfully loaded movies from device
-				return DatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
+				return MovieDatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
 			}
 		}
 		
@@ -502,23 +502,23 @@ class Database : DatabaseParent {
 			// received records from the cloud
 			userDefaults?.setObject(NSDate(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
 			userDefaults?.synchronize()
-			
+
 			if (updatedCKRecords.count > 0) {
 				// generate an array of MovieRecords
 				var updatedMovieRecordArray: [MovieRecord] = []
-				
+					
 				let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 				guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("queryOperationFinishedUpdatedMovies: Corrupt countrycode \(prefsCountryString)"); return }
-				
-				for ckRecord in updatedCKRecords {
+					
+				for ckRecord in self.updatedCKRecords {
 					let newRecord = MovieRecord(country: country)
 					newRecord.initWithCKRecord(ckRecord)
 					updatedMovieRecordArray.append(newRecord)
 				}
-				
+					
 				// merge both arrays (the existing movies and the updated movies)
-				if (loadedMovieRecordArray != nil) {
-					DatabaseHelper.joinMovieRecordArrays(&(loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
+				if (self.loadedMovieRecordArray != nil) {
+					MovieDatabaseHelper.joinMovieRecordArrays(&(self.loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
 				}
 			}
 			
@@ -527,8 +527,16 @@ class Database : DatabaseParent {
 				cleanUpExistingMovies(&loadedMovieRecordArray!)
 			}
 			
-			// clean up posters
-			cleanUpPosters()
+			if (updatedCKRecords.count > 0) {
+				// we have updated records: also update genre-database, then clean-up posters
+				loadGenreDatabase({ () -> () in
+					self.cleanUpPosters()
+				})
+			}
+			else {
+				// clean up posters
+				cleanUpPosters()
+			}
 		}
 	}
 	
@@ -549,7 +557,7 @@ class Database : DatabaseParent {
 		// write it to device
 		
 		if let filename = self.moviesPlistFile {
-			if ((DatabaseHelper.movieRecordArrayToDictArray(allMovieRecords) as NSArray).writeToFile(filename, atomically: true) == false) {
+			if ((MovieDatabaseHelper.movieRecordArrayToDictArray(allMovieRecords) as NSArray).writeToFile(filename, atomically: true) == false) {
 				if let saveStopIndicator = self.stopIndicator {
 					dispatch_async(dispatch_get_main_queue()) {
 						saveStopIndicator()
@@ -579,14 +587,12 @@ class Database : DatabaseParent {
 		
 		// and store the latest modification-date of the records
 		if (updatedMoviesAsRecordArray.count > 0) {
-			DatabaseHelper.storeLastModification(updatedMoviesAsRecordArray)
+			MovieDatabaseHelper.storeLastModification(updatedMoviesAsRecordArray)
 		}
 		
 		// success
-		if let finishHandler = self.finishHandler {
-			dispatch_async(dispatch_get_main_queue()) {
-				finishHandler()
-			}
+		dispatch_async(dispatch_get_main_queue()) {
+			self.finishHandler?()
 		}
 		
 		completionHandler(movies: allMovieRecords)
@@ -635,7 +641,7 @@ class Database : DatabaseParent {
 		Deleted unneeded poster files from the device, and reads missing poster files from the CloudKit database to the device.
 	*/
 	private func cleanUpPosters() {
-		let pathUrl    = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 		
 		if let basePath = pathUrl?.path, movies = loadedMovieRecordArray {
 			deleteUnneededPosters(basePath, movies: movies)
@@ -643,7 +649,14 @@ class Database : DatabaseParent {
 			deleteUnneededYoutubeImages(basePath, movies: movies)
 		}
 		
-		downloadsFinished()
+		// Try to write the movies to the device.
+		
+		if let completionHandler = completionHandler, errorHandler = errorHandler, loadedMovieRecordArray = loadedMovieRecordArray {
+			writeMovies(loadedMovieRecordArray, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
+		}
+		else {
+			errorHandler?(errorMessage: "One of the handlers is nil!")
+		}
 	}
 	
 
@@ -809,17 +822,23 @@ class Database : DatabaseParent {
 	
 
 	/**
-		Tries to write the movies to the device.
+		Loads the genre database.
+	
+		- parameter genresLoadedHandler: This handler is called after the genres are read, even if an error occured.
 	*/
-	private func downloadsFinished() {
-		// finish movies
-		if let completionHandler = completionHandler, errorHandler = errorHandler, loadedMovieRecordArray = loadedMovieRecordArray {
-			writeMovies(loadedMovieRecordArray, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
-		}
-		else {
-			errorHandler?(errorMessage: "One of the handlers is nil!")
-			return
-		}
+	private func loadGenreDatabase(genresLoadedHandler: (() -> ())) {
+		
+		let genreDatabase = GenreDatabase(
+			finishHandler: { (genres) -> () in
+				genresLoadedHandler()
+			},
+			errorHandler: { (errorMessage) -> () in
+				NSLog("Error reading genres from the Cloud: \(errorMessage)")
+				genresLoadedHandler()
+			}
+		)
+		
+		genreDatabase.readGenresFromCloud()
 	}
 
 }

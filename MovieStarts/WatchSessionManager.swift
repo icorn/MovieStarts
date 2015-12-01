@@ -131,7 +131,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		
 		// transfer favorite thumbnails to watch
 		
-		let loadedMovieRecordArray = DatabaseHelper.dictArrayToMovieRecordArray(loadMovieListToDictArray(), country: country)
+		let loadedMovieRecordArray = MovieDatabaseHelper.dictArrayToMovieRecordArray(loadMovieListToDictArray(), country: country)
 		var favoritesDicts: [NSDictionary] = []
 		
 		if sendThumbnails {

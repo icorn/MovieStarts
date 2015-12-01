@@ -13,7 +13,7 @@ import CloudKit
 class StartViewController: UIViewController {
 	
 	var aboutView: UIView?
-	var database: Database?
+	var movieDatabase: MovieDatabase?
 	var welcomeWindow: MessageWindow?
 
 	
@@ -41,11 +41,11 @@ class StartViewController: UIViewController {
 		
 		// read movies from device or from cloud
 
-		database = Database(recordType: Constants.dbRecordTypeMovie, viewForError: view)
+		movieDatabase = MovieDatabase(recordType: Constants.dbRecordTypeMovie, viewForError: view)
 		
-		if (database?.isDatabaseOnDevice() == true) {
+		if (movieDatabase?.isDatabaseOnDevice() == true) {
 			// the database is on the device: load movies
-			loadDatabase()
+			loadMovieDatabase()
 		}
 		else {
 			// first start, no database on the device: this is the first start, say hello to the user
@@ -65,10 +65,11 @@ class StartViewController: UIViewController {
 
 					// check network, load database if all is OK
 					if (NetworkChecker.checkReachability(self.view) == false) { return }
-					guard let database = self.database else { return }
+					guard let database = self.movieDatabase else { return }
+					
 					NetworkChecker.checkCloudKit(self.view, database: database,
 						okCallback: { () -> () in
-							self.loadDatabase()
+							self.loadMovieDatabase()
 						},
 						errorCallback: nil
 					)
@@ -83,10 +84,13 @@ class StartViewController: UIViewController {
 	
 	
 	// MARK: - 
-	
 
-	func loadDatabase() {
-		database?.getAllMovies(
+
+	/**
+		Loads the movedatabase to memory from either a file (if it exists), or from the cloud.
+	*/
+	func loadMovieDatabase() {
+		movieDatabase?.getAllMovies(
 			{ (movies: [MovieRecord]?) in
 				
 				// show the next view controller
@@ -95,10 +99,11 @@ class StartViewController: UIViewController {
 				let tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
 				
 				if let tabBarController = tabBarController, allMovies = movies {
-					self.database?.updateThumbnailHandler = tabBarController.updateThumbnailHandler
+					self.movieDatabase?.updateThumbnailHandler = tabBarController.updateThumbnailHandler
 					
 					// store movies in tabbarcontroller
 					tabBarController.setUpMovies(allMovies)
+					tabBarController.loadGenresFromFile()
 					
 					// show tabbarcontroller
 					

@@ -163,7 +163,7 @@ class TabBarController: UITabBarController {
 	}
 	
 	
-	func updateMovies(allMovies: [MovieRecord], database: Database?) {
+	func updateMovies(allMovies: [MovieRecord], database: MovieDatabase?) {
 
 		if (userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) != nil) {
 			let latestSuccessfullUpdate: NSDate? = userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) as? NSDate
@@ -229,7 +229,7 @@ class TabBarController: UITabBarController {
 	}
 	
 	
-	private func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord], database: Database?) {
+	private func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord], database: MovieDatabase?) {
 		
 		database?.updateThumbnailHandler = updateThumbnailHandler
 
@@ -364,19 +364,6 @@ class TabBarController: UITabBarController {
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 				NSLog(errorMessage)
 			}
-/*
-			,
-			updatePosterHandler: { (tmdbId: Int) in
-				// update thumbnail poster if needed
-				dispatch_async(dispatch_get_main_queue()) {
-					if (self.nowPlayingController?.updateThumbnail(tmdbId) == false) {
-						self.upcomingController?.updateThumbnail(tmdbId)
-					}
-					
-					self.favoriteController?.updateThumbnail(tmdbId)
-				}
-			}
-*/
 		)
 	}
 	
@@ -411,7 +398,6 @@ class TabBarController: UITabBarController {
 		}
 	}
 
-	
 	private func findTableViewController<T>() -> T? {
 		if let tabBarVcs = viewControllers {
 			for tabBarVc in tabBarVcs {
