@@ -22,12 +22,13 @@ class MovieRecordTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-
+/*
     func testToDictionary() {
+		
 		let tmdbTestId = 12345
 		let imdbTestId = "imdb"
 		let titleTest  = "testtitle"
-		
+
 		let record = MovieRecord(dict: [Constants.DB_ID_TMDB_ID : tmdbTestId, Constants.DB_ID_IMDB_ID : imdbTestId, Constants.DB_ID_TITLE : titleTest])
 		
 		XCTAssertNotNil(record.title,  "Title is nil")
@@ -67,5 +68,5 @@ class MovieRecordTests: XCTestCase {
 		
 		XCTAssert(subtitles.count == 3, "Record should have 3 subtitles")
 	}
-	
+*/	
 }
