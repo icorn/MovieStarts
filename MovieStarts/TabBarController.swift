@@ -187,7 +187,7 @@ class TabBarController: UITabBarController {
 
 		// check internet connection
 		
-		if IJReachability.isConnectedToNetwork() == false {
+		if (NetworkChecker.checkReachability(self.view) == false) {
 			NSLog("Movie update: no network, we just don't update")
 			return
 		}

@@ -471,7 +471,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		// check internet connection
 		
-		if IJReachability.isConnectedToNetwork() == false {
+		if (NetworkChecker.checkReachability(self.view) == false) {
 			NSLog("IMDb view: no network")
 			noInternetConnection()
 			return
@@ -510,7 +510,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		// check internet connection
 		
-		if IJReachability.isConnectedToNetwork() == false {
+		if (NetworkChecker.checkReachability(self.view) == false) {
 			NSLog("Trailer: no network")
 			noInternetConnection()
 			return

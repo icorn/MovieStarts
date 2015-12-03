@@ -22,7 +22,10 @@ class NetworkChecker {
 	*/
 	class func checkReachability(viewForError: UIView) -> Bool {
 		
-		if IJReachability.isConnectedToNetwork() == false {
+		let reachabilityStatus = Reach().connectionStatus()
+		
+		switch reachabilityStatus {
+		case .Offline, .Unknown:
 			NSLog("No network")
 			var errorWindow: MessageWindow?
 			
@@ -35,9 +38,10 @@ class NetworkChecker {
 			}
 			
 			return false
+			
+		case .Online(ReachabilityType.WiFi), .Online(ReachabilityType.WWAN):
+			return true
 		}
-		
-		return true
 	}
 
 	
