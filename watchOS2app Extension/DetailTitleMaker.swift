@@ -15,12 +15,10 @@ class DetailTitleMaker {
 		
 		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
 
-		let genreId = movie.genreIds.first
-// TODO:	let genre = movie.genres.first
-		
-		if let genreId = genreId {
-			detailText += String(genreId) + " | "
-// TODO:		detailText += NSLocalizedString(genre, comment: "") + " | "
+		let genreName = movie.genreNames.first
+
+		if let genreName = genreName {
+			detailText += genreName + " | "
 		}
 		
 		if (detailText.characters.count > 0) {
@@ -37,10 +35,9 @@ class DetailTitleMaker {
 
 		// add genres
 		
-		if (movie.genreIds.count > 0) {
-			for genreId in movie.genreIds {
-				detailText += String(genreId) + ", "
-// TODO:				detailText += NSLocalizedString(genre, comment: "") + ", "
+		if (movie.genreNames.count > 0) {
+			for genreName in movie.genreNames {
+				detailText += genreName + ", "
 			}
 			
 			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor()) + " | "
@@ -48,7 +45,7 @@ class DetailTitleMaker {
 
 		// add countries
 		
-		if let countries = movie.countryString {
+		if let countries = movie.countries {
 			detailText += countries + " | "
 		}
 		
@@ -63,22 +60,11 @@ class DetailTitleMaker {
 	class func makeMinuteAndCertificationString(movie: WatchMovieRecord) -> String {
 		var detailText = ""
 		
-		if (movie.runtime[movie.currentCountry.languageArrayIndex] > 0) {
-			detailText += "\(movie.runtime[movie.currentCountry.languageArrayIndex]) m | "
+		if let runtime = movie.runtime where runtime > 0 {
+			detailText += "\(runtime) m | "
 		}
 		
-		if movie.certification[movie.currentCountry.countryArrayIndex].characters.count > 0 {
-			var cert = movie.certification[movie.currentCountry.countryArrayIndex]
-			
-			if (cert == "PG-13") {
-				// fighting for every pixel ;-)
-				cert = "PG13"
-			}
-			
-			if (movie.currentCountry == MovieCountry.Germany) {
-				cert = "FSK" + cert
-			}
-			
+		if let cert = movie.certification where cert.characters.count > 0 {
 			detailText += "\(cert) | "
 		}
 		

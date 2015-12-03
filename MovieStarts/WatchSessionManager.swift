@@ -129,6 +129,9 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		guard let country = MovieCountry(rawValue: prefsCountryString) else { return }
 		
+		let genreDatabase = GenreDatabase(finishHandler: nil, errorHandler: nil)
+		let genreDict = genreDatabase.readGenresFromFile()
+		
 		// transfer favorite thumbnails to watch
 		
 		let loadedMovieRecordArray = MovieDatabaseHelper.dictArrayToMovieRecordArray(loadMovieListToDictArray(), country: country)
@@ -139,8 +142,8 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		}
 		
 		for movie in loadedMovieRecordArray {
-			if (Favorites.IDs.contains(movie.id)) {
-				favoritesDicts.append(movie.toDictionary())
+			if ((movie.isHidden == false) && Favorites.IDs.contains(movie.id)) {
+				favoritesDicts.append(movie.toWatchDictionary(genreDict))
 
 				if sendThumbnails {
 					guard let thumbnailUrl = movie.thumbnailURL else { continue }

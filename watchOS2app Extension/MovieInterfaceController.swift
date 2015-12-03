@@ -72,9 +72,10 @@ class MovieInterfaceController: WKInterfaceController {
 			favoriteMovies = movieDictsToMovieRecords(loadedDictArray)
 			
 			favoriteMovies.sortInPlace {
-				let date0 = $0.releaseDate[$0.currentCountry.countryArrayIndex]
-				let date1 = $1.releaseDate[$1.currentCountry.countryArrayIndex]
-				let title0 = $0.sortTitle[$0.currentCountry.countryArrayIndex], title1 = $1.sortTitle[$1.currentCountry.countryArrayIndex]
+				let date0 = $0.releaseDate ?? NSDate(timeIntervalSince1970: 0)
+				let date1 = $1.releaseDate ?? NSDate(timeIntervalSince1970: 0)
+				let title0 = $0.sortTitle ?? ""
+				let title1 = $1.sortTitle ?? ""
 
 				if ($0.isNowPlaying() && $1.isNowPlaying()) {
 					// both movies are playing now: sort by title
@@ -149,7 +150,7 @@ class MovieInterfaceController: WKInterfaceController {
 		// find out the necessary row-types
 	
 		for movie in movies {
-			let releaseDate = movie.releaseDate[movie.currentCountry.countryArrayIndex]
+			let releaseDate = movie.releaseDate
 			
 			if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
 				// it's a current movie, but there is no section yet
@@ -184,7 +185,7 @@ class MovieInterfaceController: WKInterfaceController {
 			else if let content = content as? WatchMovieRecord {
 				let movie = content
 				let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
-				row?.titleLabel.setText(movie.title[movie.currentCountry.languageArrayIndex] ?? movie.origTitle)
+				row?.titleLabel.setText(movie.title ?? movie.origTitle)
 				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
 				row?.posterImage.setImage(movie.thumbnailImage.0)
 				row?.movie = movie
@@ -213,13 +214,24 @@ class MovieInterfaceController: WKInterfaceController {
 	private func movieDictsToMovieRecords(dictArray: NSArray) -> [WatchMovieRecord] {
 		var movieRecordArray: [WatchMovieRecord] = []
 		
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
-		
-		if let country = MovieCountry(rawValue: prefsCountryString) {
-			for dict in dictArray {
-				if let dict = dict as? [String : AnyObject] {
-					movieRecordArray.append(WatchMovieRecord(country: country, dict: dict))
-				}
+		for dict in dictArray {
+			if let dict = dict as? [String : AnyObject] {
+				movieRecordArray.append(
+					WatchMovieRecord(
+						origTitle: dict[Constants.dbIdOrigTitle] as? String,
+						runtime: dict[Constants.dbIdRuntime] as? Int,
+						title: dict[Constants.dbIdTitle] as? String,
+						sortTitle: dict[Constants.dbIdSortTitle] as? String,
+						synopsis: dict[Constants.dbIdSynopsis] as? String,
+						releaseDate: dict[Constants.dbIdRelease] as? NSDate,
+						genreNames: (dict[Constants.dbIdGenreNames] as? [String]) ?? [],
+						countries: dict[Constants.dbIdProductionCountries] as? String,
+						certification: dict[Constants.dbIdCertification] as? String,
+						posterUrl: dict[Constants.dbIdPosterUrl] as? String,
+						directors: (dict[Constants.dbIdDirectors] as? [String]) ?? [],
+						actors: (dict[Constants.dbIdActors] as? [String]) ?? []
+					)
+				)
 			}
 		}
 		
@@ -227,4 +239,3 @@ class MovieInterfaceController: WKInterfaceController {
 	}
 
 }
-

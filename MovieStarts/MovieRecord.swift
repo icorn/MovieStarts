@@ -11,7 +11,7 @@ import CloudKit
 import UIKit
 
 
-public class MovieRecord {
+public class MovieRecord : CustomStringConvertible {
 	
 	public var currentCountry: MovieCountry
 	
@@ -231,6 +231,78 @@ public class MovieRecord {
 		return retval
 	}
 	
+	
+	/**
+		Converts this object to a dictionary for serialization to the Apple Watch.
+	
+		- parameter genreDict: The dictionary with genre-id as key and genre-name as value
+	
+		- returns: A dictionary with all non-null members of this object.
+	*/
+	
+	public func toWatchDictionary(genreDict: [Int : String]) -> [String: AnyObject] {
+		
+		var retval: [String:AnyObject] = [:]
+		
+		if let origTitle 	 = origTitle 	 { retval[Constants.dbIdOrigTitle] 	= origTitle }
+		
+		retval[Constants.dbIdTitle] 				= title[currentCountry.languageArrayIndex]
+		retval[Constants.dbIdSortTitle]				= sortTitle[currentCountry.languageArrayIndex]
+		retval[Constants.dbIdRelease] 				= releaseDate[currentCountry.countryArrayIndex]
+		retval[Constants.dbIdPosterUrl] 		 	= posterUrl[currentCountry.languageArrayIndex]
+		retval[Constants.dbIdDirectors] 			= directors
+		retval[Constants.dbIdProductionCountries]	= countryString
+		retval[Constants.dbIdRuntime]				= runtimeForLanguage.0
+		retval[Constants.dbIdSynopsis]	 	 		= synopsisForLanguage.0
+
+		// add up to 5 actors
+		var actorNames: [String] = []
+		
+		for (index, actor) in actors.enumerate() {
+			actorNames.append(actor)
+			
+			if (index == 4) {
+				break
+			}
+		}
+
+		retval[Constants.dbIdActors] = actorNames
+		
+		// add genre names
+		var genreNames: [String] = []
+
+		for genreId in genreIds {
+			guard let genreName = genreDict[genreId] else { continue }
+			genreNames.append(genreName)
+		}
+		
+		retval[Constants.dbIdGenreNames] = genreNames
+
+		// add certification
+		
+		let cert = certification[currentCountry.countryArrayIndex]
+		
+		if (cert.characters.count > 0) {
+			var certText = ""
+			
+			if (cert == "PG-13") {
+				// fighting for every pixel ;-)
+				certText = "PG13"
+			}
+			else if (currentCountry == MovieCountry.Germany) {
+				certText = "FSK" + cert
+			}
+			else {
+				certText = "\(cert)"
+			}
+
+			retval[Constants.dbIdCertification] = certText
+		}
+		
+		return retval
+	}
+	
+
 	/// Is the movie hidden?
 	
 	var isHidden: Bool {
@@ -566,16 +638,6 @@ public class MovieRecord {
 		}
 		
 		return retval
-		
-		/* ignored:
-		public var certification:String?
-		public var synopsis:String?
-		public var productionCountries:[String] = []
-		public var genreIds:[Int] = []
-		public var directors:[String] = []
-		public var actors:[String] = []
-		public var trailerIds:[String] = []
-		*/
 	}
 
 }

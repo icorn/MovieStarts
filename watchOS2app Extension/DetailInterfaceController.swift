@@ -42,8 +42,8 @@ class DetailInterfaceController: WKInterfaceController {
 		let movie: WatchMovieRecord? = (context as? WatchMovieRecord)
 		
 		if let movie = movie {
-			if movie.title[movie.currentCountry.languageArrayIndex].characters.count > 0 {
-				titleLabel.setText(movie.title[movie.currentCountry.languageArrayIndex])
+			if let title = movie.title where title.characters.count > 0 {
+				titleLabel.setText(title)
 			}
 			else if let movieOrigTitle = movie.origTitle {
 				titleLabel.setText(movieOrigTitle)
@@ -89,9 +89,9 @@ class DetailInterfaceController: WKInterfaceController {
 			}
 			
 			// synopsis
-			if movie.synopsis[movie.currentCountry.languageArrayIndex].characters.count > 0 {
+			if let synopsis = movie.synopsis where synopsis.characters.count > 0 {
 				synopsisHeadlineLabel.setText(NSLocalizedString("Synopsis", comment: "") + ":")
-				synopsisLabel.setText(movie.synopsis[movie.currentCountry.languageArrayIndex])
+				synopsisLabel.setText(synopsis)
 			}
 			else {
 				synopsisGroup.setHidden(true)

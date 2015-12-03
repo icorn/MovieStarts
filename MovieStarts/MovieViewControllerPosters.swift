@@ -139,13 +139,21 @@ extension MovieViewController {
 								return
 							}
 							
+							// turn on network indicator and spinner
+							UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+							dispatch_async(dispatch_get_main_queue()) {
+								self.spinnerBackground?.hidden = false
+								self.spinner?.startAnimating()
+							}
+							
 							// no big poster: load it!
 							
 							if (NetworkChecker.checkReachability(self.view) == false) {
 								// no network available
+								self.stopSpinners()
 								return
 							}
-							
+
 							self.loadBigPoster()
 						}
 					)
@@ -156,15 +164,23 @@ extension MovieViewController {
 	
 	
 	/**
-		Uses CloudKit to load the big movie poster and store it to the device.
+		Loads the big movie poster and stores it on the device.
 	*/
 	func loadBigPoster() {
 		
-		guard let bigPosterImageView = bigPosterImageView, movie = movie else { return }
+		guard let bigPosterImageView = bigPosterImageView, movie = movie else {
+			stopSpinners()
+			return
+		}
+		
 		var errorWindow: MessageWindow?
 
 		// build paths
-		guard let targetPath = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)?.path else { return }
+		guard let targetPath = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)?.path else {
+			stopSpinners()
+			return
+		}
+		
 		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Big.rawValue
 		var posterUrl = movie.posterUrl[movie.currentCountry.languageArrayIndex]
 		
@@ -173,73 +189,79 @@ extension MovieViewController {
 			posterUrl = movie.posterUrl[MovieCountry.USA.languageArrayIndex]
 		}
 		
-		if (posterUrl.characters.count > 0) {
-			// poster file is missing
+		if (posterUrl.characters.count <= 0) {
+			stopSpinners()
+			return
+		}
+		
+		// poster file is missing
+		
+		guard let sourceUrl = NSURL(string: sourcePath + posterUrl) else {
+			stopSpinners()
+			return
+		}
+		
+		let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+			self.stopSpinners()
 			
-			if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
-				// turn on network indicator and spinner
-				UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-				dispatch_async(dispatch_get_main_queue()) {
-					self.spinnerBackground?.hidden = false
-					self.spinner?.startAnimating()
+			if let error = error {
+				NSLog("Error getting missing thumbnail: \(error.description)")
+			}
+			else if let receivedPath = location?.path {
+				// move received poster to target path where it belongs
+				do {
+					try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: targetPath + Constants.bigPosterFolder + posterUrl)
 				}
-				
-				let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
-					UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-					dispatch_async(dispatch_get_main_queue()) {
-						self.spinner?.stopAnimating()
-						self.spinnerBackground?.removeFromSuperview()
+				catch let error as NSError {
+					if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+						// ignoring, because it's okay it it's already there
 					}
-					
-					if let error = error {
-						NSLog("Error getting missing thumbnail: \(error.description)")
-					}
-					else if let receivedPath = location?.path {
-						// move received poster to target path where it belongs
-						do {
-							try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: targetPath + Constants.bigPosterFolder + posterUrl)
-						}
-						catch let error as NSError {
-							if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
-								// ignoring, because it's okay it it's already there
-							}
-							else {
-								NSLog("Error moving missing poster: \(error.description)")
-								dispatch_async(dispatch_get_main_queue()) {
-									errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
-										errorWindow?.close()
-									})
-								}
-								return
-							}
-						}
-						
-						// load and show poster
-						if let bigPoster = movie.bigPoster {
-							dispatch_async(dispatch_get_main_queue()) {
-								bigPosterImageView.image = bigPoster
-							}
-							return
-						}
-						
-						// poster not loaded or error
-						if let error = error {
-							NSLog("Error getting big poster: \(error.code) (\(error.description))")
-						}
-						
+					else {
+						NSLog("Error moving missing poster: \(error.description)")
 						dispatch_async(dispatch_get_main_queue()) {
 							errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 								errorWindow?.close()
 							})
 						}
+						return
 					}
-				})
+				}
 				
-				task.resume()
+				// load and show poster
+				if let bigPoster = movie.bigPoster {
+					dispatch_async(dispatch_get_main_queue()) {
+						bigPosterImageView.image = bigPoster
+					}
+					return
+				}
+				
+				// poster not loaded or error
+				if let error = error {
+					NSLog("Error getting big poster: \(error.code) (\(error.description))")
+				}
+				
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+						errorWindow?.close()
+					})
+				}
 			}
-		}
+		})
+		
+		task.resume()
 	}
 
+	/**
+		Stops both the network activity indicator and the loading spinner. 
+		Also removes the loading spinner from the superview.
+	*/
+	private func stopSpinners() {
+		UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+			dispatch_async(dispatch_get_main_queue()) {
+			self.spinner?.stopAnimating()
+			self.spinnerBackground?.removeFromSuperview()
+		}
+	}
 	
 	/**
 		Closes the enlarged poster.

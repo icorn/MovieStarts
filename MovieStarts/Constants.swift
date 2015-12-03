@@ -78,6 +78,9 @@ public struct Constants {
 	static let dbIdCertificationDE		= "certificationDE"
 	static let dbIdReleaseGB			= "releaseGB"
 	static let dbIdCertificationGB		= "certificationGB"
+
+	static let dbIdRelease				= "release"
+	static let dbIdCertification		= "certification"
 	
 	// language-specific database fields (table "Movie")
 	static let dbIdTrailerIdsEN			= "trailerIdsEN"
@@ -92,10 +95,16 @@ public struct Constants {
 	static let dbIdSynopsisDE			= "synopsisDE"
 	static let dbIdRuntimeDE			= "runtimeDE"
 
+	static let dbIdTitle				= "title"
+	static let dbIdSortTitle			= "sortTitle"
+	static let dbIdSynopsis				= "synopsis"
+	static let dbIdRuntime				= "runtime"
+
 	// language-specific database fields for poster URLs
 	static let dbIdPosterUrlEN			= "posterUrlEN"
 	static let dbIdPosterUrlDE			= "posterUrlDE"
 	static let allDbIdPosterUrls = [dbIdPosterUrlEN, dbIdPosterUrlDE]
 
+	static let dbIdPosterUrl			= "posterUrl"
 }
 

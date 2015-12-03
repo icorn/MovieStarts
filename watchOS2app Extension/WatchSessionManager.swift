@@ -48,11 +48,11 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			
 			// thumbnail received
 			
-			print("Watch has received a thumbnail.")
-			
 			guard let inputFilename = file.fileURL.lastPathComponent else { return }
 			let documentFilename = documentDir.URLByAppendingPathComponent(inputFilename)
 
+			print("Watch has received thumbnail \(inputFilename)")
+			
 			do {
 				try fileManager.moveItemAtURL(file.fileURL, toURL: documentFilename)
 			} catch let error as NSError {
@@ -113,13 +113,11 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 				
 				guard let filesInDocDirSave = filesInDocDir else { return }
 
-				// read favorites piece by piece
+				// read favorites piece by piece to check thumbnails
+				var thumbnailMissing = false
 				
 				for dict in loadedDictArray {
-
-// TODO: Hier nicht einfach das EN-Poster nehmen! Evtl. das country als Metadata übertragen.
-					
-					guard let favPosterUrl = dict[Constants.dbIdPosterUrlEN] as? String else { continue }
+					guard let favPosterUrl = dict[Constants.dbIdPosterUrl] as? String else { continue }
 					var thumbnailFound = false
 					
 					// check, if this thumbnail of poster-url from the favorite is on the watch
@@ -134,16 +132,19 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 					}
 					
 					if (thumbnailFound == false) {
-						// a thumbnail was not found: ask phone for thumbnails
-						// TODO: be smarter: collect the IDs of the missing thumbnails and ask for only those
-						
-						do {
-							try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetAllMovies : Constants.watchAppContextValueThumbnailsOnly])
-						} catch let error as NSError {
-							NSLog("Error updating AppContext (thumbnails only): \(error.description)")
-						}
-						
+						thumbnailMissing = true
 						break
+					}
+				}
+				
+				if thumbnailMissing {
+					// a thumbnail was not found: ask phone for thumbnails
+					// TODO: be smarter: collect the IDs of the missing thumbnails and ask for only those
+					
+					do {
+						try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetAllMovies : Constants.watchAppContextValueThumbnailsOnly])
+					} catch let error as NSError {
+						NSLog("Error updating AppContext (thumbnails only): \(error.description)")
 					}
 				}
 			}
