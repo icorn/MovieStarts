@@ -26,10 +26,8 @@
 		4F3EC70B1B24B35B003C48E4 /* WebViewRefresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7051B24B35B003C48E4 /* WebViewRefresh.png */; };
 		4F3EC70C1B24B35B003C48E4 /* WebViewBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7061B24B35B003C48E4 /* WebViewBack.png */; };
 		4F4A26871BC934000077AEF5 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A26851BC934000077AEF5 /* Interface.storyboard */; };
-		4F4A26891BC934000077AEF5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A26881BC934000077AEF5 /* Assets.xcassets */; };
 		4F4A26901BC934000077AEF5 /* watchOS2app Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4F4A268F1BC934000077AEF5 /* watchOS2app Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4F4A26971BC934000077AEF5 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A26961BC934000077AEF5 /* ExtensionDelegate.swift */; };
-		4F4A269B1BC934000077AEF5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F4A269A1BC934000077AEF5 /* Assets.xcassets */; };
 		4F4A269F1BC934000077AEF5 /* watchOS2app.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 4F4A26831BC934000077AEF5 /* watchOS2app.app */; };
 		4F4A26A81BC934770077AEF5 /* MovieInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A26A71BC934770077AEF5 /* MovieInterfaceController.swift */; };
 		4F4A26AA1BC936090077AEF5 /* WatchMovieRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A26A91BC936090077AEF5 /* WatchMovieRecord.swift */; };
@@ -101,11 +99,12 @@
 		4F934C991BCE9BB000BCAFB0 /* LaunchStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F934C981BCE9BB000BCAFB0 /* LaunchStatus.swift */; };
 		4F94A93D1AA84E1000E5F27F /* Calendar@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F94A93C1AA84E1000E5F27F /* Calendar@3x.png */; };
 		4F95FC291C10A9C9008F482B /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F95FC281C10A9C9008F482B /* Reach.swift */; };
+		4F95FC311C11ABFE008F482B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F95FC301C11ABFE008F482B /* Images.xcassets */; };
+		4F95FC331C11CFC5008F482B /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F95FC321C11CFC5008F482B /* Icons.xcassets */; };
 		4F9E658D1BC14694006C6BA9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAFF8EB1A8C002B00864078 /* CloudKit.framework */; };
 		4FAE075B1B555615009C7507 /* NowTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAE075A1B555615009C7507 /* NowTableViewController.swift */; };
 		4FAFF8C91A8BFFE500864078 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAFF8C81A8BFFE500864078 /* AppDelegate.swift */; };
 		4FAFF8D01A8BFFE500864078 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAFF8CE1A8BFFE500864078 /* Main.storyboard */; };
-		4FAFF8D21A8BFFE500864078 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FAFF8D11A8BFFE500864078 /* Images.xcassets */; };
 		4FAFF8D51A8BFFE500864078 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4FAFF8D31A8BFFE500864078 /* LaunchScreen.xib */; };
 		4FBB03CC1BA862B50053CE99 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBB03CB1BA862B50053CE99 /* AboutViewController.swift */; };
 		4FCFBA0E1C0A370E00D43C27 /* YoutubeBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCFBA0D1C0A370E00D43C27 /* YoutubeBack.png */; };
@@ -196,11 +195,9 @@
 		4F3EC7061B24B35B003C48E4 /* WebViewBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WebViewBack.png; sourceTree = "<group>"; };
 		4F4A26831BC934000077AEF5 /* watchOS2app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watchOS2app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A26861BC934000077AEF5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
-		4F4A26881BC934000077AEF5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F4A268A1BC934000077AEF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F4A268F1BC934000077AEF5 /* watchOS2app Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "watchOS2app Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F4A26961BC934000077AEF5 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
-		4F4A269A1BC934000077AEF5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F4A269C1BC934000077AEF5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F4A26A71BC934770077AEF5 /* MovieInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieInterfaceController.swift; sourceTree = "<group>"; };
 		4F4A26A91BC936090077AEF5 /* WatchMovieRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchMovieRecord.swift; sourceTree = "<group>"; };
@@ -269,12 +266,13 @@
 		4F934C981BCE9BB000BCAFB0 /* LaunchStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchStatus.swift; sourceTree = "<group>"; };
 		4F94A93C1AA84E1000E5F27F /* Calendar@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Calendar@3x.png"; sourceTree = "<group>"; };
 		4F95FC281C10A9C9008F482B /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
+		4F95FC301C11ABFE008F482B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4F95FC321C11CFC5008F482B /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
 		4FAE075A1B555615009C7507 /* NowTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowTableViewController.swift; sourceTree = "<group>"; };
 		4FAFF8C31A8BFFE500864078 /* MovieStarts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieStarts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FAFF8C71A8BFFE500864078 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4FAFF8C81A8BFFE500864078 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FAFF8CF1A8BFFE500864078 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		4FAFF8D11A8BFFE500864078 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4FAFF8D41A8BFFE500864078 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		4FAFF8EA1A8C002800864078 /* MovieStarts.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = MovieStarts.entitlements; sourceTree = "<group>"; };
 		4FAFF8EB1A8C002B00864078 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -340,9 +338,9 @@
 		4F4A26841BC934000077AEF5 /* watchOS2app */ = {
 			isa = PBXGroup;
 			children = (
-				4F4A26881BC934000077AEF5 /* Assets.xcassets */,
 				4F4A268A1BC934000077AEF5 /* Info.plist */,
 				4F4A26851BC934000077AEF5 /* Interface.storyboard */,
+				4F95FC321C11CFC5008F482B /* Icons.xcassets */,
 			);
 			path = watchOS2app;
 			sourceTree = "<group>";
@@ -350,7 +348,6 @@
 		4F4A26931BC934000077AEF5 /* watchOS2app Extension */ = {
 			isa = PBXGroup;
 			children = (
-				4F4A269A1BC934000077AEF5 /* Assets.xcassets */,
 				4F2CE8B21BC93FE200D66319 /* DetailInterfaceController.swift */,
 				4F4A26B11BC936B40077AEF5 /* DetailTitleMaker.swift */,
 				4F4A26961BC934000077AEF5 /* ExtensionDelegate.swift */,
@@ -503,12 +500,12 @@
 		4FAFF8C51A8BFFE500864078 /* MovieStarts */ = {
 			isa = PBXGroup;
 			children = (
-				4FAFF8D11A8BFFE500864078 /* Images.xcassets */,
 				4FAFF8D31A8BFFE500864078 /* LaunchScreen.xib */,
 				4FAFF8CE1A8BFFE500864078 /* Main.storyboard */,
 				4FAFF8EA1A8C002800864078 /* MovieStarts.entitlements */,
 				4F8ED3EB1B4442C7008C24FE /* MovieTableViewCell.xib */,
 				4FAFF8EF1A8C036A00864078 /* Source */,
+				4F95FC301C11ABFE008F482B /* Images.xcassets */,
 				4FAFF8C61A8BFFE500864078 /* Supporting Files */,
 			);
 			path = MovieStarts;
@@ -718,7 +715,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F4A26891BC934000077AEF5 /* Assets.xcassets in Resources */,
+				4F95FC331C11CFC5008F482B /* Icons.xcassets in Resources */,
 				4F4A26871BC934000077AEF5 /* Interface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -729,7 +726,6 @@
 			files = (
 				4F5857491BCFE7170066DDE1 /* refreshMenuItem@2x.png in Resources */,
 				4F70ACC51BCD02D700E34987 /* Localizable.strings in Resources */,
-				4F4A269B1BC934000077AEF5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -742,6 +738,7 @@
 				4F3EC7091B24B35B003C48E4 /* WebViewBack@2x.png in Resources */,
 				4F7A99981BABF0B500ED38C9 /* favoritetab@3x.png in Resources */,
 				4F6914921A8C085300B8FFCE /* Settings@3x.png in Resources */,
+				4F95FC311C11ABFE008F482B /* Images.xcassets in Resources */,
 				4F69148F1A8C085300B8FFCE /* Calendar@2x.png in Resources */,
 				4F5EB0781BAA210200B1EFA0 /* starsgold@2x.png in Resources */,
 				4FAFF8D01A8BFFE500864078 /* Main.storyboard in Resources */,
@@ -796,7 +793,6 @@
 				4FAFF8D51A8BFFE500864078 /* LaunchScreen.xib in Resources */,
 				4FDAF8361BFBFDC100A6380F /* noposter@3x.png in Resources */,
 				4F7203811B9D9463006A4282 /* welcome.png in Resources */,
-				4FAFF8D21A8BFFE500864078 /* Images.xcassets in Resources */,
 				4F7A99A61BACC4EB00ED38C9 /* tmdb.png in Resources */,
 				4F7A99A41BACC4EB00ED38C9 /* tmdb@2x.png in Resources */,
 			);
