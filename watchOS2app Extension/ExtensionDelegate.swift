@@ -95,16 +95,19 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 	}
 	
 	
+	/**
+		Checks if the given poster-filename belongs to at least one favorite movie.
+	
+		- parameter movieDictArray: The array of dictionaries, each representing a favorite movie
+		- parameter filename:		The filename to search for
+	*/
 	private func isThumbnailInFavorites(movieDictArray: [NSDictionary], filename: String) -> Bool {
 		for dict in movieDictArray {
 			guard let dict = (dict as? [String : AnyObject]) else { continue }
+			guard let posterUrl = dict[Constants.dbIdPosterUrl] as? String else { continue }
 			
-			for dbIdPosterUrl in Constants.allDbIdPosterUrls {
-				guard let posterUrl = dict[dbIdPosterUrl] as? String else { continue }
-
-				if posterUrl.containsString(filename) {
-					return true
-				}
+			if posterUrl.containsString(filename) {
+				return true
 			}
 		}
 		
