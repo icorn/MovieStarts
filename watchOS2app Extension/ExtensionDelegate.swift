@@ -61,7 +61,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 			print("No movie list on the Watch, asking Phone to give my some.")
 			
 			do {
-				try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetAllMovies : Constants.watchAppContextValueEveryting])
+				try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueEveryting])
 			} catch let error as NSError {
 				NSLog("Error updating AppContext: \(error.description)")
 				WatchSessionManager.sharedManager.launchStatus = LaunchStatus.ConnectError

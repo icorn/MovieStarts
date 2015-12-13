@@ -92,22 +92,28 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 	// Receiver
 	func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]) {
 		
-		guard let getAllMovies = applicationContext[Constants.watchAppContextGetAllMovies] as? String else { return }
+		guard let getDataFromPhone = applicationContext[Constants.watchAppContextGetDataFromPhone] as? String else {
+			NSLog("Received illegal call from watch: \(applicationContext)")
+			return
+		}
 		
-		if (getAllMovies == Constants.watchAppContextValueEveryting) {
+		if (getDataFromPhone == Constants.watchAppContextValueEveryting) {
 			// the watch wants to get all favorites movies with list and all thumbnails
-			print("Received 'GetAllMovies everything' call from Watch.")
 			sendAllFavoritesToWatch(true, sendThumbnails: true)
 		}
-		else if (getAllMovies == Constants.watchAppContextValueListOnly) {
+		else if (getDataFromPhone == Constants.watchAppContextValueListOnly) {
 			// the watch wants to get all favorites movies, but only the list
-			print("Received 'GetAllMovies list-only' call from Watch.")
 			sendAllFavoritesToWatch(true, sendThumbnails: false)
 		}
-		else if (getAllMovies == Constants.watchAppContextValueThumbnailsOnly) {
-			// the watch wants to get all favorites movies, but only the thumbnails
-			print("Received 'GetAllMovies list-only' call from Watch.")
-			sendAllFavoritesToWatch(false, sendThumbnails: true)
+		else if (getDataFromPhone == Constants.watchAppContextValueThumbnailsOnly) {
+			// the watch wants to get a thumbnail
+			
+			guard let posterUrl = applicationContext[Constants.watchAppContextGetThumbnail] as? String else {
+				NSLog("Received no posterUrl for a thumbnail from watch.")
+				return
+			}
+			
+			sendThumbnailToWatch(posterUrl)
 		}
 	}
 	
@@ -162,6 +168,61 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			// write movielist and transfer it to watch
 			sendMovieListToWatch(favoritesDicts)
 		}
+	}
+	
+	
+	/**
+		Sends a thumbnail to the watch.
+	
+		- parameter posterUrl: The posterUrl of the movie whose thumbnail we will send to the watch
+	*/
+	func sendThumbnailToWatch(posterUrl: String) {
+		if (validSession == nil) {
+			return
+		}
+		
+//		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+//		guard let country = MovieCountry(rawValue: prefsCountryString) else { return }
+		
+		// transfer favorite thumbnails to watch
+		
+//		let loadedMovieRecordArray = MovieDatabaseHelper.dictArrayToMovieRecordArray(loadMovieListToDictArray(), country: country)
+		
+		print("Transfering thumbnail for movie \(posterUrl) to the Watch.")
+		
+		
+
+		
+		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		guard let thumbnailURL = pathUrl?.URLByAppendingPathComponent(Constants.thumbnailFolder + posterUrl) else {
+			NSLog("Received illegal thumbnail url from watch (\(posterUrl))")
+			return
+		}
+		guard let thumbnailName = thumbnailURL.path else {
+			NSLog("Received illegal thumbnail from watch (\(posterUrl))")
+			return
+		}
+		
+		removeOutstandingThumbnailTransfer(thumbnailName)
+		
+		if (transferFile(thumbnailURL, metadata: [Constants.watchMetadataThumbnail : 1]) == nil) {
+			NSLog("Error sending tumbnail \(thumbnailName) to watch.")
+		}
+		
+/*
+		for movie in loadedMovieRecordArray {
+			if (movie.id == movieID) {
+				guard let thumbnailUrl = movie.thumbnailURL else { continue }
+				guard let thumbnailName = thumbnailUrl.path else { continue }
+					
+				removeOutstandingThumbnailTransfer(thumbnailName)
+					
+				if (transferFile(thumbnailUrl, metadata: [Constants.watchMetadataThumbnail : 1]) == nil) {
+					NSLog("Error sending tumbnail for \(movie.title) to watch.")
+				}
+			}
+		}
+*/
 	}
 	
 	

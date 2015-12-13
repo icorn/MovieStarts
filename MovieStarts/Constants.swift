@@ -45,7 +45,8 @@ public struct Constants {
 	static let watchMetadataThumbnail		= "thumbnail"
 	static let watchMetadataMovieList		= "movieList"
 
-	static let watchAppContextGetAllMovies			= "getAllMovies"
+	static let watchAppContextGetDataFromPhone		= "getDataFromPhone"
+	static let watchAppContextGetThumbnail			= "getThumbnail"
 	static let watchAppContextValueEveryting		= "everything"
 	static let watchAppContextValueListOnly			= "listOnly"
 	static let watchAppContextValueThumbnailsOnly	= "thumbsOnly"
