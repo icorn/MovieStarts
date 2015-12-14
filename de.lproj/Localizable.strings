@@ -91,6 +91,7 @@
 "SettingsUseYoutube"	= "Benutze YouTube-App";
 "SettingsUseAppsFooter"	= "Wenn diese Schalter aktiviert sind, werden die Apps aufgerufen, anstatt die jeweilige Webseite im Browser. Die Schalter sind nur aktivierbar, wenn die entsprechende App installiert ist.";
 "SettingsAbout"			= "Über MovieStarts";
+"SettingsRateTheApp"	= "Diese App bewerten";
 
 // About
 

@@ -91,6 +91,7 @@
 "SettingsUseYoutube"	= "Use YouTube app";
 "SettingsUseAppsFooter"	= "If these switches are turned on, the app is launched instead of the the browser with the website. The switches can only be turned on if the appropriate app is installed.";
 "SettingsAbout"			= "About MovieStarts";
+"SettingsRateTheApp"	= "Rate this app";
 
 // About
 
