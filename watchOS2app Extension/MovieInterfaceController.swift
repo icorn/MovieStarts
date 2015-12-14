@@ -130,7 +130,7 @@ class MovieInterfaceController: WKInterfaceController {
 
 	func refreshButtonTapped() {
 		do {
-			try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetAllMovies : Constants.watchAppContextValueEveryting])
+			try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueEveryting])
 		} catch let error as NSError {
 			NSLog("Error updating AppContext: \(error.description)")
 			WatchSessionManager.sharedManager.launchStatus = LaunchStatus.ConnectError

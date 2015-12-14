@@ -55,6 +55,11 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			
 			do {
 				try fileManager.moveItemAtURL(file.fileURL, toURL: documentFilename)
+				
+				// update interface controller
+				dispatch_async(dispatch_get_main_queue()) {
+					self.rootInterfaceController?.loadMovieDataFromFile()
+				}
 			} catch let error as NSError {
 				if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
 					// ignoring, because it's okay it it's already there
@@ -114,37 +119,32 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 				guard let filesInDocDirSave = filesInDocDir else { return }
 
 				// read favorites piece by piece to check thumbnails
-				var thumbnailMissing = false
 				
 				for dict in loadedDictArray {
-					guard let favPosterUrl = dict[Constants.dbIdPosterUrl] as? String else { continue }
+					guard let posterUrl = dict[Constants.dbIdPosterUrl] as? String else { continue }
 					var thumbnailFound = false
 					
 					// check, if this thumbnail of poster-url from the favorite is on the watch
 					
 					for fileInDocDir in filesInDocDirSave {
 						guard let filename = fileInDocDir.lastPathComponent where filename.endsWith(".jpg") else { continue }
-
-						if favPosterUrl.containsString(filename) {
+						
+						if posterUrl.containsString(filename) {
 							thumbnailFound = true
 							break
 						}
 					}
 					
 					if (thumbnailFound == false) {
-						thumbnailMissing = true
-						break
-					}
-				}
-				
-				if thumbnailMissing {
-					// a thumbnail was not found: ask phone for thumbnails
-					// TODO: be smarter: collect the IDs of the missing thumbnails and ask for only those
-					
-					do {
-						try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetAllMovies : Constants.watchAppContextValueThumbnailsOnly])
-					} catch let error as NSError {
-						NSLog("Error updating AppContext (thumbnails only): \(error.description)")
+						// thumbnail was not found: ask phone for missing thumbnail
+						
+						do {
+							try WatchSessionManager.sharedManager.updateApplicationContext(
+								[Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueThumbnailsOnly,
+								 Constants.watchAppContextGetThumbnail : posterUrl])
+						} catch let error as NSError {
+							NSLog("Error updating AppContext (thumbnail): \(error.description)")
+						}
 					}
 				}
 			}

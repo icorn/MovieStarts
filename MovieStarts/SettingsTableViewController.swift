@@ -15,10 +15,14 @@ class SettingsTableViewController: UITableViewController {
 	@IBOutlet weak var imdbSwitch: UISwitch!
 	@IBOutlet weak var youtubeSwitch: UISwitch!
 	@IBOutlet weak var aboutLabel: UILabel!
+	@IBOutlet weak var rateLabel: UILabel!
 	
 	let sectionUseApps	= 0
 	let sectionAbout	= 1
-	
+
+	let itemRate	= 0
+	let itemAbout	= 1
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -27,6 +31,7 @@ class SettingsTableViewController: UITableViewController {
 		imdbLabel.text = NSLocalizedString("SettingsUseImdb", comment: "")
 		youtubeLabel.text = NSLocalizedString("SettingsUseYoutube", comment: "")
 		aboutLabel.text = NSLocalizedString("SettingsAbout", comment: "")
+		rateLabel.text = NSLocalizedString("SettingsRateTheApp", comment: "")
 		
 		imdbSwitch.addTarget(self, action: Selector("imdbSwitchTapped"), forControlEvents: UIControlEvents.TouchUpInside)
 		youtubeSwitch.addTarget(self, action: Selector("youtubeSwitchTapped"), forControlEvents: UIControlEvents.TouchUpInside)
@@ -54,7 +59,7 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		switch section {
 			case sectionUseApps: 	return 2
-			case sectionAbout: 		return 1
+			case sectionAbout: 		return 2
 			default: 				return 0
 		}
 	}
@@ -77,11 +82,16 @@ class SettingsTableViewController: UITableViewController {
 	
 	
 	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		
 		if (indexPath.section == sectionAbout) {
-			if let saveStoryboard = self.storyboard {
-				if let aboutController: AboutViewController = saveStoryboard.instantiateViewControllerWithIdentifier("AboutViewController") as? AboutViewController {
-					navigationController?.pushViewController(aboutController, animated: true)
+			if (indexPath.item == itemRate) {
+				guard let rateUrl = NSURL(string: "itms-apps://itunes.apple.com/app/id1043041023") else { return }
+				UIApplication.sharedApplication().openURL(rateUrl)
+			}
+			else if (indexPath.item == itemAbout) {
+				if let storyboard = self.storyboard {
+					if let aboutController: AboutViewController = storyboard.instantiateViewControllerWithIdentifier("AboutViewController") as? AboutViewController {
+						navigationController?.pushViewController(aboutController, animated: true)
+					}
 				}
 			}
 		}
