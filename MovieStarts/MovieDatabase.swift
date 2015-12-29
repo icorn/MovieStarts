@@ -391,13 +391,13 @@ class MovieDatabase : DatabaseParent {
 		
 		if let saveModDate: NSDate = latestModDate {
 			
-			print("Getting records after modification date \(saveModDate)")
+			NSLog("Getting records after modification date \(saveModDate)")
 			
 			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 			
 			// get records modifies after the last modification of the local database
 			let predicateModificationDate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
-			let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [/*predicateReleaseDate,*/ predicateModificationDate])
+			let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [predicateModificationDate])
 			
 			let query = CKQuery(recordType: self.recordType, predicate: predicate)
 			let queryOperation = CKQueryOperation(query: query)

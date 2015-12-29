@@ -16,25 +16,28 @@ class NetworkChecker {
 	/**
 		Checks the reachability of the network.
 	
-		- parameter viewForError:	The parent view for error windows
+		- parameter viewForError:	The parent view for error windows. If null, no error will be shown to user.
 	
 		- returns: TRUE if the network is available, FALSE otherwise
 	*/
-	class func checkReachability(viewForError: UIView) -> Bool {
+	class func checkReachability(viewForError: UIView?) -> Bool {
 		
 		let reachabilityStatus = Reach().connectionStatus()
 		
 		switch reachabilityStatus {
 		case .Offline, .Unknown:
 			NSLog("No network")
-			var errorWindow: MessageWindow?
 			
-			dispatch_async(dispatch_get_main_queue()) {
-				errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringIds: ["Close"],
-					handler: { (buttonIndex) -> () in
-						errorWindow?.close()
-					}
-				)
+			if let viewForError = viewForError {
+				var errorWindow: MessageWindow?
+			
+				dispatch_async(dispatch_get_main_queue()) {
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringIds: 	["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
+				}
 			}
 			
 			return false
