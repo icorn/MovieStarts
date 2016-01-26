@@ -186,12 +186,12 @@ class TabBarController: UITabBarController {
 		}
 
 		// check internet connection
-
+/*
 		if (NetworkChecker.checkReachability(nil) == false) {
 			NSLog("Movie update: no network, we just don't update")
 			return
 		}
-
+*/
 		// check iCloud status
 		
 		database?.checkCloudKit({ (status: CKAccountStatus, error: NSError?) -> () in

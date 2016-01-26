@@ -470,13 +470,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	func imdbButtonTapped(sender:UIButton) {
 		
 		// check internet connection
-		
+/*
 		if (NetworkChecker.checkReachability(self.view) == false) {
 			NSLog("IMDb view: no network")
 			noInternetConnection()
 			return
 		}
-		
+*/
 		// check if we open the idmb app or the webview
 		
 		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
@@ -509,13 +509,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		guard let movie = movie else { return }
 		
 		// check internet connection
-		
+/*
 		if (NetworkChecker.checkReachability(self.view) == false) {
 			NSLog("Trailer: no network")
 			noInternetConnection()
 			return
 		}
-		
+*/
 		// check if we open the youtube app or the webview
 		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseYoutubeApp) as? Bool
 		var trailerId: String?
@@ -599,7 +599,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			}
 		}
 	}
-	
+
+/*
 	private final func noInternetConnection() {
 		var errorWindow: MessageWindow?
 			
@@ -614,4 +615,5 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			)
 		}
 	}
+*/
 }

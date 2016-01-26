@@ -20,19 +20,20 @@ class NetworkChecker {
 	
 		- returns: TRUE if the network is available, FALSE otherwise
 	*/
+/*
 	class func checkReachability(viewForError: UIView?) -> Bool {
 		
 		let reachabilityStatus = Reach().connectionStatus()
 		
 		switch reachabilityStatus {
 		case .Offline, .Unknown:
-			NSLog("No network")
+			NSLog("No network: \(reachabilityStatus.description)")
 			
 			if let viewForError = viewForError {
 				var errorWindow: MessageWindow?
 			
 				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringIds: 	["Close"],
+					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: reachabilityStatus.description /* "NoNetworkText" */, buttonStringIds: 	["Close"],
 						handler: { (buttonIndex) -> () in
 							errorWindow?.close()
 						}
@@ -43,10 +44,11 @@ class NetworkChecker {
 			return false
 			
 		case .Online(ReachabilityType.WiFi), .Online(ReachabilityType.WWAN):
+			NSLog("Network good: \(reachabilityStatus.description)")
 			return true
 		}
 	}
-
+*/
 	
 	/**
 		Checks the availibility of CloudKit.

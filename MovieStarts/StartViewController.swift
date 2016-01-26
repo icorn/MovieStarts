@@ -64,7 +64,8 @@ class StartViewController: UIViewController {
 					NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 
 					// check network, load database if all is OK
-					if (NetworkChecker.checkReachability(self.view) == false) { return }
+//					if (NetworkChecker.checkReachability(self.view) == false) { return }
+
 					guard let database = self.movieDatabase else { return }
 					
 					NetworkChecker.checkCloudKit(self.view, database: database,
