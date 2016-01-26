@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CFNetwork
 
 
 extension MovieViewController {
@@ -146,14 +147,14 @@ extension MovieViewController {
 								self.spinner?.startAnimating()
 							}
 							
-							// no big poster: load it!
-							
+							// no big poster here: load it!
+/*
 							if (NetworkChecker.checkReachability(self.view) == false) {
 								// no network available
 								self.stopSpinners()
 								return
 							}
-
+*/
 							self.loadBigPoster()
 						}
 					)
@@ -201,11 +202,36 @@ extension MovieViewController {
 			return
 		}
 		
-		let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+		// configure download task
+		
+		let config = NSURLSessionConfiguration.defaultSessionConfiguration()
+		config.allowsCellularAccess = true
+		config.timeoutIntervalForRequest = 10
+		config.timeoutIntervalForResource = 10
+		
+		let session = NSURLSession(configuration: config)
+		
+		// start the download
+		let task = session.downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
 			self.stopSpinners()
 			
 			if let error = error {
 				NSLog("Error getting missing thumbnail: \(error.description)")
+				
+				if (Int32(error.code) == CFNetworkErrors.CFURLErrorTimedOut.rawValue) {
+					dispatch_async(dispatch_get_main_queue()) {
+						errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterTimeOut", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						})
+					}
+				}
+				else {
+					dispatch_async(dispatch_get_main_queue()) {
+						errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						})
+					}
+				}
 			}
 			else if let receivedPath = location?.path {
 				// move received poster to target path where it belongs
@@ -226,7 +252,7 @@ extension MovieViewController {
 						return
 					}
 				}
-				
+
 				// load and show poster
 				if let bigPoster = movie.bigPoster {
 					dispatch_async(dispatch_get_main_queue()) {
@@ -234,12 +260,12 @@ extension MovieViewController {
 					}
 					return
 				}
-				
+
 				// poster not loaded or error
 				if let error = error {
 					NSLog("Error getting big poster: \(error.code) (\(error.description))")
 				}
-				
+
 				dispatch_async(dispatch_get_main_queue()) {
 					errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 						errorWindow?.close()
