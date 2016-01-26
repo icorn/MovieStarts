@@ -76,6 +76,7 @@
 
 "BigPosterErrorTitle"	= "Load Error";
 "BigPosterErrorText"	= "Error loading the poster. Please try again later.";
+"BigPosterTimeOut"		= "The network is currently too slow to load the movie poster.";
 
 "NoRecordsInCloudTitle"	= "No Movies";
 "NoRecordsInCloudText"	= "Oops, there are no movies on the server. Please try again later.";

@@ -76,6 +76,7 @@
 
 "BigPosterErrorTitle"	= "Lade-Fehler";
 "BigPosterErrorText"	= "Beim Laden des Posters ist ein Fehler aufgetreten. Bitte versuche es später noch einmal.";
+"BigPosterTimeOut"		= "Das Netzwerk ist derzeit zu langsam, um das Poster zu laden.";
 
 "NoRecordsInCloudTitle"	= "Keine Filmdaten";
 "NoRecordsInCloudText"	= "Hoppla, auf dem Server sind keine Filmdaten zu finden. Bitte versuche es später noch einmal.";
