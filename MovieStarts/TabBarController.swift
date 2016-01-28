@@ -116,7 +116,7 @@ class TabBarController: UITabBarController {
 				let newMovieArray: [MovieRecord] = []
 				upcomingMovies.append(newMovieArray)
 				upcomingSections.append(movie.releaseDateStringLong)
-				currentSection++
+				currentSection += 1
 			}
 			
 			// add movie to current section
@@ -145,7 +145,7 @@ class TabBarController: UITabBarController {
 				let newMovieArray: [MovieRecord] = []
 				favoriteMovies.append(newMovieArray)
 				favoriteSections.append(NSLocalizedString("NowPlayingLong", comment: ""))
-				currentSection++
+				currentSection += 1
 			}
 			else if ((movie.isNowPlaying() == false) && ((previousDate == nil) || (previousDate != movie.releaseDate[movie.currentCountry.countryArrayIndex]))) {
 				// upcoming movies:
@@ -153,7 +153,7 @@ class TabBarController: UITabBarController {
 				let newMovieArray: [MovieRecord] = []
 				favoriteMovies.append(newMovieArray)
 				favoriteSections.append(movie.releaseDateStringLong)
-				currentSection++
+				currentSection += 1
 			}
 			
 			// add movie to current section
