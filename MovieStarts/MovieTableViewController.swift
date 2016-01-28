@@ -189,7 +189,7 @@ class MovieTableViewController: UITableViewController {
 			
 			// hide unused labels
 			
-			for (var index = movie.getSubtitleArray(genreDict).count; index < subtitleLabels.count; index++) {
+			for index in movie.getSubtitleArray(genreDict).count ..< subtitleLabels.count {
 				subtitleLabels[index]?.hidden = true
 			}
 		

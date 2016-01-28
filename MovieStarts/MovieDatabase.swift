@@ -614,7 +614,9 @@ class MovieDatabase : DatabaseParent {
 		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
 		if let country = MovieCountry(rawValue: prefsCountryString) {
-			for (var index = existingMovies.count-1; index >= 0; index--) {
+
+			for i in 0...existingMovies.count-1 {
+				let index = existingMovies.count-1 - i
 				let releaseDate = existingMovies[index].releaseDate[country.countryArrayIndex]
 				
 				if releaseDate.compare(compareDate) == NSComparisonResult.OrderedAscending {
