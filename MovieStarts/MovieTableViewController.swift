@@ -20,6 +20,22 @@ class MovieTableViewController: UITableViewController {
 		}
 	}
 	
+	var settingsTableViewController: SettingsTableViewController? {
+		var stvc: SettingsTableViewController?
+		
+		if let viewControllersOfRoot = movieTabBarController?.viewControllers {
+			for viewControllerOfRoot in viewControllersOfRoot where viewControllerOfRoot is UINavigationController {
+				if let viewControllersOfNav = (viewControllerOfRoot as? UINavigationController)?.viewControllers {
+					for viewControllerOfNav in viewControllersOfNav where viewControllerOfNav is SettingsTableViewController {
+						stvc = viewControllerOfNav as? SettingsTableViewController
+						break
+					}
+				}
+			}
+		}
+		return stvc
+	}
+
 	var genreDict: [Int: String] {
 		if let tbc = movieTabBarController {
 			return tbc.genreDict
@@ -121,17 +137,50 @@ class MovieTableViewController: UITableViewController {
 		tableView.reloadData()
 		
 		// if last update is long enough ago: check CloudKit for update
-		
 		guard let tbc = movieTabBarController else { return }
 		let database = MovieDatabase(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
 
 		if let movies = database.readDatabaseFromFile() {
 			tbc.updateMovies(movies, database: database)
 		}
+		
+		// check if we had notifications turned on in the app, but turned off in the system
+		let notificationsTurnedOn: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotifications) as? Bool
+		
+		if let notificationsTurnedOn = notificationsTurnedOn where notificationsTurnedOn == true {
+			if let currentSettings = UIApplication.sharedApplication().currentUserNotificationSettings() where currentSettings.types.contains(UIUserNotificationType.Alert) {
+				// current notifications settings are okay
+			}
+			else {
+				// tell the user, the notifications are no longer working - and it's all his fault ;-)
+				var errorWindow: MessageWindow?
+				
+				if let errorView = self.movieTabBarController?.view {
+					errorWindow = MessageWindow(parent: errorView, darkenBackground: true, titleStringId: "NotificationWarnTitle", textStringId: "NotificationWarnText2", buttonStringIds: ["Close"],
+						handler: { (buttonIndex) -> () in
+							errorWindow?.close()
+						}
+					)
+				}
+				
+				// also, turn notifications off
+				if let settings = settingsTableViewController {
+					settings.switchNotifications(false)
+				}
+				else {
+					NSLog("Settings dialog not available. This should never happen.")
+					NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsNotifications)
+					NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+					NotificationManager.removeAllFavoriteNotifications()
+				}
+			}
+		}
 	}
 
+	
 	// MARK: - UITableViewDataSource
 
+	
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
 		if (currentTab == MovieTab.NowPlaying) {
 			return 1

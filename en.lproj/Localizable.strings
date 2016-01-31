@@ -85,6 +85,10 @@
 "InternalErrorText"		= "There was an internal error. Please try again later.";
 "ErrorWritingFile"		= "Error writing a file. Maybe your iPhone is full.";
 
+"NotificationWarnTitle"	= "Notifications";
+"NotificationWarnText"	= "Notifications are not allowed for this app right now. Please open the 'Settings' app, go to 'Notifications' / 'MovieStarts' and activate 'Allow Notifications'.";
+"NotificationWarnText2"	= "You had notifications turned on in this app, but now they are not allowed anymore by the system. To turn them on again, please open the 'Settings' app, go to 'Notifications' / 'MovieStarts' and activate 'Allow Notifications'. Then you can turn on notifications here in MovieStarts again.";
+
 // Settings
 
 "SettingsUseApps"		= "Use apps instead of browser";
@@ -93,6 +97,10 @@
 "SettingsUseAppsFooter"	= "If these switches are turned on, the app is launched instead of the the browser with the website. The switches can only be turned on if the appropriate app is installed.";
 "SettingsAbout"			= "About MovieStarts";
 "SettingsRateTheApp"	= "Rate this app";
+
+"SettingsNotificationsHeader"	= "Notifications for Favorites";
+"SettingsNotifications"			= "Activate Notifications";
+"SettingsNotificationsFooter"	= "You will get a push notification as soon as a one of your favorites movies is released.";
 
 // About
 
@@ -112,6 +120,32 @@
 
 "Close"						= "Close";
 "menuItemRefresh"			= "Refresh";
+
+// Notification times
+
+"5daysBefore"			= "5 Days before";
+"4daysBefore"			= "4 Days before";
+"3daysBefore"			= "3 Days before";
+"2daysBefore"			= "2 Days before";
+"1daysBefore"			= "1 Days before";
+"0daysBefore"			= "Release Day";
+
+"8oclock"				= "8 am";
+"9oclock"				= "9 am";
+"10oclock"				= "10 am";
+"11oclock"				= "11 am";
+"12oclock"				= "12 noon";
+"13oclock"				= "1 pm";
+"14oclock"				= "2 pm";
+"15oclock"				= "3 pm";
+"16oclock"				= "4 pm";
+"17oclock"				= "5 pm";
+"18oclock"				= "6 pm";
+"19oclock"				= "7 pm";
+"20oclock"				= "8 pm";
+"21oclock"				= "8 pm";
+"22oclock"				= "10 pm";
+"23oclock"				= "11 pm";
 
 // Watch
 

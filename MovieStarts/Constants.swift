@@ -19,6 +19,7 @@ public struct Constants {
 	static let thumbnailFolder				= "/Thumbnails"
 	static let bigPosterFolder				= "/BigPoster"
 	static let trailerFolder				= "/Trailers"
+	static let notificationUserInfo			= "MovieStartsNotification"
 	
 	static let prefsLatestDbModification 		= "modificationDate"
 	static let prefsLatestDbSuccessfullUpdate 	= "lastestCheck"
@@ -27,6 +28,7 @@ public struct Constants {
 	static let prefsUseYoutubeApp				= "userYoutubeApp"
 	static let prefsPosterHintAlreadyShown		= "posterHintAlreadyShown"
 	static let prefsCountry						= "country"
+	static let prefsNotifications				= "notifications"
 	
 	static let dbRecordTypeMovie			= "Movie"
 	static let dbRecordTypeGenre			= "Genre"

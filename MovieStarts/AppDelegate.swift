@@ -9,11 +9,30 @@
 import UIKit
 import CloudKit
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
+	var movieTabBarController: TabBarController? {
+		return (window?.rootViewController as? StartViewController)?.myTabBarController
+	}
+	var settingsTableViewController: SettingsTableViewController? {
+		var stvc: SettingsTableViewController?
 
+		if let viewControllersOfRoot = movieTabBarController?.viewControllers {
+			for viewControllerOfRoot in viewControllersOfRoot where viewControllerOfRoot is UINavigationController {
+				if let viewControllersOfNav = (viewControllerOfRoot as? UINavigationController)?.viewControllers {
+					for viewControllerOfNav in viewControllersOfNav where viewControllerOfNav is SettingsTableViewController {
+						stvc = viewControllerOfNav as? SettingsTableViewController
+						break
+					}
+				}
+			}
+		}
+		return stvc
+	}
+	
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		
@@ -72,15 +91,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		if useImdbApp == nil {
 			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsUseImdbApp)
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 		}
 		
 		if useYoutubeApp == nil {
 			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsUseYoutubeApp)
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 		}
 		
 		// start watch session (if there is a watch)
-		
 		WatchSessionManager.sharedManager.startSession()
+		
+		// Handle launching from a notification
+		if let launchOptions = launchOptions {
+			if let notification = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
+				
+				let alert = UIAlertController(title: notification.alertTitle!, message: notification.alertBody!, preferredStyle: UIAlertControllerStyle.Alert)
+				let alertAction = UIAlertAction(title: "OK Blank", style: UIAlertActionStyle.Default, handler: nil)
+				alert.addAction(alertAction)
+				self.movieTabBarController?.presentViewController(alert, animated: true, completion: nil)
+				
+				
+				
+				UITabBar.appearance().tintColor = UIColor(red: 255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+				UINavigationBar.appearance().tintColor = UIColor.greenColor()
+
+				
+				
+				// TODO: Only setting to 0 if launched by click on notification. Can't be correct. What about starting normal?
+				// Then the badge stays.
+				
+				application.applicationIconBadgeNumber = 0
+			}
+		}
 		
 		return true
 	}
@@ -105,6 +148,81 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func applicationWillTerminate(application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+	}
+
+	
+	// MARK: - Handling local notifications
+ 
+	
+	func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+		
+		if (notificationSettings.types.contains(UIUserNotificationType.Alert)) {
+			// user has allowed notifications
+			if let settings = settingsTableViewController {
+				settings.switchNotifications(true)
+			}
+			else {
+				NSLog("Settings dialog not available. This should never happen.")
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(true, forKey: Constants.prefsNotifications)
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+				NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+			}
+		}
+		else {
+			// user has *not* allowed notifications
+			if let settings = settingsTableViewController {
+				settings.switchNotifications(false)
+			}
+			else {
+				NSLog("Settings dialog not available. This should never happen.")
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsNotifications)
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+				NotificationManager.removeAllFavoriteNotifications()
+			}
+			
+			// warn user
+			var messageWindow: MessageWindow?
+			
+			if let viewForMessage = window {
+				messageWindow = MessageWindow(parent: viewForMessage, darkenBackground: true, titleStringId: "NotificationWarnTitle", textStringId: "NotificationWarnText", buttonStringIds: ["Close"],
+					handler: { (buttonIndex) -> () in
+						messageWindow?.close()
+					}
+				)
+			}
+		}
+		
+/*
+		if (notificationSettings.types.contains(UIUserNotificationType.Sound)) {
+			NSLog("- Sound")
+		}
+		if (notificationSettings.types.contains(UIUserNotificationType.Badge)) {
+			NSLog("- Badge")
+		}
+*/
+	}
+	
+	
+	func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+		let state = application.applicationState
+
+		if (state == UIApplicationState.Active) {
+			// app was in foreground
+			let alert = UIAlertController(title: notification.alertTitle!, message: notification.alertBody!, preferredStyle: UIAlertControllerStyle.Alert)
+			let alertAction = UIAlertAction(title: "OK Foreground", style: UIAlertActionStyle.Default, handler: nil)
+			alert.addAction(alertAction)
+			self.movieTabBarController?.presentViewController(alert, animated: true, completion: nil)
+		}
+		else if (state == UIApplicationState.Inactive) {
+			// app was in background, but in memory
+			let alert = UIAlertController(title: notification.alertTitle!, message: notification.alertBody!, preferredStyle: UIAlertControllerStyle.Alert)
+			let alertAction = UIAlertAction(title: "OK Background", style: UIAlertActionStyle.Default, handler: nil)
+			alert.addAction(alertAction)
+			self.movieTabBarController?.presentViewController(alert, animated: true, completion: nil)
+		}
+
+		// Set icon badge number to zero
+		application.applicationIconBadgeNumber = 0
 	}
 
 }

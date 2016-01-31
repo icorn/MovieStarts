@@ -85,6 +85,10 @@
 "InternalErrorText"		= "Es ist ein interner Fehler aufgetreten. Bitte versuche es später noch einmal.";
 "ErrorWritingFile"		= "Fehler beim Speichern einer Datei. Möglicherweise ist dein iPhone voll.";
 
+"NotificationWarnTitle"	= "Mitteilungen";
+"NotificationWarnText"	= "Mitteilungen sind für diese App derzeit nicht erlaubt. Bitte wechsele in die App 'Einstellungen', gehe zu 'Mitteilungen' / 'MovieStarts', und aktiviere 'Mitteilungen erlauben'.";
+"NotificationWarnText2"	= "Du hattest Mitteilungen in dieser App eingeschaltet, sie sind aber nun im System für diese App nicht mehr erlaubt. Um sie wieder zu erlauben, wechsele bitte in die App 'Einstellungen', gehe zu 'Mitteilungen' / 'MovieStarts', und aktiviere 'Mitteilungen erlauben'. Dann kannst du Mitteilungen hier in MovieStarts wieder einschalten.";
+
 // Settings
 
 "SettingsUseApps"		= "Benutze Apps statt Browser";
@@ -93,6 +97,10 @@
 "SettingsUseAppsFooter"	= "Wenn diese Schalter aktiviert sind, werden die Apps aufgerufen, anstatt die jeweilige Webseite im Browser. Die Schalter sind nur aktivierbar, wenn die entsprechende App installiert ist.";
 "SettingsAbout"			= "Über MovieStarts";
 "SettingsRateTheApp"	= "Diese App bewerten";
+
+"SettingsNotificationsHeader"	= "Mitteilungen für Favoriten";
+"SettingsNotifications"			= "Mitteilungen aktivieren";
+"SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung, sobald in Film deiner Favoritenliste ins Kino kommt.";
 
 // About
 
@@ -112,6 +120,15 @@
 
 "Close"					= "Schließen";
 "menuItemRefresh"		= "Aktualisieren";
+
+// Notification times
+
+"5daysBefore"			= "5 Tage vorher";
+"4daysBefore"			= "4 Tage vorher";
+"3daysBefore"			= "3 Tage vorher";
+"2daysBefore"			= "2 Tage vorher";
+"1daysBefore"			= "1 Tage vorher";
+"0daysBefore"			= "Erscheinungstag";
 
 // Watch
 

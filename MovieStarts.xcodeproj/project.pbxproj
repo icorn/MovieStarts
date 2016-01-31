@@ -18,6 +18,8 @@
 		4F2C92B31B66EC840044A27B /* favoritecorner.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92B01B66EC840044A27B /* favoritecorner.png */; };
 		4F2C92B41B66EC840044A27B /* favoritecorner@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F2C92B11B66EC840044A27B /* favoritecorner@3x.png */; };
 		4F2CE8B31BC93FE200D66319 /* DetailInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2CE8B21BC93FE200D66319 /* DetailInterfaceController.swift */; };
+		4F2D38301C5A7A29000927E7 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */; };
+		4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D38311C5BC984000927E7 /* NotificationManager.swift */; };
 		4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3AA9891B71FEFD00640D04 /* FavoriteTableViewController.swift */; };
 		4F3EC7071B24B35B003C48E4 /* WebViewRefresh@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7011B24B35B003C48E4 /* WebViewRefresh@2x.png */; };
 		4F3EC7081B24B35B003C48E4 /* WebViewForward@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F3EC7021B24B35B003C48E4 /* WebViewForward@2x.png */; };
@@ -186,6 +188,8 @@
 		4F2C92B11B66EC840044A27B /* favoritecorner@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoritecorner@3x.png"; sourceTree = "<group>"; };
 		4F2CE8B01BC93FB500D66319 /* refreshMenuItem@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "refreshMenuItem@2x.png"; path = "watchOS2app Extension/refreshMenuItem@2x.png"; sourceTree = SOURCE_ROOT; };
 		4F2CE8B21BC93FE200D66319 /* DetailInterfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailInterfaceController.swift; sourceTree = "<group>"; };
+		4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
+		4F2D38311C5BC984000927E7 /* NotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		4F3AA9891B71FEFD00640D04 /* FavoriteTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteTableViewController.swift; sourceTree = "<group>"; };
 		4F3EC7011B24B35B003C48E4 /* WebViewRefresh@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WebViewRefresh@2x.png"; sourceTree = "<group>"; };
 		4F3EC7021B24B35B003C48E4 /* WebViewForward@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WebViewForward@2x.png"; sourceTree = "<group>"; };
@@ -454,6 +458,7 @@
 			isa = PBXGroup;
 			children = (
 				4F7A99A71BAE1A6700ED38C9 /* AnimatedTabBar.swift */,
+				4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */,
 				4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */,
 			);
 			name = Extensions;
@@ -539,6 +544,7 @@
 				4F8ED3EA1B4442C7008C24FE /* MovieTableViewCell.swift */,
 				4F7A99AC1BAEA0CE00ED38C9 /* MovieViewControllerPosters.swift */,
 				4F7A99AE1BAF01E600ED38C9 /* NetworkChecker.swift */,
+				4F2D38311C5BC984000927E7 /* NotificationManager.swift */,
 				4F95FC281C10A9C9008F482B /* Reach.swift */,
 				4F87F9271A8DF0C1001869A1 /* View Controllers */,
 				4F70ACBF1BCC419100E34987 /* WatchSessionManager.swift */,
@@ -840,6 +846,7 @@
 				4FECDF201A8FE27D00F84A52 /* MovieDatabase.swift in Sources */,
 				4FFC9FB31BAF1803007A24CA /* DatabaseParent.swift in Sources */,
 				4FCFBA111C0C9D7800D43C27 /* GenreDatabase.swift in Sources */,
+				4F2D38301C5A7A29000927E7 /* NSDateExtension.swift in Sources */,
 				4FBB03CC1BA862B50053CE99 /* AboutViewController.swift in Sources */,
 				4F95FC291C10A9C9008F482B /* Reach.swift in Sources */,
 				4F70ACC01BCC419100E34987 /* WatchSessionManager.swift in Sources */,
@@ -855,6 +862,7 @@
 				4FEAAED51B8797940074C3AF /* MovieTab.swift in Sources */,
 				4F6914961A8C09BA00B8FFCE /* UpcomingTableViewController.swift in Sources */,
 				4FFE43481BA6B4D10080D9F3 /* MessageWindow.swift in Sources */,
+				4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */,
 				4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */,
 				4F63E61E1A992BCA00528FB3 /* MovieDatabaseHelper.swift in Sources */,
 				4F63E6401A9D24BA00528FB3 /* StartViewController.swift in Sources */,
