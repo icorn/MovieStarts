@@ -569,7 +569,7 @@ class MovieDatabase : DatabaseParent {
 				
 				if let viewForError = viewForError {
 					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorText", textStringId: "ErrorWritingFile", buttonStringIds: ["Close"],
+						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "ErrorWritingFile", buttonStringIds: ["Close"],
 							handler: { (buttonIndex) -> () in
 								errorWindow?.close()
 							}
