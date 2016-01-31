@@ -357,6 +357,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				}
 				
 				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(true, forKey: Constants.prefsPosterHintAlreadyShown)
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 			}
 		}
 	}
