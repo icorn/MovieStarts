@@ -193,24 +193,6 @@ class MovieInterfaceController: WKInterfaceController {
 		}
 	}
 	
-	private func movieDateToString(releaseDate: NSDate) -> String {
-		
-		var retval = ""
-		let gregorian = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
-		let gmtZone = NSTimeZone(abbreviation: "GMT")
-		
-		if let gmtZone = gmtZone {
-			gregorian?.timeZone = gmtZone
-			
-			if let saveGregorian = gregorian {
-				let components = saveGregorian.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year], fromDate: releaseDate)
-				retval = "\(components.month).\(components.day).\(components.year)"
-			}
-		}
-		
-		return retval
-	}
-	
 	private func movieDictsToMovieRecords(dictArray: NSArray) -> [WatchMovieRecord] {
 		var movieRecordArray: [WatchMovieRecord] = []
 		
