@@ -101,7 +101,68 @@ public class WatchMovieRecord : CustomStringConvertible {
 	}
 	
 	
+	/// The release data as string in medium sized format.
+	
+	var releaseDateString: String {
+		var retval = NSLocalizedString("NoReleaseDate", comment: "")
+		
+		if let releaseDate = releaseDate where releaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
+			let dateFormatter = NSDateFormatter()
+			dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+			dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+			retval = dateFormatter.stringFromDate(releaseDate)
+		}
+		
+		return retval
+	}
+
+	// Calculates the release date of the movie for the local (current) timezone. Instead of midnight GMT this will be midnight in the local (current) timezone.
+	var releaseDateInLocalTimezone: NSDate? {
+		var localDate: NSDate?
+
+		guard let releaseDate = releaseDate else { return localDate }
+		
+		let calendarGMT = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+		let calendarLocal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+		let timezoneGMT = NSTimeZone(abbreviation: "GMT")
+		
+		if let calendarGMT = calendarGMT, calendarLocal = calendarLocal, timezoneGMT = timezoneGMT {
+			calendarGMT.timeZone = timezoneGMT
+			calendarLocal.timeZone = NSTimeZone.localTimeZone()
+			
+			let gmtComponents = calendarGMT.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year], fromDate: releaseDate)
+			
+			let localComponents = NSDateComponents()
+			localComponents.day = gmtComponents.day
+			localComponents.month = gmtComponents.month
+			localComponents.year = gmtComponents.year
+			localComponents.calendar = calendarLocal
+			localDate = localComponents.date
+		}
+		
+		return localDate
+	}
+
+	/**
+		Checks if the movie is now playing in theaters.
+
+		- returns: TRUE if it is now playing, FALSE otherwise
+	*/
+	func isNowPlaying() -> Bool {
+		var retval = false
+		
+		if let localReleaseDate = releaseDateInLocalTimezone where localReleaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
+			let now = NSDate()
+			retval = (localReleaseDate.compare(now) != NSComparisonResult.OrderedDescending)
+		}
+		
+		return retval
+	}
+
+	
 	// MARK: - Printable
+	
 	
 	public var description: String {
 		
@@ -120,39 +181,6 @@ public class WatchMovieRecord : CustomStringConvertible {
 		retval += "genreNames: \(genreNames) | "
 		retval += "directors: \(directors) | "
 		retval += "actors: \(actors)"
-		
-		return retval
-	}
-	
-	
-	/**
-		Checks if the movie is now playing in theaters.
-	
-		- returns: TRUE if it is now playing, FALSE otherwise
-	*/
-	func isNowPlaying() -> Bool {
-		var retval = false
-		
-		if let releaseDate = releaseDate where releaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
-			let today = NSDate()
-			retval = (releaseDate.compare(today) != NSComparisonResult.OrderedDescending)
-		}
-		
-		return retval
-	}
-
-	
-	/// The release data as string in medium sized format.
-	
-	var releaseDateString: String {
-		var retval = NSLocalizedString("NoReleaseDate", comment: "")
-		
-		if let releaseDate = releaseDate where releaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
-			let dateFormatter = NSDateFormatter()
-			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
-			dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-			retval = dateFormatter.stringFromDate(releaseDate)
-		}
 		
 		return retval
 	}
