@@ -136,6 +136,9 @@ class MovieTableViewController: UITableViewController {
 		// reload to update favorite-icon if we come back from detail view.
 		tableView.reloadData()
 		
+		// check what's "now playing" and what not. this changes after midnight.
+		checkNowPlayingStatus()
+		
 		// if last update is long enough ago: check CloudKit for update
 		guard let tbc = movieTabBarController else { return }
 		let database = MovieDatabase(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
@@ -379,6 +382,42 @@ class MovieTableViewController: UITableViewController {
 	private func removeFavoriteIconFromCell(cell: MovieTableViewCell?) {
 		cell?.favoriteCorner.hidden = true
 	}
+	
+	private func checkNowPlayingStatus() {
+		
+		guard let movieTabBarController = movieTabBarController else { return }
+		var moviesToDeleteFromUpcomingList: [MovieRecord] = []
+
+		// check upcoming-list and move all now-playing movies to now-playing-list
+		for upcomingSection in movieTabBarController.upcomingMovies {
+			for upcomingMovie in upcomingSection {
+				if (upcomingMovie.isNowPlaying()) {
+					// this upcoming movie is no longer upcoming - it's now playing.
+					// add movie to "now playing"-list and collect the ID for later deleting
+					movieTabBarController.nowPlayingController?.addMovie(upcomingMovie)
+					moviesToDeleteFromUpcomingList.append(upcomingMovie)
+				}
+			}
+		}
+		
+		for movieToDelete in moviesToDeleteFromUpcomingList {
+			movieTabBarController.upcomingController?.removeMovie(movieToDelete)
+		}
+
+		// check favorite-list and move all now-playing movies to the correct section
+		for (sectionIndex, favoriteSection) in (movieTabBarController.favoriteMovies).enumerate() {
+			for favoriteMovie in favoriteSection {
+				if (favoriteMovie.isNowPlaying()) {
+					// this favorite movie is now playing. We check if it's already in the now-playing-section inside the favorites-list.
+					if (movieTabBarController.favoriteSections[sectionIndex] != NSLocalizedString("NowPlayingLong", comment: "")) {
+						// movie is now-playing, but not in the now-playing-section inside the favorites list: move it!
+						movieTabBarController.favoriteController?.removeFavorite(favoriteMovie.id)
+						movieTabBarController.favoriteController?.addFavorite(favoriteMovie)
+					}
+				}
+			}
+		}
+	}
 
 	
 	// MARK: - Helper functions for the children classes (TabViewControllers)
@@ -451,7 +490,6 @@ class MovieTableViewController: UITableViewController {
 		}
 	}
 
-	
 	func updateThumbnail(tmdbId: Int) -> Bool {
 		var updated = false
 		
