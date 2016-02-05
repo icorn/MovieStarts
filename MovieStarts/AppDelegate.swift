@@ -14,6 +14,7 @@ import CloudKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
+	var movieReleaseNotification: UILocalNotification?
 	var movieTabBarController: TabBarController? {
 		return (window?.rootViewController as? StartViewController)?.myTabBarController
 	}
@@ -31,6 +32,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 		return stvc
+	}
+	var favoriteTableViewController: FavoriteTableViewController? {
+		var ftvc: FavoriteTableViewController?
+		
+		if let viewControllersOfRoot = movieTabBarController?.viewControllers {
+			for viewControllerOfRoot in viewControllersOfRoot where viewControllerOfRoot is UINavigationController {
+				if let viewControllersOfNav = (viewControllerOfRoot as? UINavigationController)?.viewControllers {
+					for viewControllerOfNav in viewControllersOfNav where viewControllerOfNav is FavoriteTableViewController {
+						ftvc = viewControllerOfNav as? FavoriteTableViewController
+						break
+					}
+				}
+			}
+		}
+		return ftvc
 	}
 	
 
@@ -105,23 +121,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Handle launching from a notification
 		if let launchOptions = launchOptions {
 			if let notification = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
-				
-				let alert = UIAlertController(title: notification.alertTitle!, message: notification.alertBody!, preferredStyle: UIAlertControllerStyle.Alert)
-				let alertAction = UIAlertAction(title: "OK Blank", style: UIAlertActionStyle.Default, handler: nil)
-				alert.addAction(alertAction)
-				self.movieTabBarController?.presentViewController(alert, animated: true, completion: nil)
-				
-				
-				
-				UITabBar.appearance().tintColor = UIColor(red: 255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
-				UINavigationBar.appearance().tintColor = UIColor.greenColor()
-
-				
-				
-				// TODO: Only setting to 0 if launched by click on notification. Can't be correct. What about starting normal?
-				// Then the badge stays.
-				
-				application.applicationIconBadgeNumber = 0
+				// save received notification for later
+				movieReleaseNotification = notification
 			}
 		}
 		
@@ -191,39 +192,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				)
 			}
 		}
-		
-/*
-		if (notificationSettings.types.contains(UIUserNotificationType.Sound)) {
-			NSLog("- Sound")
-		}
-		if (notificationSettings.types.contains(UIUserNotificationType.Badge)) {
-			NSLog("- Badge")
-		}
-*/
 	}
-	
-	
+
 	func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+
+		guard let userInfo = notification.userInfo,
+			  let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] where movieIDs.count > 0,
+			  let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] where movieTitles.count > 0,
+			  let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
+			  let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else {
+			return
+		}
+
 		let state = application.applicationState
 
 		if (state == UIApplicationState.Active) {
 			// app was in foreground
-			let alert = UIAlertController(title: notification.alertTitle!, message: notification.alertBody!, preferredStyle: UIAlertControllerStyle.Alert)
-			let alertAction = UIAlertAction(title: "OK Foreground", style: UIAlertActionStyle.Default, handler: nil)
-			alert.addAction(alertAction)
-			self.movieTabBarController?.presentViewController(alert, animated: true, completion: nil)
+			
+			if (movieTitles.count == 1) {
+				// only one movie
+				NotificationManager.notifyAboutOneMovie(self, movieID: movieIDs[0], movieTitle: movieTitles[0], movieDate: movieDate, notificationDay: notificationDay)
+			}
+			else {
+				// multiple movies
+				NotificationManager.notifyAboutMultipleMovies(self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+			}
 		}
 		else if (state == UIApplicationState.Inactive) {
 			// app was in background, but in memory
-			let alert = UIAlertController(title: notification.alertTitle!, message: notification.alertBody!, preferredStyle: UIAlertControllerStyle.Alert)
-			let alertAction = UIAlertAction(title: "OK Background", style: UIAlertActionStyle.Default, handler: nil)
-			alert.addAction(alertAction)
-			self.movieTabBarController?.presentViewController(alert, animated: true, completion: nil)
+			
+			if (movieTitles.count == 1) {
+				// only one movie
+				self.movieTabBarController?.selectedIndex = Constants.tabIndexFavorites
+				self.favoriteTableViewController?.showFavoriteMovie(movieIDs[0])
+			}
+			else {
+				// multiple movies
+				NotificationManager.notifyAboutMultipleMovies(self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+			}
 		}
-
-		// Set icon badge number to zero
-		application.applicationIconBadgeNumber = 0
 	}
-
 }
 

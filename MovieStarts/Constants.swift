@@ -19,7 +19,10 @@ public struct Constants {
 	static let thumbnailFolder				= "/Thumbnails"
 	static let bigPosterFolder				= "/BigPoster"
 	static let trailerFolder				= "/Trailers"
-	static let notificationUserInfo			= "MovieStartsNotification"
+	static let notificationUserInfoId		= "MovieStartsNotificationId"
+	static let notificationUserInfoName		= "MovieStartsNotificationName"
+	static let notificationUserInfoDate		= "MovieStartsNotificationDate"
+	static let notificationUserInfoDay		= "MovieStartsNotificationDay"
 	
 	static let prefsLatestDbModification 		= "modificationDate"
 	static let prefsLatestDbSuccessfullUpdate 	= "lastestCheck"
@@ -29,9 +32,20 @@ public struct Constants {
 	static let prefsPosterHintAlreadyShown		= "posterHintAlreadyShown"
 	static let prefsCountry						= "country"
 	static let prefsNotifications				= "notifications"
+	static let prefsNotificationDay				= "notificationDay"
+	static let prefsNotificationTime			= "notificationTime"
 	
 	static let dbRecordTypeMovie			= "Movie"
 	static let dbRecordTypeGenre			= "Genre"
+	
+	static let tabIndexNowPlaying			= 0
+	static let tabIndexUpcoming				= 1
+	static let tabIndexFavorites			= 2
+	static let tabIndexSettings				= 3
+	
+	static let notificationTimeMin			= 8
+	static let notificationTimeMax			= 23
+	static let notificationDays				= 6 // number of different possible days for notification
 	
 	static let hoursBetweenDbUpdates		= 24
 	static let maxDaysInThePast				= 30.0

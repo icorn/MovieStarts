@@ -34,25 +34,51 @@ class TabBarController: UITabBarController {
 				
 				// set tab bar titles
 				
-				saveItems[0].title = NSLocalizedString("NowPlayingTabBar", comment: "")
-				saveItems[1].title = NSLocalizedString("UpcomingTabBar", comment: "")
-				saveItems[2].title = NSLocalizedString("FavoritesTabBar", comment: "")
-				saveItems[3].title = NSLocalizedString("SettingsTabBar", comment: "")
+				saveItems[Constants.tabIndexNowPlaying].title = NSLocalizedString("NowPlayingTabBar", comment: "")
+				saveItems[Constants.tabIndexUpcoming].title = NSLocalizedString("UpcomingTabBar", comment: "")
+				saveItems[Constants.tabIndexFavorites].title = NSLocalizedString("FavoritesTabBar", comment: "")
+				saveItems[Constants.tabIndexSettings].title = NSLocalizedString("SettingsTabBar", comment: "")
 				
 				// set tab bar images
 
-				saveItems[0].image = UIImage(named: "Video.png")
-				saveItems[1].image = UIImage(named: "Calendar.png")
-				saveItems[2].image = UIImage(named: "favorite.png")
-				saveItems[3].image = UIImage(named: "Settings.png")
+				saveItems[Constants.tabIndexNowPlaying].image = UIImage(named: "Video.png")
+				saveItems[Constants.tabIndexUpcoming].image = UIImage(named: "Calendar.png")
+				saveItems[Constants.tabIndexFavorites].image = UIImage(named: "favorite.png")
+				saveItems[Constants.tabIndexSettings].image = UIImage(named: "Settings.png")
 			}
 		}
     }
-	
+
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		
+		if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, let notification = appDelegate.movieReleaseNotification {
+			// we have a notification for the user
+			guard let userInfo = notification.userInfo,
+				let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] where movieIDs.count > 0,
+				let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] where movieTitles.count > 0,
+				let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
+				let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else {
+					return
+			}
+			
+			if (movieTitles.count == 1) {
+				// only one movie: go directly to the movie
+				selectedIndex = Constants.tabIndexFavorites
+				self.favoriteController?.showFavoriteMovie(movieIDs[0])
+			}
+			else {
+				// multiple movies
+				NotificationManager.notifyAboutMultipleMovies(appDelegate, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+			}
+			
+			appDelegate.movieReleaseNotification = nil
+		}
+	}
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
 	
 	func loadGenresFromFile() {
 		let genreDatabase = GenreDatabase(finishHandler: nil, errorHandler: nil)
@@ -167,6 +193,8 @@ class TabBarController: UITabBarController {
 			
 			previousDate = movie.releaseDate[movie.currentCountry.countryArrayIndex]
 		}
+		
+		NotificationManager.updateFavoriteNotifications(favoriteMovies)
 	}
 	
 	

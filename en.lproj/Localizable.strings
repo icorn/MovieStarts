@@ -116,11 +116,6 @@
 "reachability"			= "This app uses 'Reach' from Isuru Nanayakkara. It uses the following license:";
 "mitLicense"			= "The MIT License (MIT)\n\nCopyright (c) 2014 Isuru Nanayakkara\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
 
-// Misc.
-
-"Close"						= "Close";
-"menuItemRefresh"			= "Refresh";
-
 // Notification times
 
 "5daysBefore"			= "5 Days before";
@@ -130,22 +125,20 @@
 "1daysBefore"			= "1 Days before";
 "0daysBefore"			= "Release Day";
 
-"8oclock"				= "8 am";
-"9oclock"				= "9 am";
-"10oclock"				= "10 am";
-"11oclock"				= "11 am";
-"12oclock"				= "12 noon";
-"13oclock"				= "1 pm";
-"14oclock"				= "2 pm";
-"15oclock"				= "3 pm";
-"16oclock"				= "4 pm";
-"17oclock"				= "5 pm";
-"18oclock"				= "6 pm";
-"19oclock"				= "7 pm";
-"20oclock"				= "8 pm";
-"21oclock"				= "8 pm";
-"22oclock"				= "10 pm";
-"23oclock"				= "11 pm";
+// Notifications
+
+"NotificationMsgWindowTitle"	= "Good News";
+"OneMovieReleasedToday"			= "has been released today.";
+"OneMovieReleasedTomorrow"		= "will be released tomorrow.";
+"OneMovieReleasedAfterTomorrow"	= "will be released in two days.";
+"OneMovieReleasedSoon1"			= "will be released on ";
+"OneMovieReleasedSoon2"			= ".";
+
+"MoviesReleasedToday"			= "of your favorite movies have been released today";
+"MoviesReleasedTomorrow"		= "of your favorite movies will be released tomorrow";
+"MoviesReleasedAfterTomorrow"	= "of your favorite movies will be released the day after tomorrow";
+"MoviesReleasedSoon1"			= "of your favorite movies will be released on ";
+"MoviesReleasedSoon2"			= "";
 
 // Watch
 
@@ -153,6 +146,23 @@
 "WatchNowPlaying"			= "Now Playing";
 "WatchConnectError"			= "Error connecting to the iPhone. Please check your network and/or try again later.";
 "WatchUserShouldStartPhone"	= "Please open the MovieStarts iPhone app so that the Watch can access your favorite movies from the iPhone. Future movie updates will be done automatically.";
+
+// Misc.
+
+"ShowMovie"					= "Show Movie";
+"Close"						= "Close";
+"menuItemRefresh"			= "Refresh";
+"2"							= "two";
+"3"							= "three";
+"4"							= "four";
+"5"							= "five";
+"6"							= "six";
+"7"							= "seven";
+"8"							= "eight";
+"9"							= "nine";
+"10"						= "ten";
+"11"						= "eleven";
+"12"						= "twelve";
 
 // Country names
 

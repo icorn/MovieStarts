@@ -384,7 +384,6 @@ class MovieTableViewController: UITableViewController {
 	}
 	
 	private func checkNowPlayingStatus() {
-		
 		guard let movieTabBarController = movieTabBarController else { return }
 		var moviesToDeleteFromUpcomingList: [MovieRecord] = []
 
@@ -421,7 +420,8 @@ class MovieTableViewController: UITableViewController {
 
 	
 	// MARK: - Helper functions for the children classes (TabViewControllers)
-	
+
+
 	func addMovieToExistingSection(foundSectionIndex: Int, newMovie: MovieRecord) {
 		
 		// add new movie to the section, then sort it

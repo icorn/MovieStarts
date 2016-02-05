@@ -553,6 +553,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		if let movie = movie {
 			Favorites.addMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
+			NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 		}
 	}
 
@@ -566,6 +567,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		if let movie = movie {
 			Favorites.removeMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
+			NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 		}
 	}
 	

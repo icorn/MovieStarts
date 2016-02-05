@@ -50,7 +50,6 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 
 		// fill titles and strings
 		navigationItem.title = NSLocalizedString("SettingsLong", comment: "")
-		
 		imdbLabel.text = NSLocalizedString("SettingsUseImdb", comment: "")
 		youtubeLabel.text = NSLocalizedString("SettingsUseYoutube", comment: "")
 		aboutLabel.text = NSLocalizedString("SettingsAbout", comment: "")
@@ -62,7 +61,7 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		notificationSwitch.addTarget(self, action: Selector("notificationSwitchTapped"), forControlEvents: UIControlEvents.TouchUpInside)
 		
 		// set up picker view
-		for hour in 8...23 {
+		for hour in Constants.notificationTimeMin...Constants.notificationTimeMax {
 			notificationTimeArray[timeComponent].append(NSDateFormatter.localizedStringFromDate(NSDate().setHour(hour), dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))
 		}
 		
@@ -75,10 +74,19 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		
-		// set up the two switches
+		// set up the switches
 		setUpSwitch(Constants.prefsUseImdbApp, switcher: imdbSwitch, label: imdbLabel, urlString: "imdb:")
 		setUpSwitch(Constants.prefsUseYoutubeApp, switcher: youtubeSwitch, label: youtubeLabel, urlString: "youtube:")
 		setUpSwitch(Constants.prefsNotifications, switcher: notificationSwitch, label: nil, urlString: nil)
+		
+		// set up picker
+		
+		if let day = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotificationDay) as? Int,
+		   let time = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotificationTime) as? Int
+		{
+			timePicker.selectRow(day + Constants.notificationDays - 1, inComponent: dayComponent, animated: false)
+			timePicker.selectRow(time - Constants.notificationTimeMin, inComponent: timeComponent, animated: false)
+		}
 	}
 
     override func didReceiveMemoryWarning() {
@@ -176,6 +184,11 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		}
 	}
 	
+	func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+		saveNotificationTime()
+		NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+	}
+	
 
 	// MARK: - Private helper functions
 
@@ -193,9 +206,11 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 	func notificationSwitchTapped() {
 		if (notificationSwitch.on) {
 			// notification switch was turned on: try to activate notifications
-			UIApplication.sharedApplication().registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, UIUserNotificationType.Badge, UIUserNotificationType.Sound], categories: nil))
+			UIApplication.sharedApplication().registerUserNotificationSettings(
+				UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, /*UIUserNotificationType.Badge,*/ UIUserNotificationType.Sound], categories: nil))
+			saveNotificationTime()
 			
-			// if it was successfull, the AppDelegate calls "switchNotifications(true)"
+			// if registration was successfull, the AppDelegate calls "switchNotifications(true)"
 		}
 		else {
 			// notification switch was turned off
@@ -227,6 +242,15 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 			
 			NotificationManager.removeAllFavoriteNotifications()
 		}
+	}
+	
+	private func saveNotificationTime() {
+		let day = timePicker.selectedRowInComponent(dayComponent) - Constants.notificationDays + 1
+		let time = timePicker.selectedRowInComponent(timeComponent) + Constants.notificationTimeMin
+		
+		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(day, forKey: Constants.prefsNotificationDay)
+		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(time, forKey: Constants.prefsNotificationTime)
+		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 	}
 	
 	private func setUpSwitch(prefKey: String, switcher: UISwitch, label: UILabel?, urlString: String?) {
