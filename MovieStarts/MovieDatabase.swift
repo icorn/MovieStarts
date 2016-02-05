@@ -33,8 +33,6 @@ class MovieDatabase : DatabaseParent {
 	var allCKRecords: [CKRecord] = []
 	var updatedCKRecords: [CKRecord] = []
 
-	let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
-	
 	let queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries, Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId, Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN]
 
 	init(recordType: String, viewForError: UIView?) {
@@ -311,6 +309,7 @@ class MovieDatabase : DatabaseParent {
 				}
 			}
 
+			let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 			userDefaults?.setObject(NSDate(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
 			userDefaults?.synchronize()
 			
@@ -387,6 +386,7 @@ class MovieDatabase : DatabaseParent {
 		
 		self.loadedMovieRecordArray = allMovies
 		
+		let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 		let latestModDate: NSDate? = userDefaults?.objectForKey(Constants.prefsLatestDbModification) as? NSDate
 		
 		if let saveModDate: NSDate = latestModDate {
@@ -500,6 +500,7 @@ class MovieDatabase : DatabaseParent {
 		}
 		else {
 			// received records from the cloud
+			let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 			userDefaults?.setObject(NSDate(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
 			userDefaults?.synchronize()
 

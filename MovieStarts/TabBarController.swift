@@ -19,8 +19,6 @@ class TabBarController: UITabBarController {
 	var favoriteMovies: [[MovieRecord]] = []
 	var favoriteSections: [String] = []
 	
-	let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
-
 	@IBOutlet weak var movieTabBar: UITabBar!
 
 	
@@ -199,6 +197,7 @@ class TabBarController: UITabBarController {
 	
 	
 	func updateMovies(allMovies: [MovieRecord], database: MovieDatabase?) {
+		let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 
 		if (userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) != nil) {
 			let latestSuccessfullUpdate: NSDate? = userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) as? NSDate
