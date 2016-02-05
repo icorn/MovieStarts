@@ -98,9 +98,9 @@
 "SettingsAbout"			= "Über MovieStarts";
 "SettingsRateTheApp"	= "Diese App bewerten";
 
-"SettingsNotificationsHeader"	= "Mitteilungen für Favoriten";
-"SettingsNotifications"			= "Mitteilungen aktivieren";
-"SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung, sobald in Film deiner Favoritenliste ins Kino kommt.";
+"SettingsNotificationsHeader"	= "Mitteilungen";
+"SettingsNotifications"			= "Mitteilungen für Favoriten";
+"SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung zum eingestellten Zeitpunkt, wenn ein Film deiner Favoritenliste ins Kino kommt.";
 
 // About
 
@@ -128,17 +128,17 @@
 // Notifications
 
 "NotificationMsgWindowTitle"	= "Eine gute Nachricht";
-"OneMovieReleasedToday"			= "kommt heute in's Kino.";
-"OneMovieReleasedTomorrow"		= "kommt morgen in's Kino.";
-"OneMovieReleasedAfterTomorrow"	= "kommt übermorgen in's Kino.";
+"OneMovieReleasedToday"			= "kommt heute ins Kino.";
+"OneMovieReleasedTomorrow"		= "kommt morgen ins Kino.";
+"OneMovieReleasedAfterTomorrow"	= "kommt übermorgen ins Kino.";
 "OneMovieReleasedSoon1"			= "kommt am ";
-"OneMovieReleasedSoon2"			= " in's Kino.";
+"OneMovieReleasedSoon2"			= " ins Kino.";
 
-"MoviesReleasedToday"			= "deiner Wunschfilme kommen heute in's Kino";
-"MoviesReleasedTomorrow"		= "deiner Wunschfilme kommen morgen in's Kino";
-"MoviesReleasedAfterTomorrow"	= "deiner Wunschfilme kommen übermorgen in's Kino";
+"MoviesReleasedToday"			= "deiner Wunschfilme kommen heute ins Kino";
+"MoviesReleasedTomorrow"		= "deiner Wunschfilme kommen morgen ins Kino";
+"MoviesReleasedAfterTomorrow"	= "deiner Wunschfilme kommen übermorgen ins Kino";
 "MoviesReleasedSoon1"			= "deiner Wunschfilme kommen am ";
-"MoviesReleasedSoon2"			= " in's Kino";
+"MoviesReleasedSoon2"			= " ins Kino";
 
 // Watch
 
