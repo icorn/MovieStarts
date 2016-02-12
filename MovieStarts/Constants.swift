@@ -34,6 +34,7 @@ public struct Constants {
 	static let prefsNotifications				= "notifications"
 	static let prefsNotificationDay				= "notificationDay"
 	static let prefsNotificationTime			= "notificationTime"
+	static let prefsVersion						= "version"
 	
 	static let dbRecordTypeMovie			= "Movie"
 	static let dbRecordTypeGenre			= "Genre"
@@ -50,9 +51,13 @@ public struct Constants {
 	static let hoursBetweenDbUpdates		= 24
 	static let maxDaysInThePast				= 30.0
 
-	static let tagFavoriteView: Int			= 10000
-	static let tagTableCell: Int			= 10001
-	static let tagTrailer: Int				= 20000
+	static let tagFavoriteView				= 10000
+	static let tagTableCell					= 10001
+	static let tagTrailer					= 20000
+	
+	static let version1_0					= 10
+	static let version1_1					= 11
+	static let versionCurrent				= version1_1
 	
 	// MARK: - Watch communication
 	

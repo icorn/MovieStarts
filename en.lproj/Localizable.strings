@@ -89,6 +89,12 @@
 "NotificationWarnText"	= "Notifications are not allowed for this app right now. Please open the 'Settings' app, go to 'Notifications' / 'MovieStarts' and activate 'Allow Notifications'.";
 "NotificationWarnText2"	= "You had notifications turned on in this app, but now they are not allowed anymore by the system. To turn them on again, please open the 'Settings' app, go to 'Notifications' / 'MovieStarts' and activate 'Allow Notifications'. Then you can turn on notifications here in MovieStarts again.";
 
+// Update messages
+
+"UpdateFeature"			= "New Feature";
+"UpdateFeatures"		= "New Features";
+"UpdateMessagePush"		= "There is a new feature in this version of the app: You can turn on notifications in the settings to get a push notification when your favorite movies will be released.";
+
 // Settings
 
 "SettingsUseApps"		= "Use apps instead of browser";

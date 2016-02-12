@@ -18,6 +18,7 @@ class TabBarController: UITabBarController {
 	var upcomingSections: [String] = []
 	var favoriteMovies: [[MovieRecord]] = []
 	var favoriteSections: [String] = []
+	var thisIsTheFirstLaunch = false
 	
 	@IBOutlet weak var movieTabBar: UITabBar!
 
@@ -71,6 +72,26 @@ class TabBarController: UITabBarController {
 			}
 			
 			appDelegate.movieReleaseNotification = nil
+		}
+	}
+
+	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+
+		// if we have a new mayor version (and no first launch), show the user some informations about new features
+		
+		if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+			if ((thisIsTheFirstLaunch == false)  && (appDelegate.versionOfPreviousLaunch != Constants.versionCurrent)) {
+				var infoWindow: MessageWindow?
+
+				dispatch_async(dispatch_get_main_queue()) {
+					infoWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "UpdateFeature", textStringId: "UpdateMessagePush",
+						buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+							infoWindow?.close()
+						}
+					)
+				}
+			}
 		}
 	}
 

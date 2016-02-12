@@ -16,7 +16,7 @@ class StartViewController: UIViewController {
 	var movieDatabase: MovieDatabase?
 	var welcomeWindow: MessageWindow?
 	var myTabBarController: TabBarController?
-
+	var thisIsTheFirstLaunch = true
 	
 	// MARK: - UIViewController
 	
@@ -46,11 +46,13 @@ class StartViewController: UIViewController {
 		
 		if (movieDatabase?.isDatabaseOnDevice() == true) {
 			// the database is on the device: load movies
+			thisIsTheFirstLaunch = false
 			loadMovieDatabase()
 		}
 		else {
 			// first start, no database on the device: this is the first start, say hello to the user
 			
+			thisIsTheFirstLaunch = true
 			var countries = [MovieCountry.USA, MovieCountry.Germany, MovieCountry.England]
 			var countryStringIds: [String] = []
 			
@@ -106,7 +108,8 @@ class StartViewController: UIViewController {
 					// store movies in tabbarcontroller
 					tabBarController.setUpMovies(allMovies)
 					tabBarController.loadGenresFromFile()
-					
+					tabBarController.thisIsTheFirstLaunch = self.thisIsTheFirstLaunch
+
 					// show tabbarcontroller
 					
 					self.presentViewController(tabBarController, animated: true, completion: { () in

@@ -14,6 +14,7 @@ import CloudKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
+	var versionOfPreviousLaunch = Constants.version1_0
 	var movieReleaseNotification: UILocalNotification?
 	var movieTabBarController: TabBarController? {
 		return (window?.rootViewController as? StartViewController)?.myTabBarController
@@ -124,6 +125,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				// save received notification for later
 				movieReleaseNotification = notification
 			}
+		}
+		
+		// getting version of the last launch
+		
+		let oldVersion = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsVersion)
+		
+		if let oldVersion = oldVersion as? Int {
+			versionOfPreviousLaunch = oldVersion
+		}
+
+		// if this is a new version: write it to disc
+		if (versionOfPreviousLaunch != Constants.versionCurrent) {
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(Constants.versionCurrent, forKey: Constants.prefsVersion)
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 		}
 		
 		return true

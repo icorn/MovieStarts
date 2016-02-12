@@ -89,6 +89,12 @@
 "NotificationWarnText"	= "Mitteilungen sind für diese App derzeit nicht erlaubt. Bitte wechsele in die App 'Einstellungen', gehe zu 'Mitteilungen' / 'MovieStarts', und aktiviere 'Mitteilungen erlauben'.";
 "NotificationWarnText2"	= "Du hattest Mitteilungen in dieser App eingeschaltet, sie sind aber nun im System für diese App nicht mehr erlaubt. Um sie wieder zu erlauben, wechsele bitte in die App 'Einstellungen', gehe zu 'Mitteilungen' / 'MovieStarts', und aktiviere 'Mitteilungen erlauben'. Dann kannst du Mitteilungen hier in MovieStarts wieder einschalten.";
 
+// Update messages
+
+"UpdateFeature"			= "Neues Feature";
+"UpdateFeatures"		= "Neue Features";
+"UpdateMessagePush"		= "In dieser Version der App gibt es ein neues Feature: In den Einstellungen kannst du Mitteilungen einschalten, um dich daran erinnern zu lassen, wenn deine Favoriten-Filme ins Kino kommen.";
+
 // Settings
 
 "SettingsUseApps"		= "Benutze Apps statt Browser";
