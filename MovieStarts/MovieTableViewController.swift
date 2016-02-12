@@ -118,11 +118,6 @@ class MovieTableViewController: UITableViewController {
 
 	override func viewDidLoad() {
         super.viewDidLoad()
-
-		if movieTabBarController != nil {
-			self.tableView.reloadData()
-		}
-		
 		tableView.registerNib(UINib(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
     }
 	
