@@ -25,6 +25,55 @@ class MovieInterfaceController: WKInterfaceController {
 	override func didAppear() {
 		super.didAppear()
 		loadMovieDataFromFile()
+		
+		// for future use, if we want to use notifications with custom actions
+
+/*
+		// check if app was called by notification
+		
+		if let watchDelegate = WKExtension.sharedExtension().delegate as? ExtensionDelegate {
+			guard 	let movieTitles = watchDelegate.notificationMovieTitles,
+					let movieDate = watchDelegate.notificationMovieDate,
+					let alarmDay = watchDelegate.notificationAlarmDay else {
+				return
+			}
+			
+			if (movieTitles.count == 1) {
+				// forward user to the one movie which he was notified for.
+				// but first search the movie.
+				
+				for index in 0 ..< movieTable.numberOfRows {
+					if let movieRow = movieTable.rowControllerAtIndex(index) as? MovieRow, movie = movieRow.movie {
+						if (movieTitles[0] == movie.title) {
+							pushControllerWithName("DetailInterfaceController", context: movie)
+							break
+						}
+					}
+				}
+			}
+			else  if (movieTitles.count > 1) {
+				// show message with all movies the user was notified for
+				
+				var messageBody = "\(movieTitles.count) "
+				
+				switch(alarmDay) {
+					case 0 : messageBody.appendContentsOf(NSLocalizedString("MoviesReleasedToday", comment: ""))
+					case -1: messageBody.appendContentsOf(NSLocalizedString("MoviesReleasedTomorrow", comment: ""))
+					case -2: messageBody.appendContentsOf(NSLocalizedString("MoviesReleasedAfterTomorrow", comment: ""))
+					default: messageBody.appendContentsOf(NSLocalizedString("MoviesReleasedSoon1", comment: "") + movieDate + NSLocalizedString("MoviesReleasedSoon2", comment: ""))
+				}
+
+				messageBody.appendContentsOf(":\n")
+				
+				for title in movieTitles {
+					messageBody += "\n\u{25CF} " + title
+				}
+				
+				let closeAction = WKAlertAction(title: NSLocalizedString("Close", comment: ""), style: WKAlertActionStyle.Default) {}
+				presentAlertControllerWithTitle(NSLocalizedString("NotificationMsgWindowTitle", comment: ""), message: messageBody, preferredStyle: WKAlertControllerStyle.ActionSheet, actions: [closeAction])
+			}
+		}
+*/
 	}
 	
     override func awakeWithContext(context: AnyObject?) {

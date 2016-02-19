@@ -114,5 +114,21 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 		return false
 	}
 
+	
+	// for future use, if we want to use notifications with custom actions
+	
+/*
+	func handleActionWithIdentifier(identifier: String?, forLocalNotification localNotification: UILocalNotification) {
+
+		guard let userInfo = localNotification.userInfo else { return }
+		
+		notificationMovieIDs 	= userInfo[Constants.notificationUserInfoId] as? [String]
+		notificationMovieTitles = userInfo[Constants.notificationUserInfoName] as? [String]
+		notificationMovieDate	= userInfo[Constants.notificationUserInfoDate] as? String
+		notificationAlarmDay	= userInfo[Constants.notificationUserInfoDay] as? Int
+	}
+
+*/
+
 }
 
