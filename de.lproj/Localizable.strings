@@ -133,7 +133,7 @@
 
 // Notifications
 
-"NotificationMsgWindowTitle"	= "Eine gute Nachricht";
+"NotificationMsgWindowTitle"	= "Gute Nachrichten";
 "OneMovieReleasedToday"			= "kommt heute ins Kino.";
 "OneMovieReleasedTomorrow"		= "kommt morgen ins Kino.";
 "OneMovieReleasedAfterTomorrow"	= "kommt übermorgen ins Kino.";
@@ -197,6 +197,7 @@
 "Georgia"					= "Georgien";
 "Germany"					= "Deutschland";
 "Greece"					= "Griechenland";
+"Greenland"					= "Grönland";
 "Hong Kong"					= "Hongkong";
 "Hungary"					= "Ungarn";
 "Iceland"					= "Island";
@@ -205,9 +206,11 @@
 "Ireland"					= "Irland";
 "Italy"						= "Italien";
 "Jordan"					= "Jordanien";
+"Kyrgyz Republic"			= "Kirgisistan";
 "Lebanon"					= "Libanon";
 "Libyan Arab Jamahiriya"	= "Libyen";
 "Luxembourg"				= "Luxemburg";
+"Macedonia"					= "Mazedonien";
 "Mexico"					= "Mexiko";
 "Morocco"					= "Marokko";
 "Netherlands"				= "Niederlande";
