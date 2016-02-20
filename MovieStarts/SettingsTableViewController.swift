@@ -20,6 +20,7 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 	@IBOutlet weak var notificationLabel: UILabel!
 	@IBOutlet weak var notificationTimeTableCell: UITableViewCell!
 	@IBOutlet weak var notificationSwitch: UISwitch!
+	@IBOutlet weak var notificationTimeLabel: UILabel!
 
 	let sectionUseApps			= 0
 	let sectionNotifications	= 1
@@ -55,6 +56,7 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		aboutLabel.text = NSLocalizedString("SettingsAbout", comment: "")
 		rateLabel.text = NSLocalizedString("SettingsRateTheApp", comment: "")
 		notificationLabel.text = NSLocalizedString("SettingsNotifications", comment: "")
+		notificationTimeLabel.text = NSLocalizedString("SettingsNotificationTime", comment: "")
 		
 		imdbSwitch.addTarget(self, action: Selector("imdbSwitchTapped"), forControlEvents: UIControlEvents.TouchUpInside)
 		youtubeSwitch.addTarget(self, action: Selector("youtubeSwitchTapped"), forControlEvents: UIControlEvents.TouchUpInside)

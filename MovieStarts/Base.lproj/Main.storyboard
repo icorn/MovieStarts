@@ -852,7 +852,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notifications" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mip-oq-ITS">
                                                     <rect key="frame" x="16" y="11" width="517" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="IOd-D4-eRo">
@@ -872,23 +872,41 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="160" id="8bm-Qq-UkV">
-                                        <rect key="frame" x="0.0" y="225" width="600" height="160"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="181" id="8bm-Qq-UkV">
+                                        <rect key="frame" x="0.0" y="225" width="600" height="181"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8bm-Qq-UkV" id="fgS-gx-1m4">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="159"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="180"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oTd-2K-22P" userLabel="Time Picker">
-                                                    <rect key="frame" x="8" y="8" width="584" height="143"/>
+                                                    <rect key="frame" x="8" y="29" width="584" height="143"/>
                                                 </pickerView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tmk-go-lgn">
+                                                    <rect key="frame" x="16" y="8" width="576" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="21" id="lTf-3Q-5Ss"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="oTd-2K-22P" firstAttribute="top" secondItem="tmk-go-lgn" secondAttribute="bottom" id="1TI-fW-iIT"/>
+                                                <constraint firstItem="tmk-go-lgn" firstAttribute="leading" secondItem="fgS-gx-1m4" secondAttribute="leadingMargin" constant="8" id="1qp-Sp-7PP"/>
                                                 <constraint firstItem="oTd-2K-22P" firstAttribute="bottom" secondItem="fgS-gx-1m4" secondAttribute="bottomMargin" id="WqS-nV-gIF"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="tmk-go-lgn" secondAttribute="trailing" id="Y1n-Iz-3NG"/>
                                                 <constraint firstItem="oTd-2K-22P" firstAttribute="trailing" secondItem="fgS-gx-1m4" secondAttribute="trailingMargin" id="ZdH-PD-E9U"/>
+                                                <constraint firstItem="tmk-go-lgn" firstAttribute="top" secondItem="fgS-gx-1m4" secondAttribute="topMargin" id="aDR-nF-osX"/>
                                                 <constraint firstItem="oTd-2K-22P" firstAttribute="top" secondItem="fgS-gx-1m4" secondAttribute="topMargin" id="egq-1s-zAf"/>
                                                 <constraint firstItem="oTd-2K-22P" firstAttribute="leading" secondItem="fgS-gx-1m4" secondAttribute="leadingMargin" id="rc5-AP-Z0C"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="egq-1s-zAf"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -896,7 +914,7 @@
                             <tableViewSection id="FIS-OS-r0t">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="W17-V9-38l" style="IBUITableViewCellStyleDefault" id="s1i-rd-qRT">
-                                        <rect key="frame" x="0.0" y="405" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="426" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="s1i-rd-qRT" id="Plp-q7-SDG">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
@@ -913,7 +931,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" textLabel="iAa-SH-HfO" style="IBUITableViewCellStyleDefault" id="gZw-r4-ShU">
-                                        <rect key="frame" x="0.0" y="449" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="470" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gZw-r4-ShU" id="eqq-80-wPy">
                                             <rect key="frame" x="0.0" y="0.0" width="567" height="43"/>
@@ -945,6 +963,7 @@
                         <outlet property="imdbSwitch" destination="MjN-cb-oJo" id="hWp-xE-ZYD"/>
                         <outlet property="notificationLabel" destination="mip-oq-ITS" id="oVv-7K-fH6"/>
                         <outlet property="notificationSwitch" destination="IOd-D4-eRo" id="9Es-hC-7kJ"/>
+                        <outlet property="notificationTimeLabel" destination="tmk-go-lgn" id="MoG-Wt-9ka"/>
                         <outlet property="notificationTimeTableCell" destination="8bm-Qq-UkV" id="66P-XV-U7K"/>
                         <outlet property="rateLabel" destination="W17-V9-38l" id="1et-4V-k10"/>
                         <outlet property="timePicker" destination="oTd-2K-22P" id="Ctc-q3-fPf"/>
