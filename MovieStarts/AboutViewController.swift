@@ -21,6 +21,7 @@ class AboutViewController: UIViewController {
 	@IBOutlet weak var appzgearLabel: UILabel!
 	@IBOutlet weak var reachabilityLabel: UILabel!
 	@IBOutlet weak var mitLicenseLabel: UILabel!
+	@IBOutlet weak var bottomLine: UIView!
 	
 	@IBOutlet weak var webLinkButton: UIButton!
 	@IBOutlet weak var emailLinkButton: UIButton!
@@ -45,8 +46,12 @@ class AboutViewController: UIViewController {
 		twitterHeadlineLabel.text = NSLocalizedString("twitterHeadline", comment: "")
 		swiftLabel.text = NSLocalizedString("swift", comment: "")
 		appzgearLabel.text = NSLocalizedString("appzgear", comment: "")
-		reachabilityLabel.text = NSLocalizedString("reachability", comment: "")
-		mitLicenseLabel.text = NSLocalizedString("mitLicense", comment: "")
+		reachabilityLabel.text = "" // NSLocalizedString("reachability", comment: "")
+		mitLicenseLabel.text = "" // NSLocalizedString("mitLicense", comment: "")
+		
+		reachabilityLabel.hidden = true
+		mitLicenseLabel.hidden = true
+		bottomLine.hidden = true
 	}
 
 	@IBAction func webLinkTouched(sender: AnyObject) {

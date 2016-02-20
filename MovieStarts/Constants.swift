@@ -19,6 +19,10 @@ public struct Constants {
 	static let thumbnailFolder				= "/Thumbnails"
 	static let bigPosterFolder				= "/BigPoster"
 	static let trailerFolder				= "/Trailers"
+	static let notificationUserInfoId		= "MovieStartsNotificationId"
+	static let notificationUserInfoName		= "MovieStartsNotificationName"
+	static let notificationUserInfoDate		= "MovieStartsNotificationDate"
+	static let notificationUserInfoDay		= "MovieStartsNotificationDay"
 	
 	static let prefsLatestDbModification 		= "modificationDate"
 	static let prefsLatestDbSuccessfullUpdate 	= "lastestCheck"
@@ -27,16 +31,33 @@ public struct Constants {
 	static let prefsUseYoutubeApp				= "userYoutubeApp"
 	static let prefsPosterHintAlreadyShown		= "posterHintAlreadyShown"
 	static let prefsCountry						= "country"
+	static let prefsNotifications				= "notifications"
+	static let prefsNotificationDay				= "notificationDay"
+	static let prefsNotificationTime			= "notificationTime"
+	static let prefsVersion						= "version"
 	
 	static let dbRecordTypeMovie			= "Movie"
 	static let dbRecordTypeGenre			= "Genre"
 	
+	static let tabIndexNowPlaying			= 0
+	static let tabIndexUpcoming				= 1
+	static let tabIndexFavorites			= 2
+	static let tabIndexSettings				= 3
+	
+	static let notificationTimeMin			= 8
+	static let notificationTimeMax			= 23
+	static let notificationDays				= 6 // number of different possible days for notification
+	
 	static let hoursBetweenDbUpdates		= 24
 	static let maxDaysInThePast				= 30.0
 
-	static let tagFavoriteView: Int			= 10000
-	static let tagTableCell: Int			= 10001
-	static let tagTrailer: Int				= 20000
+	static let tagFavoriteView				= 10000
+	static let tagTableCell					= 10001
+	static let tagTrailer					= 20000
+	
+	static let version1_0					= 10
+	static let version1_1					= 11
+	static let versionCurrent				= version1_1
 	
 	// MARK: - Watch communication
 	

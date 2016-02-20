@@ -15,7 +15,8 @@ class StartViewController: UIViewController {
 	var aboutView: UIView?
 	var movieDatabase: MovieDatabase?
 	var welcomeWindow: MessageWindow?
-
+	var myTabBarController: TabBarController?
+	var thisIsTheFirstLaunch = true
 	
 	// MARK: - UIViewController
 	
@@ -45,11 +46,13 @@ class StartViewController: UIViewController {
 		
 		if (movieDatabase?.isDatabaseOnDevice() == true) {
 			// the database is on the device: load movies
+			thisIsTheFirstLaunch = false
 			loadMovieDatabase()
 		}
 		else {
 			// first start, no database on the device: this is the first start, say hello to the user
 			
+			thisIsTheFirstLaunch = true
 			var countries = [MovieCountry.USA, MovieCountry.Germany, MovieCountry.England]
 			var countryStringIds: [String] = []
 			
@@ -97,23 +100,21 @@ class StartViewController: UIViewController {
 				// show the next view controller
 				
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				let tabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
+				self.myTabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
 				
-				if let tabBarController = tabBarController, allMovies = movies {
+				if let tabBarController = self.myTabBarController, allMovies = movies {
 					self.movieDatabase?.updateThumbnailHandler = tabBarController.updateThumbnailHandler
 					
 					// store movies in tabbarcontroller
 					tabBarController.setUpMovies(allMovies)
 					tabBarController.loadGenresFromFile()
-					
+					tabBarController.thisIsTheFirstLaunch = self.thisIsTheFirstLaunch
+
 					// show tabbarcontroller
 					
 					self.presentViewController(tabBarController, animated: true, completion: { () in
 						if let saveAboutView = self.aboutView {
 							saveAboutView.removeFromSuperview()
-							
-							// no longer needed. is now done in MovieTableViewController.
-							// tabBarController.updateMovies(allMovies, database: self.database)
 						}
 					})
 					

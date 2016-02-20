@@ -29,13 +29,12 @@ class MessageWindow: NSObject {
 	weak var parentView: UIView?
 	var buttonHandler: ((buttonIndex: Int) -> ())?
 
-	
-	convenience init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringIds: [String], handler: ((buttonIndex: Int) -> ())?) {
-		self.init(parent: parent, darkenBackground: darkenBackground, titleStringId: titleStringId, textStringId: textStringId, buttonStringIds: buttonStringIds, error: nil, handler: handler)
+	convenience init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, textStringAlignment: NSTextAlignment? = nil, buttonStringIds: [String], error: NSError? = nil, handler: ((buttonIndex: Int) -> ())?) {
+		
+		self.init(parent: parent, darkenBackground: darkenBackground, titleStringId: titleStringId, textString: NSLocalizedString(textStringId, comment: ""), textStringAlignment: textStringAlignment, buttonStringIds: buttonStringIds, error: nil, handler: handler)
 	}
-	
-	
-	init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, buttonStringIds: [String], error: NSError?, handler: ((buttonIndex: Int) -> ())?) {
+
+	init(parent: UIView, darkenBackground: Bool, titleStringId: String, textString: String, textStringAlignment: NSTextAlignment? = nil, buttonStringIds: [String], error: NSError? = nil, handler: ((buttonIndex: Int) -> ())?) {
 
 		parentView = parent
 		buttonHandler = handler
@@ -88,10 +87,10 @@ class MessageWindow: NSObject {
 
 		let msg = UILabel()
 		msg.translatesAutoresizingMaskIntoConstraints = false
-		msg.text = NSLocalizedString(textStringId, comment: "")
+		msg.text = textString
 		
 		if let error = error {
-			var messageText = NSLocalizedString(textStringId, comment: "") + " " + error.localizedDescription
+			var messageText = textString + " " + error.localizedDescription
 			
 			if let recoverySuggestion = error.localizedRecoverySuggestion {
 				messageText = messageText + " " + recoverySuggestion
@@ -101,11 +100,17 @@ class MessageWindow: NSObject {
 			msg.font = UIFont.systemFontOfSize(14)
 		}
 		else {
-			msg.text = NSLocalizedString(textStringId, comment: "")
+			msg.text = textString
 			msg.font = UIFont.systemFontOfSize(16)
 		}
 		
-		msg.textAlignment = NSTextAlignment.Center
+		if let textStringAlignment = textStringAlignment {
+			msg.textAlignment = textStringAlignment
+		}
+		else {
+			msg.textAlignment = NSTextAlignment.Center
+		}
+		
 		msg.textColor = UIColor.blackColor()
 		msg.backgroundColor = UIColor.clearColor()
 		msg.numberOfLines = 0

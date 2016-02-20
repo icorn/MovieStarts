@@ -120,7 +120,7 @@ public class MovieDatabaseHelper {
 					}
 				}
 				
-				index++
+				index += 1
 			}
 		}
 		

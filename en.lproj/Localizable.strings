@@ -26,7 +26,7 @@
 
 "ReleaseDate"		= "Release Date";
 "UserRating"		= "User Rating";
-"Actors"			= "Actors";
+"Actors"			= "Cast";
 "Directors"			= "Directors";
 "Director"			= "Director";
 "Synopsis"			= "Story";
@@ -85,6 +85,16 @@
 "InternalErrorText"		= "There was an internal error. Please try again later.";
 "ErrorWritingFile"		= "Error writing a file. Maybe your iPhone is full.";
 
+"NotificationWarnTitle"	= "Notifications";
+"NotificationWarnText"	= "Notifications are not allowed for this app right now. Please open the 'Settings' app, go to 'Notifications' / 'MovieStarts' and activate 'Allow Notifications'.";
+"NotificationWarnText2"	= "You had notifications turned on in this app, but now they are not allowed anymore by the system. To turn them on again, please open the 'Settings' app, go to 'Notifications' / 'MovieStarts' and activate 'Allow Notifications'. Then you can turn on notifications here in MovieStarts again.";
+
+// Update messages
+
+"UpdateFeature"			= "New Feature";
+"UpdateFeatures"		= "New Features";
+"UpdateMessagePush"		= "There is a new feature in this version of the app: You can turn on notifications in the settings to get a push notification when your favorite movies will be released.";
+
 // Settings
 
 "SettingsUseApps"		= "Use apps instead of browser";
@@ -94,10 +104,15 @@
 "SettingsAbout"			= "About MovieStarts";
 "SettingsRateTheApp"	= "Rate this app";
 
+"SettingsNotificationsHeader"	= "Notifications";
+"SettingsNotifications"			= "Notifications for Favorites";
+"SettingsNotificationsFooter"	= "You will get a push notification when one of the movies on your favorites list will be released.";
+"SettingsNotificationTime"		= "Time of the Notification:";
+
 // About
 
 "Version"				= "Version";
-"TagLine"				= "All the latest movie release dates at a glance.";
+"TagLine"				= "Never Miss a Movie Again.";
 "developerHeadline"		= "App development and design:";
 "supportHeadline"		= "Support:";
 "webHeadline"			= "Web:";
@@ -108,10 +123,29 @@
 "reachability"			= "This app uses 'Reach' from Isuru Nanayakkara. It uses the following license:";
 "mitLicense"			= "The MIT License (MIT)\n\nCopyright (c) 2014 Isuru Nanayakkara\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
 
-// Misc.
+// Notification times
 
-"Close"						= "Close";
-"menuItemRefresh"			= "Refresh";
+"5daysBefore"			= "5 Days before";
+"4daysBefore"			= "4 Days before";
+"3daysBefore"			= "3 Days before";
+"2daysBefore"			= "2 Days before";
+"1daysBefore"			= "1 Days before";
+"0daysBefore"			= "Release Day";
+
+// Notifications
+
+"NotificationMsgWindowTitle"	= "Good News";
+"OneMovieReleasedToday"			= "has been released today.";
+"OneMovieReleasedTomorrow"		= "will be released tomorrow.";
+"OneMovieReleasedAfterTomorrow"	= "will be released in two days.";
+"OneMovieReleasedSoon1"			= "will be released on ";
+"OneMovieReleasedSoon2"			= ".";
+
+"MoviesReleasedToday"			= "of your favorite movies have been released today";
+"MoviesReleasedTomorrow"		= "of your favorite movies will be released tomorrow";
+"MoviesReleasedAfterTomorrow"	= "of your favorite movies will be released the day after tomorrow";
+"MoviesReleasedSoon1"			= "of your favorite movies will be released on ";
+"MoviesReleasedSoon2"			= "";
 
 // Watch
 
@@ -119,6 +153,23 @@
 "WatchNowPlaying"			= "Now Playing";
 "WatchConnectError"			= "Error connecting to the iPhone. Please check your network and/or try again later.";
 "WatchUserShouldStartPhone"	= "Please open the MovieStarts iPhone app so that the Watch can access your favorite movies from the iPhone. Future movie updates will be done automatically.";
+
+// Misc.
+
+"ShowMovie"					= "Show Movie";
+"Close"						= "Close";
+"menuItemRefresh"			= "Refresh";
+"2"							= "two";
+"3"							= "three";
+"4"							= "four";
+"5"							= "five";
+"6"							= "six";
+"7"							= "seven";
+"8"							= "eight";
+"9"							= "nine";
+"10"						= "ten";
+"11"						= "eleven";
+"12"						= "twelve";
 
 // Country names
 

@@ -39,7 +39,8 @@ struct Favorites {
 		- parameter id:	the movie id to be removed
 	*/
 	static func removeMovie(movie: MovieRecord, tabBarController: TabBarController?) {
-		for (var i=0; i < Favorites.IDs.count; i++) {
+		
+		for i in 0 ..< Favorites.IDs.count {
 			if (Favorites.IDs[i] == movie.id) {
 				Favorites.IDs.removeAtIndex(i)
 				Favorites.saveFavorites()

@@ -18,9 +18,8 @@ class TabBarController: UITabBarController {
 	var upcomingSections: [String] = []
 	var favoriteMovies: [[MovieRecord]] = []
 	var favoriteSections: [String] = []
+	var thisIsTheFirstLaunch = false
 	
-	let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
-
 	@IBOutlet weak var movieTabBar: UITabBar!
 
 	
@@ -34,25 +33,71 @@ class TabBarController: UITabBarController {
 				
 				// set tab bar titles
 				
-				saveItems[0].title = NSLocalizedString("NowPlayingTabBar", comment: "")
-				saveItems[1].title = NSLocalizedString("UpcomingTabBar", comment: "")
-				saveItems[2].title = NSLocalizedString("FavoritesTabBar", comment: "")
-				saveItems[3].title = NSLocalizedString("SettingsTabBar", comment: "")
+				saveItems[Constants.tabIndexNowPlaying].title = NSLocalizedString("NowPlayingTabBar", comment: "")
+				saveItems[Constants.tabIndexUpcoming].title = NSLocalizedString("UpcomingTabBar", comment: "")
+				saveItems[Constants.tabIndexFavorites].title = NSLocalizedString("FavoritesTabBar", comment: "")
+				saveItems[Constants.tabIndexSettings].title = NSLocalizedString("SettingsTabBar", comment: "")
 				
 				// set tab bar images
 
-				saveItems[0].image = UIImage(named: "Video.png")
-				saveItems[1].image = UIImage(named: "Calendar.png")
-				saveItems[2].image = UIImage(named: "favorite.png")
-				saveItems[3].image = UIImage(named: "Settings.png")
+				saveItems[Constants.tabIndexNowPlaying].image = UIImage(named: "Video.png")
+				saveItems[Constants.tabIndexUpcoming].image = UIImage(named: "Calendar.png")
+				saveItems[Constants.tabIndexFavorites].image = UIImage(named: "favorite.png")
+				saveItems[Constants.tabIndexSettings].image = UIImage(named: "Settings.png")
 			}
 		}
     }
-	
+
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		
+		if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, let notification = appDelegate.movieReleaseNotification {
+			// we have a notification for the user
+			guard let userInfo = notification.userInfo,
+				let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] where movieIDs.count > 0,
+				let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] where movieTitles.count > 0,
+				let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
+				let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else {
+					return
+			}
+			
+			if (movieTitles.count == 1) {
+				// only one movie: go directly to the movie
+				selectedIndex = Constants.tabIndexFavorites
+				self.favoriteController?.showFavoriteMovie(movieIDs[0])
+			}
+			else {
+				// multiple movies
+				NotificationManager.notifyAboutMultipleMovies(appDelegate, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+			}
+			
+			appDelegate.movieReleaseNotification = nil
+		}
+	}
+
+	override func viewDidAppear(animated: Bool) {
+		super.viewDidAppear(animated)
+
+		// if we have a new mayor version (and no first launch), show the user some informations about new features
+		
+		if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
+			if ((thisIsTheFirstLaunch == false)  && (appDelegate.versionOfPreviousLaunch != Constants.versionCurrent)) {
+				var infoWindow: MessageWindow?
+
+				dispatch_async(dispatch_get_main_queue()) {
+					infoWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "UpdateFeature", textStringId: "UpdateMessagePush",
+						buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+							infoWindow?.close()
+						}
+					)
+				}
+			}
+		}
+	}
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
 	
 	func loadGenresFromFile() {
 		let genreDatabase = GenreDatabase(finishHandler: nil, errorHandler: nil)
@@ -116,7 +161,7 @@ class TabBarController: UITabBarController {
 				let newMovieArray: [MovieRecord] = []
 				upcomingMovies.append(newMovieArray)
 				upcomingSections.append(movie.releaseDateStringLong)
-				currentSection++
+				currentSection += 1
 			}
 			
 			// add movie to current section
@@ -145,7 +190,7 @@ class TabBarController: UITabBarController {
 				let newMovieArray: [MovieRecord] = []
 				favoriteMovies.append(newMovieArray)
 				favoriteSections.append(NSLocalizedString("NowPlayingLong", comment: ""))
-				currentSection++
+				currentSection += 1
 			}
 			else if ((movie.isNowPlaying() == false) && ((previousDate == nil) || (previousDate != movie.releaseDate[movie.currentCountry.countryArrayIndex]))) {
 				// upcoming movies:
@@ -153,7 +198,7 @@ class TabBarController: UITabBarController {
 				let newMovieArray: [MovieRecord] = []
 				favoriteMovies.append(newMovieArray)
 				favoriteSections.append(movie.releaseDateStringLong)
-				currentSection++
+				currentSection += 1
 			}
 			
 			// add movie to current section
@@ -167,10 +212,13 @@ class TabBarController: UITabBarController {
 			
 			previousDate = movie.releaseDate[movie.currentCountry.countryArrayIndex]
 		}
+		
+		NotificationManager.updateFavoriteNotifications(favoriteMovies)
 	}
 	
 	
 	func updateMovies(allMovies: [MovieRecord], database: MovieDatabase?) {
+		let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 
 		if (userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) != nil) {
 			let latestSuccessfullUpdate: NSDate? = userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) as? NSDate

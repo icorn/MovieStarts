@@ -13,6 +13,8 @@ import UIKit
 
 public class MovieRecord : CustomStringConvertible {
 	
+	// MARK: - Properties
+	
 	public var currentCountry: MovieCountry
 	
 	/// the unique ID from CKAsset
@@ -59,9 +61,235 @@ public class MovieRecord : CustomStringConvertible {
 	/// is this movie hidden?
 	private var hidden: Bool = false
 
-	
 	var _thumbnailImage: UIImage?
 	var _thumbnailFound: Bool = false
+	
+	
+	// MARK: - Computed Properties
+
+	
+	/// Is the movie hidden?
+	var isHidden: Bool {
+		get {
+			return hidden
+		}
+		set {
+			hidden = newValue
+		}
+	}
+	
+	/// The thumbnail image as NSURL
+	var thumbnailURL: (NSURL?) {
+		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		var url: NSURL?
+		
+		if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
+			url = pathUrl?.URLByAppendingPathComponent(Constants.thumbnailFolder + posterUrl[currentCountry.languageArrayIndex])
+		}
+		
+		return url
+	}
+	
+	/// The thumbnail image object as a tuple: the image object and the "found" flag indicating if a poster image was returned or if it only is the default image.
+	var thumbnailImage: (UIImage?, Bool) {
+		if ((_thumbnailFound == true) && (_thumbnailImage != nil)) {
+			return (_thumbnailImage, _thumbnailFound)
+		}
+		
+		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		
+		if let pathUrl = pathUrl, basePath = pathUrl.path {
+			// try to load the poster for the current language
+			if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
+				_thumbnailImage = UIImage(contentsOfFile: basePath + Constants.thumbnailFolder + posterUrl[currentCountry.languageArrayIndex])
+				
+				if (_thumbnailImage != nil) {
+					_thumbnailFound = true
+					return (_thumbnailImage, _thumbnailFound)
+				}
+			}
+			
+			// poster not found or not loaded: try the english one
+			if ((currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) && (posterUrl[MovieCountry.USA.languageArrayIndex].characters.count > 0)) {
+				_thumbnailImage = UIImage(contentsOfFile: basePath + Constants.thumbnailFolder + posterUrl[MovieCountry.USA.languageArrayIndex])
+				
+				if (_thumbnailImage != nil) {
+					_thumbnailFound = true
+					return (_thumbnailImage, _thumbnailFound)
+				}
+			}
+		}
+		
+		_thumbnailImage = UIImage(named: "noposter.png")
+		_thumbnailFound = false
+		return (_thumbnailImage, _thumbnailFound)
+	}
+	
+	/// The synopsis for the current languate, or (if there is none) the one in English. Can be empty, but not null.
+	/// Return value: A tuple with the synopsis and the language index.
+	var synopsisForLanguage: (String, Int) {
+		if (synopsis[currentCountry.languageArrayIndex].characters.count > 0) {
+			return (synopsis[currentCountry.languageArrayIndex], currentCountry.languageArrayIndex)
+		}
+		else {
+			return (synopsis[MovieCountry.USA.languageArrayIndex], MovieCountry.USA.languageArrayIndex)
+		}
+	}
+	
+	/// The runtime for the movie in the current languate, or (if there is none) for the English version. Can be 0, but not null.
+	/// Return value: A tuple with the runtime and the language index.
+	var runtimeForLanguage: (Int, Int) {
+		if (runtime[currentCountry.languageArrayIndex] > 0) {
+			return (runtime[currentCountry.languageArrayIndex], currentCountry.languageArrayIndex)
+		}
+		else {
+			return (runtime[MovieCountry.USA.languageArrayIndex], MovieCountry.USA.languageArrayIndex)
+		}
+	}
+	
+	/// The big poster image object as optional image object
+	var bigPoster: UIImage? {
+		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		var retval: UIImage?
+		
+		if let pathUrl = pathUrl, basePath = pathUrl.path {
+			if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
+				retval = UIImage(contentsOfFile: basePath + Constants.bigPosterFolder + posterUrl[currentCountry.languageArrayIndex])
+			}
+		}
+		
+		return retval
+	}
+
+	/// The string of production countries.
+	var countryString: String? {
+		var countryText: String = ""
+		
+		if (productionCountries.count > 0) {
+			for country in productionCountries {
+				countryText += NSLocalizedString(country, comment: "") + ", "
+			}
+			
+			return countryText.substringToIndex(countryText.endIndex.predecessor().predecessor())
+		}
+		else {
+			return nil
+		}
+	}
+	
+	/// The subtitle for the detail view of the movie.
+	private var detailSubtitle: String? {
+		var detailText = ""
+		
+		// add runtime
+		
+		if (runtime[currentCountry.languageArrayIndex] > 0) {
+			let minutesShort = NSLocalizedString("MinutesShort", comment: "")
+			detailText += "\(runtime[currentCountry.languageArrayIndex]) \(minutesShort) | "
+		}
+		else if (runtime[MovieCountry.USA.languageArrayIndex] > 0) {
+			let minutesShort = NSLocalizedString("MinutesShort", comment: "")
+			detailText += "\(runtime[MovieCountry.USA.languageArrayIndex]) \(minutesShort) | "
+		}
+		
+		// add rating
+		
+		if certification[currentCountry.countryArrayIndex].characters.count > 0 {
+			if (currentCountry == MovieCountry.Germany) {
+				detailText += "FSK "
+			}
+			
+			detailText += "\(certification[currentCountry.countryArrayIndex]) | "
+		}
+		
+		// add countries
+		
+		if let countries = countryString {
+			detailText += countries
+		}
+		else {
+			if (detailText.characters.count > 2) {
+				detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor())
+			}
+		}
+		
+		if (detailText.characters.count == 0) {
+			return nil
+		}
+		else {
+			return detailText
+		}
+	}
+	
+	/// The original movie title including language-specific prefix (like "aka").
+	var originalTitleForDisplay: String? {
+		var retval: String? = nil
+		
+		if let origTitle = origTitle where origTitle != title[currentCountry.languageArrayIndex] {
+			let akaString = NSLocalizedString("aka", comment: "")
+			retval = "\(akaString) \"\(origTitle)\""
+		}
+		
+		return retval
+	}
+	
+	/// The release data as string in medium sized format.
+	var releaseDateString: String {
+		var retval = NSLocalizedString("NoReleaseDate", comment: "")
+		
+		if releaseDate[currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
+			let dateFormatter = NSDateFormatter()
+			dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+			dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+			retval = dateFormatter.stringFromDate(releaseDate[currentCountry.countryArrayIndex])
+		}
+		
+		return retval
+	}
+	
+	/// The release data as string in long format.
+	var releaseDateStringLong: String {
+		var retval = NSLocalizedString("NoReleaseDate", comment: "")
+		
+		if releaseDate[currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
+			let dateFormatter = NSDateFormatter()
+			dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+			dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
+			retval = dateFormatter.stringFromDate(releaseDate[currentCountry.countryArrayIndex])
+		}
+		
+		return retval
+	}
+	
+	// Calculates the release date of the movie for the local (current) timezone. Instead of midnight GMT this will be midnight in the local (current) timezone.
+	var releaseDateInLocalTimezone: NSDate? {
+		
+		var localDate: NSDate?
+		let calendarGMT = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+		let calendarLocal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
+		let timezoneGMT = NSTimeZone(abbreviation: "GMT")
+		
+		if let calendarGMT = calendarGMT, calendarLocal = calendarLocal, timezoneGMT = timezoneGMT {
+			calendarGMT.timeZone = timezoneGMT
+			calendarLocal.timeZone = NSTimeZone.localTimeZone()
+			
+			let gmtComponents = calendarGMT.components([NSCalendarUnit.Day, NSCalendarUnit.Month, NSCalendarUnit.Year], fromDate: releaseDate[currentCountry.countryArrayIndex])
+			
+			let localComponents = NSDateComponents()
+			localComponents.day = gmtComponents.day
+			localComponents.month = gmtComponents.month
+			localComponents.year = gmtComponents.year
+			localComponents.calendar = calendarLocal
+			localDate = localComponents.date
+		}
+		
+		return localDate
+	}
+	
+	
+	// MARK: - Initializers
 	
 	
 	init(country: MovieCountry) {
@@ -83,7 +311,6 @@ public class MovieRecord : CustomStringConvertible {
 			releaseDate.append(NSDate(timeIntervalSince1970: 0))
 		}
 	}
-	
 	
 	convenience init(country: MovieCountry, dict: [String: AnyObject]) {
 		self.init(country: country)
@@ -135,6 +362,9 @@ public class MovieRecord : CustomStringConvertible {
 	}
 	
 	
+	// MARK: - Functions
+	
+	
 	/**
 		Initializes the class with a CKRecord as input.
 
@@ -181,13 +411,11 @@ public class MovieRecord : CustomStringConvertible {
 		id = ckRecord.recordID.recordName
 	}
 	
-	
 	/**
 		Converts this object to a dictionary for serialization.
 	
 		- returns: A dictionary with all non-null members of this object.
 	*/
-	
 	public func toDictionary() -> [String: AnyObject] {
 		
 		var retval: [String:AnyObject] = [:]
@@ -231,7 +459,6 @@ public class MovieRecord : CustomStringConvertible {
 		return retval
 	}
 	
-	
 	/**
 		Converts this object to a dictionary for serialization to the Apple Watch.
 	
@@ -239,7 +466,6 @@ public class MovieRecord : CustomStringConvertible {
 	
 		- returns: A dictionary with all non-null members of this object.
 	*/
-	
 	public func toWatchDictionary(genreDict: [Int : String]) -> [String: AnyObject] {
 		
 		var retval: [String:AnyObject] = [:]
@@ -302,107 +528,13 @@ public class MovieRecord : CustomStringConvertible {
 		return retval
 	}
 	
-
-	/// Is the movie hidden?
+	/*
+		Generates a string of genres for this movie.
 	
-	var isHidden: Bool {
-		get {
-			return hidden
-		}
-		set {
-			hidden = newValue
-		}
-	}
+		- parameter genreDict: The dictionary with genre-id as key and genre-name as value
 	
-
-	/// The thumbnail image as NSURL
-	
-	var thumbnailURL: (NSURL?) {
-		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
-		var url: NSURL?
-		
-		if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
-			url = pathUrl?.URLByAppendingPathComponent(Constants.thumbnailFolder + posterUrl[currentCountry.languageArrayIndex])
-		}
-		
-		return url
-	}
-	
-
-	/// The thumbnail image object as a tuple: the image object and the "found" flag indicating if a poster image was returned or if it only is the default image.
-	/*override*/ var thumbnailImage: (UIImage?, Bool) {
-		if ((_thumbnailFound == true) && (_thumbnailImage != nil)) {
-			return (_thumbnailImage, _thumbnailFound)
-		}
-		
-		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
-		
-		if let pathUrl = pathUrl, basePath = pathUrl.path {
-			// try to load the poster for the current language
-			if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
-				_thumbnailImage = UIImage(contentsOfFile: basePath + Constants.thumbnailFolder + posterUrl[currentCountry.languageArrayIndex])
-				
-				if (_thumbnailImage != nil) {
-					_thumbnailFound = true
-					return (_thumbnailImage, _thumbnailFound)
-				}
-			}
-
-			// poster not found or not loaded: try the english one
-			if ((currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) && (posterUrl[MovieCountry.USA.languageArrayIndex].characters.count > 0)) {
-				_thumbnailImage = UIImage(contentsOfFile: basePath + Constants.thumbnailFolder + posterUrl[MovieCountry.USA.languageArrayIndex])
-					
-				if (_thumbnailImage != nil) {
-					_thumbnailFound = true
-					return (_thumbnailImage, _thumbnailFound)
-				}
-			}
-		}
-		
-		_thumbnailImage = UIImage(named: "noposter.png")
-		_thumbnailFound = false
-		return (_thumbnailImage, _thumbnailFound)
-	}
-
-	/// The synopsis for the current languate, or (if there is none) the one in English. Can be empty, but not null.
-	/// Return value: A tuple with the synopsis and the language index.
-	var synopsisForLanguage: (String, Int) {
-		if (synopsis[currentCountry.languageArrayIndex].characters.count > 0) {
-			return (synopsis[currentCountry.languageArrayIndex], currentCountry.languageArrayIndex)
-		}
-		else {
-			return (synopsis[MovieCountry.USA.languageArrayIndex], MovieCountry.USA.languageArrayIndex)
-		}
-	}
-	
-	/// The runtime for the movie in the current languate, or (if there is none) for the English version. Can be 0, but not null.
-	/// Return value: A tuple with the runtime and the language index.
-	var runtimeForLanguage: (Int, Int) {
-		if (runtime[currentCountry.languageArrayIndex] > 0) {
-			return (runtime[currentCountry.languageArrayIndex], currentCountry.languageArrayIndex)
-		}
-		else {
-			return (runtime[MovieCountry.USA.languageArrayIndex], MovieCountry.USA.languageArrayIndex)
-		}
-	}
-	
-	/// The big poster image object as optional image object
-	
-	var bigPoster: UIImage? {
-		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
-		var retval: UIImage?
-		
-		if let pathUrl = pathUrl, basePath = pathUrl.path {
-			if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
-				retval = UIImage(contentsOfFile: basePath + Constants.bigPosterFolder + posterUrl[currentCountry.languageArrayIndex])
-			}
-		}
-		
-		return retval
-	}
-	
-	/// The string of genres of the movie.
-	
+		- returns: The genre-string as optional
+	*/
 	private func makeGenreString(genreDict: [Int : String]) -> String? {
 		var genreText: String = ""
 		
@@ -419,83 +551,13 @@ public class MovieRecord : CustomStringConvertible {
 		}
 	}
 	
-	/// The string of production countries.
+	/*
+		Generates an array of strings as subtitle for display.
 	
-	var countryString: String? {
-		var countryText: String = ""
-		
-		if (productionCountries.count > 0) {
-			for country in productionCountries {
-				countryText += NSLocalizedString(country, comment: "") + ", "
-			}
-			
-			return countryText.substringToIndex(countryText.endIndex.predecessor().predecessor())
-		}
-		else {
-			return nil
-		}
-	}
+		- parameter genreDict: The dictionary with genre-id as key and genre-name as value
 	
-	/// The subtitle for the detail view of the movie.
-	
-	private var detailSubtitle: String? {
-		var detailText = ""
-		
-		// add runtime
-		
-		if (runtime[currentCountry.languageArrayIndex] > 0) {
-			let minutesShort = NSLocalizedString("MinutesShort", comment: "")
-			detailText += "\(runtime[currentCountry.languageArrayIndex]) \(minutesShort) | "
-		}
-		else if (runtime[MovieCountry.USA.languageArrayIndex] > 0) {
-			let minutesShort = NSLocalizedString("MinutesShort", comment: "")
-			detailText += "\(runtime[MovieCountry.USA.languageArrayIndex]) \(minutesShort) | "
-		}
-		
-		// add rating
-		
-		if certification[currentCountry.countryArrayIndex].characters.count > 0 {
-			if (currentCountry == MovieCountry.Germany) {
-				detailText += "FSK "
-			}
-			
-			detailText += "\(certification[currentCountry.countryArrayIndex]) | "
-		}
-		
-		// add countries
-		
-		if let countries = countryString {
-			detailText += countries
-		}
-		else {
-			if (detailText.characters.count > 2) {
-				detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor())
-			}
-		}
-		
-		if (detailText.characters.count == 0) {
-			return nil
-		}
-		else {
-			return detailText
-		}
-	}
-	
-	/// The original movie title including language-specific prefix (like "aka").
-	
-	var originalTitleForDisplay: String? {
-		var retval: String? = nil
-		
-		if let origTitle = origTitle where origTitle != title[currentCountry.languageArrayIndex] {
-			let akaString = NSLocalizedString("aka", comment: "")
-			retval = "\(akaString) \"\(origTitle)\""
-		}
-		
-		return retval
-	}
-	
-	/// An array with up to three items for the subtitle.
-	
+		- returns: The array of strings with movie informations
+	*/
 	func getSubtitleArray(genreDict: [Int : String]) -> [String] {
 		var subtitles: [String] = []
 		
@@ -514,37 +576,6 @@ public class MovieRecord : CustomStringConvertible {
 		return subtitles
 	}
 	
-	/// The release data as string in medium sized format.
-	
-	var releaseDateString: String {
-		var retval = NSLocalizedString("NoReleaseDate", comment: "")
-		
-		if releaseDate[currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
-			let dateFormatter = NSDateFormatter()
-			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
-			dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-			retval = dateFormatter.stringFromDate(releaseDate[currentCountry.countryArrayIndex])
-		}
-		
-		return retval
-	}
-	
-	/// The release data as string in long format.
-	
-	var releaseDateStringLong: String {
-		var retval = NSLocalizedString("NoReleaseDate", comment: "")
-		
-		if releaseDate[currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
-			let dateFormatter = NSDateFormatter()
-			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
-			dateFormatter.dateStyle = NSDateFormatterStyle.FullStyle
-			retval = dateFormatter.stringFromDate(releaseDate[currentCountry.countryArrayIndex])
-		}
-		
-		return retval
-	}
-	
-	
 	/**
 		Checks if the movie is now playing in theaters.
 	
@@ -553,18 +584,29 @@ public class MovieRecord : CustomStringConvertible {
 	func isNowPlaying() -> Bool {
 		var retval = false
 		
-		if releaseDate[currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
-			let today = NSDate()
-			retval = (releaseDate[currentCountry.countryArrayIndex].compare(today) != NSComparisonResult.OrderedDescending)
+		if let localReleaseDate = releaseDateInLocalTimezone where localReleaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
+			let now = NSDate()
+			retval = (localReleaseDate.compare(now) != NSComparisonResult.OrderedDescending)
+
+/*
+			if (retval == false) {
+				NSLog("\(title[currentCountry.countryArrayIndex])")
+				NSLog("RelDate: \(releaseDate[currentCountry.countryArrayIndex])")
+				NSLog("Starts in: \(localReleaseDate.timeIntervalSinceDate(now) / 60 / 60) hours")
+				NSLog("")
+			}
+*/
 		}
 		
 		return retval
 	}
-	
-	
+
 	/**
-		Checks if the updated version of the movie record has changes
-		which are visible in the table cell.
+		Checks if the updated version of the movie record has changes which are visible in the table cell.
+	
+		- parameter updatedMovie: the updated version of this movie
+	
+		- returns: TRUE if there are visible changes in the movie, FALSE otherwise
 	*/
 	func hasVisibleChanges(updatedMovie: MovieRecord) -> Bool {
 		
@@ -583,7 +625,9 @@ public class MovieRecord : CustomStringConvertible {
 		return false
 	}
 	
+	
 	// MARK: - Printable
+	
 	
 	public var description: String {
 		

@@ -154,7 +154,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				
 				// hide unused labels
 				
-				for (var index = movie.getSubtitleArray(genreDict).count; index < subtitleLabels.count; index++) {
+				for index in movie.getSubtitleArray(genreDict).count ..< subtitleLabels.count {
 					subtitleLabels[index]?.hidden = true
 				}
 
@@ -357,6 +357,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				}
 				
 				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(true, forKey: Constants.prefsPosterHintAlreadyShown)
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 			}
 		}
 	}
@@ -552,6 +553,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		if let movie = movie {
 			Favorites.addMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
+			NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 		}
 	}
 
@@ -565,6 +567,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		if let movie = movie {
 			Favorites.removeMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
+			NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 		}
 	}
 	

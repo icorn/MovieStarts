@@ -26,7 +26,7 @@
 
 "ReleaseDate"		= "Veröffentlichung";
 "UserRating"		= "Bewertung";
-"Actors"			= "Schauspieler";
+"Actors"			= "Besetzung";
 "Directors"			= "Regie";
 "Director"			= "Regie";
 "Synopsis"			= "Inhalt";
@@ -85,6 +85,16 @@
 "InternalErrorText"		= "Es ist ein interner Fehler aufgetreten. Bitte versuche es später noch einmal.";
 "ErrorWritingFile"		= "Fehler beim Speichern einer Datei. Möglicherweise ist dein iPhone voll.";
 
+"NotificationWarnTitle"	= "Mitteilungen";
+"NotificationWarnText"	= "Mitteilungen sind für diese App derzeit nicht erlaubt. Bitte wechsele in die App 'Einstellungen', gehe zu 'Mitteilungen' / 'MovieStarts', und aktiviere 'Mitteilungen erlauben'.";
+"NotificationWarnText2"	= "Du hattest Mitteilungen in dieser App eingeschaltet, sie sind aber nun im System für diese App nicht mehr erlaubt. Um sie wieder zu erlauben, wechsele bitte in die App 'Einstellungen', gehe zu 'Mitteilungen' / 'MovieStarts', und aktiviere 'Mitteilungen erlauben'. Dann kannst du Mitteilungen hier in MovieStarts wieder einschalten.";
+
+// Update messages
+
+"UpdateFeature"			= "Neues Feature";
+"UpdateFeatures"		= "Neue Features";
+"UpdateMessagePush"		= "In dieser Version der App gibt es ein neues Feature: In den Einstellungen kannst du Mitteilungen einschalten, um dich daran erinnern zu lassen, wenn deine Favoriten-Filme ins Kino kommen.";
+
 // Settings
 
 "SettingsUseApps"		= "Benutze Apps statt Browser";
@@ -94,10 +104,15 @@
 "SettingsAbout"			= "Über MovieStarts";
 "SettingsRateTheApp"	= "Diese App bewerten";
 
+"SettingsNotificationsHeader"	= "Mitteilungen";
+"SettingsNotifications"			= "Mitteilungen für Favoriten";
+"SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung zum eingestellten Zeitpunkt, wenn ein Film deiner Favoritenliste ins Kino kommt.";
+"SettingsNotificationTime"		= "Zeitpunkt der Mitteilung:";
+
 // About
 
 "Version"				= "Version";
-"TagLine"				= "Alle aktuellen Kinotermine - schnell und übersichtlich";
+"TagLine"				= "Nie wieder einen Film verpassen.";
 "developerHeadline"		= "App-Entwicklung und -Design:";
 "supportHeadline"		= "Support:";
 "webHeadline"			= "Web:";
@@ -108,17 +123,53 @@
 "reachability"			= "Diese App benutzt 'Reach' von Isuru Nanayakkara. Es nutzt folgende Lizenz:";
 "mitLicense"			= "The MIT License (MIT)\n\nCopyright (c) 2014 Isuru Nanayakkara\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
 
-// Misc.
+// Notification times
 
-"Close"					= "Schließen";
-"menuItemRefresh"		= "Aktualisieren";
+"5daysBefore"			= "5 Tage vorher";
+"4daysBefore"			= "4 Tage vorher";
+"3daysBefore"			= "3 Tage vorher";
+"2daysBefore"			= "2 Tage vorher";
+"1daysBefore"			= "1 Tage vorher";
+"0daysBefore"			= "Erscheinungstag";
+
+// Notifications
+
+"NotificationMsgWindowTitle"	= "Gute Nachrichten";
+"OneMovieReleasedToday"			= "kommt heute ins Kino.";
+"OneMovieReleasedTomorrow"		= "kommt morgen ins Kino.";
+"OneMovieReleasedAfterTomorrow"	= "kommt übermorgen ins Kino.";
+"OneMovieReleasedSoon1"			= "kommt am ";
+"OneMovieReleasedSoon2"			= " ins Kino.";
+
+"MoviesReleasedToday"			= "deiner Wunschfilme kommen heute ins Kino";
+"MoviesReleasedTomorrow"		= "deiner Wunschfilme kommen morgen ins Kino";
+"MoviesReleasedAfterTomorrow"	= "deiner Wunschfilme kommen übermorgen ins Kino";
+"MoviesReleasedSoon1"			= "deiner Wunschfilme kommen am ";
+"MoviesReleasedSoon2"			= " ins Kino";
 
 // Watch
 
-"WatchNoFavorites"		= "Bitte lege in der MovieStarts iPhone-App deine Favoriten an, um sie hier auf der Watch sehen zu können.";
-"WatchNowPlaying"		= "Jetzt im Kino";
-"WatchConnectError"		= "Fehler beim Verbinden mit deinem iPhone. Bitte überprüfe das Netzwerk und/oder probiere es später noch einmal.";
+"WatchNoFavorites"			= "Bitte lege in der MovieStarts iPhone-App deine Favoriten an, um sie hier auf der Watch sehen zu können.";
+"WatchNowPlaying"			= "Jetzt im Kino";
+"WatchConnectError"			= "Fehler beim Verbinden mit deinem iPhone. Bitte überprüfe das Netzwerk und/oder probiere es später noch einmal.";
 "WatchUserShouldStartPhone"	= "Bitte öffne die MovieStarts iPhone-App, damit die Uhr auf die dort gespeicherten Favoriten zugreifen kann. Spätere Updates werden dann automatisch durchgeführt.";
+
+// Misc.
+
+"ShowMovie"				= "Anzeigen";
+"Close"					= "Schließen";
+"menuItemRefresh"		= "Aktualisieren";
+"2"						= "zwei";
+"3"						= "drei";
+"4"						= "vier";
+"5"						= "fünf";
+"6"						= "sechs";
+"7"						= "sieben";
+"8"						= "acht";
+"9"						= "neun";
+"10"					= "zehn";
+"11"					= "elf";
+"12"					= "zwölf";
 
 // Country names
 
@@ -147,6 +198,7 @@
 "Georgia"					= "Georgien";
 "Germany"					= "Deutschland";
 "Greece"					= "Griechenland";
+"Greenland"					= "Grönland";
 "Hong Kong"					= "Hongkong";
 "Hungary"					= "Ungarn";
 "Iceland"					= "Island";
@@ -155,9 +207,11 @@
 "Ireland"					= "Irland";
 "Italy"						= "Italien";
 "Jordan"					= "Jordanien";
+"Kyrgyz Republic"			= "Kirgisistan";
 "Lebanon"					= "Libanon";
 "Libyan Arab Jamahiriya"	= "Libyen";
 "Luxembourg"				= "Luxemburg";
+"Macedonia"					= "Mazedonien";
 "Mexico"					= "Mexiko";
 "Morocco"					= "Marokko";
 "Netherlands"				= "Niederlande";

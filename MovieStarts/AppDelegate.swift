@@ -9,11 +9,47 @@
 import UIKit
 import CloudKit
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
+	var versionOfPreviousLaunch = Constants.version1_0
+	var movieReleaseNotification: UILocalNotification?
+	var movieTabBarController: TabBarController? {
+		return (window?.rootViewController as? StartViewController)?.myTabBarController
+	}
+	var settingsTableViewController: SettingsTableViewController? {
+		var stvc: SettingsTableViewController?
 
+		if let viewControllersOfRoot = movieTabBarController?.viewControllers {
+			for viewControllerOfRoot in viewControllersOfRoot where viewControllerOfRoot is UINavigationController {
+				if let viewControllersOfNav = (viewControllerOfRoot as? UINavigationController)?.viewControllers {
+					for viewControllerOfNav in viewControllersOfNav where viewControllerOfNav is SettingsTableViewController {
+						stvc = viewControllerOfNav as? SettingsTableViewController
+						break
+					}
+				}
+			}
+		}
+		return stvc
+	}
+	var favoriteTableViewController: FavoriteTableViewController? {
+		var ftvc: FavoriteTableViewController?
+		
+		if let viewControllersOfRoot = movieTabBarController?.viewControllers {
+			for viewControllerOfRoot in viewControllersOfRoot where viewControllerOfRoot is UINavigationController {
+				if let viewControllersOfNav = (viewControllerOfRoot as? UINavigationController)?.viewControllers {
+					for viewControllerOfNav in viewControllersOfNav where viewControllerOfNav is FavoriteTableViewController {
+						ftvc = viewControllerOfNav as? FavoriteTableViewController
+						break
+					}
+				}
+			}
+		}
+		return ftvc
+	}
+	
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		
@@ -72,15 +108,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		if useImdbApp == nil {
 			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsUseImdbApp)
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 		}
 		
 		if useYoutubeApp == nil {
 			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsUseYoutubeApp)
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 		}
 		
 		// start watch session (if there is a watch)
-		
 		WatchSessionManager.sharedManager.startSession()
+		
+		// Handle launching from a notification
+		if let launchOptions = launchOptions {
+			if let notification = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
+				// save received notification for later
+				movieReleaseNotification = notification
+			}
+		}
+		
+		// getting version of the last launch
+		
+		let oldVersion = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsVersion)
+		
+		if let oldVersion = oldVersion as? Int {
+			versionOfPreviousLaunch = oldVersion
+		}
+
+		// if this is a new version: write it to disc
+		if (versionOfPreviousLaunch != Constants.versionCurrent) {
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(Constants.versionCurrent, forKey: Constants.prefsVersion)
+			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+		}
 		
 		return true
 	}
@@ -107,5 +166,86 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
 
+	
+	// MARK: - Handling local notifications
+ 
+	
+	func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+		
+		if (notificationSettings.types.contains(UIUserNotificationType.Alert)) {
+			// user has allowed notifications
+			if let settings = settingsTableViewController {
+				settings.switchNotifications(true)
+			}
+			else {
+				NSLog("Settings dialog not available. This should never happen.")
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(true, forKey: Constants.prefsNotifications)
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+				NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+			}
+		}
+		else {
+			// user has *not* allowed notifications
+			if let settings = settingsTableViewController {
+				settings.switchNotifications(false)
+			}
+			else {
+				NSLog("Settings dialog not available. This should never happen.")
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsNotifications)
+				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+				NotificationManager.removeAllFavoriteNotifications()
+			}
+			
+			// warn user
+			var messageWindow: MessageWindow?
+			
+			if let viewForMessage = window {
+				messageWindow = MessageWindow(parent: viewForMessage, darkenBackground: true, titleStringId: "NotificationWarnTitle", textStringId: "NotificationWarnText", buttonStringIds: ["Close"],
+					handler: { (buttonIndex) -> () in
+						messageWindow?.close()
+					}
+				)
+			}
+		}
+	}
+
+	func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+
+		guard let userInfo = notification.userInfo,
+			  let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] where movieIDs.count > 0,
+			  let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] where movieTitles.count > 0,
+			  let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
+			  let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else {
+			return
+		}
+
+		let state = application.applicationState
+
+		if (state == UIApplicationState.Active) {
+			// app was in foreground
+			
+			if (movieTitles.count == 1) {
+				// only one movie
+				NotificationManager.notifyAboutOneMovie(self, movieID: movieIDs[0], movieTitle: movieTitles[0], movieDate: movieDate, notificationDay: notificationDay)
+			}
+			else {
+				// multiple movies
+				NotificationManager.notifyAboutMultipleMovies(self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+			}
+		}
+		else if (state == UIApplicationState.Inactive) {
+			// app was in background, but in memory
+			
+			if (movieTitles.count == 1) {
+				// only one movie
+				self.movieTabBarController?.selectedIndex = Constants.tabIndexFavorites
+				self.favoriteTableViewController?.showFavoriteMovie(movieIDs[0])
+			}
+			else {
+				// multiple movies
+				NotificationManager.notifyAboutMultipleMovies(self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+			}
+		}
+	}
 }
 

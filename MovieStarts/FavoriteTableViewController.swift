@@ -63,6 +63,7 @@ class FavoriteTableViewController: MovieTableViewController {
 		tableView.beginUpdates()
 		addFavoritePrivate(newFavorite)
 		tableView.endUpdates()
+		NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 	}
 
 	private func addFavoritePrivate(newFavorite: MovieRecord) {
@@ -100,6 +101,7 @@ class FavoriteTableViewController: MovieTableViewController {
 		tableView.beginUpdates()
 		removeFavoritePrivate(removedFavoriteId)
 		tableView.endUpdates()
+		NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 	}
 	
 	
@@ -165,6 +167,9 @@ class FavoriteTableViewController: MovieTableViewController {
 				// the title or the date has changed. we have to move the table cell to a new position.
 				removeFavoritePrivate(updatedMovie.id)
 				addFavoritePrivate(updatedMovie)
+				
+				// update notifications for favorites
+				NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 			}
 			else if (moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row].hasVisibleChanges(updatedMovie)) {
 				// some data has changed which is shown in the table cell -> change the cell with an animation
@@ -183,5 +188,23 @@ class FavoriteTableViewController: MovieTableViewController {
 		WatchSessionManager.sharedManager.updateFavoritesOnWatch()
 	}
 	
+	
+	func showFavoriteMovie(movieID: String) {
+		// we use the array from the tab-controller, because the local one might not be initialized yet
+		guard let moviesInSections = movieTabBarController?.favoriteMovies else { return }
+		
+		for (sectionIndex, section) in moviesInSections.enumerate() {
+			for (movieIndex, movie) in section.enumerate() {
+				if (movie.id == movieID) {
+					// we found the movie to show: select the row and show it
+					let indexPath = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
+					tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: UITableViewScrollPosition.None)
+					tableView(tableView, didSelectRowAtIndexPath: indexPath)
+					tabBarController?.tabBar.hidden = false
+					return
+				}
+			}
+		}
+	}
 }
 
