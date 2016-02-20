@@ -106,12 +106,13 @@
 
 "SettingsNotificationsHeader"	= "Notifications";
 "SettingsNotifications"			= "Notifications for Favorites";
-"SettingsNotificationsFooter"	= "You will get a push notification when one of your favorite movies is released.";
+"SettingsNotificationsFooter"	= "You will get a push notification when one of the movies on your favorites list will be released.";
+"SettingsNotificationTime"		= "Time of the Notification:";
 
 // About
 
 "Version"				= "Version";
-"TagLine"				= "All the latest movie release dates at a glance.";
+"TagLine"				= "Never Miss a Movie Again.";
 "developerHeadline"		= "App development and design:";
 "supportHeadline"		= "Support:";
 "webHeadline"			= "Web:";

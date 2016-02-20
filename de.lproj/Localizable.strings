@@ -107,11 +107,12 @@
 "SettingsNotificationsHeader"	= "Mitteilungen";
 "SettingsNotifications"			= "Mitteilungen für Favoriten";
 "SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung zum eingestellten Zeitpunkt, wenn ein Film deiner Favoritenliste ins Kino kommt.";
+"SettingsNotificationTime"		= "Zeitpunkt der Mitteilung:";
 
 // About
 
 "Version"				= "Version";
-"TagLine"				= "Alle aktuellen Kinotermine - schnell und übersichtlich";
+"TagLine"				= "Nie wieder einen Film verpassen.";
 "developerHeadline"		= "App-Entwicklung und -Design:";
 "supportHeadline"		= "Support:";
 "webHeadline"			= "Web:";
