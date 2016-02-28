@@ -372,6 +372,7 @@ class MovieDatabase : DatabaseParent {
 		Checks if there are new or updates movies in the cloud and gets them.
 	*/
 	func getUpdatedMovies(	allMovies: [MovieRecord],
+							country: MovieCountry,
 							addNewMovieHandler: (movie: MovieRecord) -> (),
 							updateMovieHandler: (movie: MovieRecord) -> (),
 							removeMovieHandler: (movie: MovieRecord) -> (),
@@ -389,14 +390,15 @@ class MovieDatabase : DatabaseParent {
 		let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 		let latestModDate: NSDate? = userDefaults?.objectForKey(Constants.prefsLatestDbModification) as? NSDate
 		
-		if let saveModDate: NSDate = latestModDate {
+		if let modDate: NSDate = latestModDate {
+			let minReleaseDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast)
 			
-			NSLog("Getting records after modification date \(saveModDate)")
+			NSLog("Getting records after modification date \(modDate) and after releasedate \(minReleaseDate)")
 			
 			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 			
-			// get records modifies after the last modification of the local database
-			let predicateModificationDate = NSPredicate(format: "modificationDate > %@", argumentArray: [saveModDate])
+			// get records modified after the last modification of the local database
+			let predicateModificationDate = NSPredicate(format: "(%K > %@) AND (modificationDate > %@)", argumentArray: [country.databaseKeyRelease, minReleaseDate, modDate])
 			let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [predicateModificationDate])
 			
 			let query = CKQuery(recordType: self.recordType, predicate: predicate)
