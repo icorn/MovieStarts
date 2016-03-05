@@ -285,10 +285,16 @@ class TabBarController: UITabBarController {
 	
 	
 	private func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord], database: MovieDatabase?) {
+		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		
+		guard let country = MovieCountry(rawValue: prefsCountryString) else {
+			NSLog("ERROR getting country from preferences")
+			return
+		}
 		
 		database?.updateThumbnailHandler = updateThumbnailHandler
 
-		database?.getUpdatedMovies(allMovies,
+		database?.getUpdatedMovies(allMovies, country: country,
 			addNewMovieHandler: { (movie: MovieRecord) in
 
 				if (!movie.isHidden) {
