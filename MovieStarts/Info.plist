@@ -23,7 +23,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>16.2.3</string>
+	<string>16.3.1</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>imdb</string>
