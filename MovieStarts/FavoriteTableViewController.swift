@@ -18,8 +18,8 @@ class FavoriteTableViewController: MovieTableViewController {
 		navigationItem.title = NSLocalizedString("FavoritesLong", comment: "")
 	}
 	
-	override func viewDidAppear(animated: Bool) {
-		super.viewDidAppear(animated)
+	override func viewWillAppear(animated: Bool) {
+		super.viewWillAppear(animated)
 		checkForEmptyList()
 	}
 	
