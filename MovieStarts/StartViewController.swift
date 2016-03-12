@@ -95,7 +95,7 @@ class StartViewController: UIViewController {
 	*/
 	func loadMovieDatabase() {
 		movieDatabase?.getAllMovies(
-			{ (movies: [MovieRecord]?) in
+			{ [unowned self] (movies: [MovieRecord]?) in
 				
 				// show the next view controller
 				
@@ -132,19 +132,19 @@ class StartViewController: UIViewController {
 				}
 			},
 			
-			showIndicator: {
+			showIndicator: { [unowned self] () in
 				self.welcomeWindow?.showProgressIndicator(NSLocalizedString("WelcomeDownloading", comment: ""))
 			},
 			
-			stopIndicator: {
+			stopIndicator: { [unowned self] () in
 				self.welcomeWindow?.hideProgressIndicator()
 			},
 			
-			updateIndicator: { (counter: Int) in
+			updateIndicator: { [unowned self] (counter: Int) in
 				self.welcomeWindow?.updateProgressIndicator("\(counter) " + NSLocalizedString("WelcomeProgress", comment: ""))
 			},
 			
-			finishHandler: {
+			finishHandler: { [unowned self] () in
 				dispatch_async(dispatch_get_main_queue()) {
 					self.welcomeWindow?.close()
 					self.welcomeWindow = nil

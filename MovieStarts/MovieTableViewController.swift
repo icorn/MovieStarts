@@ -314,7 +314,7 @@ class MovieTableViewController: UITableViewController {
 		// define button-action
 		
 		let favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.Default, title: title, handler: {
-			(action: UITableViewRowAction, path: NSIndexPath) -> () in
+			[unowned self] (action: UITableViewRowAction, path: NSIndexPath) -> () in
 
 				// find out movie id
 			

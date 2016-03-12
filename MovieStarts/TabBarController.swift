@@ -242,7 +242,7 @@ class TabBarController: UITabBarController {
 */
 		// check iCloud status
 		
-		database?.checkCloudKit({ (status: CKAccountStatus, error: NSError?) -> () in
+		database?.checkCloudKit({ [unowned self] (status: CKAccountStatus, error: NSError?) -> () in
 			
 			var errorWindow: MessageWindow?
 			
@@ -295,7 +295,7 @@ class TabBarController: UITabBarController {
 		database?.updateThumbnailHandler = updateThumbnailHandler
 
 		database?.getUpdatedMovies(allMovies, country: country,
-			addNewMovieHandler: { (movie: MovieRecord) in
+			addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
 
 				if (!movie.isHidden) {
 					// add new movie
@@ -315,7 +315,7 @@ class TabBarController: UITabBarController {
 				}
 			},
 			
-			updateMovieHandler: { (movie: MovieRecord) in
+			updateMovieHandler: { [unowned self] (movie: MovieRecord) in
 
 				// update movie
 
@@ -404,7 +404,7 @@ class TabBarController: UITabBarController {
 				}
 			},
 			
-			removeMovieHandler: { (movie: MovieRecord) in
+			removeMovieHandler: { [unowned self] (movie: MovieRecord) in
 				
 				// remove movie
 				dispatch_async(dispatch_get_main_queue()) {
@@ -417,7 +417,7 @@ class TabBarController: UITabBarController {
 				}
 			},
 			
-			completionHandler: { (movies: [MovieRecord]?) in
+			completionHandler: { [unowned self] (movies: [MovieRecord]?) in
 				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 				self.loadGenresFromFile()
 			},

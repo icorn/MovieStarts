@@ -170,12 +170,12 @@ class MovieDatabase : DatabaseParent {
 		queryOperation.database = cloudKitDatabase
 		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
 
-		queryOperation.recordFetchedBlock = { (record : CKRecord) -> Void in
+		queryOperation.recordFetchedBlock = { [unowned self] (record : CKRecord) -> Void in
 			self.allCKRecords.append(record)
 			self.updateIndicator?(counter: self.allCKRecords.count)
 		}
 
-		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: NSError?) -> Void in
+		queryOperation.queryCompletionBlock = { [unowned self] (cursor: CKQueryCursor?, error: NSError?) -> Void in
 			if let cursor = cursor {
 				// some objects are here, ask for more
 				let queryCursorOperation = CKQueryOperation(cursor: cursor)
@@ -281,7 +281,8 @@ class MovieDatabase : DatabaseParent {
 					}
 
 					if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
-						let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+						let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl,
+							completionHandler: { [unowned self] (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
 							if let error = error {
 								NSLog("Error getting thumbnail: \(error.description)")
 							}
@@ -315,7 +316,7 @@ class MovieDatabase : DatabaseParent {
 			
 			// finish movies
 			if let completionHandler = self.completionHandler, errorHandler = self.errorHandler {
-				loadGenreDatabase({ () -> () in
+				loadGenreDatabase({ [unowned self] () -> () in
 					self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
 				})
 			}
@@ -333,7 +334,7 @@ class MovieDatabase : DatabaseParent {
 					dispatch_async(dispatch_get_main_queue()) {
 						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringIds: ["Close"],
 							handler: { (buttonIndex) -> () in
-							errorWindow?.close()
+								errorWindow?.close()
 							}
 						)
 					}
@@ -795,7 +796,8 @@ class MovieDatabase : DatabaseParent {
 				// poster file is missing
 				
 				if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
-					let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+					let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl,
+						completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
 						if let error = error {
 							NSLog("Error getting missing thumbnail: \(error.description)")
 						}
