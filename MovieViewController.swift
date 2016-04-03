@@ -134,7 +134,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			posterImageView.image = movie.thumbnailImage.0
 
 			if (movie.thumbnailImage.1) {
-				let rec = UITapGestureRecognizer(target: self, action: Selector("thumbnailTapped:"))
+				let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.thumbnailTapped(_:)))
 				rec.numberOfTapsRequired = 1
 				posterImageView.addGestureRecognizer(rec)
 			}
@@ -289,7 +289,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			// show textbutton for imdb
 			
 			if (movie.imdbId != nil) {
-				imdbButton.addTarget(self, action: Selector("imdbButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 				imdbButton.setTitle(NSLocalizedString("ShowOnImdb", comment: ""), forState: UIControlState.Normal)
 			}
 
@@ -421,7 +421,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				button.tag = Constants.tagTrailer + index
 				button.setImage(scaledImage, forState: UIControlState.Normal)
 				button.contentMode = .ScaleAspectFit
-				button.addTarget(self, action: Selector("trailerButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				button.addTarget(self, action: #selector(MovieViewController.trailerButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 				trailerStackView.addArrangedSubview(button)
 			}
 		}
@@ -591,7 +591,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			if (Favorites.IDs.contains(movie.id)) {
 				// this movie is a favorite: show remove-button
 				if let navigationController = navigationController, topViewController = navigationController.topViewController {
-					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("removeFavoriteButtonTapped:"))
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite.png"), style: UIBarButtonItemStyle.Done, target: self, action: #selector(MovieViewController.removeFavoriteButtonTapped(_:)))
 				}
 			}
 			else {

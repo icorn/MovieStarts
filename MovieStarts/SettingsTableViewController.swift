@@ -58,9 +58,9 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		notificationLabel.text = NSLocalizedString("SettingsNotifications", comment: "")
 		notificationTimeLabel.text = NSLocalizedString("SettingsNotificationTime", comment: "")
 		
-		imdbSwitch.addTarget(self, action: Selector("imdbSwitchTapped"), forControlEvents: UIControlEvents.TouchUpInside)
-		youtubeSwitch.addTarget(self, action: Selector("youtubeSwitchTapped"), forControlEvents: UIControlEvents.TouchUpInside)
-		notificationSwitch.addTarget(self, action: Selector("notificationSwitchTapped"), forControlEvents: UIControlEvents.TouchUpInside)
+		imdbSwitch.addTarget(self, action: #selector(SettingsTableViewController.imdbSwitchTapped), forControlEvents: UIControlEvents.TouchUpInside)
+		youtubeSwitch.addTarget(self, action: #selector(SettingsTableViewController.youtubeSwitchTapped), forControlEvents: UIControlEvents.TouchUpInside)
+		notificationSwitch.addTarget(self, action: #selector(SettingsTableViewController.notificationSwitchTapped), forControlEvents: UIControlEvents.TouchUpInside)
 		
 		// set up picker view
 		for hour in Constants.notificationTimeMin...Constants.notificationTimeMax {

@@ -123,7 +123,7 @@ class MessageWindow: NSObject {
 			button.setTitle(NSLocalizedString(buttonStringId, comment: ""), forState: UIControlState.Normal)
 			button.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0), forState: UIControlState.Normal)
 			button.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0), forState: UIControlState.Highlighted)
-			button.addTarget(self, action: Selector("buttonPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
+			button.addTarget(self, action: #selector(MessageWindow.buttonPressed(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 			buttons.append(button)
 		}
 		
