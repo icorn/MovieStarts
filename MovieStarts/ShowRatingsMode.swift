@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+
+enum ShowRatingsMode {
+	case Hide
+	case TmdbOnly
+	case ImdbOnly
+	case ImdbAndTomato
+}

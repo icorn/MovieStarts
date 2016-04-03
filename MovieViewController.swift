@@ -40,6 +40,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
 	
+	@IBOutlet weak var ratingStackView: UIStackView!
+	@IBOutlet weak var imdbRatingLabel: UILabel!
+	@IBOutlet weak var tomatoesImageView: UIImageView!
+	@IBOutlet weak var tomatoesRatingLabel: UILabel!
+	
+	
 	@IBOutlet weak var bottomLine: UIView!
 	
 	@IBOutlet weak var starsgrey: UIImageView!
@@ -81,6 +87,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var storyHeadlineLabelTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var storyLabelTopSpaceConstraint: NSLayoutConstraint!
+	@IBOutlet weak var line2bHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var line2bVerticalSpaceConstraint: NSLayoutConstraint!
 	
 	@IBOutlet weak var starsgoldWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var starsgreyWidthConstraint: NSLayoutConstraint!
@@ -94,6 +102,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var ratingLabelTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
+	@IBOutlet weak var ratingStackViewHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var ratingStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	
 	var posterImageViewTopConstraint: NSLayoutConstraint?
 	var posterImageViewLeadingConstraint: NSLayoutConstraint?
@@ -115,6 +125,21 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
 	var movie: MovieRecord?
 	var allTrailerIds: [String] = []
+
+	/// show the old tmdb-ratings?
+	let showTmdbRatings = false
+	
+	var showRatingsMode: ShowRatingsMode = .Hide
+	
+	/// when we show only one rating: show this one
+	var onlyRatingValue: Double? {
+		if (showRatingsMode == .TmdbOnly) {
+			return movie?.voteAverage
+		}
+		else {
+			return movie?.ratingImdb
+		}
+	}
 	
 
 	// MARK: - UIViewController
@@ -175,39 +200,25 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				releaseDateLabel?.text = "-"
 			}
 			
-			// show rating
+			// show rating(s) or don't
 			
-			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
-			if (movie.voteCount > 2) {
-				let numberFormatter = NSNumberFormatter()
-				numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
-				numberFormatter.minimumFractionDigits = 1
-
-				let voteAverage = numberFormatter.stringFromNumber(movie.voteAverage)
-
-				if let saveVoteAverage = voteAverage {
-					ratingLabel?.text =  "\(saveVoteAverage)"
+			if (showTmdbRatings) {
+				if (movie.voteCount > 2) {
+					self.showRatingsMode = .TmdbOnly
 				}
-				else {
-					// vote was no number, shouldn't happen
-					ratingLabel?.text = "?"
-				}
-				
-				starsgoldWidthConstraint.constant = 0
-				starsgoldTrailingConstraint.constant = 150
 			}
 			else {
-				// no or not enough votes, hide it
-				
-				ratingHeadlineLabelHeightConstraint.constant = 0
-				ratingLabelHeightConstraint.constant = 0
-				starsgoldHeightConstraint.constant = 0
-				starsgreyHeightConstraint.constant = 0
-				line2VerticalSpaceConstraint.constant = 0
-				line2HeightConstraint.constant = 0
-				ratingLabelTopConstraint.constant = 0
-				ratingHeadlineLabelTopConstraint.constant = 0
+				if (movie.ratingImdb != nil) {
+					if (movie.ratingTomato != nil) {
+						self.showRatingsMode = .ImdbAndTomato
+					}
+					else {
+						self.showRatingsMode = .ImdbOnly
+					}
+				}
 			}
+			
+			generateRatingsDisplay(movie)
 			
 			// show director(s)
 
@@ -323,18 +334,20 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		super.viewDidAppear(animated)
 		view.layoutIfNeeded()
 		
-		// show vote average
+		// animate show vote average
 		
-		if let voteAverage = movie?.voteAverage, voteCount = movie?.voteCount where voteCount > 2 {
-			UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveLinear,
-				animations: {
-					self.starsgreyWidthConstraint.constant = 150 - 15 * CGFloat(voteAverage)
-					self.starsgoldWidthConstraint.constant = 15 * CGFloat(voteAverage)
-					self.starsgoldTrailingConstraint.constant = 150 - 15 * CGFloat(voteAverage)
-					self.view.layoutIfNeeded()
-				},
-				completion:  { _ in }
-			)
+		if ((self.showRatingsMode == .TmdbOnly) || (self.showRatingsMode == .ImdbOnly)) {
+			if let voteAverage = self.onlyRatingValue {
+				UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveLinear,
+					animations: {
+						self.starsgreyWidthConstraint.constant = 150 - 15 * CGFloat(voteAverage)
+						self.starsgoldWidthConstraint.constant = 15 * CGFloat(voteAverage)
+						self.starsgoldTrailingConstraint.constant = 150 - 15 * CGFloat(voteAverage)
+						self.view.layoutIfNeeded()
+					},
+					completion:  { _ in }
+				)
+			}
 		}
 		
 		if (movie?.thumbnailImage.1 == true) {
@@ -361,6 +374,107 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			}
 		}
 	}
+	
+	
+	func generateRatingsDisplay(movie: MovieRecord) {
+		
+		switch (self.showRatingsMode) {
+			
+		case .Hide:
+			ratingHeadlineLabelHeightConstraint.constant = 0
+			ratingLabelHeightConstraint.constant = 0
+			starsgoldHeightConstraint.constant = 0
+			starsgreyHeightConstraint.constant = 0
+			line2VerticalSpaceConstraint.constant = 0
+			line2HeightConstraint.constant = 0
+			ratingLabelTopConstraint.constant = 0
+			ratingHeadlineLabelTopConstraint.constant = 0
+
+			ratingStackViewHeightConstraint.constant = 0
+			ratingStackViewVerticalSpaceConstraint.constant = 0
+			ratingStackView.hidden = true
+			line2bHeightConstraint.constant = 0
+			line2bVerticalSpaceConstraint.constant = 0
+			
+		case .TmdbOnly:
+			ratingStackView.hidden = true
+			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
+			line2bHeightConstraint.constant = 0
+			line2bVerticalSpaceConstraint.constant = 0
+			setOnlyRating()
+			
+		case .ImdbOnly:
+			ratingStackView.hidden = true
+			ratingHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "") + ":"
+			line2bHeightConstraint.constant = 0
+			line2bVerticalSpaceConstraint.constant = 0
+			setOnlyRating()
+
+			// TODO: gesture recognizers not working here (?)
+			
+			let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.imdbButtonTapped(_:)))
+			rec.numberOfTapsRequired = 1
+			ratingHeadlineLabel.addGestureRecognizer(rec)
+			ratingLabel.addGestureRecognizer(rec)
+			starsgold.addGestureRecognizer(rec)
+			starsgrey.addGestureRecognizer(rec)
+			
+		case .ImdbAndTomato:
+			ratingHeadlineLabelHeightConstraint.constant = 0
+			ratingLabelHeightConstraint.constant = 0
+			starsgoldHeightConstraint.constant = 0
+			starsgreyHeightConstraint.constant = 0
+			line2VerticalSpaceConstraint.constant = 0
+			line2HeightConstraint.constant = 0
+			ratingLabelTopConstraint.constant = 0
+			ratingHeadlineLabelTopConstraint.constant = 0
+			
+			// IMDb rating
+			
+			let numberFormatter = NSNumberFormatter()
+			numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+			numberFormatter.minimumFractionDigits = 1
+			
+			if let score = self.movie?.ratingImdb, scoreString = numberFormatter.stringFromNumber(score) {
+				imdbRatingLabel?.text =  "\(scoreString)"
+			}
+			else {
+				// vote was no number, shouldn't happen
+				imdbRatingLabel?.text = "?"
+			}
+
+			// Rotten Tomatoes rating
+			
+			if let score = self.movie?.ratingTomato {
+				tomatoesRatingLabel.text = "\(score)%"
+			}
+			else {
+				tomatoesRatingLabel.text = "?"
+			}
+		}
+	}
+	
+	
+	func setOnlyRating() {
+		let numberFormatter = NSNumberFormatter()
+		numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+		numberFormatter.minimumFractionDigits = 1
+		
+		if let score = self.onlyRatingValue, scoreString = numberFormatter.stringFromNumber(score) {
+			ratingLabel?.text =  "\(scoreString)"
+		}
+		else {
+			// vote was no number, shouldn't happen
+			ratingLabel?.text = "?"
+		}
+		
+		starsgoldWidthConstraint.constant = 0
+		starsgoldTrailingConstraint.constant = 150
+		
+		ratingStackViewHeightConstraint.constant = 0
+		ratingStackViewVerticalSpaceConstraint.constant = 0
+	}
+	
 	
 	/**
 		Creates all the buttons for trailers. If there are no trailers, all trailer-related UI elements will be hidden.
@@ -452,7 +566,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	}
 	
 	
-	// MARK: - UIViewController
+	// MARK: - SFSafariViewControllerDelegate
 
 	
 	func safariViewControllerDidFinish(controller: SFSafariViewController) {
@@ -462,61 +576,15 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	// MARK: - Button callbacks
 
-	
-	/**
-		Calls the webview with the imdb page for the movie.
-	
-		- parameter sender:	The tapped button
-	*/
-	func imdbButtonTapped(sender:UIButton) {
-		
-		// check internet connection
-/*
-		if (NetworkChecker.checkReachability(self.view) == false) {
-			NSLog("IMDb view: no network")
-			noInternetConnection()
-			return
-		}
-*/
-		// check if we open the idmb app or the webview
-		
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
-		
-		if let imdbId = movie?.imdbId {
-			let url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
 
-			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
-				// use the app instead of the webview
-				UIApplication.sharedApplication().openURL(url)
-			}
-			else {
-				// use the webview
-				guard let webUrl = NSURL(string: "http://www.imdb.com/title/\(imdbId)") else { return }
-				let webVC = SFSafariViewController(URL: webUrl)
-				webVC.delegate = self
-				self.presentViewController(webVC, animated: true, completion: nil)
-			}
-		}
+	func imdbButtonTapped(sender: UIButton) {
+		showImdbPage()
 	}
 
-
-	/**
-		Calls the webview with the trailer page for the movie.
-	
-		- parameter sender:	The tapped button
-	*/
 	func trailerButtonTapped(sender: UIButton) {
 		
 		guard let movie = movie else { return }
 		
-		// check internet connection
-/*
-		if (NetworkChecker.checkReachability(self.view) == false) {
-			NSLog("Trailer: no network")
-			noInternetConnection()
-			return
-		}
-*/
 		// check if we open the youtube app or the webview
 		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseYoutubeApp) as? Bool
 		var trailerId: String?
@@ -543,12 +611,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 	
-	
-	/**
-		Adds the current movie to favorites.
-	
-		- parameter sender:	The tapped button
-	*/
 	func addFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
 			Favorites.addMovie(movie, tabBarController: movieTabBarController)
@@ -557,12 +619,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 
-	
-	/**
-		Removes current movie from favorites.
-	
-		- parameter sender:	The tapped button
-	*/
 	func removeFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
 			Favorites.removeMovie(movie, tabBarController: movieTabBarController)
@@ -570,8 +626,21 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 		}
 	}
+
+	@IBAction func imdbRatingTapped(sender: UITapGestureRecognizer) {
+		showImdbPage()
+	}
 	
+	@IBAction func tomatoRatingTapped(sender: UITapGestureRecognizer) {
+		if let urlString = movie?.tomatoURL {
+			guard let webUrl = NSURL(string: urlString) else { return }
+			let webVC = SFSafariViewController(URL: webUrl)
+			webVC.delegate = self
+			self.presentViewController(webVC, animated: true, completion: nil)
+		}
+	}
 	
+
 	// MARK: - Helpers
 	
 	
@@ -597,26 +666,33 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			else {
 				// this movie is not a favorite: show add-button
 				if let navigationController = navigationController, topViewController = navigationController.topViewController {
-					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favoriteframe.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("addFavoriteButtonTapped:"))
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favoriteframe.png"), style: UIBarButtonItemStyle.Done, target: self, action: #selector(MovieViewController.addFavoriteButtonTapped(_:)))
 				}
 			}
 		}
 	}
 
-/*
-	private final func noInternetConnection() {
-		var errorWindow: MessageWindow?
+	
+	private func showImdbPage() {
+		// check if we open the idmb app or the webview
+		
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
+		
+		if let imdbId = movie?.imdbId {
+			let url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
 			
-		dispatch_async(dispatch_get_main_queue()) {
-			self.scrollView.scrollEnabled = false
-			
-			errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringIds: ["Close"],
-				handler: { (buttonIndex) -> () in
-					errorWindow?.close()
-					self.scrollView.scrollEnabled = true
-				}
-			)
+			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
+				// use the app instead of the webview
+				UIApplication.sharedApplication().openURL(url)
+			}
+			else {
+				// use the webview
+				guard let webUrl = NSURL(string: "http://www.imdb.com/title/\(imdbId)") else { return }
+				let webVC = SFSafariViewController(URL: webUrl)
+				webVC.delegate = self
+				self.presentViewController(webVC, animated: true, completion: nil)
+			}
 		}
 	}
-*/
+
 }

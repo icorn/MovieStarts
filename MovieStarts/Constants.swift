@@ -57,7 +57,8 @@ public struct Constants {
 	
 	static let version1_0					= 10
 	static let version1_1					= 11
-	static let versionCurrent				= version1_1
+	static let version1_2					= 12
+	static let versionCurrent				= version1_2
 	
 	// MARK: - Watch communication
 	
@@ -121,6 +122,13 @@ public struct Constants {
 	static let dbIdSortTitle			= "sortTitle"
 	static let dbIdSynopsis				= "synopsis"
 	static let dbIdRuntime				= "runtime"
+
+ 	// database fields for third-party rating
+	static let dbIdRatingImdb			= "ratingImdb"
+	static let dbIdRatingMetacritic		= "ratingMetacritic"
+	static let dbIdRatingTomato			= "ratingTomato"
+	static let dbIdTomatoImage			= "tomatoImage"
+	static let dbIdTomatoURL			= "tomatoURL"
 
 	// language-specific database fields for poster URLs
 	static let dbIdPosterUrlEN			= "posterUrlEN"

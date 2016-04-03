@@ -57,6 +57,16 @@ public class MovieRecord : CustomStringConvertible {
 	public var popularity:Int = 0
 	/// the number of votes for this movie on tmdb
 	public var voteCount:Int = 0
+	///  the IMDb rating (between 0.0 and 10.0)
+	public var ratingImdb: Double?
+	///  the Metacritic rating (between 0 and 100)
+	public var ratingMetacritic: Int?
+	///  the Rotten Tomatoes rating (between 0 and 100)
+	public var ratingTomato: Int?
+	///  the Rotten Tomatoes image (1:cert, 2:fresh, 3:rotten)
+	public var tomatoImage: Int?
+	///  the Rotten Tomatoes url for this movie
+	public var tomatoURL: String?
 	
 	/// is this movie hidden?
 	private var hidden: Bool = false
@@ -352,6 +362,12 @@ public class MovieRecord : CustomStringConvertible {
 		if let value = dict[Constants.dbIdProductionCountries] as? [String]	{ self.productionCountries	= value	}
 		if let value = dict[Constants.dbIdHidden] as? Bool					{ self.hidden				= value	}
 		
+		if (dict[Constants.dbIdRatingImdb] != nil) 			{ self.ratingImdb 		= dict[Constants.dbIdRatingImdb] 		as? Double }
+		if (dict[Constants.dbIdRatingMetacritic] != nil) 	{ self.ratingMetacritic = dict[Constants.dbIdRatingMetacritic] 	as? Int }
+		if (dict[Constants.dbIdRatingTomato] != nil) 		{ self.ratingTomato 	= dict[Constants.dbIdRatingTomato] 		as? Int }
+		if (dict[Constants.dbIdTomatoImage] != nil) 		{ self.tomatoImage 		= dict[Constants.dbIdTomatoImage] 		as? Int }
+		if (dict[Constants.dbIdTomatoURL] != nil) 			{ self.tomatoURL 		= dict[Constants.dbIdTomatoURL] 		as? String }
+		
 		if let saveId = dict[Constants.dbIdId] as? String {
 			id = saveId
 		}
@@ -408,6 +424,12 @@ public class MovieRecord : CustomStringConvertible {
 		if let value = ckRecord.objectForKey(Constants.dbIdVoteCount) as? Int					{ self.voteCount 			= value }
 		if let value = ckRecord.objectForKey(Constants.dbIdHidden) as? Bool						{ self.isHidden				= value }
 
+		if (ckRecord.objectForKey(Constants.dbIdRatingImdb) != nil) 		{ self.ratingImdb 		= ckRecord.objectForKey(Constants.dbIdRatingImdb) 		as? Double }
+		if (ckRecord.objectForKey(Constants.dbIdRatingMetacritic) != nil) 	{ self.ratingMetacritic = ckRecord.objectForKey(Constants.dbIdRatingMetacritic) as? Int }
+		if (ckRecord.objectForKey(Constants.dbIdRatingTomato) != nil) 		{ self.ratingTomato 	= ckRecord.objectForKey(Constants.dbIdRatingTomato) 	as? Int }
+		if (ckRecord.objectForKey(Constants.dbIdTomatoImage) != nil) 		{ self.tomatoImage 		= ckRecord.objectForKey(Constants.dbIdTomatoImage) 		as? Int }
+		if (ckRecord.objectForKey(Constants.dbIdTomatoURL) != nil) 			{ self.tomatoURL 		= ckRecord.objectForKey(Constants.dbIdTomatoURL) 		as? String }
+
 		id = ckRecord.recordID.recordName
 	}
 	
@@ -444,6 +466,12 @@ public class MovieRecord : CustomStringConvertible {
 		retval[Constants.dbIdTitleEN] 			= title[MovieCountry.USA.languageArrayIndex]
 		retval[Constants.dbIdSynopsisEN] 	 	= synopsis[MovieCountry.USA.languageArrayIndex]
 		retval[Constants.dbIdPosterUrlEN] 	 	= posterUrl[MovieCountry.USA.languageArrayIndex]
+		
+		retval[Constants.dbIdRatingImdb] 		= ratingImdb
+		retval[Constants.dbIdRatingMetacritic] 	= ratingMetacritic
+		retval[Constants.dbIdRatingTomato] 		= ratingTomato
+		retval[Constants.dbIdTomatoImage] 		= tomatoImage
+		retval[Constants.dbIdTomatoURL] 		= tomatoURL
 		
 		retval[Constants.dbIdVoteAverage] 			= voteAverage
 		retval[Constants.dbIdDirectors] 			= directors
@@ -623,6 +651,38 @@ public class MovieRecord : CustomStringConvertible {
 		}
 		
 		return false
+	}
+	
+	/**
+		Migrates this record to a new database version by filling the given database fields
+		with the values from the given update-record.
+		
+		- parameter updateRecord:	The record to copy the values from
+		- parameter updateKeys: 	The database keys to update
+	*/
+	func migrate(updateRecord: MovieRecord, updateKeys: [String]) {
+		
+		// [Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic]
+		
+		if (updateKeys.contains(Constants.dbIdRatingImdb)) {
+			self.ratingImdb = updateRecord.ratingImdb
+		}
+		
+		if (updateKeys.contains(Constants.dbIdRatingTomato)) {
+			self.ratingTomato = updateRecord.ratingTomato
+		}
+
+		if (updateKeys.contains(Constants.dbIdTomatoImage)) {
+			self.tomatoImage = updateRecord.tomatoImage
+		}
+
+		if (updateKeys.contains(Constants.dbIdTomatoURL)) {
+			self.tomatoURL = updateRecord.tomatoURL
+		}
+
+		if (updateKeys.contains(Constants.dbIdRatingMetacritic)) {
+			self.ratingMetacritic = updateRecord.ratingMetacritic
+		}
 	}
 	
 	

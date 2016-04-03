@@ -11,7 +11,7 @@ import CloudKit
 
 
 class MovieTableViewController: UITableViewController {
-	
+
 	var currentTab: MovieTab?
 
 	var movieTabBarController: TabBarController? {
@@ -45,7 +45,7 @@ class MovieTableViewController: UITableViewController {
 		}
 	}
 
-	var movies: [MovieRecord] {
+	var nowMovies: [MovieRecord] {
 		get {
 			if let tbc = movieTabBarController {
 				return tbc.nowMovies
@@ -61,7 +61,7 @@ class MovieTableViewController: UITableViewController {
 			}
 		}
 	}
-	
+
 	var sections: [String] {
 		get {
 			if let tbc = movieTabBarController {
@@ -133,19 +133,21 @@ class MovieTableViewController: UITableViewController {
 		
 		// check what's "now playing" and what not. this changes after midnight.
 		checkNowPlayingStatus()
-		
-		// if last update is long enough ago: check CloudKit for update
-		guard let tbc = movieTabBarController else { return }
-		let database = MovieDatabase(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
+	
+		if (migrateDatabaseIfNeeded() == false) {
+			// no database migration needed: if last update is long enough ago: check CloudKit for update
+			guard let tbc = movieTabBarController else { return }
+			let database = MovieDatabase(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
 
-		if let movies = database.readDatabaseFromFile() {
-			tbc.updateMovies(movies, database: database)
+			if let allMovies = database.readDatabaseFromFile() {
+				tbc.updateMovies(allMovies, database: database)
+			}
 		}
 		
 		// check if we had notifications turned on in the app, but turned off in the system
-		let notificationsTurnedOn: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotifications) as? Bool
+		let notificationsTurnedOnInSettings: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotifications) as? Bool
 		
-		if let notificationsTurnedOn = notificationsTurnedOn where notificationsTurnedOn == true {
+		if let notificationsTurnedOnInSettings = notificationsTurnedOnInSettings where notificationsTurnedOnInSettings == true {
 			if let currentSettings = UIApplication.sharedApplication().currentUserNotificationSettings() where currentSettings.types.contains(UIUserNotificationType.Alert) {
 				// current notifications settings are okay
 			}
@@ -193,7 +195,7 @@ class MovieTableViewController: UITableViewController {
 			return moviesInSections[section].count
 		}
 		else {
-			return movies.count
+			return nowMovies.count
 		}
     }
 	
@@ -217,7 +219,7 @@ class MovieTableViewController: UITableViewController {
 			movie = moviesInSections[indexPath.section][indexPath.row]
 		}
 		else {
-			movie = movies[indexPath.row]
+			movie = nowMovies[indexPath.row]
 		}
 		
 		if let movie = movie, cell = cell {
@@ -271,7 +273,7 @@ class MovieTableViewController: UITableViewController {
 					// print("Selected movie: \(moviesInSections[indexPath.section][indexPath.row])")
 				}
 				else {
-					movieController.movie = movies[indexPath.row]
+					movieController.movie = nowMovies[indexPath.row]
 					// print("Selected movie: \(movies[indexPath.row])")
 				}
 				
@@ -294,7 +296,7 @@ class MovieTableViewController: UITableViewController {
 			movieID = moviesInSections[indexPath.section][indexPath.row].id
 		}
 		else {
-			movieID = movies[indexPath.row].id
+			movieID = nowMovies[indexPath.row].id
 		}
 
 		// set title and color of button
@@ -323,7 +325,7 @@ class MovieTableViewController: UITableViewController {
 					movie = self.moviesInSections[indexPath.section][indexPath.row]
 				}
 				else {
-					movie = self.movies[indexPath.row]
+					movie = self.nowMovies[indexPath.row]
 				}
 			
 				// add or remove movie as favorite
@@ -413,6 +415,114 @@ class MovieTableViewController: UITableViewController {
 		}
 	}
 
+
+	/**
+		Checks if we have a new version of the app, which needs to migrate the database (or show some information to the user).
+		- returns: TRUE if a database migration will be performed, FALSE otherwise
+	*/
+	private func migrateDatabaseIfNeeded() -> Bool {
+		
+		var retval = false
+		
+		if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate, tbc = self.movieTabBarController {
+			if ((tbc.thisIsTheFirstLaunch == false) && (appDelegate.versionOfPreviousLaunch < Constants.version1_2)) {
+				
+				// this is the first start after an update from an older version to version 1.2: Get new database fields for all records
+				
+				retval = true
+				var updateWindow: MessageWindow?
+				var updateCounter = 0
+				
+				dispatch_async(dispatch_get_main_queue()) {
+					updateWindow = MessageWindow(parent: tbc.view, darkenBackground: true, titleStringId: "UpdateDatabase1_2Title", textStringId: "UpdateDatabase1_2Text",
+					                             buttonStringIds: [], handler: { (buttonIndex) -> () in } )
+					
+					updateWindow?.showProgressIndicator(NSLocalizedString("RatingUpdateStart", comment: ""))
+					
+					let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+					guard let country = MovieCountry(rawValue: prefsCountryString) else {
+						NSLog("ERROR getting country from preferences")
+						return
+					}
+					
+					let database = MovieMigrationDatabase(recordType: Constants.dbRecordTypeMovie, viewForError: self.view)
+					
+					database.getMigrationMovies(country,
+					                            updateMovieHandler: { [unowned self] (movie: MovieRecord) in
+													
+													// update the just received movie
+													updateCounter += 1
+													var updated = false
+													
+													for (nowIndex, nowMovie) in self.nowMovies.enumerate() {
+														if (nowMovie.tmdbId == movie.tmdbId) {
+															self.nowMovies[nowIndex].migrate(movie, updateKeys: database.queryKeys)
+															updated = true
+															break
+														}
+													}
+													
+													if (updated == false) {
+														for (upcomingSectionIndex, upcomingMovieSection) in tbc.upcomingMovies.enumerate() {
+															for (upcomingMovieIndex, upcomingMovie) in upcomingMovieSection.enumerate() {
+																if (upcomingMovie.tmdbId == movie.tmdbId) {
+																	tbc.upcomingMovies[upcomingSectionIndex][upcomingMovieIndex].migrate(movie, updateKeys: database.queryKeys)
+																	break
+																}
+															}
+														}
+													}
+													
+													for (favoriteSectionIndex, favoriteMovieSection) in tbc.favoriteMovies.enumerate() {
+														for (favoriteMovieIndex, favoriteMovie) in favoriteMovieSection.enumerate() {
+															if (favoriteMovie.tmdbId == movie.tmdbId) {
+																tbc.favoriteMovies[favoriteSectionIndex][favoriteMovieIndex].migrate(movie, updateKeys: database.queryKeys)
+																break
+															}
+														}
+													}
+													
+													updateWindow?.updateProgressIndicator("\(updateCounter) " + NSLocalizedString("RatingUpdateProgress", comment: ""))
+												},
+					                            
+					                            completionHandler: { (movies: [MovieRecord]?) in
+													UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+													dispatch_async(dispatch_get_main_queue()) {
+														updateWindow?.close()
+													}
+													
+													// Don't forget to write the new version-number to settings
+													NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(Constants.versionCurrent, forKey: Constants.prefsVersion)
+													NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+												},
+					                            
+					                            errorHandler: { (errorMessage: String) in
+													UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+													dispatch_async(dispatch_get_main_queue()) {
+														updateWindow?.close()
+														
+														// tell user about the error
+														var infoWindow: MessageWindow?
+														
+														dispatch_async(dispatch_get_main_queue()) {
+															infoWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "UpdateFailedHeadline", textStringId: "UpdateFailedText",
+																buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+																	infoWindow?.close()
+																}
+															)
+														}
+													}
+													
+													NSLog(errorMessage)
+												}
+											)
+				}
+			}
+		}
+		
+		return retval
+	}
+	
 	
 	// MARK: - Helper functions for the children classes (TabViewControllers)
 

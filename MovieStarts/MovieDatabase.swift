@@ -33,7 +33,10 @@ class MovieDatabase : DatabaseParent {
 	var allCKRecords: [CKRecord] = []
 	var updatedCKRecords: [CKRecord] = []
 
-	let queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries, Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId, Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN]
+	let queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries,
+	                 Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId,
+	                 Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN /*, Constants.dbIdRatingImdb, Constants.dbIdRatingTomato,
+					 Constants.dbIdTomatoImage, Constants.dbIdTomatoURL */ ]
 
 	init(recordType: String, viewForError: UIView?) {
 		self.viewForError = viewForError
@@ -535,16 +538,22 @@ class MovieDatabase : DatabaseParent {
 				// we have updated records: also update genre-database, then clean-up posters
 				loadGenreDatabase({ () -> () in
 					self.cleanUpPosters()
+					self.writeMoviesToDevice()
 				})
 			}
 			else {
 				// clean up posters
 				cleanUpPosters()
+				self.writeMoviesToDevice()
 			}
 		}
 	}
 	
 	
+	// MARK: - Functions for migrating the database to a new version with more fields
+	
+	
+
 	// MARK: - Private helper functions
 	
 	
@@ -552,7 +561,7 @@ class MovieDatabase : DatabaseParent {
 		Writes the movies and the modification date to file.
 	
 		- parameter allMovieRecords:			The array with all movies. This will be written to file.
-		- parameter updatedMoviesAsRecordArray:	The array with all updated movies (used to find out latest modification date)
+		- parameter updatedMoviesAsRecordArray:	The array with all updated movies (only used to find out latest modification date)
 		- parameter completionHandler:			The handler which is called upon completion
 		- parameter errorHandler:				The handler which is called if an error occurs
 	*/
@@ -629,15 +638,15 @@ class MovieDatabase : DatabaseParent {
 					existingMovies.removeAtIndex(index)
 				}
 			}
-			
+
 			removedMovies = oldNumberOfMovies - existingMovies.count
-			
+
 			if (removedMovies > 0) {
 				// udpate the watch
 				WatchSessionManager.sharedManager.sendAllFavoritesToWatch(true, sendThumbnails: false)
 			}
 		}
-		
+
 		print("Clean up over, removed \(removedMovies) movies from local file. Now we have \(existingMovies.count) movies.")
 	}
 
@@ -653,9 +662,12 @@ class MovieDatabase : DatabaseParent {
 			downloadMissingPosters(basePath, movies: movies)
 			deleteUnneededYoutubeImages(basePath, movies: movies)
 		}
-		
-		// Try to write the movies to the device.
-		
+	}
+
+	/**
+		Tries to write the movies to the device.
+	*/
+	private func writeMoviesToDevice() {
 		if let completionHandler = completionHandler, errorHandler = errorHandler, loadedMovieRecordArray = loadedMovieRecordArray {
 			writeMovies(loadedMovieRecordArray, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
 		}

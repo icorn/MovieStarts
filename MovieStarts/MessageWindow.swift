@@ -51,12 +51,12 @@ class MessageWindow: NSObject {
 		buttonTopConstraints = []
 		
 		super.init()
-
+/*
 		if (buttonStringIds.count == 0) {
 			NSLog("MessageWindow must have buttons!")
 			return
 		}
-		
+*/
 		// set up views
 		
 		view.translatesAutoresizingMaskIntoConstraints = false
@@ -237,14 +237,26 @@ class MessageWindow: NSObject {
 				attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0)
 		])
 
-		view.addConstraints([
+		view.addConstraint(
 			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.CenterX, relatedBy: NSLayoutRelation.Equal, toItem: view,
-				attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: buttons[0],
-				attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: buttons[0],
-				attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0)
-		])
+				attribute: NSLayoutAttribute.CenterX, multiplier: 1.0, constant: 0))
+
+		if (buttons.count > 0) {
+			view.addConstraints([
+				NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: buttons[0],
+					attribute: NSLayoutAttribute.Top, multiplier: 1.0, constant: 0),
+				NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: buttons[0],
+					attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0)
+				])
+		}
+		else {
+			view.addConstraints([
+				NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Top, relatedBy: NSLayoutRelation.Equal, toItem: msg,
+					attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 10),
+				NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Height, relatedBy: NSLayoutRelation.Equal, toItem: msg,
+					attribute: NSLayoutAttribute.Height, multiplier: 1.0, constant: 0)
+				])
+		}
 
 		progressViewWidthConstraint =  NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.Width, relatedBy: NSLayoutRelation.Equal, toItem: nil,
 			attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: progressLabel.frame.width + 30)
@@ -253,12 +265,19 @@ class MessageWindow: NSObject {
 			view.addConstraint(constraint)
 		}
 		
-		parent.addConstraints([
+		parent.addConstraint(
 			NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.CenterY, relatedBy: NSLayoutRelation.Equal, toItem: parent,
-				attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal, toItem: buttons[buttons.count-1],
-				attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 20)
-		])
+				attribute: NSLayoutAttribute.CenterY, multiplier: 1.0, constant: 0)
+		)
+
+		if (buttons.count > 0) {
+			parent.addConstraint(NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal,
+				toItem: buttons[buttons.count-1], attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 20))
+		}
+		else {
+			parent.addConstraint(NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.Bottom, relatedBy: NSLayoutRelation.Equal,
+				toItem: progressView, attribute: NSLayoutAttribute.Bottom, multiplier: 1.0, constant: 20))
+		}
 	}
 	
 	

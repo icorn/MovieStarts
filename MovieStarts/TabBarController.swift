@@ -75,26 +75,6 @@ class TabBarController: UITabBarController {
 		}
 	}
 
-	override func viewDidAppear(animated: Bool) {
-		super.viewDidAppear(animated)
-
-		// if we have a new mayor version (and no first launch), show the user some informations about new features
-		
-		if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate {
-			if ((thisIsTheFirstLaunch == false)  && (appDelegate.versionOfPreviousLaunch != Constants.versionCurrent)) {
-				var infoWindow: MessageWindow?
-
-				dispatch_async(dispatch_get_main_queue()) {
-					infoWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "UpdateFeature", textStringId: "UpdateMessagePush",
-						buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
-							infoWindow?.close()
-						}
-					)
-				}
-			}
-		}
-	}
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -233,13 +213,6 @@ class TabBarController: UITabBarController {
 			}
 		}
 
-		// check internet connection
-/*
-		if (NetworkChecker.checkReachability(nil) == false) {
-			NSLog("Movie update: no network, we just don't update")
-			return
-		}
-*/
 		// check iCloud status
 		
 		database?.checkCloudKit({ [unowned self] (status: CKAccountStatus, error: NSError?) -> () in

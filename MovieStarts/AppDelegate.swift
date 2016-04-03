@@ -134,12 +134,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if let oldVersion = oldVersion as? Int {
 			versionOfPreviousLaunch = oldVersion
 		}
-
+		
+/*
 		// if this is a new version: write it to disc
 		if (versionOfPreviousLaunch != Constants.versionCurrent) {
 			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(Constants.versionCurrent, forKey: Constants.prefsVersion)
 			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 		}
+*/
 		
 		return true
 	}

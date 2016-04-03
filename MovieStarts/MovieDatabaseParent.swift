@@ -7,3 +7,15 @@
 //
 
 import Foundation
+import CloudKit
+import UIKit
+
+
+class MovieDatabaseParent : DatabaseParent {
+	
+	
+	// TODO
+	
+	// Parent für die 3 MovieDatabases
+	
+}
