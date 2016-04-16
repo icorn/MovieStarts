@@ -134,14 +134,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if let oldVersion = oldVersion as? Int {
 			versionOfPreviousLaunch = oldVersion
 		}
-		
-/*
+
 		// if this is a new version: write it to disc
 		if (versionOfPreviousLaunch != Constants.versionCurrent) {
+			// write old version to disc
 			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(Constants.versionCurrent, forKey: Constants.prefsVersion)
 			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+			
+			// check if movie database exists locally
+			
+			if (databaseFileExists()) {
+				// movie database file exists -> check if we need to migrate the database to a new version
+				
+				if (versionOfPreviousLaunch < Constants.version1_2) {
+					// set in flag in the prefs, read the flag later in MovieTableViewController.
+					// special case: if the prefs-entry already exists (from a previously failed update-try from an older version), 
+					// don't override it: the database file is from the older version (because previous update failed).
+					
+					let previousMigrateFromVersion = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsMigrateFromVersion)
+					
+					if (previousMigrateFromVersion == nil) {
+						NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(versionOfPreviousLaunch, forKey: Constants.prefsMigrateFromVersion)
+						NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+					}
+				}
+			}
 		}
-*/
 		
 		return true
 	}
@@ -248,6 +266,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				NotificationManager.notifyAboutMultipleMovies(self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
 			}
 		}
+	}
+
+	
+	private func databaseFileExists() -> Bool {
+		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		
+		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
+			var moviesPlistFile: String
+			if fileUrlPath.hasSuffix("/") {
+				moviesPlistFile = fileUrlPath + Constants.dbRecordTypeMovie + ".plist"
+			}
+			else {
+				moviesPlistFile = fileUrlPath + "/" + Constants.dbRecordTypeMovie + ".plist"
+			}
+			
+			if (NSFileManager.defaultManager().fileExistsAtPath(moviesPlistFile)) {
+				return true
+			}
+		}
+		
+		return false
 	}
 }
 

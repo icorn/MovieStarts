@@ -451,6 +451,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			else {
 				tomatoesRatingLabel.text = "?"
 			}
+			
+			if let tomatoImageIndex = self.movie?.tomatoImage, tomatoImage = TomatoImage(rawValue: tomatoImageIndex) {
+				tomatoesImageView.image = UIImage.init(named: tomatoImage.filename)
+			}
 		}
 	}
 	

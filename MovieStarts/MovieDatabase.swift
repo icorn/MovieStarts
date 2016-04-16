@@ -33,10 +33,7 @@ class MovieDatabase : DatabaseParent {
 	var allCKRecords: [CKRecord] = []
 	var updatedCKRecords: [CKRecord] = []
 
-	let queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries,
-	                 Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId,
-	                 Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN /*, Constants.dbIdRatingImdb, Constants.dbIdRatingTomato,
-					 Constants.dbIdTomatoImage, Constants.dbIdTomatoURL */ ]
+	let queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries, Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId, Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN, Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic]
 
 	init(recordType: String, viewForError: UIView?) {
 		self.viewForError = viewForError
@@ -550,10 +547,6 @@ class MovieDatabase : DatabaseParent {
 	}
 	
 	
-	// MARK: - Functions for migrating the database to a new version with more fields
-	
-	
-
 	// MARK: - Private helper functions
 	
 	

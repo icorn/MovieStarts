@@ -615,15 +615,6 @@ public class MovieRecord : CustomStringConvertible {
 		if let localReleaseDate = releaseDateInLocalTimezone where localReleaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
 			let now = NSDate()
 			retval = (localReleaseDate.compare(now) != NSComparisonResult.OrderedDescending)
-
-/*
-			if (retval == false) {
-				NSLog("\(title[currentCountry.countryArrayIndex])")
-				NSLog("RelDate: \(releaseDate[currentCountry.countryArrayIndex])")
-				NSLog("Starts in: \(localReleaseDate.timeIntervalSinceDate(now) / 60 / 60) hours")
-				NSLog("")
-			}
-*/
 		}
 		
 		return retval

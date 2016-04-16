@@ -19,6 +19,7 @@ class TabBarController: UITabBarController {
 	var favoriteMovies: [[MovieRecord]] = []
 	var favoriteSections: [String] = []
 	var thisIsTheFirstLaunch = false
+	var migrationHasFailedInThisSession = false
 	
 	@IBOutlet weak var movieTabBar: UITabBar!
 

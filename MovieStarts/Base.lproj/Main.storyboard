@@ -117,7 +117,7 @@
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bewertung:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r3S-Qm-fw6" userLabel="ratingHeadlineLabel">
-                                                <rect key="frame" x="16" y="184" width="100" height="21"/>
+                                                <rect key="frame" x="16" y="184" width="388" height="21"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="100" id="0Lf-UF-Yrn"/>
@@ -126,6 +126,11 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
+                                                <variation key="default">
+                                                    <mask key="constraints">
+                                                        <exclude reference="0Lf-UF-Yrn"/>
+                                                    </mask>
+                                                </variation>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10.0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0cO-Vy-ASY" userLabel="ratingLabel">
                                                 <rect key="frame" x="554" y="186" width="30" height="17"/>
@@ -424,10 +429,10 @@
                                                                 <rect key="frame" x="0.0" y="18" width="281" height="24"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MQ6-PP-VZr" userLabel="tomatoesInnerView">
-                                                                        <rect key="frame" x="110" y="0.0" width="61" height="24"/>
+                                                                        <rect key="frame" x="110" y="0.0" width="61" height="22"/>
                                                                         <subviews>
-                                                                            <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fresh.png" translatesAutoresizingMaskIntoConstraints="NO" id="qsD-v2-d2b" userLabel="tomatoesImageView">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="20" height="24"/>
+                                                                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="fresh.png" translatesAutoresizingMaskIntoConstraints="NO" id="qsD-v2-d2b" userLabel="tomatoesImageView">
+                                                                                <rect key="frame" x="0.0" y="0.0" width="20" height="22"/>
                                                                                 <constraints>
                                                                                     <constraint firstAttribute="width" constant="30" id="00n-of-Igt"/>
                                                                                     <constraint firstAttribute="height" constant="48" id="h0I-Fa-Y4g"/>
@@ -440,7 +445,7 @@
                                                                                 </variation>
                                                                             </imageView>
                                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="75%" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000004" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="78R-OM-e1F" userLabel="tomatoesRatingLabel">
-                                                                                <rect key="frame" x="28" y="0.0" width="33" height="24"/>
+                                                                                <rect key="frame" x="28" y="0.0" width="33" height="22"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                                                 <nil key="highlightedColor"/>
@@ -450,6 +455,7 @@
                                                                             <constraint firstItem="qsD-v2-d2b" firstAttribute="leading" secondItem="MQ6-PP-VZr" secondAttribute="leading" id="16t-sg-2sl"/>
                                                                             <constraint firstAttribute="bottom" secondItem="qsD-v2-d2b" secondAttribute="bottom" id="5lC-kG-ixk"/>
                                                                             <constraint firstItem="78R-OM-e1F" firstAttribute="leading" secondItem="qsD-v2-d2b" secondAttribute="trailing" constant="8" id="6hh-Yz-coC"/>
+                                                                            <constraint firstItem="78R-OM-e1F" firstAttribute="centerY" secondItem="MQ6-PP-VZr" secondAttribute="centerY" id="CCG-qD-vbT"/>
                                                                             <constraint firstItem="78R-OM-e1F" firstAttribute="top" secondItem="MQ6-PP-VZr" secondAttribute="top" id="IEJ-sB-yII"/>
                                                                             <constraint firstAttribute="bottom" secondItem="78R-OM-e1F" secondAttribute="bottom" id="IyB-T3-Z8a"/>
                                                                             <constraint firstAttribute="trailing" secondItem="78R-OM-e1F" secondAttribute="trailing" id="Wcz-JH-Vtr"/>
@@ -459,9 +465,8 @@
                                                                 </subviews>
                                                                 <constraints>
                                                                     <constraint firstItem="MQ6-PP-VZr" firstAttribute="centerX" secondItem="5J0-4O-DWx" secondAttribute="centerX" id="M3d-Ef-9bE"/>
-                                                                    <constraint firstItem="MQ6-PP-VZr" firstAttribute="centerY" secondItem="5J0-4O-DWx" secondAttribute="centerY" id="jTk-vy-UHW"/>
                                                                     <constraint firstItem="MQ6-PP-VZr" firstAttribute="top" secondItem="5J0-4O-DWx" secondAttribute="top" id="oRR-ts-5NY"/>
-                                                                    <constraint firstAttribute="bottom" secondItem="MQ6-PP-VZr" secondAttribute="bottom" id="p8n-QK-ow2"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="MQ6-PP-VZr" secondAttribute="bottom" constant="2" id="p8n-QK-ow2"/>
                                                                 </constraints>
                                                             </view>
                                                         </subviews>
@@ -528,6 +533,7 @@
                                             <constraint firstItem="0cO-Vy-ASY" firstAttribute="leading" secondItem="68J-7c-hsV" secondAttribute="trailing" id="NBP-Tc-E5u"/>
                                             <constraint firstAttribute="trailing" secondItem="Xsr-tj-oBk" secondAttribute="trailing" constant="16" id="NDu-a4-U3x"/>
                                             <constraint firstItem="Q3S-Oh-8ST" firstAttribute="leading" secondItem="wfA-YV-bBb" secondAttribute="trailing" id="NVg-4Q-hFO"/>
+                                            <constraint firstItem="68J-7c-hsV" firstAttribute="leading" secondItem="r3S-Qm-fw6" secondAttribute="trailing" id="O8Y-PK-rV9"/>
                                             <constraint firstItem="mEF-Zu-Foy" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="OGo-Q1-58C"/>
                                             <constraint firstItem="eV1-Lj-IO0" firstAttribute="top" secondItem="IDh-DI-GX7" secondAttribute="top" id="OS7-Ae-cE3"/>
                                             <constraint firstItem="iBv-0T-9D3" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" id="Og3-Lb-US9"/>

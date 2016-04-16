@@ -35,7 +35,7 @@
 "NoReleaseDate" 	= "unbekannt";
 "MinutesShort"		= "Min";
 "aka"				= "Original:";
-"IMDbRating"		= "IMDb-Bewertung";
+"IMDbRating"		= "IMDb-Score";
 
 "ShowOnImdb"				= "Zeige Details auf IMDb";
 "TrailerHeadline"			= "Trailer";
@@ -96,7 +96,7 @@
 "UpdateFeatures"			= "Neue Features";
 "UpdateMessagePush"			= "In dieser Version der App gibt es ein neues Feature: In den Einstellungen kannst du Mitteilungen einschalten, um dich daran erinnern zu lassen, wenn deine Favoriten-Filme ins Kino kommen.";
 
-"UpdateDatabase1_2Title"	= "Film-Bewertungen aktualisieren";
+"UpdateDatabase1_2Title"	= "Update";
 "UpdateDatabase1_2Text"		= "Es werden fehlende Film-Bewertungen vom Server geladen.";
 "RatingUpdateStart"			= "Bewertungen laden...";
 "RatingUpdateProgress"		= "Bewertungen geladen...";

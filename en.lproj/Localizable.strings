@@ -96,7 +96,7 @@
 "UpdateFeatures"			= "New Features";
 "UpdateMessagePush"			= "There is a new feature in this version of the app: You can turn on notifications in the settings to get a push notification when your favorite movies will be released.";
 
-"UpdateDatabase1_2Title"	= "Update Movie Ratings";
+"UpdateDatabase1_2Title"	= "Update";
 "UpdateDatabase1_2Text"		= "Downloading missing movie ratings from the server.";
 "RatingUpdateStart"			= "Downloading ratings...";
 "RatingUpdateProgress"		= "ratings downloaded...";

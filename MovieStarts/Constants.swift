@@ -35,6 +35,7 @@ public struct Constants {
 	static let prefsNotificationDay				= "notificationDay"
 	static let prefsNotificationTime			= "notificationTime"
 	static let prefsVersion						= "version"
+	static let prefsMigrateFromVersion			= "migrateFromVersion"
 	
 	static let dbRecordTypeMovie			= "Movie"
 	static let dbRecordTypeGenre			= "Genre"
@@ -48,7 +49,7 @@ public struct Constants {
 	static let notificationTimeMax			= 23
 	static let notificationDays				= 6 // number of different possible days for notification
 	
-	static let hoursBetweenDbUpdates		= 24
+	static let hoursBetweenDbUpdates		= 1 //24
 	static let maxDaysInThePast				= 30.0
 
 	static let tagFavoriteView				= 10000
