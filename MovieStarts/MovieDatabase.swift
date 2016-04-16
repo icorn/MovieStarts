@@ -692,15 +692,16 @@ class MovieDatabase : DatabaseParent {
 				
 				if let posterfilenameString = posterfilename as? String {
 					for movie in movies {
-						for posterUrl in movie.posterUrl {
-							if (posterUrl.characters.count > 3) {
-								if (posterfilenameString == posterUrl.substringWithRange(Range<String.Index>(start: posterUrl.startIndex.advancedBy(1), end: posterUrl.endIndex)))
-								{
-									found = true
-									break
-								}
-							}
-						}
+                        if (found == false) {
+                            for posterUrl in movie.posterUrl {
+                                if ((posterUrl.characters.count > 3) &&
+                                    (posterfilenameString == posterUrl.substringFromIndex(posterUrl.startIndex.advancedBy(1))))
+                                {
+                                    found = true
+                                    break
+                                }
+                            }
+                        }
 					}
 					
 					if (found == false) {
