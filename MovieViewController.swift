@@ -65,6 +65,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var line4VerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line5HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line5VerticalSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet weak var line1HeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var line1VerticalSpaceConstraint: NSLayoutConstraint!
 	
 	@IBOutlet weak var directorHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorLabelHeightConstraint: NSLayoutConstraint!
@@ -105,6 +107,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var ratingStackViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ratingStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	
+    @IBOutlet weak var imdbOuterView: UIView!
+    @IBOutlet weak var imdbInnerView: UIView!
+    
 	var posterImageViewTopConstraint: NSLayoutConstraint?
 	var posterImageViewLeadingConstraint: NSLayoutConstraint?
 	var posterImageViewWidthConstraint: NSLayoutConstraint?
@@ -140,7 +145,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			return movie?.ratingImdb
 		}
 	}
-	
+
 
 	// MARK: - UIViewController
 	
@@ -242,7 +247,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			}
 			if (movie.directors.count < 1) {
 				setConstraintsToZero(directorLabelHeightConstraint, directorLabelVerticalSpaceConstraint, directorHeadlineLabelHeightConstraint,
-					directorHeadlineLabelVerticalSpaceConstraint, line2HeightConstraint, line2VerticalSpaceConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint)
+					directorHeadlineLabelVerticalSpaceConstraint, line2bHeightConstraint, line2bVerticalSpaceConstraint)
 			}
 			
 			// show actor(s)
@@ -381,34 +386,27 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		switch (self.showRatingsMode) {
 			
 		case .Hide:
-			ratingHeadlineLabelHeightConstraint.constant = 0
-			ratingLabelHeightConstraint.constant = 0
-			starsgoldHeightConstraint.constant = 0
-			starsgreyHeightConstraint.constant = 0
-			line2VerticalSpaceConstraint.constant = 0
-			line2HeightConstraint.constant = 0
-			ratingLabelTopConstraint.constant = 0
-			ratingHeadlineLabelTopConstraint.constant = 0
-
-			ratingStackViewHeightConstraint.constant = 0
-			ratingStackViewVerticalSpaceConstraint.constant = 0
-			ratingStackView.hidden = true
-			line2bHeightConstraint.constant = 0
-			line2bVerticalSpaceConstraint.constant = 0
+            ratingStackView.hidden = true
+            setConstraintsToZero(ratingHeadlineLabelHeightConstraint, ratingLabelHeightConstraint,
+                starsgoldHeightConstraint, starsgreyHeightConstraint, ratingLabelTopConstraint,
+                ratingHeadlineLabelTopConstraint, ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
+                line1VerticalSpaceConstraint, line1HeightConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint)
 			
 		case .TmdbOnly:
 			ratingStackView.hidden = true
 			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
-			line2bHeightConstraint.constant = 0
-			line2bVerticalSpaceConstraint.constant = 0
-			setOnlyRating()
+            setOnlyRating()
+
+            setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
+                line1bHeightConstraint, line1bVerticalSpaceConstraint)
 			
 		case .ImdbOnly:
 			ratingStackView.hidden = true
 			ratingHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "") + ":"
-			line2bHeightConstraint.constant = 0
-			line2bVerticalSpaceConstraint.constant = 0
-			setOnlyRating()
+            setOnlyRating()
+
+            setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
+                line1bHeightConstraint, line1bVerticalSpaceConstraint)
 
 			// TODO: gesture recognizers not working here (?)
 			
@@ -420,14 +418,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			starsgrey.addGestureRecognizer(rec)
 			
 		case .ImdbAndTomato:
-			ratingHeadlineLabelHeightConstraint.constant = 0
-			ratingLabelHeightConstraint.constant = 0
-			starsgoldHeightConstraint.constant = 0
-			starsgreyHeightConstraint.constant = 0
-			line2VerticalSpaceConstraint.constant = 0
-			line2HeightConstraint.constant = 0
-			ratingLabelTopConstraint.constant = 0
-			ratingHeadlineLabelTopConstraint.constant = 0
+            setConstraintsToZero(ratingHeadlineLabelHeightConstraint, ratingLabelHeightConstraint,
+                starsgoldHeightConstraint, starsgreyHeightConstraint, line1VerticalSpaceConstraint,
+                line1HeightConstraint, ratingLabelTopConstraint, ratingHeadlineLabelTopConstraint
+            
+                , line1bHeightConstraint, line1bVerticalSpaceConstraint
+                , line2HeightConstraint, line2VerticalSpaceConstraint
+            )
 			
 			// IMDb rating
 			
@@ -455,9 +452,76 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			if let tomatoImageIndex = self.movie?.tomatoImage, tomatoImage = TomatoImage(rawValue: tomatoImageIndex) {
 				tomatoesImageView.image = UIImage.init(named: tomatoImage.filename)
 			}
-		}
+            
+            // circle
+            
+            if let score = self.movie?.ratingImdb {
+                let circleRadius: CGFloat = 16.0
+                
+                // background circle
+                
+                let circlePathLayer = CAShapeLayer()
+                let circleRect  = makeCircleRect(circleRadius)
+                
+                circlePathLayer.frame = CGRect(x: 0, y: 0, width: 2*circleRadius, height: 2*circleRadius)
+                circlePathLayer.lineWidth = 4
+                circlePathLayer.fillColor = UIColor.clearColor().CGColor
+                circlePathLayer.strokeColor = UIColor.blackColor().CGColor
+                circlePathLayer.path = UIBezierPath(ovalInRect: circleRect).CGPath
+                circlePathLayer.transform = CATransform3DRotate(circlePathLayer.transform, 1.5708, 0.0, 0.0, -1.0)
+                circlePathLayer.strokeStart = 0.0
+                circlePathLayer.strokeEnd = 1.0
+                imdbRatingLabel.layer.addSublayer(circlePathLayer)
+
+                // color circle
+                
+                let maxNumberOfSegments: CGFloat = 100.0
+                let segmentSize = CGFloat(1.0 / 100.0)
+                
+                for i in 0 ..< Int(score*10.0) {
+                    let circlePathLayer = CAShapeLayer()
+                    let circleRect  = makeCircleRect(circleRadius)
+                    
+                    circlePathLayer.frame = CGRect(x: 0, y: 0, width: 2*circleRadius, height: 2*circleRadius)
+                    circlePathLayer.lineWidth = 3
+                    circlePathLayer.fillColor = UIColor.clearColor().CGColor
+                    circlePathLayer.path = UIBezierPath(ovalInRect: circleRect).CGPath
+                    circlePathLayer.transform = CATransform3DRotate(circlePathLayer.transform, 1.5708, 0.0, 0.0, -1.0)
+                    circlePathLayer.strokeEnd = CGFloat(score) / 10.0
+                    
+                    if (CGFloat(i) < maxNumberOfSegments / 2.0) {
+                        // color between red and yellow
+                        circlePathLayer.strokeColor = UIColor.init(red: 1.0,
+                                                                   green: 2.0 * CGFloat(i) * (1.0 / maxNumberOfSegments),
+                                                                   blue: 0.0,
+                                                                   alpha: 1.0).CGColor
+                    }
+                    else {
+                        // color between yellow and green
+                        circlePathLayer.strokeColor = UIColor.init(red: 2.0 - 2.0 * CGFloat(i) * (1.0 / maxNumberOfSegments),
+                                                                   green: 1.0,
+                                                                   blue: 0.0,
+                                                                   alpha: 1.0).CGColor
+                    }
+                    
+                    circlePathLayer.strokeStart = segmentSize * CGFloat(i)
+                    circlePathLayer.strokeEnd = segmentSize * (CGFloat(i) + 1.5)
+
+                    imdbRatingLabel.layer.addSublayer(circlePathLayer)
+                }
+            }
+        }
 	}
-	
+
+    
+    func makeCircleRect(circleRadius: CGFloat) -> CGRect {
+        var circleFrame = CGRect(x: 0, y: 0, width: 2 * circleRadius, height: 2 * circleRadius)
+        circleFrame.origin.y = (imdbRatingLabel.frame.width - 2.0 * circleRadius) / 2.0
+        circleFrame.origin.x = (imdbRatingLabel.frame.height - 2.0 * circleRadius) / -2.0
+        
+        return circleFrame
+    }
+    
 	
 	func setOnlyRating() {
 		let numberFormatter = NSNumberFormatter()
