@@ -106,6 +106,15 @@
 		4F95FC311C11ABFE008F482B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F95FC301C11ABFE008F482B /* Images.xcassets */; };
 		4F95FC331C11CFC5008F482B /* Icons.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F95FC321C11CFC5008F482B /* Icons.xcassets */; };
 		4F9E658D1BC14694006C6BA9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAFF8EB1A8C002B00864078 /* CloudKit.framework */; };
+		4FAB4F131CCD553D00E5E988 /* arrowup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F101CCD553D00E5E988 /* arrowup.png */; };
+		4FAB4F141CCD553D00E5E988 /* arrowup@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F111CCD553D00E5E988 /* arrowup@2x.png */; };
+		4FAB4F151CCD553D00E5E988 /* arrowup@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F121CCD553D00E5E988 /* arrowup@3x.png */; };
+		4FAB4F281CCD5ABA00E5E988 /* arrowdown.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F221CCD5ABA00E5E988 /* arrowdown.png */; };
+		4FAB4F291CCD5ABA00E5E988 /* arrowdown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F231CCD5ABA00E5E988 /* arrowdown@2x.png */; };
+		4FAB4F2A1CCD5ABA00E5E988 /* arrowdown@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F241CCD5ABA00E5E988 /* arrowdown@3x.png */; };
+		4FAB4F2B1CCD5ABA00E5E988 /* arrowmedium.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F251CCD5ABA00E5E988 /* arrowmedium.png */; };
+		4FAB4F2C1CCD5ABA00E5E988 /* arrowmedium@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F261CCD5ABA00E5E988 /* arrowmedium@2x.png */; };
+		4FAB4F2D1CCD5ABA00E5E988 /* arrowmedium@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAB4F271CCD5ABA00E5E988 /* arrowmedium@3x.png */; };
 		4FAE075B1B555615009C7507 /* NowTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAE075A1B555615009C7507 /* NowTableViewController.swift */; };
 		4FAFF8C91A8BFFE500864078 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAFF8C81A8BFFE500864078 /* AppDelegate.swift */; };
 		4FAFF8D01A8BFFE500864078 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAFF8CE1A8BFFE500864078 /* Main.storyboard */; };
@@ -294,6 +303,15 @@
 		4F95FC281C10A9C9008F482B /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
 		4F95FC301C11ABFE008F482B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4F95FC321C11CFC5008F482B /* Icons.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Icons.xcassets; sourceTree = "<group>"; };
+		4FAB4F101CCD553D00E5E988 /* arrowup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowup.png; sourceTree = "<group>"; };
+		4FAB4F111CCD553D00E5E988 /* arrowup@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowup@2x.png"; sourceTree = "<group>"; };
+		4FAB4F121CCD553D00E5E988 /* arrowup@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowup@3x.png"; sourceTree = "<group>"; };
+		4FAB4F221CCD5ABA00E5E988 /* arrowdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowdown.png; sourceTree = "<group>"; };
+		4FAB4F231CCD5ABA00E5E988 /* arrowdown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowdown@2x.png"; sourceTree = "<group>"; };
+		4FAB4F241CCD5ABA00E5E988 /* arrowdown@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowdown@3x.png"; sourceTree = "<group>"; };
+		4FAB4F251CCD5ABA00E5E988 /* arrowmedium.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowmedium.png; sourceTree = "<group>"; };
+		4FAB4F261CCD5ABA00E5E988 /* arrowmedium@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowmedium@2x.png"; sourceTree = "<group>"; };
+		4FAB4F271CCD5ABA00E5E988 /* arrowmedium@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrowmedium@3x.png"; sourceTree = "<group>"; };
 		4FAE075A1B555615009C7507 /* NowTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NowTableViewController.swift; sourceTree = "<group>"; };
 		4FAFF8C31A8BFFE500864078 /* MovieStarts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieStarts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FAFF8C71A8BFFE500864078 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -446,6 +464,15 @@
 				4F7A99991BAC68D000ED38C9 /* abouticon.png */,
 				4F7A999A1BAC68D000ED38C9 /* abouticon@2x.png */,
 				4F7A999B1BAC68D000ED38C9 /* abouticon@3x.png */,
+				4FAB4F221CCD5ABA00E5E988 /* arrowdown.png */,
+				4FAB4F231CCD5ABA00E5E988 /* arrowdown@2x.png */,
+				4FAB4F241CCD5ABA00E5E988 /* arrowdown@3x.png */,
+				4FAB4F251CCD5ABA00E5E988 /* arrowmedium.png */,
+				4FAB4F261CCD5ABA00E5E988 /* arrowmedium@2x.png */,
+				4FAB4F271CCD5ABA00E5E988 /* arrowmedium@3x.png */,
+				4FAB4F101CCD553D00E5E988 /* arrowup.png */,
+				4FAB4F111CCD553D00E5E988 /* arrowup@2x.png */,
+				4FAB4F121CCD553D00E5E988 /* arrowup@3x.png */,
 				4F6914851A8C085300B8FFCE /* Calendar.png */,
 				4F6914861A8C085300B8FFCE /* Calendar@2x.png */,
 				4F94A93C1AA84E1000E5F27F /* Calendar@3x.png */,
@@ -802,8 +829,11 @@
 				4F5EB0771BAA210200B1EFA0 /* starsgold.png in Resources */,
 				4F5EB07A1BAA210200B1EFA0 /* starsgold@3x.png in Resources */,
 				4F3EC7091B24B35B003C48E4 /* WebViewBack@2x.png in Resources */,
+				4FAB4F2B1CCD5ABA00E5E988 /* arrowmedium.png in Resources */,
 				4F7A99981BABF0B500ED38C9 /* favoritetab@3x.png in Resources */,
+				4FAB4F2A1CCD5ABA00E5E988 /* arrowdown@3x.png in Resources */,
 				4F6914921A8C085300B8FFCE /* Settings@3x.png in Resources */,
+				4FAB4F151CCD553D00E5E988 /* arrowup@3x.png in Resources */,
 				4F95FC311C11ABFE008F482B /* Images.xcassets in Resources */,
 				4F69148F1A8C085300B8FFCE /* Calendar@2x.png in Resources */,
 				4F5EB0781BAA210200B1EFA0 /* starsgold@2x.png in Resources */,
@@ -815,8 +845,11 @@
 				4F8ED3ED1B4442C7008C24FE /* MovieTableViewCell.xib in Resources */,
 				4F63E62E1A9A416100528FB3 /* LaunchLogo@2x.png in Resources */,
 				4F94A93D1AA84E1000E5F27F /* Calendar@3x.png in Resources */,
+				4FAB4F141CCD553D00E5E988 /* arrowup@2x.png in Resources */,
 				4F2C92AD1B64E4710044A27B /* favorite@3x.png in Resources */,
+				4FAB4F131CCD553D00E5E988 /* arrowup.png in Resources */,
 				4F3EC7081B24B35B003C48E4 /* WebViewForward@2x.png in Resources */,
+				4FAB4F2D1CCD5ABA00E5E988 /* arrowmedium@3x.png in Resources */,
 				4F6914911A8C085300B8FFCE /* Video.png in Resources */,
 				4FB552EB1C94CBC80053A81B /* certified@4x.png in Resources */,
 				4F63E63C1A9A8CD100528FB3 /* icon60@3x.png in Resources */,
@@ -825,6 +858,7 @@
 				4F7203831B9D9463006A4282 /* welcome@3x.png in Resources */,
 				4F583D581BAB1DBD000EF489 /* favoriteframe.png in Resources */,
 				4F6914941A8C085300B8FFCE /* Video@2x.png in Resources */,
+				4FAB4F291CCD5ABA00E5E988 /* arrowdown@2x.png in Resources */,
 				4F6914931A8C085300B8FFCE /* Settings.png in Resources */,
 				4F8ED3EF1B444B43008C24FE /* noposter.png in Resources */,
 				4FB552E61C94CBC80053A81B /* fresh@4x.png in Resources */,
@@ -835,6 +869,7 @@
 				4F69148C1A8C085300B8FFCE /* Video@3x.png in Resources */,
 				4F63E63A1A9A8CD100528FB3 /* icon40@3x.png in Resources */,
 				4F63E63B1A9A8CD100528FB3 /* icon40@2x.png in Resources */,
+				4FAB4F281CCD5ABA00E5E988 /* arrowdown.png in Resources */,
 				4F3EC70C1B24B35B003C48E4 /* WebViewBack.png in Resources */,
 				4F2C92AC1B64E4710044A27B /* favorite.png in Resources */,
 				4F7A99A51BACC4EB00ED38C9 /* tmdb@3x.png in Resources */,
@@ -861,6 +896,7 @@
 				4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */,
 				4F63E63D1A9A8CD100528FB3 /* icon60@2x.png in Resources */,
 				4F6914901A8C085300B8FFCE /* Settings@2x.png in Resources */,
+				4FAB4F2C1CCD5ABA00E5E988 /* arrowmedium@2x.png in Resources */,
 				4F2C92AE1B64E4710044A27B /* favorite@2x.png in Resources */,
 				4FB552EE1C94CBC80053A81B /* certified@3x.png in Resources */,
 				4F7203821B9D9463006A4282 /* welcome@2x.png in Resources */,

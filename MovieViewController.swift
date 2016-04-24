@@ -42,9 +42,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	@IBOutlet weak var ratingStackView: UIStackView!
 	@IBOutlet weak var imdbRatingLabel: UILabel!
+    @IBOutlet weak var imdbImageView: UIImageView!
 	@IBOutlet weak var tomatoesImageView: UIImageView!
 	@IBOutlet weak var tomatoesRatingLabel: UILabel!
-	
 	
 	@IBOutlet weak var bottomLine: UIView!
 	
@@ -434,10 +434,21 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			
 			if let score = self.movie?.ratingImdb, scoreString = numberFormatter.stringFromNumber(score) {
 				imdbRatingLabel?.text =  "\(scoreString)"
+                
+                if (score >= 7.0) {
+                    imdbImageView.image = UIImage.init(named: "arrowup.png")
+                }
+                else if (score < 6.0) {
+                    imdbImageView.image = UIImage.init(named: "arrowdown.png")
+                }
+                else {
+                    imdbImageView.image = UIImage.init(named: "arrowmedium.png")
+                }
 			}
 			else {
 				// vote was no number, shouldn't happen
 				imdbRatingLabel?.text = "?"
+                imdbImageView.image = nil
 			}
 
 			// Rotten Tomatoes rating
@@ -452,7 +463,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			if let tomatoImageIndex = self.movie?.tomatoImage, tomatoImage = TomatoImage(rawValue: tomatoImageIndex) {
 				tomatoesImageView.image = UIImage.init(named: tomatoImage.filename)
 			}
-            
+
+/*
             // circle
             
             if let score = self.movie?.ratingImdb {
@@ -510,10 +522,11 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
                     imdbRatingLabel.layer.addSublayer(circlePathLayer)
                 }
             }
+*/
         }
 	}
 
-    
+/*
     func makeCircleRect(circleRadius: CGFloat) -> CGRect {
         var circleFrame = CGRect(x: 0, y: 0, width: 2 * circleRadius, height: 2 * circleRadius)
         circleFrame.origin.y = (imdbRatingLabel.frame.width - 2.0 * circleRadius) / 2.0
@@ -521,7 +534,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         
         return circleFrame
     }
-    
+*/
 	
 	func setOnlyRating() {
 		let numberFormatter = NSNumberFormatter()
