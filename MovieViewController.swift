@@ -43,6 +43,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var ratingStackView: UIStackView!
 	@IBOutlet weak var imdbRatingLabel: UILabel!
     @IBOutlet weak var imdbImageView: UIImageView!
+	@IBOutlet weak var imdbHeadlineLabel: UILabel!
 	@IBOutlet weak var tomatoesImageView: UIImageView!
 	@IBOutlet weak var tomatoesRatingLabel: UILabel!
 	
@@ -418,16 +419,14 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			starsgrey.addGestureRecognizer(rec)
 			
 		case .ImdbAndTomato:
-            setConstraintsToZero(ratingHeadlineLabelHeightConstraint, ratingLabelHeightConstraint,
-                starsgoldHeightConstraint, starsgreyHeightConstraint, line1VerticalSpaceConstraint,
-                line1HeightConstraint, ratingLabelTopConstraint, ratingHeadlineLabelTopConstraint
-            
-                , line1bHeightConstraint, line1bVerticalSpaceConstraint
-                , line2HeightConstraint, line2VerticalSpaceConstraint
-            )
+            setConstraintsToZero(ratingHeadlineLabelHeightConstraint, ratingLabelHeightConstraint, starsgoldHeightConstraint,
+				starsgreyHeightConstraint, line1VerticalSpaceConstraint, line1HeightConstraint, ratingLabelTopConstraint,
+				ratingHeadlineLabelTopConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint, line2HeightConstraint,
+				line2VerticalSpaceConstraint)
 			
 			// IMDb rating
 			
+			imdbHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "") + ":"
 			let numberFormatter = NSNumberFormatter()
 			numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
 			numberFormatter.minimumFractionDigits = 1

@@ -35,7 +35,7 @@
 "NoReleaseDate" 	= "unknown";
 "MinutesShort"		= "min";
 "aka"				= "aka";
-"IMDbRating"		= "IMDb Score:";
+"IMDbRating"		= "IMDb Score";
 
 "ShowOnImdb"				= "Show Details on IMDb";
 "TrailerHeadline"			= "Trailers";
