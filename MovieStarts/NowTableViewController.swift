@@ -107,14 +107,23 @@ class NowTableViewController: MovieTableViewController {
 				}
 
 				if let indexForUpdatedMovie = indexForUpdatedMovie {
-					// move movie to new position
+					// move movie to new position. this is two separate actions, hence the endUpdate and beginUpdate.
 					nowMovies.insert(updatedMovie, atIndex: indexForUpdatedMovie)
 					tableView.moveRowAtIndexPath(NSIndexPath(forRow: indexForExistingMovie, inSection: 0), toIndexPath: NSIndexPath(forRow: indexForUpdatedMovie, inSection: 0))
+                    tableView.endUpdates()
+
+                    tableView.beginUpdates()
+                    tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: indexForUpdatedMovie, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
 				}
 				else {
-					// move movie to the end
+ 
+					// move movie to the end. this is two separate actions, hence the endUpdate and beginUpdate.
 					nowMovies.append(updatedMovie)
 					tableView.moveRowAtIndexPath(NSIndexPath(forRow: indexForExistingMovie, inSection: 0), toIndexPath: NSIndexPath(forRow: nowMovies.count-1, inSection: 0))
+                    tableView.endUpdates()
+
+                    tableView.beginUpdates()
+                    tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: nowMovies.count-1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
 				}
 			}
 			else if (nowMovies[indexForExistingMovie].hasVisibleChanges(updatedMovie)) {
