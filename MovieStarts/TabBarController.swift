@@ -268,139 +268,141 @@ class TabBarController: UITabBarController {
 		
 		database?.updateThumbnailHandler = updateThumbnailHandler
 
-		database?.getUpdatedMovies(allMovies, country: country,
-			addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            database?.getUpdatedMovies(allMovies, country: country,
+                addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
 
-				if (!movie.isHidden) {
-					// add new movie
-					
-					dispatch_async(dispatch_get_main_queue()) {
-						let title = movie.title[movie.currentCountry.languageArrayIndex]
+                    if (!movie.isHidden) {
+                        // add new movie
+                        
+                        dispatch_async(dispatch_get_main_queue()) {
+                            let title = movie.title[movie.currentCountry.languageArrayIndex]
 
-						if movie.isNowPlaying() {
-							print("Adding \(title) to NOW PLAYING")
-							self.nowPlayingController?.addMovie(movie)
-						}
-						else {
-							print("Adding \(title) to UPCOMING")
-							self.upcomingController?.addMovie(movie)
-						}
-					}
-				}
-			},
-			
-			updateMovieHandler: { [unowned self] (movie: MovieRecord) in
+                            if movie.isNowPlaying() {
+                                print("Adding \(title) to NOW PLAYING")
+                                self.nowPlayingController?.addMovie(movie)
+                            }
+                            else {
+                                print("Adding \(title) to UPCOMING")
+                                self.upcomingController?.addMovie(movie)
+                            }
+                        }
+                    }
+                },
+                
+                updateMovieHandler: { [unowned self] (movie: MovieRecord) in
 
-				// update movie
+                    // update movie
 
-				// there are several possibilities:
-				// 1a) movie was and is now-playing, movie cell stays in same position, only "invisible" changes
-				// 1b) movie was and is now-playing, movie cell stays in same position, changes in visible data, change cell with animation
-				// 1c) movie was and is now-playing, movie cell moves because of name-change
-				
-				// 2a) movie was and is upcoming, movie cell stays in same position (same date, same name), only "invisible" changes
-				// 2b) movie was and is upcoming, movie cell stays in same position (same date, same name), changes in visible data, change cell with animation
-				// 2c) movie was and is upcoming, movie cell moves in current section (same date, name has changed)
-				// 2d) movie was and is upcoming, movie cell moves from one section to another (date has changed)
+                    // there are several possibilities:
+                    // 1a) movie was and is now-playing, movie cell stays in same position, only "invisible" changes
+                    // 1b) movie was and is now-playing, movie cell stays in same position, changes in visible data, change cell with animation
+                    // 1c) movie was and is now-playing, movie cell moves because of name-change
+                    
+                    // 2a) movie was and is upcoming, movie cell stays in same position (same date, same name), only "invisible" changes
+                    // 2b) movie was and is upcoming, movie cell stays in same position (same date, same name), changes in visible data, change cell with animation
+                    // 2c) movie was and is upcoming, movie cell moves in current section (same date, name has changed)
+                    // 2d) movie was and is upcoming, movie cell moves from one section to another (date has changed)
 
-				// 3) movie was upcoming, is now now-playing
-				// 4) movie was now-playing, is now upcoming (unlikely)
-				
-				// the last two remove the cell from one *tab* and add it to another.
-				
-				let movieIsInUpcomingList = self.isMovieInUpcomingList(movie)
-				let movieIsInNowPlayingList = self.isMovieInNowPlayingList(movie)
-				
-				dispatch_async(dispatch_get_main_queue()) {
-					if (movie.isNowPlaying() && movieIsInNowPlayingList) {
-						// movie was and is now-playing
-						
-						if movie.isHidden {
-							self.nowPlayingController?.removeMovie(movie)
-						}
-						else {
-							let title = movie.title[movie.currentCountry.languageArrayIndex]
-							print("Updating \(title) in NOW PLAYING")
-							self.nowPlayingController?.updateMovie(movie)
-						}
-					}
-					else if (!movie.isNowPlaying() && movieIsInUpcomingList) {
-						// movie was and is upcoming
-						
-						if movie.isHidden {
-							self.upcomingController?.removeMovie(movie)
-						}
-						else {
-							let title = movie.title[movie.currentCountry.languageArrayIndex]
-							print("Updating \(title) in UPCOMING")
-							self.upcomingController?.updateMovie(movie)
-						}
-					}
-					else if (!movie.isNowPlaying() && movieIsInNowPlayingList) {
-						// movie was now-playing, is now upcoming
-						
-						if movie.isHidden {
-							self.nowPlayingController?.removeMovie(movie)
-						}
-						else {
-							let title = movie.title[movie.currentCountry.languageArrayIndex]
-							print("Moving \(title) in from NOW PLAYING to UPCOMING")
-							self.nowPlayingController?.removeMovie(movie)
-							self.upcomingController?.addMovie(movie)
-						}
-					}
-					else if (movie.isNowPlaying() && movieIsInUpcomingList) {
-						// movie was upcoming, is now now-playing
-						
-						if movie.isHidden {
-							self.upcomingController?.removeMovie(movie)
-						}
-						else {
-							let title = movie.title[movie.currentCountry.languageArrayIndex]
-							print("Moving \(title) in from UPCOMING to NOW PLAYING")
-							self.upcomingController?.removeMovie(movie)
-							self.nowPlayingController?.addMovie(movie)
-						}
-					}
-					
-					if (Favorites.IDs.contains(movie.id)) {
-						// also, update the favorites
-						
-						if movie.isHidden {
-							self.favoriteController?.removeFavorite(movie.id)
-						}
-						else {
-							let title = movie.title[movie.currentCountry.languageArrayIndex]
-							print("Updating \(title) in FAVORITES")
-							self.favoriteController?.updateFavorite(movie)
-						}
-					}
-				}
-			},
-			
-			removeMovieHandler: { [unowned self] (movie: MovieRecord) in
-				
-				// remove movie
-				dispatch_async(dispatch_get_main_queue()) {
-					self.nowPlayingController?.removeMovie(movie)
-					self.upcomingController?.removeMovie(movie)
-				
-					if (Favorites.IDs.contains(movie.id)) {
-						self.favoriteController?.removeFavorite(movie.id)
-					}
-				}
-			},
-			
-			completionHandler: { [unowned self] (movies: [MovieRecord]?) in
-				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				self.loadGenresFromFile()
-			},
+                    // 3) movie was upcoming, is now now-playing
+                    // 4) movie was now-playing, is now upcoming (unlikely)
+                    
+                    // the last two remove the cell from one *tab* and add it to another.
+                    
+                    let movieIsInUpcomingList = self.isMovieInUpcomingList(movie)
+                    let movieIsInNowPlayingList = self.isMovieInNowPlayingList(movie)
+                    
+                    dispatch_async(dispatch_get_main_queue()) {
+                        if (movie.isNowPlaying() && movieIsInNowPlayingList) {
+                            // movie was and is now-playing
+                            
+                            if movie.isHidden {
+                                self.nowPlayingController?.removeMovie(movie)
+                            }
+                            else {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Updating \(title) in NOW PLAYING")
+                                self.nowPlayingController?.updateMovie(movie)
+                            }
+                        }
+                        else if (!movie.isNowPlaying() && movieIsInUpcomingList) {
+                            // movie was and is upcoming
+                            
+                            if movie.isHidden {
+                                self.upcomingController?.removeMovie(movie)
+                            }
+                            else {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Updating \(title) in UPCOMING")
+                                self.upcomingController?.updateMovie(movie)
+                            }
+                        }
+                        else if (!movie.isNowPlaying() && movieIsInNowPlayingList) {
+                            // movie was now-playing, is now upcoming
+                            
+                            if movie.isHidden {
+                                self.nowPlayingController?.removeMovie(movie)
+                            }
+                            else {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Moving \(title) in from NOW PLAYING to UPCOMING")
+                                self.nowPlayingController?.removeMovie(movie)
+                                self.upcomingController?.addMovie(movie)
+                            }
+                        }
+                        else if (movie.isNowPlaying() && movieIsInUpcomingList) {
+                            // movie was upcoming, is now now-playing
+                            
+                            if movie.isHidden {
+                                self.upcomingController?.removeMovie(movie)
+                            }
+                            else {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Moving \(title) in from UPCOMING to NOW PLAYING")
+                                self.upcomingController?.removeMovie(movie)
+                                self.nowPlayingController?.addMovie(movie)
+                            }
+                        }
+                        
+                        if (Favorites.IDs.contains(movie.id)) {
+                            // also, update the favorites
+                            
+                            if movie.isHidden {
+                                self.favoriteController?.removeFavorite(movie.id)
+                            }
+                            else {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Updating \(title) in FAVORITES")
+                                self.favoriteController?.updateFavorite(movie)
+                            }
+                        }
+                    }
+                },
+                
+                removeMovieHandler: { [unowned self] (movie: MovieRecord) in
+                    
+                    // remove movie
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.nowPlayingController?.removeMovie(movie)
+                        self.upcomingController?.removeMovie(movie)
+                    
+                        if (Favorites.IDs.contains(movie.id)) {
+                            self.favoriteController?.removeFavorite(movie.id)
+                        }
+                    }
+                },
+                
+                completionHandler: { [unowned self] (movies: [MovieRecord]?) in
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    self.loadGenresFromFile()
+                },
 
-			errorHandler: { (errorMessage: String) in
-				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				NSLog(errorMessage)
-			}
-		)
+                errorHandler: { (errorMessage: String) in
+                    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+                    NSLog(errorMessage)
+                }
+            )
+        }
 	}
 	
 
