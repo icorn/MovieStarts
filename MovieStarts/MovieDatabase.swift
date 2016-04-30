@@ -648,12 +648,14 @@ class MovieDatabase : DatabaseParent {
 		Deleted unneeded poster files from the device, and reads missing poster files from the CloudKit database to the device.
 	*/
 	private func cleanUpPosters() {
-		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
+            let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 		
-		if let basePath = pathUrl?.path, movies = loadedMovieRecordArray {
-			deleteUnneededPosters(basePath, movies: movies)
-			downloadMissingPosters(basePath, movies: movies)
-			deleteUnneededYoutubeImages(basePath, movies: movies)
+            if let basePath = pathUrl?.path, movies = self.loadedMovieRecordArray {
+                self.deleteUnneededPosters(basePath, movies: movies)
+                self.downloadMissingPosters(basePath, movies: movies)
+                self.deleteUnneededYoutubeImages(basePath, movies: movies)
+            }
 		}
 	}
 
