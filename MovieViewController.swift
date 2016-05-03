@@ -630,6 +630,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		- parameter trailerId:	The id of the trailer, which is also the filename of the trailer-image
 	*/
 	func updateTrailerButton(index: Int, trailerId: String) {
+        if (index >= trailerStackView.arrangedSubviews.count) {
+            return
+        }
+        
 		guard let buttonToUpdate = trailerStackView.arrangedSubviews[index] as? UIButton else { return }
 		guard let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup) else { return }
 		guard let basePath = pathUrl.path else { return }
