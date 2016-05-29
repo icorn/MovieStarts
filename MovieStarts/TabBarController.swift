@@ -198,7 +198,7 @@ class TabBarController: UITabBarController {
 	}
 	
 	
-	func updateMovies(allMovies: [MovieRecord], database: MovieDatabase?) {
+	func updateMovies(allMovies: [MovieRecord], databaseUpdater: MovieDatabaseUpdater?) {
 		let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
 
 		if (userDefaults?.objectForKey(Constants.prefsLatestDbSuccessfullUpdate) != nil) {
@@ -216,13 +216,13 @@ class TabBarController: UITabBarController {
 
 		// check iCloud status
 		
-		database?.checkCloudKit({ [unowned self] (status: CKAccountStatus, error: NSError?) -> () in
+		databaseUpdater?.checkCloudKit({ [unowned self] (status: CKAccountStatus, error: NSError?) -> () in
 			
 			var errorWindow: MessageWindow?
 			
 			switch status {
 			case .Available:
-				self.getUpdatedMoviesFromDatabase(allMovies, database: database)
+				self.getUpdatedMoviesFromDatabase(allMovies, databaseUpdater: databaseUpdater)
 				
 			case .NoAccount:
 				NSLog("CloudKit error on update: no account")
@@ -258,7 +258,7 @@ class TabBarController: UITabBarController {
 	}
 	
 	
-	private func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord], database: MovieDatabase?) {
+	private func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord], databaseUpdater: MovieDatabaseUpdater?) {
 		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
 		guard let country = MovieCountry(rawValue: prefsCountryString) else {
@@ -266,10 +266,10 @@ class TabBarController: UITabBarController {
 			return
 		}
 		
-		database?.updateThumbnailHandler = updateThumbnailHandler
+		databaseUpdater?.updateThumbnailHandler = updateThumbnailHandler
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-            database?.getUpdatedMovies(allMovies, country: country,
+            databaseUpdater?.getUpdatedMovies(allMovies, country: country,
                 addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
 
                     if (!movie.isHidden) {

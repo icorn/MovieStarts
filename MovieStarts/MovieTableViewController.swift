@@ -137,10 +137,10 @@ class MovieTableViewController: UITableViewController {
 		if (migrateDatabaseIfNeeded() == false) {
 			// no database migration needed: if last update is long enough ago: check CloudKit for update
 			guard let tbc = movieTabBarController else { return }
-			let database = MovieDatabase(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
+			let databaseUpdater = MovieDatabaseUpdater(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
 
-			if let allMovies = database.readDatabaseFromFile() {
-				tbc.updateMovies(allMovies, database: database)
+			if let allMovies = databaseUpdater.readDatabaseFromFile() {
+				tbc.updateMovies(allMovies, databaseUpdater: databaseUpdater)
 			}
 		}
 		
@@ -455,9 +455,9 @@ class MovieTableViewController: UITableViewController {
 					return
 				}
 				
-				let database = MovieMigrationDatabase(recordType: Constants.dbRecordTypeMovie, viewForError: self.view)
+				let databaseMigrator = MovieDatabaseMigrator(recordType: Constants.dbRecordTypeMovie, viewForError: self.view)
 				
-				database.getMigrationMovies(country,
+				databaseMigrator.getMigrationMovies(country,
 											updateMovieHandler: { [unowned self] (movie: MovieRecord) in
 												
 												// update the just received movie
@@ -466,7 +466,7 @@ class MovieTableViewController: UITableViewController {
 												
 												for (nowIndex, nowMovie) in self.nowMovies.enumerate() {
 													if (nowMovie.tmdbId == movie.tmdbId) {
-														self.nowMovies[nowIndex].migrate(movie, updateKeys: database.queryKeys)
+														self.nowMovies[nowIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
 														updated = true
 														break
 													}
@@ -476,7 +476,7 @@ class MovieTableViewController: UITableViewController {
 													for (upcomingSectionIndex, upcomingMovieSection) in tbc.upcomingMovies.enumerate() {
 														for (upcomingMovieIndex, upcomingMovie) in upcomingMovieSection.enumerate() {
 															if (upcomingMovie.tmdbId == movie.tmdbId) {
-																tbc.upcomingMovies[upcomingSectionIndex][upcomingMovieIndex].migrate(movie, updateKeys: database.queryKeys)
+																tbc.upcomingMovies[upcomingSectionIndex][upcomingMovieIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
 																break
 															}
 														}
@@ -486,7 +486,7 @@ class MovieTableViewController: UITableViewController {
 												for (favoriteSectionIndex, favoriteMovieSection) in tbc.favoriteMovies.enumerate() {
 													for (favoriteMovieIndex, favoriteMovie) in favoriteMovieSection.enumerate() {
 														if (favoriteMovie.tmdbId == movie.tmdbId) {
-															tbc.favoriteMovies[favoriteSectionIndex][favoriteMovieIndex].migrate(movie, updateKeys: database.queryKeys)
+															tbc.favoriteMovies[favoriteSectionIndex][favoriteMovieIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
 															break
 														}
 													}

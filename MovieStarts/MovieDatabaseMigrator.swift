@@ -11,27 +11,13 @@ import CloudKit
 import UIKit
 
 
-class MovieMigrationDatabase : DatabaseParent {
-
-	var moviesPlistPath: String?
-	var moviesPlistFile: String?
-	var loadedMovieRecordArray: [MovieRecord]?
-	var viewForError: UIView?
-
-	var completionHandler: ((movies: [MovieRecord]?) -> ())?
-	var errorHandler: ((errorMessage: String) -> ())?
-	var updateMovieHandler: ((movie: MovieRecord) -> ())?
-	var stopIndicator: (() -> ())?
-	var finishHandler: (() -> ())?
-
-	var updatedCKRecords: [CKRecord] = []
-
-	let queryKeys = [Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic]
-
+class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 	
-	init(recordType: String, viewForError: UIView?) {
-		self.viewForError = viewForError
+	required init(recordType: String, viewForError: UIView?) {
 		super.init(recordType: recordType)
+
+		self.viewForError = viewForError
+		queryKeys = [Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic]
 		
 		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 		
@@ -90,37 +76,37 @@ class MovieMigrationDatabase : DatabaseParent {
 		let queryOperation = CKQueryOperation(query: query)
 		
 		let operationQueue = NSOperationQueue()
-		executeQueryOperationMigrationMovies(queryOperation, onOperationQueue: operationQueue)
+		executeQueryOperation(queryOperation, onOperationQueue: operationQueue)
 	}
 	
 	
 	/**
 		Sends a new CloudKit query to get more records.
-	
 		- parameter queryOperation:		The query operation containing the predicates
 		- parameter onOperationQueue:	The queue for the query operation
 	*/
-	func executeQueryOperationMigrationMovies(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
+	internal func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
 		
 		queryOperation.desiredKeys = self.queryKeys
 		queryOperation.desiredKeys?.append(Constants.dbIdTmdbId)
 		queryOperation.database = cloudKitDatabase
 		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
 		queryOperation.resultsLimit = 10
-		
+		queryOperation.recordFetchedBlock = self.recordFetchedCallback
+/*
 		queryOperation.recordFetchedBlock = { (record : CKRecord) -> Void in
-			self.recordFetchedMigrationMoviesCallback(record)
+			self.recordFetchedCallback(record)
 		}
-		
+*/
 		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: NSError?) -> Void in
 			if let cursor = cursor {
 				// some objects are here, ask for more
 				let queryCursorOperation = CKQueryOperation(cursor: cursor)
-				self.executeQueryOperationMigrationMovies(queryCursorOperation, onOperationQueue: operationQueue)
+				self.executeQueryOperation(queryCursorOperation, onOperationQueue: operationQueue)
 			}
 			else {
 				// download finished (with error or not)
-				self.queryOperationFinishedMigrationMovies(error)
+				self.queryOperationFinished(error)
 			}
 		}
 		
@@ -132,10 +118,9 @@ class MovieMigrationDatabase : DatabaseParent {
 	/**
 		Adds the record to an array to save it for later processing.
 		This function is called when a new updated record was fetched from the CloudKit database.
-	
 		- parameter record:	The record from the CloudKit database
 	*/
-	func recordFetchedMigrationMoviesCallback(record: CKRecord) {
+	internal func recordFetchedCallback(record: CKRecord) {
 		
 		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("recordFetchedMigrationMoviesCallback: Corrupt countrycode \(prefsCountryString)"); return }
@@ -158,10 +143,9 @@ class MovieMigrationDatabase : DatabaseParent {
 	/**
 		This function is called when all updated records have been fetched from the CloudKit database.
 		MovieRecord objects are generated and save.
-	
 		- parameter error:	The error object
 	*/
-	func queryOperationFinishedMigrationMovies(error: NSError?) {
+	internal func queryOperationFinished(error: NSError?) {
 		if let error = error {
 			// there was an error
 			self.errorHandler?(errorMessage: "Error querying updated records: \(error.code) (\(error.description))")
@@ -196,97 +180,5 @@ class MovieMigrationDatabase : DatabaseParent {
 			}
 		}
 	}
-	
-	
-	// from MovieDatabase.swift
-	
-	
-	/**
-		Reads the movie database from local file and returns it.
-	
-		- returns: All movies as array of MovieRecord objects, or nil on error
-	*/
-	func readDatabaseFromFile() -> [MovieRecord]? {
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
-		guard let country = MovieCountry(rawValue: prefsCountryString) else { return nil }
-		
-		if let moviesPlistFile = moviesPlistFile {
-			// try to load movies from device
-			if let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary] {
-				// successfully loaded movies from device
-				return MovieDatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
-			}
-		}
-		
-		return nil
-	}
-
-	
-	/**
-		Tries to write the movies to the device.
-	*/
-	private func writeMoviesToDevice() {
-		if let completionHandler = completionHandler, errorHandler = errorHandler, loadedMovieRecordArray = loadedMovieRecordArray {
-			writeMovies(loadedMovieRecordArray, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
-		}
-		else {
-			errorHandler?(errorMessage: "One of the handlers is nil!")
-		}
-	}
-
-	
-	/**
-		Writes the movies and the modification date to file.
-
-		- parameter allMovieRecords:			The array with all movies. This will be written to file.
-		- parameter updatedMoviesAsRecordArray:	The array with all updated movies (used to find out latest modification date)
-		- parameter completionHandler:			The handler which is called upon completion
-		- parameter errorHandler:				The handler which is called if an error occurs
-	*/
-	private func writeMovies(allMovieRecords: [MovieRecord], updatedMoviesAsRecordArray: [CKRecord], completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
-		
-		// write it to device
-		
-		if let filename = self.moviesPlistFile {
-			if ((MovieDatabaseHelper.movieRecordArrayToDictArray(allMovieRecords) as NSArray).writeToFile(filename, atomically: true) == false) {
-				if let saveStopIndicator = self.stopIndicator {
-					dispatch_async(dispatch_get_main_queue()) {
-						saveStopIndicator()
-					}
-				}
-				
-				errorHandler(errorMessage: "*** Error writing movies-file")
-				var errorWindow: MessageWindow?
-				
-				if let viewForError = viewForError {
-					dispatch_async(dispatch_get_main_queue()) {
-						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "ErrorWritingFile", buttonStringIds: ["Close"],
-						                            handler: { (buttonIndex) -> () in
-														errorWindow?.close()
-							}
-						)
-					}
-				}
-				
-				return
-			}
-		}
-		else {
-			errorHandler(errorMessage: "*** Filename for movies-list is broken")
-			return
-		}
-		
-		// and store the latest modification-date of the records
-		if (updatedMoviesAsRecordArray.count > 0) {
-			MovieDatabaseHelper.storeLastModification(updatedMoviesAsRecordArray)
-		}
-		
-		// success
-		dispatch_async(dispatch_get_main_queue()) {
-			self.finishHandler?()
-		}
-		
-		completionHandler(movies: allMovieRecords)
-	}
-
 }
+
