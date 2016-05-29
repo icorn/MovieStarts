@@ -48,7 +48,7 @@ extension MovieViewController {
 				bigPosterImageView.contentMode = UIViewContentMode.ScaleAspectFit
 				bigPosterImageView.translatesAutoresizingMaskIntoConstraints = false
 				bigPosterImageView.userInteractionEnabled = true
-				bigPosterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: Selector("bigPosterTapped:")))
+				bigPosterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.bigPosterTapped(_:))))
 				
 				if let bigPoster = bigPoster {
 					bigPosterImageView.image = bigPoster

@@ -86,7 +86,7 @@ class MovieInterfaceController: WKInterfaceController {
 		let menuIcon = UIImage(named: "refreshMenuItem@2x.png")
 
 		if let menuIcon = menuIcon {
-			addMenuItemWithImage(menuIcon, title: NSLocalizedString("menuItemRefresh", comment: ""), action: Selector("refreshButtonTapped"))
+			addMenuItemWithImage(menuIcon, title: NSLocalizedString("menuItemRefresh", comment: ""), action: #selector(MovieInterfaceController.refreshButtonTapped))
 		}
 		
 		// go on depending on launch-status

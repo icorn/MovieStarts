@@ -40,6 +40,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
 	
+	@IBOutlet weak var ratingStackView: UIStackView!
+	@IBOutlet weak var imdbRatingLabel: UILabel!
+    @IBOutlet weak var imdbImageView: UIImageView!
+	@IBOutlet weak var imdbHeadlineLabel: UILabel!
+	@IBOutlet weak var tomatoesImageView: UIImageView!
+	@IBOutlet weak var tomatoesRatingLabel: UILabel!
+	
 	@IBOutlet weak var bottomLine: UIView!
 	
 	@IBOutlet weak var starsgrey: UIImageView!
@@ -59,6 +66,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var line4VerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line5HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line5VerticalSpaceConstraint: NSLayoutConstraint!
+    @IBOutlet weak var line1HeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var line1VerticalSpaceConstraint: NSLayoutConstraint!
 	
 	@IBOutlet weak var directorHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorLabelHeightConstraint: NSLayoutConstraint!
@@ -81,6 +90,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var storyHeadlineLabelTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var storyLabelTopSpaceConstraint: NSLayoutConstraint!
+	@IBOutlet weak var line2bHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var line2bVerticalSpaceConstraint: NSLayoutConstraint!
 	
 	@IBOutlet weak var starsgoldWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var starsgreyWidthConstraint: NSLayoutConstraint!
@@ -94,7 +105,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var ratingLabelTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
+	@IBOutlet weak var ratingStackViewHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var ratingStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	
+    @IBOutlet weak var imdbOuterView: UIView!
+    @IBOutlet weak var imdbInnerView: UIView!
+    
 	var posterImageViewTopConstraint: NSLayoutConstraint?
 	var posterImageViewLeadingConstraint: NSLayoutConstraint?
 	var posterImageViewWidthConstraint: NSLayoutConstraint?
@@ -115,7 +131,22 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
 	var movie: MovieRecord?
 	var allTrailerIds: [String] = []
+
+	/// show the old tmdb-ratings?
+	let showTmdbRatings = false
 	
+	var showRatingsMode: ShowRatingsMode = .Hide
+	
+	/// when we show only one rating: show this one
+	var onlyRatingValue: Double? {
+		if (showRatingsMode == .TmdbOnly) {
+			return movie?.voteAverage
+		}
+		else {
+			return movie?.ratingImdb
+		}
+	}
+
 
 	// MARK: - UIViewController
 	
@@ -134,7 +165,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			posterImageView.image = movie.thumbnailImage.0
 
 			if (movie.thumbnailImage.1) {
-				let rec = UITapGestureRecognizer(target: self, action: Selector("thumbnailTapped:"))
+				let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.thumbnailTapped(_:)))
 				rec.numberOfTapsRequired = 1
 				posterImageView.addGestureRecognizer(rec)
 			}
@@ -175,39 +206,25 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				releaseDateLabel?.text = "-"
 			}
 			
-			// show rating
+			// show rating(s) or don't
 			
-			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
-			if (movie.voteCount > 2) {
-				let numberFormatter = NSNumberFormatter()
-				numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
-				numberFormatter.minimumFractionDigits = 1
-
-				let voteAverage = numberFormatter.stringFromNumber(movie.voteAverage)
-
-				if let saveVoteAverage = voteAverage {
-					ratingLabel?.text =  "\(saveVoteAverage)"
+			if (showTmdbRatings) {
+				if (movie.voteCount > 2) {
+					self.showRatingsMode = .TmdbOnly
 				}
-				else {
-					// vote was no number, shouldn't happen
-					ratingLabel?.text = "?"
-				}
-				
-				starsgoldWidthConstraint.constant = 0
-				starsgoldTrailingConstraint.constant = 150
 			}
 			else {
-				// no or not enough votes, hide it
-				
-				ratingHeadlineLabelHeightConstraint.constant = 0
-				ratingLabelHeightConstraint.constant = 0
-				starsgoldHeightConstraint.constant = 0
-				starsgreyHeightConstraint.constant = 0
-				line2VerticalSpaceConstraint.constant = 0
-				line2HeightConstraint.constant = 0
-				ratingLabelTopConstraint.constant = 0
-				ratingHeadlineLabelTopConstraint.constant = 0
+				if (movie.ratingImdb != nil) {
+					if (movie.ratingTomato != nil) {
+						self.showRatingsMode = .ImdbAndTomato
+					}
+					else {
+						self.showRatingsMode = .ImdbOnly
+					}
+				}
 			}
+			
+			generateRatingsDisplay(movie)
 			
 			// show director(s)
 
@@ -231,7 +248,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			}
 			if (movie.directors.count < 1) {
 				setConstraintsToZero(directorLabelHeightConstraint, directorLabelVerticalSpaceConstraint, directorHeadlineLabelHeightConstraint,
-					directorHeadlineLabelVerticalSpaceConstraint, line2HeightConstraint, line2VerticalSpaceConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint)
+					directorHeadlineLabelVerticalSpaceConstraint, line2bHeightConstraint, line2bVerticalSpaceConstraint)
 			}
 			
 			// show actor(s)
@@ -289,7 +306,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			// show textbutton for imdb
 			
 			if (movie.imdbId != nil) {
-				imdbButton.addTarget(self, action: Selector("imdbButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 				imdbButton.setTitle(NSLocalizedString("ShowOnImdb", comment: ""), forState: UIControlState.Normal)
 			}
 
@@ -323,18 +340,20 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		super.viewDidAppear(animated)
 		view.layoutIfNeeded()
 		
-		// show vote average
+		// animate show vote average
 		
-		if let voteAverage = movie?.voteAverage, voteCount = movie?.voteCount where voteCount > 2 {
-			UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveLinear,
-				animations: {
-					self.starsgreyWidthConstraint.constant = 150 - 15 * CGFloat(voteAverage)
-					self.starsgoldWidthConstraint.constant = 15 * CGFloat(voteAverage)
-					self.starsgoldTrailingConstraint.constant = 150 - 15 * CGFloat(voteAverage)
-					self.view.layoutIfNeeded()
-				},
-				completion:  { _ in }
-			)
+		if ((self.showRatingsMode == .TmdbOnly) || (self.showRatingsMode == .ImdbOnly)) {
+			if let voteAverage = self.onlyRatingValue {
+				UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveLinear,
+					animations: {
+						self.starsgreyWidthConstraint.constant = 150 - 15 * CGFloat(voteAverage)
+						self.starsgoldWidthConstraint.constant = 15 * CGFloat(voteAverage)
+						self.starsgoldTrailingConstraint.constant = 150 - 15 * CGFloat(voteAverage)
+						self.view.layoutIfNeeded()
+					},
+					completion:  { _ in }
+				)
+			}
 		}
 		
 		if (movie?.thumbnailImage.1 == true) {
@@ -361,6 +380,181 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			}
 		}
 	}
+	
+	
+	func generateRatingsDisplay(movie: MovieRecord) {
+		
+		switch (self.showRatingsMode) {
+			
+		case .Hide:
+            ratingStackView.hidden = true
+            setConstraintsToZero(ratingHeadlineLabelHeightConstraint, ratingLabelHeightConstraint,
+                starsgoldHeightConstraint, starsgreyHeightConstraint, ratingLabelTopConstraint,
+                ratingHeadlineLabelTopConstraint, ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
+                line1VerticalSpaceConstraint, line1HeightConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint)
+			
+		case .TmdbOnly:
+			ratingStackView.hidden = true
+			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
+            setOnlyRating()
+
+            setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
+                line1bHeightConstraint, line1bVerticalSpaceConstraint)
+			
+		case .ImdbOnly:
+			ratingStackView.hidden = true
+			ratingHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "") + ":"
+            setOnlyRating()
+
+            setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
+                line1bHeightConstraint, line1bVerticalSpaceConstraint)
+
+			// TODO: gesture recognizers not working here (?)
+			
+			let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.imdbButtonTapped(_:)))
+			rec.numberOfTapsRequired = 1
+			ratingHeadlineLabel.addGestureRecognizer(rec)
+			ratingLabel.addGestureRecognizer(rec)
+			starsgold.addGestureRecognizer(rec)
+			starsgrey.addGestureRecognizer(rec)
+			
+		case .ImdbAndTomato:
+            setConstraintsToZero(ratingHeadlineLabelHeightConstraint, ratingLabelHeightConstraint, starsgoldHeightConstraint,
+				starsgreyHeightConstraint, line1VerticalSpaceConstraint, line1HeightConstraint, ratingLabelTopConstraint,
+				ratingHeadlineLabelTopConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint, line2HeightConstraint,
+				line2VerticalSpaceConstraint)
+			
+			// IMDb rating
+			
+			imdbHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "") + ":"
+			let numberFormatter = NSNumberFormatter()
+			numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+			numberFormatter.minimumFractionDigits = 1
+			
+			if let score = self.movie?.ratingImdb, scoreString = numberFormatter.stringFromNumber(score) {
+				imdbRatingLabel?.text =  "\(scoreString)"
+                
+                if (score >= 7.0) {
+                    imdbImageView.image = UIImage.init(named: "arrowup.png")
+                }
+                else if (score < 6.0) {
+                    imdbImageView.image = UIImage.init(named: "arrowdown.png")
+                }
+                else {
+                    imdbImageView.image = UIImage.init(named: "arrowmedium.png")
+                }
+			}
+			else {
+				// vote was no number, shouldn't happen
+				imdbRatingLabel?.text = "?"
+                imdbImageView.image = nil
+			}
+
+			// Rotten Tomatoes rating
+			
+			if let score = self.movie?.ratingTomato {
+				tomatoesRatingLabel.text = "\(score)%"
+			}
+			else {
+				tomatoesRatingLabel.text = "?"
+			}
+			
+			if let tomatoImageIndex = self.movie?.tomatoImage, tomatoImage = TomatoImage(rawValue: tomatoImageIndex) {
+				tomatoesImageView.image = UIImage.init(named: tomatoImage.filename)
+			}
+
+/*
+            // circle
+            
+            if let score = self.movie?.ratingImdb {
+                let circleRadius: CGFloat = 16.0
+                
+                // background circle
+                
+                let circlePathLayer = CAShapeLayer()
+                let circleRect  = makeCircleRect(circleRadius)
+                
+                circlePathLayer.frame = CGRect(x: 0, y: 0, width: 2*circleRadius, height: 2*circleRadius)
+                circlePathLayer.lineWidth = 4
+                circlePathLayer.fillColor = UIColor.clearColor().CGColor
+                circlePathLayer.strokeColor = UIColor.blackColor().CGColor
+                circlePathLayer.path = UIBezierPath(ovalInRect: circleRect).CGPath
+                circlePathLayer.transform = CATransform3DRotate(circlePathLayer.transform, 1.5708, 0.0, 0.0, -1.0)
+                circlePathLayer.strokeStart = 0.0
+                circlePathLayer.strokeEnd = 1.0
+                imdbRatingLabel.layer.addSublayer(circlePathLayer)
+
+                // color circle
+                
+                let maxNumberOfSegments: CGFloat = 100.0
+                let segmentSize = CGFloat(1.0 / 100.0)
+                
+                for i in 0 ..< Int(score*10.0) {
+                    let circlePathLayer = CAShapeLayer()
+                    let circleRect  = makeCircleRect(circleRadius)
+                    
+                    circlePathLayer.frame = CGRect(x: 0, y: 0, width: 2*circleRadius, height: 2*circleRadius)
+                    circlePathLayer.lineWidth = 3
+                    circlePathLayer.fillColor = UIColor.clearColor().CGColor
+                    circlePathLayer.path = UIBezierPath(ovalInRect: circleRect).CGPath
+                    circlePathLayer.transform = CATransform3DRotate(circlePathLayer.transform, 1.5708, 0.0, 0.0, -1.0)
+                    circlePathLayer.strokeEnd = CGFloat(score) / 10.0
+                    
+                    if (CGFloat(i) < maxNumberOfSegments / 2.0) {
+                        // color between red and yellow
+                        circlePathLayer.strokeColor = UIColor.init(red: 1.0,
+                                                                   green: 2.0 * CGFloat(i) * (1.0 / maxNumberOfSegments),
+                                                                   blue: 0.0,
+                                                                   alpha: 1.0).CGColor
+                    }
+                    else {
+                        // color between yellow and green
+                        circlePathLayer.strokeColor = UIColor.init(red: 2.0 - 2.0 * CGFloat(i) * (1.0 / maxNumberOfSegments),
+                                                                   green: 1.0,
+                                                                   blue: 0.0,
+                                                                   alpha: 1.0).CGColor
+                    }
+                    
+                    circlePathLayer.strokeStart = segmentSize * CGFloat(i)
+                    circlePathLayer.strokeEnd = segmentSize * (CGFloat(i) + 1.5)
+
+                    imdbRatingLabel.layer.addSublayer(circlePathLayer)
+                }
+            }
+*/
+        }
+	}
+
+/*
+    func makeCircleRect(circleRadius: CGFloat) -> CGRect {
+        var circleFrame = CGRect(x: 0, y: 0, width: 2 * circleRadius, height: 2 * circleRadius)
+        circleFrame.origin.y = (imdbRatingLabel.frame.width - 2.0 * circleRadius) / 2.0
+        circleFrame.origin.x = (imdbRatingLabel.frame.height - 2.0 * circleRadius) / -2.0
+        
+        return circleFrame
+    }
+*/
+	
+	func setOnlyRating() {
+		let numberFormatter = NSNumberFormatter()
+		numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+		numberFormatter.minimumFractionDigits = 1
+		
+		if let score = self.onlyRatingValue, scoreString = numberFormatter.stringFromNumber(score) {
+			ratingLabel?.text =  "\(scoreString)"
+		}
+		else {
+			// vote was no number, shouldn't happen
+			ratingLabel?.text = "?"
+		}
+		
+		starsgoldWidthConstraint.constant = 0
+		starsgoldTrailingConstraint.constant = 150
+		
+		ratingStackViewHeightConstraint.constant = 0
+		ratingStackViewVerticalSpaceConstraint.constant = 0
+	}
+	
 	
 	/**
 		Creates all the buttons for trailers. If there are no trailers, all trailer-related UI elements will be hidden.
@@ -421,7 +615,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				button.tag = Constants.tagTrailer + index
 				button.setImage(scaledImage, forState: UIControlState.Normal)
 				button.contentMode = .ScaleAspectFit
-				button.addTarget(self, action: Selector("trailerButtonTapped:"), forControlEvents: UIControlEvents.TouchUpInside)
+				button.addTarget(self, action: #selector(MovieViewController.trailerButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
 				trailerStackView.addArrangedSubview(button)
 			}
 		}
@@ -436,6 +630,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		- parameter trailerId:	The id of the trailer, which is also the filename of the trailer-image
 	*/
 	func updateTrailerButton(index: Int, trailerId: String) {
+        if (index >= trailerStackView.arrangedSubviews.count) {
+            return
+        }
+        
 		guard let buttonToUpdate = trailerStackView.arrangedSubviews[index] as? UIButton else { return }
 		guard let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup) else { return }
 		guard let basePath = pathUrl.path else { return }
@@ -452,7 +650,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	}
 	
 	
-	// MARK: - UIViewController
+	// MARK: - SFSafariViewControllerDelegate
 
 	
 	func safariViewControllerDidFinish(controller: SFSafariViewController) {
@@ -462,61 +660,15 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	// MARK: - Button callbacks
 
-	
-	/**
-		Calls the webview with the imdb page for the movie.
-	
-		- parameter sender:	The tapped button
-	*/
-	func imdbButtonTapped(sender:UIButton) {
-		
-		// check internet connection
-/*
-		if (NetworkChecker.checkReachability(self.view) == false) {
-			NSLog("IMDb view: no network")
-			noInternetConnection()
-			return
-		}
-*/
-		// check if we open the idmb app or the webview
-		
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
-		
-		if let imdbId = movie?.imdbId {
-			let url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
 
-			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
-				// use the app instead of the webview
-				UIApplication.sharedApplication().openURL(url)
-			}
-			else {
-				// use the webview
-				guard let webUrl = NSURL(string: "http://www.imdb.com/title/\(imdbId)") else { return }
-				let webVC = SFSafariViewController(URL: webUrl)
-				webVC.delegate = self
-				self.presentViewController(webVC, animated: true, completion: nil)
-			}
-		}
+	func imdbButtonTapped(sender: UIButton) {
+		showImdbPage()
 	}
 
-
-	/**
-		Calls the webview with the trailer page for the movie.
-	
-		- parameter sender:	The tapped button
-	*/
 	func trailerButtonTapped(sender: UIButton) {
 		
 		guard let movie = movie else { return }
 		
-		// check internet connection
-/*
-		if (NetworkChecker.checkReachability(self.view) == false) {
-			NSLog("Trailer: no network")
-			noInternetConnection()
-			return
-		}
-*/
 		// check if we open the youtube app or the webview
 		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseYoutubeApp) as? Bool
 		var trailerId: String?
@@ -543,12 +695,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 	
-	
-	/**
-		Adds the current movie to favorites.
-	
-		- parameter sender:	The tapped button
-	*/
 	func addFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
 			Favorites.addMovie(movie, tabBarController: movieTabBarController)
@@ -557,12 +703,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 
-	
-	/**
-		Removes current movie from favorites.
-	
-		- parameter sender:	The tapped button
-	*/
 	func removeFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
 			Favorites.removeMovie(movie, tabBarController: movieTabBarController)
@@ -570,8 +710,21 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
 		}
 	}
+
+	@IBAction func imdbRatingTapped(sender: UITapGestureRecognizer) {
+		showImdbPage()
+	}
 	
+	@IBAction func tomatoRatingTapped(sender: UITapGestureRecognizer) {
+		if let urlString = movie?.tomatoURL {
+			guard let webUrl = NSURL(string: urlString) else { return }
+			let webVC = SFSafariViewController(URL: webUrl)
+			webVC.delegate = self
+			self.presentViewController(webVC, animated: true, completion: nil)
+		}
+	}
 	
+
 	// MARK: - Helpers
 	
 	
@@ -591,32 +744,39 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			if (Favorites.IDs.contains(movie.id)) {
 				// this movie is a favorite: show remove-button
 				if let navigationController = navigationController, topViewController = navigationController.topViewController {
-					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("removeFavoriteButtonTapped:"))
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite.png"), style: UIBarButtonItemStyle.Done, target: self, action: #selector(MovieViewController.removeFavoriteButtonTapped(_:)))
 				}
 			}
 			else {
 				// this movie is not a favorite: show add-button
 				if let navigationController = navigationController, topViewController = navigationController.topViewController {
-					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favoriteframe.png"), style: UIBarButtonItemStyle.Done, target: self, action: Selector("addFavoriteButtonTapped:"))
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favoriteframe.png"), style: UIBarButtonItemStyle.Done, target: self, action: #selector(MovieViewController.addFavoriteButtonTapped(_:)))
 				}
 			}
 		}
 	}
 
-/*
-	private final func noInternetConnection() {
-		var errorWindow: MessageWindow?
+	
+	private func showImdbPage() {
+		// check if we open the idmb app or the webview
+		
+		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
+		
+		if let imdbId = movie?.imdbId {
+			let url: NSURL? = NSURL(string: "imdb:///title/\(imdbId)/")
 			
-		dispatch_async(dispatch_get_main_queue()) {
-			self.scrollView.scrollEnabled = false
-			
-			errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: "NoNetworkText", buttonStringIds: ["Close"],
-				handler: { (buttonIndex) -> () in
-					errorWindow?.close()
-					self.scrollView.scrollEnabled = true
-				}
-			)
+			if let url = url where (useApp == true) && UIApplication.sharedApplication().canOpenURL(url) {
+				// use the app instead of the webview
+				UIApplication.sharedApplication().openURL(url)
+			}
+			else {
+				// use the webview
+				guard let webUrl = NSURL(string: "http://www.imdb.com/title/\(imdbId)") else { return }
+				let webVC = SFSafariViewController(URL: webUrl)
+				webVC.delegate = self
+				self.presentViewController(webVC, animated: true, completion: nil)
+			}
 		}
 	}
-*/
+
 }
