@@ -33,11 +33,12 @@ struct Favorites {
 		Favorites.saveFavorites()
 		tabBarController?.favoriteController?.addFavorite(movie)
 		WatchSessionManager.sharedManager.sendNewFavoriteToWatch(movie)
-
-		let imdbId = (movie.imdbId != nil) ? movie.imdbId! : "<unknown ID>"
-		let title = (movie.origTitle != nil) ? movie.origTitle! : "<unknown title>"
 		
-		Answers.logCustomEventWithName("Add Favorite", customAttributes: ["Title": title, "IMDb-ID": imdbId])
+		#if RELEASE
+			let imdbId = (movie.imdbId != nil) ? movie.imdbId! : "<unknown ID>"
+			let title = (movie.origTitle != nil) ? movie.origTitle! : "<unknown title>"
+			Answers.logCustomEventWithName("Add Favorite", customAttributes: ["Title": title, "IMDb-ID": imdbId])
+		#endif
 	}
 	
 	/**
