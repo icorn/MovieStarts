@@ -8,6 +8,8 @@
 
 import UIKit
 import CloudKit
+import Fabric
+import Crashlytics
 
 
 @UIApplicationMain
@@ -160,6 +162,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				}
 			}
 		}
+		
+		Fabric.with([Crashlytics.self])
 		
 		return true
 	}

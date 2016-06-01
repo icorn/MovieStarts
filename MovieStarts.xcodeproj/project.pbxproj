@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4F0953411B9F17D50040BBC9 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */; };
+		4F0CCC941CFAFB4B003D5BA4 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0CCC921CFAFB4B003D5BA4 /* Fabric.framework */; };
+		4F0CCC951CFAFB4B003D5BA4 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F0CCC931CFAFB4B003D5BA4 /* Crashlytics.framework */; };
 		4F0FED001CF9E40A003B9975 /* MovieDatabaseUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0FECFF1CF9E40A003B9975 /* MovieDatabaseUpdater.swift */; };
 		4F0FED021CF9F0C4003B9975 /* MovieDatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0FED011CF9F0C4003B9975 /* MovieDatabaseProtocol.swift */; };
 		4F2C91141B621BE70044A27B /* DatabaseHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C91131B621BE70044A27B /* DatabaseHelperTests.swift */; };
@@ -206,6 +208,8 @@
 
 /* Begin PBXFileReference section */
 		4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		4F0CCC921CFAFB4B003D5BA4 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		4F0CCC931CFAFB4B003D5BA4 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		4F0FECFF1CF9E40A003B9975 /* MovieDatabaseUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseUpdater.swift; sourceTree = "<group>"; };
 		4F0FED011CF9F0C4003B9975 /* MovieDatabaseProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseProtocol.swift; sourceTree = "<group>"; };
 		4F2C91081B6216F50044A27B /* MovieStartsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MovieStartsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -377,6 +381,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4F9E658D1BC14694006C6BA9 /* CloudKit.framework in Frameworks */,
+				4F0CCC951CFAFB4B003D5BA4 /* Crashlytics.framework in Frameworks */,
+				4F0CCC941CFAFB4B003D5BA4 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,6 +581,8 @@
 				4F4A26841BC934000077AEF5 /* watchOS2app */,
 				4F4A26931BC934000077AEF5 /* watchOS2app Extension */,
 				4FAFF8C41A8BFFE500864078 /* Products */,
+				4F0CCC921CFAFB4B003D5BA4 /* Fabric.framework */,
+				4F0CCC931CFAFB4B003D5BA4 /* Crashlytics.framework */,
 			);
 			sourceTree = "<group>";
 		};
@@ -729,6 +737,7 @@
 				4FAFF8C01A8BFFE500864078 /* Frameworks */,
 				4FAFF8C11A8BFFE500864078 /* Resources */,
 				4F8EE10D1BC13B9C00F1710A /* Embed Watch Content */,
+				4F0CCC911CFAFAD7003D5BA4 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -923,6 +932,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4F0CCC911CFAFAD7003D5BA4 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run cd33404e9b129bee66c039ab4eccd72b4f411510 3b6a49df25d45ea8ffd726a63b25beed7536ed68f3cb68d7de1a71142a1e5554";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4F2C91041B6216F50044A27B /* Sources */ = {
@@ -1251,11 +1276,13 @@
 				CODE_SIGN_ENTITLEMENTS = MovieStarts/MovieStarts.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = MovieStarts/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1282,7 +1309,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = MovieStarts/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

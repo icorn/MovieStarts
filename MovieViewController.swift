@@ -8,6 +8,7 @@
 
 import UIKit
 import SafariServices
+import Crashlytics
 
 
 class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate {
@@ -159,6 +160,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		var directorLabels = [directorLabel, directorLabel2]
 		
 		if let movie = movie {
+			
+			// log this action
+			
+			let imdbId = (movie.imdbId != nil) ? movie.imdbId! : "<unknown ID>"
+			let title = (movie.origTitle != nil) ? movie.origTitle! : "<unknown title>"
+			Answers.logContentViewWithName(title, contentType: nil, contentId: imdbId, customAttributes: nil)
 			
 			// show poster
 			
