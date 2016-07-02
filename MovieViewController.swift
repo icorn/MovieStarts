@@ -24,8 +24,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var subtitleText3: UILabel!
 	@IBOutlet weak var releaseDateHeadlineLabel: UILabel!
 	@IBOutlet weak var releaseDateLabel: UILabel!
-	@IBOutlet weak var ratingHeadlineLabel: UILabel!
-	@IBOutlet weak var ratingLabel: UILabel!
 	@IBOutlet weak var directorHeadlineLabel: UILabel!
 	@IBOutlet weak var directorLabel: UILabel!
 	@IBOutlet weak var directorLabel2: UILabel!
@@ -47,18 +45,15 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var imdbHeadlineLabel: UILabel!
 	@IBOutlet weak var tomatoesImageView: UIImageView!
 	@IBOutlet weak var tomatoesRatingLabel: UILabel!
+	@IBOutlet weak var metascoreRatingLabel: UILabel!
+	@IBOutlet weak var metascoreInnerView: UIView!
 	
 	@IBOutlet weak var bottomLine: UIView!
-	
-	@IBOutlet weak var starsgrey: UIImageView!
-	@IBOutlet weak var starsgold: UIImageView!
 	
 	// constraints
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorHeadlineLabelHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line1bHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line1bVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2VerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line3HeightConstraint: NSLayoutConstraint!
@@ -94,20 +89,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var line2bHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2bVerticalSpaceConstraint: NSLayoutConstraint!
 	
-	@IBOutlet weak var starsgoldWidthConstraint: NSLayoutConstraint!
-	@IBOutlet weak var starsgreyWidthConstraint: NSLayoutConstraint!
-	@IBOutlet weak var starsgoldHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var starsgoldTrailingConstraint: NSLayoutConstraint!
-	@IBOutlet weak var starsgreyHeightConstraint: NSLayoutConstraint!
-	
-	@IBOutlet weak var ratingLabelHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var ratingHeadlineLabelHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var ratingHeadlineLabelTopConstraint: NSLayoutConstraint!
-	@IBOutlet weak var ratingLabelTopConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ratingStackViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ratingStackViewVerticalSpaceConstraint: NSLayoutConstraint!
+	@IBOutlet weak var imdbImageViewWidthConstraint: NSLayoutConstraint!
+	@IBOutlet weak var tomatoesImageViewWidthConstraint: NSLayoutConstraint!
 	
     @IBOutlet weak var imdbOuterView: UIView!
     @IBOutlet weak var imdbInnerView: UIView!
@@ -132,23 +119,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
 	var movie: MovieRecord?
 	var allTrailerIds: [String] = []
-
-	/// show the old tmdb-ratings?
-	let showTmdbRatings = false
+	var showRatings: Bool = false
 	
-	var showRatingsMode: ShowRatingsMode = .Hide
-	
-	/// when we show only one rating: show this one
-	var onlyRatingValue: Double? {
-		if (showRatingsMode == .TmdbOnly) {
-			return movie?.voteAverage
-		}
-		else {
-			return movie?.ratingImdb
-		}
-	}
-
-
 	// MARK: - UIViewController
 	
 	override func viewDidLoad() {
@@ -216,22 +188,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			
 			// show rating(s) or don't
 			
-			if (showTmdbRatings) {
-				if (movie.voteCount > 2) {
-					self.showRatingsMode = .TmdbOnly
-				}
-			}
-			else {
-				if (movie.ratingImdb != nil) {
-					if (movie.ratingTomato != nil) {
-						self.showRatingsMode = .ImdbAndTomato
-					}
-					else {
-						self.showRatingsMode = .ImdbOnly
-					}
-				}
-			}
-			
+			self.showRatings = (movie.ratingImdb != nil) || (movie.ratingTomato != nil) || (movie.ratingMetacritic != nil)
 			generateRatingsDisplay(movie)
 			
 			// show director(s)
@@ -348,22 +305,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		super.viewDidAppear(animated)
 		view.layoutIfNeeded()
 		
-		// animate show vote average
-		
-		if ((self.showRatingsMode == .TmdbOnly) || (self.showRatingsMode == .ImdbOnly)) {
-			if let voteAverage = self.onlyRatingValue {
-				UIView.animateWithDuration(0.5, delay: 0.0, options: UIViewAnimationOptions.CurveLinear,
-					animations: {
-						self.starsgreyWidthConstraint.constant = 150 - 15 * CGFloat(voteAverage)
-						self.starsgoldWidthConstraint.constant = 15 * CGFloat(voteAverage)
-						self.starsgoldTrailingConstraint.constant = 150 - 15 * CGFloat(voteAverage)
-						self.view.layoutIfNeeded()
-					},
-					completion:  { _ in }
-				)
-			}
-		}
-		
 		if (movie?.thumbnailImage.1 == true) {
 			
 			// if needed: show poster-hint
@@ -391,176 +332,87 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	
 	func generateRatingsDisplay(movie: MovieRecord) {
-		
-		switch (self.showRatingsMode) {
-			
-		case .Hide:
-            ratingStackView.hidden = true
-            setConstraintsToZero(ratingHeadlineLabelHeightConstraint, ratingLabelHeightConstraint,
-                starsgoldHeightConstraint, starsgreyHeightConstraint, ratingLabelTopConstraint,
-                ratingHeadlineLabelTopConstraint, ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
-                line1VerticalSpaceConstraint, line1HeightConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint)
-			
-		case .TmdbOnly:
-			ratingStackView.hidden = true
-			ratingHeadlineLabel.text = NSLocalizedString("UserRating", comment: "") + ":"
-            setOnlyRating()
-
-            setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
-                line1bHeightConstraint, line1bVerticalSpaceConstraint)
-			
-		case .ImdbOnly:
-			ratingStackView.hidden = true
-			ratingHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "") + ":"
-            setOnlyRating()
-
-            setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
-                line1bHeightConstraint, line1bVerticalSpaceConstraint)
-
-			// TODO: gesture recognizers not working here (?)
-			
-			let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.imdbButtonTapped(_:)))
-			rec.numberOfTapsRequired = 1
-			ratingHeadlineLabel.addGestureRecognizer(rec)
-			ratingLabel.addGestureRecognizer(rec)
-			starsgold.addGestureRecognizer(rec)
-			starsgrey.addGestureRecognizer(rec)
-			
-		case .ImdbAndTomato:
-            setConstraintsToZero(ratingHeadlineLabelHeightConstraint, ratingLabelHeightConstraint, starsgoldHeightConstraint,
-				starsgreyHeightConstraint, line1VerticalSpaceConstraint, line1HeightConstraint, ratingLabelTopConstraint,
-				ratingHeadlineLabelTopConstraint, line1bHeightConstraint, line1bVerticalSpaceConstraint, line2HeightConstraint,
-				line2VerticalSpaceConstraint)
+		if (self.showRatings) {
+			setConstraintsToZero(line1VerticalSpaceConstraint, line1HeightConstraint, line2HeightConstraint,
+			                     line2VerticalSpaceConstraint)
 			
 			// IMDb rating
 			
-			imdbHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "") + ":"
+			imdbHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "")
 			let numberFormatter = NSNumberFormatter()
 			numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
 			numberFormatter.minimumFractionDigits = 1
 			
 			if let score = self.movie?.ratingImdb, scoreString = numberFormatter.stringFromNumber(score) {
-				imdbRatingLabel?.text =  "\(scoreString)"
-                
-                if (score >= 7.0) {
-                    imdbImageView.image = UIImage.init(named: "arrowup.png")
-                }
-                else if (score < 6.0) {
-                    imdbImageView.image = UIImage.init(named: "arrowdown.png")
-                }
-                else {
-                    imdbImageView.image = UIImage.init(named: "arrowmedium.png")
-                }
+				imdbRatingLabel.text =  "\(scoreString)"
+				
+				if (score >= 7.0) {
+					imdbImageView.image = UIImage.init(named: "arrowup.png")
+				}
+				else if (score < 6.0) {
+					imdbImageView.image = UIImage.init(named: "arrowdown.png")
+				}
+				else {
+					imdbImageView.image = UIImage.init(named: "arrowmedium.png")
+				}
 			}
 			else {
 				// vote was no number, shouldn't happen
-				imdbRatingLabel?.text = "?"
-                imdbImageView.image = nil
+				imdbRatingLabel.text = NSLocalizedString("Score unknown", comment: "")
+				imdbRatingLabel.textColor = UIColor.darkGrayColor()
+				imdbImageView.image = nil
+				imdbImageViewWidthConstraint.constant = 0
 			}
-
+			
 			// Rotten Tomatoes rating
 			
 			if let score = self.movie?.ratingTomato {
 				tomatoesRatingLabel.text = "\(score)%"
+
+				if let tomatoImageIndex = self.movie?.tomatoImage, tomatoImage = TomatoImage(rawValue: tomatoImageIndex) {
+					tomatoesImageView.image = UIImage.init(named: tomatoImage.filename)
+				}
 			}
 			else {
-				tomatoesRatingLabel.text = "?"
+				tomatoesRatingLabel.text = NSLocalizedString("Score unknown", comment: "")
+				tomatoesRatingLabel.textColor = UIColor.darkGrayColor()
+				tomatoesImageView.hidden = true
+				tomatoesImageViewWidthConstraint.constant = 0
 			}
 			
-			if let tomatoImageIndex = self.movie?.tomatoImage, tomatoImage = TomatoImage(rawValue: tomatoImageIndex) {
-				tomatoesImageView.image = UIImage.init(named: tomatoImage.filename)
+			// Metacritic rating
+			
+			if let score = self.movie?.ratingMetacritic {
+				metascoreRatingLabel.text = "\(score)"
+
+				switch score {
+				case 0...39:
+					// red score
+					metascoreInnerView.backgroundColor = UIColor(red: 237.0/255.0, green: 12.0/255.0, blue: 25.0/255.0, alpha: 1.0)
+					metascoreRatingLabel.textColor = UIColor.whiteColor()
+				case 40...60:
+					// yellow score
+					metascoreInnerView.backgroundColor = UIColor(red: 230.0/255.0, green: 225.0/255.0, blue: 49.0/255.0, alpha: 1.0)
+					metascoreRatingLabel.textColor = UIColor.blackColor()
+				default:
+					// green score
+					metascoreInnerView.backgroundColor = UIColor(red: 27.0/255.0, green: 184.0/255.0, blue: 31.0/255.0, alpha: 1.0)
+					metascoreRatingLabel.textColor = UIColor.whiteColor()
+				}
 			}
-
-/*
-            // circle
-            
-            if let score = self.movie?.ratingImdb {
-                let circleRadius: CGFloat = 16.0
-                
-                // background circle
-                
-                let circlePathLayer = CAShapeLayer()
-                let circleRect  = makeCircleRect(circleRadius)
-                
-                circlePathLayer.frame = CGRect(x: 0, y: 0, width: 2*circleRadius, height: 2*circleRadius)
-                circlePathLayer.lineWidth = 4
-                circlePathLayer.fillColor = UIColor.clearColor().CGColor
-                circlePathLayer.strokeColor = UIColor.blackColor().CGColor
-                circlePathLayer.path = UIBezierPath(ovalInRect: circleRect).CGPath
-                circlePathLayer.transform = CATransform3DRotate(circlePathLayer.transform, 1.5708, 0.0, 0.0, -1.0)
-                circlePathLayer.strokeStart = 0.0
-                circlePathLayer.strokeEnd = 1.0
-                imdbRatingLabel.layer.addSublayer(circlePathLayer)
-
-                // color circle
-                
-                let maxNumberOfSegments: CGFloat = 100.0
-                let segmentSize = CGFloat(1.0 / 100.0)
-                
-                for i in 0 ..< Int(score*10.0) {
-                    let circlePathLayer = CAShapeLayer()
-                    let circleRect  = makeCircleRect(circleRadius)
-                    
-                    circlePathLayer.frame = CGRect(x: 0, y: 0, width: 2*circleRadius, height: 2*circleRadius)
-                    circlePathLayer.lineWidth = 3
-                    circlePathLayer.fillColor = UIColor.clearColor().CGColor
-                    circlePathLayer.path = UIBezierPath(ovalInRect: circleRect).CGPath
-                    circlePathLayer.transform = CATransform3DRotate(circlePathLayer.transform, 1.5708, 0.0, 0.0, -1.0)
-                    circlePathLayer.strokeEnd = CGFloat(score) / 10.0
-                    
-                    if (CGFloat(i) < maxNumberOfSegments / 2.0) {
-                        // color between red and yellow
-                        circlePathLayer.strokeColor = UIColor.init(red: 1.0,
-                                                                   green: 2.0 * CGFloat(i) * (1.0 / maxNumberOfSegments),
-                                                                   blue: 0.0,
-                                                                   alpha: 1.0).CGColor
-                    }
-                    else {
-                        // color between yellow and green
-                        circlePathLayer.strokeColor = UIColor.init(red: 2.0 - 2.0 * CGFloat(i) * (1.0 / maxNumberOfSegments),
-                                                                   green: 1.0,
-                                                                   blue: 0.0,
-                                                                   alpha: 1.0).CGColor
-                    }
-                    
-                    circlePathLayer.strokeStart = segmentSize * CGFloat(i)
-                    circlePathLayer.strokeEnd = segmentSize * (CGFloat(i) + 1.5)
-
-                    imdbRatingLabel.layer.addSublayer(circlePathLayer)
-                }
-            }
-*/
-        }
-	}
-
-/*
-    func makeCircleRect(circleRadius: CGFloat) -> CGRect {
-        var circleFrame = CGRect(x: 0, y: 0, width: 2 * circleRadius, height: 2 * circleRadius)
-        circleFrame.origin.y = (imdbRatingLabel.frame.width - 2.0 * circleRadius) / 2.0
-        circleFrame.origin.x = (imdbRatingLabel.frame.height - 2.0 * circleRadius) / -2.0
-        
-        return circleFrame
-    }
-*/
-	
-	func setOnlyRating() {
-		let numberFormatter = NSNumberFormatter()
-		numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
-		numberFormatter.minimumFractionDigits = 1
-		
-		if let score = self.onlyRatingValue, scoreString = numberFormatter.stringFromNumber(score) {
-			ratingLabel?.text =  "\(scoreString)"
+			else {
+				metascoreRatingLabel.text = NSLocalizedString("Score unknown", comment: "")
+				metascoreRatingLabel.textColor = UIColor.darkGrayColor()
+				metascoreInnerView.backgroundColor = UIColor.clearColor()
+				metascoreRatingLabel.textColor = UIColor.blackColor()
+			}
 		}
 		else {
-			// vote was no number, shouldn't happen
-			ratingLabel?.text = "?"
-		}
-		
-		starsgoldWidthConstraint.constant = 0
-		starsgoldTrailingConstraint.constant = 150
-		
-		ratingStackViewHeightConstraint.constant = 0
-		ratingStackViewVerticalSpaceConstraint.constant = 0
+			// hide all ratings stuff, because we have no ratings
+            ratingStackView.hidden = true
+            setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
+                line1VerticalSpaceConstraint, line1HeightConstraint)
+        }
 	}
 	
 	

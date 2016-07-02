@@ -36,6 +36,7 @@
 "MinutesShort"		= "min";
 "aka"				= "aka";
 "IMDbRating"		= "IMDb Score";
+"Score unknown"		= "n/a";
 
 "ShowOnImdb"				= "Show Details on IMDb";
 "TrailerHeadline"			= "Trailers";
