@@ -11,6 +11,7 @@ import CloudKit
 import Fabric
 import Crashlytics
 
+let log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -54,6 +55,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+		
+		// add log destinations. at least one is needed
+		
+		let console = ConsoleDestination()  // log to Xcode Console
+//		let file = FileDestination()  // log to default swiftybeaver.log file
+		let platform = SBPlatformDestination(appID: "NxnnVL",
+		                                     appSecret: "wvDg36mYNrwrqsZ3iw5TtbFz5lmt1cho",
+		                                     encryptionKey: "xfjxarkwsscacv7Sglsbl9eYZpc89rji")
+		log.addDestination(platform)
+		log.addDestination(console)
+//		log.addDestination(file)
+		
+		log.verbose("not so important")  // prio 1, VERBOSE in silver
+//		log.debug("something to debug")  // prio 2, DEBUG in blue
+//		log.info("a nice information")   // prio 3, INFO in green
+//		log.warning("oh no, that won’t be good")  // prio 4, WARNING in yellow
+		log.error("ouch, an error did occur!")  // prio 5, ERROR in red
 		
 		// create folders for image asset
 		
