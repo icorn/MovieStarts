@@ -19,6 +19,10 @@ public struct Constants {
 	static let thumbnailFolder				= "/Thumbnails"
 	static let bigPosterFolder				= "/BigPoster"
 	static let trailerFolder				= "/Trailers"
+	static let actorThumbnailFolder			= "/ActorsThumbnails"
+	static let actorBigFolder				= "/ActorsBig"
+	static let directorThumbnailFolder		= "/DirectorsThumbnails"
+	static let directorBigFolder			= "/DirectorsBig"
 	static let notificationUserInfoId		= "MovieStartsNotificationId"
 	static let notificationUserInfoName		= "MovieStartsNotificationName"
 	static let notificationUserInfoDate		= "MovieStartsNotificationDate"
@@ -59,7 +63,8 @@ public struct Constants {
 	static let version1_0					= 10
 	static let version1_1					= 11
 	static let version1_2					= 12
-	static let versionCurrent				= version1_2
+	static let version2_0					= 20
+	static let versionCurrent				= version2_0
 	
 	// MARK: - Watch communication
 	
@@ -94,7 +99,11 @@ public struct Constants {
 	static let dbIdGenreIds				= "genreIds"
 	static let dbIdCharacters			= "characters"
 	static let dbIdId					= "id"
-	
+	static let dbIdBudget				= "budget"
+	static let dbIdBackdrop				= "backdrop"
+	static let dbIdProfilePictures		= "profilePictures"
+	static let dbIdDirectorPictures		= "directorPictures"
+
 	// country-specific database fields (table "Movie")
 	static let dbIdReleaseUS			= "releaseUS"
 	static let dbIdCertificationUS		= "certificationUS"

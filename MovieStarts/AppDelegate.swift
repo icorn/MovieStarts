@@ -67,11 +67,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		log.addDestination(console)
 //		log.addDestination(file)
 		
-		log.verbose("not so important")  // prio 1, VERBOSE in silver
+//		log.verbose("not so important")  // prio 1, VERBOSE in silver
 //		log.debug("something to debug")  // prio 2, DEBUG in blue
 //		log.info("a nice information")   // prio 3, INFO in green
 //		log.warning("oh no, that won’t be good")  // prio 4, WARNING in yellow
-		log.error("ouch, an error did occur!")  // prio 5, ERROR in red
+//		log.error("ouch, an error did occur!")  // prio 5, ERROR in red
 		
 		// create folders for image asset
 		
@@ -80,10 +80,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if let appPathUrl = appPathUrl, absolutePath = appPathUrl.path {
 			let fileManager = NSFileManager.defaultManager()
 
-			// create thumbnail folder
 			
+			
+			// TODO: kürzer!!!!!!
+			
+			
+			
+			// create thumbnail folder
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.thumbnailFolder, withIntermediateDirectories: true, attributes: nil)
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.thumbnailFolder,
+				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
 				NSLog("Error creating folder for thumbnails at \(absolutePath + Constants.thumbnailFolder).")
@@ -91,9 +97,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 			
 			// create big poster folder
-			
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.bigPosterFolder, withIntermediateDirectories: true, attributes: nil)
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.bigPosterFolder,
+				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
 				NSLog("Error creating folder for big posters at \(absolutePath + Constants.bigPosterFolder).")
@@ -101,12 +107,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 
 			// create trailer folder
-			
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.trailerFolder, withIntermediateDirectories: true, attributes: nil)
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.trailerFolder,
+				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
 				NSLog("Error creating folder for trailer covers at \(absolutePath + Constants.trailerFolder).")
+				NSLog(error.debugDescription)
+			}
+			
+			// create actor thumbnail folder
+			do {
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.actorThumbnailFolder,
+				                                      withIntermediateDirectories: true, attributes: nil)
+			}
+			catch let error as NSError {
+				NSLog("Error creating folder for actor thumbnails at \(absolutePath + Constants.actorThumbnailFolder).")
+				NSLog(error.debugDescription)
+			}
+			
+			// create actor big picture folder
+			do {
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.actorBigFolder,
+				                                      withIntermediateDirectories: true, attributes: nil)
+			}
+			catch let error as NSError {
+				NSLog("Error creating folder for big actor images at \(absolutePath + Constants.actorBigFolder).")
+				NSLog(error.debugDescription)
+			}
+			
+			// create director thumbnail folder
+			do {
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.directorThumbnailFolder,
+				                                      withIntermediateDirectories: true, attributes: nil)
+			}
+			catch let error as NSError {
+				NSLog("Error creating folder for director thumbnails at \(absolutePath + Constants.directorThumbnailFolder).")
+				NSLog(error.debugDescription)
+			}
+			
+			// create director big picture folder
+			do {
+				try fileManager.createDirectoryAtPath(absolutePath + Constants.directorBigFolder,
+				                                      withIntermediateDirectories: true, attributes: nil)
+			}
+			catch let error as NSError {
+				NSLog("Error creating folder for big director images at \(absolutePath + Constants.directorBigFolder).")
 				NSLog(error.debugDescription)
 			}
 		}
@@ -147,10 +193,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 		
-		// getting version of the last launch
+		// getting version of the last launch to find out if we need to set the "migrate" flag
 		
 		let oldVersion = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsVersion)
-		
+
 		if let oldVersion = oldVersion as? Int {
 			versionOfPreviousLaunch = oldVersion
 		}
@@ -166,8 +212,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if (databaseFileExists()) {
 				// movie database file exists -> check if we need to migrate the database to a new version
 				
-				if (versionOfPreviousLaunch < Constants.version1_2) {
-					// set in flag in the prefs, read the flag later in MovieTableViewController.
+				if (versionOfPreviousLaunch < Constants.version2_0) {
+					// set the flag in the prefs, read the flag later in MovieTableViewController.
 					// special case: if the prefs-entry already exists (from a previously failed update-try from an older version), 
 					// don't override it: the database file is from the older version (because previous update failed).
 					

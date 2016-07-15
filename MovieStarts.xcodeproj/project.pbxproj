@@ -97,6 +97,8 @@
 		4F7A99AD1BAEA0CE00ED38C9 /* MovieViewControllerPosters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A99AC1BAEA0CE00ED38C9 /* MovieViewControllerPosters.swift */; };
 		4F7A99AF1BAF01E600ED38C9 /* NetworkChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7A99AE1BAF01E600ED38C9 /* NetworkChecker.swift */; };
 		4F7B49D51B04B77100F54454 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7B49D41B04B77100F54454 /* MovieViewController.swift */; };
+		4F851AF71D32E65F00448540 /* StackViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F851AF61D32E65F00448540 /* StackViewExtension.swift */; };
+		4F851AF91D36D2BD00448540 /* MovieViewControllerActors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F851AF81D36D2BD00448540 /* MovieViewControllerActors.swift */; };
 		4F87F9261A8DEE31001869A1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F87F9251A8DEE31001869A1 /* Constants.swift */; };
 		4F885C7C1CA5C39000659D2D /* MovieDatabaseParent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F885C7B1CA5C39000659D2D /* MovieDatabaseParent.swift */; };
 		4F885C7E1CA8475E00659D2D /* MovieDatabaseMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F885C7D1CA8475E00659D2D /* MovieDatabaseMigrator.swift */; };
@@ -306,6 +308,8 @@
 		4F7A99AE1BAF01E600ED38C9 /* NetworkChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkChecker.swift; sourceTree = "<group>"; };
 		4F7B49D41B04B77100F54454 /* MovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieViewController.swift; path = ../MovieViewController.swift; sourceTree = "<group>"; };
 		4F7F97201B53F7C100054F18 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reveal.framework; path = "../../../../../../../Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/Reveal.framework"; sourceTree = "<group>"; };
+		4F851AF61D32E65F00448540 /* StackViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StackViewExtension.swift; path = sources/StackViewExtension.swift; sourceTree = "<group>"; };
+		4F851AF81D36D2BD00448540 /* MovieViewControllerActors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieViewControllerActors.swift; sourceTree = "<group>"; };
 		4F87F9251A8DEE31001869A1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4F885C7B1CA5C39000659D2D /* MovieDatabaseParent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseParent.swift; sourceTree = "<group>"; };
 		4F885C7D1CA8475E00659D2D /* MovieDatabaseMigrator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseMigrator.swift; sourceTree = "<group>"; };
@@ -565,6 +569,7 @@
 				4F7A99A71BAE1A6700ED38C9 /* AnimatedTabBar.swift */,
 				4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */,
 				4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */,
+				4F851AF61D32E65F00448540 /* StackViewExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -576,6 +581,7 @@
 				4F3AA9891B71FEFD00640D04 /* FavoriteTableViewController.swift */,
 				4F6914811A8C041D00B8FFCE /* MovieTableViewController.swift */,
 				4F7B49D41B04B77100F54454 /* MovieViewController.swift */,
+				4F851AF81D36D2BD00448540 /* MovieViewControllerActors.swift */,
 				4FAE075A1B555615009C7507 /* NowTableViewController.swift */,
 				4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */,
 				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
@@ -612,10 +618,8 @@
 		4FAFF8C51A8BFFE500864078 /* MovieStarts */ = {
 			isa = PBXGroup;
 			children = (
-				4FAFF8D31A8BFFE500864078 /* LaunchScreen.xib */,
-				4FAFF8CE1A8BFFE500864078 /* Main.storyboard */,
 				4FAFF8EA1A8C002800864078 /* MovieStarts.entitlements */,
-				4F8ED3EB1B4442C7008C24FE /* MovieTableViewCell.xib */,
+				4FC6A0081D3022E800D21C59 /* User Interface */,
 				4FAFF8EF1A8C036A00864078 /* Source */,
 				4F95FC301C11ABFE008F482B /* Images.xcassets */,
 				4FAFF8C61A8BFFE500864078 /* Supporting Files */,
@@ -673,6 +677,16 @@
 			);
 			name = SwiftyBeaver;
 			path = sources;
+			sourceTree = "<group>";
+		};
+		4FC6A0081D3022E800D21C59 /* User Interface */ = {
+			isa = PBXGroup;
+			children = (
+				4FAFF8D31A8BFFE500864078 /* LaunchScreen.xib */,
+				4FAFF8CE1A8BFFE500864078 /* Main.storyboard */,
+				4F8ED3EB1B4442C7008C24FE /* MovieTableViewCell.xib */,
+			);
+			name = "User Interface";
 			sourceTree = "<group>";
 		};
 		4FCFBA0F1C0C9C1300D43C27 /* Database */ = {
@@ -1043,6 +1057,7 @@
 				4F6914961A8C09BA00B8FFCE /* UpcomingTableViewController.swift in Sources */,
 				4FFE43481BA6B4D10080D9F3 /* MessageWindow.swift in Sources */,
 				4F0FED021CF9F0C4003B9975 /* MovieDatabaseProtocol.swift in Sources */,
+				4F851AF71D32E65F00448540 /* StackViewExtension.swift in Sources */,
 				4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */,
 				4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */,
 				4F63E61E1A992BCA00528FB3 /* MovieDatabaseHelper.swift in Sources */,
@@ -1052,6 +1067,7 @@
 				4F6914821A8C041D00B8FFCE /* MovieTableViewController.swift in Sources */,
 				4F0953411B9F17D50040BBC9 /* SettingsTableViewController.swift in Sources */,
 				4F7A99AF1BAF01E600ED38C9 /* NetworkChecker.swift in Sources */,
+				4F851AF91D36D2BD00448540 /* MovieViewControllerActors.swift in Sources */,
 				4F885C7C1CA5C39000659D2D /* MovieDatabaseParent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

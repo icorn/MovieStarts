@@ -68,6 +68,12 @@ public class MovieRecord : CustomStringConvertible {
 	///  the Rotten Tomatoes url for this movie
 	public var tomatoURL: String?
 	
+	/// four new values for version 2.0
+	var budget: Int?
+	var backdrop: String?
+	var profilePictures: [String] = []
+	var directorPictures: [String] = []
+	
 	/// is this movie hidden?
 	private var hidden: Bool = false
 
@@ -361,13 +367,19 @@ public class MovieRecord : CustomStringConvertible {
 		if let value = dict[Constants.dbIdVoteCount] as? Int 				{ self.voteCount 			= value	}
 		if let value = dict[Constants.dbIdProductionCountries] as? [String]	{ self.productionCountries	= value	}
 		if let value = dict[Constants.dbIdHidden] as? Bool					{ self.hidden				= value	}
+
+		if let value = dict[Constants.dbIdProfilePictures] as? [String] 	{ self.profilePictures 		= value	}
+		if let value = dict[Constants.dbIdDirectorPictures] as? [String] 	{ self.directorPictures 	= value	}
 		
 		if (dict[Constants.dbIdRatingImdb] != nil) 			{ self.ratingImdb 		= dict[Constants.dbIdRatingImdb] 		as? Double }
 		if (dict[Constants.dbIdRatingMetacritic] != nil) 	{ self.ratingMetacritic = dict[Constants.dbIdRatingMetacritic] 	as? Int }
 		if (dict[Constants.dbIdRatingTomato] != nil) 		{ self.ratingTomato 	= dict[Constants.dbIdRatingTomato] 		as? Int }
 		if (dict[Constants.dbIdTomatoImage] != nil) 		{ self.tomatoImage 		= dict[Constants.dbIdTomatoImage] 		as? Int }
 		if (dict[Constants.dbIdTomatoURL] != nil) 			{ self.tomatoURL 		= dict[Constants.dbIdTomatoURL] 		as? String }
-		
+
+		if (dict[Constants.dbIdBudget] != nil)		{ self.budget = dict[Constants.dbIdBudget]		as? Int }
+		if (dict[Constants.dbIdBackdrop] != nil) 	{ self.backdrop	= dict[Constants.dbIdBackdrop] 	as? String }
+
 		if let saveId = dict[Constants.dbIdId] as? String {
 			id = saveId
 		}
@@ -424,11 +436,17 @@ public class MovieRecord : CustomStringConvertible {
 		if let value = ckRecord.objectForKey(Constants.dbIdVoteCount) as? Int					{ self.voteCount 			= value }
 		if let value = ckRecord.objectForKey(Constants.dbIdHidden) as? Bool						{ self.isHidden				= value }
 
+		if let value = ckRecord.objectForKey(Constants.dbIdProfilePictures) as? [String] 		{ self.profilePictures 		= value }
+		if let value = ckRecord.objectForKey(Constants.dbIdDirectorPictures) as? [String] 		{ self.directorPictures 	= value }
+
 		if (ckRecord.objectForKey(Constants.dbIdRatingImdb) != nil) 		{ self.ratingImdb 		= ckRecord.objectForKey(Constants.dbIdRatingImdb) 		as? Double }
 		if (ckRecord.objectForKey(Constants.dbIdRatingMetacritic) != nil) 	{ self.ratingMetacritic = ckRecord.objectForKey(Constants.dbIdRatingMetacritic) as? Int }
 		if (ckRecord.objectForKey(Constants.dbIdRatingTomato) != nil) 		{ self.ratingTomato 	= ckRecord.objectForKey(Constants.dbIdRatingTomato) 	as? Int }
 		if (ckRecord.objectForKey(Constants.dbIdTomatoImage) != nil) 		{ self.tomatoImage 		= ckRecord.objectForKey(Constants.dbIdTomatoImage) 		as? Int }
 		if (ckRecord.objectForKey(Constants.dbIdTomatoURL) != nil) 			{ self.tomatoURL 		= ckRecord.objectForKey(Constants.dbIdTomatoURL) 		as? String }
+
+		if (ckRecord.objectForKey(Constants.dbIdBudget) != nil)		{ self.budget	= ckRecord.objectForKey(Constants.dbIdBudget) as? Int }
+		if (ckRecord.objectForKey(Constants.dbIdBackdrop) != nil) 	{ self.backdrop	= ckRecord.objectForKey(Constants.dbIdBackdrop)	as? String }
 
 		id = ckRecord.recordID.recordName
 	}
@@ -472,7 +490,12 @@ public class MovieRecord : CustomStringConvertible {
 		retval[Constants.dbIdRatingTomato] 		= ratingTomato
 		retval[Constants.dbIdTomatoImage] 		= tomatoImage
 		retval[Constants.dbIdTomatoURL] 		= tomatoURL
-		
+
+		retval[Constants.dbIdBudget]			= budget
+		retval[Constants.dbIdBackdrop]			= backdrop
+		retval[Constants.dbIdProfilePictures] 	= profilePictures
+		retval[Constants.dbIdDirectorPictures] 	= directorPictures
+
 		retval[Constants.dbIdVoteAverage] 			= voteAverage
 		retval[Constants.dbIdDirectors] 			= directors
 		retval[Constants.dbIdActors] 				= actors
@@ -655,24 +678,37 @@ public class MovieRecord : CustomStringConvertible {
 		
 		// [Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic]
 		
+		// version 1.2
+		
 		if (updateKeys.contains(Constants.dbIdRatingImdb)) {
 			self.ratingImdb = updateRecord.ratingImdb
 		}
-		
 		if (updateKeys.contains(Constants.dbIdRatingTomato)) {
 			self.ratingTomato = updateRecord.ratingTomato
 		}
-
 		if (updateKeys.contains(Constants.dbIdTomatoImage)) {
 			self.tomatoImage = updateRecord.tomatoImage
 		}
-
 		if (updateKeys.contains(Constants.dbIdTomatoURL)) {
 			self.tomatoURL = updateRecord.tomatoURL
 		}
-
 		if (updateKeys.contains(Constants.dbIdRatingMetacritic)) {
 			self.ratingMetacritic = updateRecord.ratingMetacritic
+		}
+		
+		// version 2.0
+		
+		if (updateKeys.contains(Constants.dbIdBudget)) {
+			self.budget = updateRecord.budget
+		}
+		if (updateKeys.contains(Constants.dbIdBackdrop)) {
+			self.backdrop = updateRecord.backdrop
+		}
+		if (updateKeys.contains(Constants.dbIdProfilePictures)) {
+			self.profilePictures = updateRecord.profilePictures
+		}
+		if (updateKeys.contains(Constants.dbIdDirectorPictures)) {
+			self.directorPictures = updateRecord.directorPictures
 		}
 	}
 	

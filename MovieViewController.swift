@@ -25,19 +25,14 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var releaseDateHeadlineLabel: UILabel!
 	@IBOutlet weak var releaseDateLabel: UILabel!
 	@IBOutlet weak var directorHeadlineLabel: UILabel!
-	@IBOutlet weak var directorLabel: UILabel!
-	@IBOutlet weak var directorLabel2: UILabel!
 	@IBOutlet weak var actorHeadlineLabel: UILabel!
-	@IBOutlet weak var actorLabel1: UILabel!
-	@IBOutlet weak var actorLabel2: UILabel!
-	@IBOutlet weak var actorLabel3: UILabel!
-	@IBOutlet weak var actorLabel4: UILabel!
-	@IBOutlet weak var actorLabel5: UILabel!
 	@IBOutlet weak var storyHeadlineLabel: UILabel!
 	@IBOutlet weak var storyLabel: UILabel!
 	@IBOutlet weak var imdbButton: UIButton!
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
+	@IBOutlet weak var actorStackView: UIStackView!
+	@IBOutlet weak var directorStackView: UIStackView!
 	
 	@IBOutlet weak var ratingStackView: UIStackView!
 	@IBOutlet weak var imdbRatingLabel: UILabel!
@@ -47,6 +42,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var tomatoesRatingLabel: UILabel!
 	@IBOutlet weak var metascoreRatingLabel: UILabel!
 	@IBOutlet weak var metascoreInnerView: UIView!
+	@IBOutlet weak var moreStoryButton: UIButton!
 	
 	@IBOutlet weak var bottomLine: UIView!
 	
@@ -54,40 +50,19 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var directorHeadlineLabelHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line2HeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var lineReleaseDateHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line3HeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line3VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line4HeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line4VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line5HeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line5VerticalSpaceConstraint: NSLayoutConstraint!
-    @IBOutlet weak var line1HeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var lineStoryHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var lineTrailersHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var lineTopHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var line1VerticalSpaceConstraint: NSLayoutConstraint!
 	
 	@IBOutlet weak var directorHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var directorLabelHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var directorLabel2HeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var directorLabelVerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var directorLabel2VerticalSpaceConstraint: NSLayoutConstraint!
-
-	@IBOutlet weak var actorHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var actorHeadlineLabelHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel1VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel2VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel3VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel4VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel5VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel1HeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel2HeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel3HeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel4HeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var actorLabel5HeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var storyHeadlineLabelTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var storyLabelTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line2bHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line2bVerticalSpaceConstraint: NSLayoutConstraint!
+	@IBOutlet weak var lineDirectorsHeightConstraint: NSLayoutConstraint!
 	
 	@IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
@@ -95,6 +70,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var ratingStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var imdbImageViewWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var tomatoesImageViewWidthConstraint: NSLayoutConstraint!
+	@IBOutlet weak var lineActorsHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var moreStoryButtonHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var moreStoryButtonVerticalSpaceConstraint: NSLayoutConstraint!
 	
     @IBOutlet weak var imdbOuterView: UIView!
     @IBOutlet weak var imdbInnerView: UIView!
@@ -119,7 +97,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
 	var movie: MovieRecord?
 	var allTrailerIds: [String] = []
-	var showRatings: Bool = false
+	var showRatingsFlag: Bool = false
+	var baseImagePath: String?
+	var showCompleteStory: Bool = false
+	
 	
 	// MARK: - UIViewController
 	
@@ -127,9 +108,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		super.viewDidLoad()
 		
 		// start to show all movie details
-
-		var actorLabels = [actorLabel1, actorLabel2, actorLabel3, actorLabel4, actorLabel5]
-		var directorLabels = [directorLabel, directorLabel2]
 		
 		if let movie = movie {
 			
@@ -140,153 +118,25 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				Answers.logContentViewWithName(title, contentType: nil, contentId: imdbId, customAttributes: nil)
 			#endif
 			
-			// show poster
-			
-			posterImageView.image = movie.thumbnailImage.0
-
-			if (movie.thumbnailImage.1) {
-				let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.thumbnailTapped(_:)))
-				rec.numberOfTapsRequired = 1
-				posterImageView.addGestureRecognizer(rec)
-			}
-
-			// fill labels
-			
-			titleLabel?.text = movie.title[movie.currentCountry.languageArrayIndex]
-
-			// show labels with subtitles
-			
-			var subtitleLabels = [subtitleText1, subtitleText2, subtitleText3]
-			
-			if let genreDict = movieTabBarController?.genreDict {
-				for (index, subtitle) in movie.getSubtitleArray(genreDict).enumerate() {
-					subtitleLabels[index]?.text = subtitle
-				}
+			baseImagePath = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)?.path
 				
-				// hide unused labels
-				
-				for index in movie.getSubtitleArray(genreDict).count ..< subtitleLabels.count {
-					subtitleLabels[index]?.hidden = true
-				}
-
-				// vertically "center" the labels
-				let moveY = (subtitleLabels.count - movie.getSubtitleArray(genreDict).count) * 19
-				titleLabelTopSpaceConstraint.constant = CGFloat(moveY / 2) * -1 + 4
-			}
-			
-			// show release date
-			
-			releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
-			
-			if (movie.releaseDate[movie.currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending) {
-				releaseDateLabel?.text = movie.releaseDateString
-			}
-			else {
-				// no release date (cannot happen)
-				releaseDateLabel?.text = "-"
-			}
-			
-			// show rating(s) or don't
-			
-			self.showRatings = (movie.ratingImdb != nil) || (movie.ratingTomato != nil) || (movie.ratingMetacritic != nil)
-			generateRatingsDisplay(movie)
-			
-			// show director(s)
-
-			directorHeadlineLabel.text = NSLocalizedString("Director", comment: "") + ":"
-			if (movie.directors.count > 1) {
-				directorHeadlineLabel.text = NSLocalizedString("Directors", comment: "") + ":"
-			}
-			
-			if (movie.directors.count > 0) {
-				for index in 0...movie.directors.count-1 {
-					if (index < 2) {
-						directorLabels[index].text = movie.directors[index]
-					}
-				}
-			}
-			
-			// hide unused director-fields
-			
-			if (movie.directors.count < 2) {
-				setConstraintsToZero(directorLabel2HeightConstraint, directorLabel2VerticalSpaceConstraint)
-			}
-			if (movie.directors.count < 1) {
-				setConstraintsToZero(directorLabelHeightConstraint, directorLabelVerticalSpaceConstraint, directorHeadlineLabelHeightConstraint,
-					directorHeadlineLabelVerticalSpaceConstraint, line2bHeightConstraint, line2bVerticalSpaceConstraint)
-			}
-			
-			// show actor(s)
-			
-			actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "") + ":"
-			if (movie.actors.count > 0) {
-				for index in 0...movie.actors.count-1 {
-					if (index < 5) {
-						actorLabels[index].text = movie.actors[index]
-					}
-				}
-			}
-			
-			// hide unused actor-fields
-			
-			if (movie.actors.count < 5) {
-				setConstraintsToZero(actorLabel5HeightConstraint, actorLabel5VerticalSpaceConstraint)
-			}
-			if (movie.actors.count < 4) {
-				setConstraintsToZero(actorLabel4HeightConstraint, actorLabel4VerticalSpaceConstraint)
-			}
-			if (movie.actors.count < 3) {
-				setConstraintsToZero(actorLabel3HeightConstraint, actorLabel3VerticalSpaceConstraint)
-			}
-			if (movie.actors.count < 2) {
-				setConstraintsToZero(actorLabel2HeightConstraint, actorLabel2VerticalSpaceConstraint)
-			}
-			if (movie.actors.count < 1) {
-				setConstraintsToZero(actorLabel1HeightConstraint, actorLabel1VerticalSpaceConstraint, actorHeadlineLabelHeightConstraint,
-					actorHeadlineLabelVerticalSpaceConstraint, line3HeightConstraint, line3VerticalSpaceConstraint)
-			}
-			
-			// show synopsis
-			
-			let synopsisForLanguage = movie.synopsisForLanguage
-
-			if (synopsisForLanguage.0.characters.count > 0) {
-				storyHeadlineLabel.text = NSLocalizedString("Synopsis", comment: "") + ":"
-				storyLabel.text = synopsisForLanguage.0
-				
-				if (synopsisForLanguage.1 != movie.currentCountry.languageArrayIndex) {
-					// synopsis is english as fallback
-					storyHeadlineLabel.text = NSLocalizedString("SynopsisEnglish", comment: "") + ":"
-				}
-			}
-			else {
-				// hide everything related to synopsis
-				setConstraintsToZero(storyLabelTopSpaceConstraint, storyHeadlineLabelTopSpaceConstraint, line4VerticalSpaceConstraint, line4HeightConstraint)
-				storyHeadlineLabel.addConstraint(NSLayoutConstraint(item: storyHeadlineLabel, attribute: NSLayoutAttribute.Height,
-					relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 0))
-				storyLabel.addConstraint(NSLayoutConstraint(item: storyLabel, attribute: NSLayoutAttribute.Height,
-					relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 0))
-			}
-
-			// show textbutton for imdb
-			
-			if (movie.imdbId != nil) {
-				imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-				imdbButton.setTitle(NSLocalizedString("ShowOnImdb", comment: ""), forState: UIControlState.Normal)
-			}
-
-			// trailers
-			trailerHeadlineLabel.text = NSLocalizedString("TrailerHeadline", comment: "") + ":"
-			
-			allTrailerIds = movie.trailerIds[movie.currentCountry.languageArrayIndex]
-			
-			if (movie.currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) {
-				allTrailerIds.appendContentsOf(movie.trailerIds[MovieCountry.USA.languageArrayIndex])
-			}
-			
-			generateTrailerButtons(movie)
+			// show movie data
+			showPoster()
+			showTitles()
+			showReleaseDate()
+			showRatings()
+			showDirectors()
+			showActors()
+			showSynopsis()
+			showLinkButtons()
+			showTrailers()
 
 			setUpFavoriteButton()
+			
+			// shrink story label if needed
+			
+			view.layoutIfNeeded()
+			shrinkStoryIfNeeded()
 
 			// Set nice distance between lowest line and the bottom of the content view.
 
@@ -295,12 +145,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 	
-	
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-	}
-	
-
 	override func viewDidAppear(animated: Bool) {
 		super.viewDidAppear(animated)
 		view.layoutIfNeeded()
@@ -331,10 +175,93 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	}
 	
 	
-	func generateRatingsDisplay(movie: MovieRecord) {
-		if (self.showRatings) {
-			setConstraintsToZero(line1VerticalSpaceConstraint, line1HeightConstraint, line2HeightConstraint,
-			                     line2VerticalSpaceConstraint)
+	/**
+		Updates a trailer button with a new image.
+	
+		- parameter index:		The index of the button inside the stackview
+		- parameter trailerId:	The id of the trailer, which is also the filename of the trailer-image
+	*/
+	private final func updateTrailerButton(index: Int, trailerId: String) {
+        if (index >= trailerStackView.arrangedSubviews.count) {
+            return
+        }
+        
+		guard let buttonToUpdate = trailerStackView.arrangedSubviews[index] as? UIButton else { return }
+		guard let basePath = self.baseImagePath else { return }
+
+		let trailerImageFilePath = basePath + Constants.trailerFolder + "/" + trailerId + ".jpg"
+		
+		guard let trailerImage = UIImage(contentsOfFile: trailerImageFilePath)?.CGImage else { return }
+
+		let scaledImage = UIImage(CGImage: trailerImage, scale: 1.5, orientation: UIImageOrientation.Up)
+
+		dispatch_async(dispatch_get_main_queue()) {
+			buttonToUpdate.setImage(scaledImage, forState: UIControlState.Normal)
+		}
+	}
+	
+	
+	// MARK: - Show-Functions
+
+	
+	private final func showPoster()
+	{
+		posterImageView.image = self.movie?.thumbnailImage.0
+		
+		if let movie = self.movie where movie.thumbnailImage.1 {
+			let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.thumbnailTapped(_:)))
+			rec.numberOfTapsRequired = 1
+			posterImageView.addGestureRecognizer(rec)
+		}
+	}
+	
+	private final func showTitles() {
+		guard let movie = self.movie else { return }
+		
+		titleLabel?.text = movie.title[movie.currentCountry.languageArrayIndex]
+			
+		// show labels with subtitles
+		
+		var subtitleLabels = [subtitleText1, subtitleText2, subtitleText3]
+		
+		if let genreDict = movieTabBarController?.genreDict {
+			for (index, subtitle) in movie.getSubtitleArray(genreDict).enumerate() {
+				subtitleLabels[index]?.text = subtitle
+			}
+			
+			// hide unused labels
+			
+			for index in movie.getSubtitleArray(genreDict).count ..< subtitleLabels.count {
+				subtitleLabels[index]?.hidden = true
+			}
+			
+			// vertically "center" the labels
+			let moveY = (subtitleLabels.count - movie.getSubtitleArray(genreDict).count) * 19
+			titleLabelTopSpaceConstraint.constant = CGFloat(moveY / 2) * -1 + 4
+		}
+	}
+
+	private final func showReleaseDate() {
+		guard let movie = self.movie else { return }
+		releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
+		
+		if (movie.releaseDate[movie.currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending) {
+			releaseDateLabel?.text = movie.releaseDateString
+		}
+		else {
+			// no release date (cannot happen)
+			releaseDateLabel?.text = "-"
+		}
+	}
+	
+	private final func showRatings() {
+		guard let movie = self.movie else { return }
+	
+		self.showRatingsFlag = (movie.ratingImdb != nil) || (movie.ratingTomato != nil) || (movie.ratingMetacritic != nil)
+		
+		if (self.showRatingsFlag) {
+			setConstraintsToZero(line1VerticalSpaceConstraint, lineTopHeightConstraint, lineReleaseDateHeightConstraint,
+								 line2VerticalSpaceConstraint)
 			
 			// IMDb rating
 			
@@ -368,7 +295,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			
 			if let score = self.movie?.ratingTomato {
 				tomatoesRatingLabel.text = "\(score)%"
-
+				
 				if let tomatoImageIndex = self.movie?.tomatoImage, tomatoImage = TomatoImage(rawValue: tomatoImageIndex) {
 					tomatoesImageView.image = UIImage.init(named: tomatoImage.filename)
 				}
@@ -384,7 +311,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			
 			if let score = self.movie?.ratingMetacritic {
 				metascoreRatingLabel.text = "\(score)"
-
+				
 				switch score {
 				case 0...39:
 					// red score
@@ -409,30 +336,67 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 		else {
 			// hide all ratings stuff, because we have no ratings
-            ratingStackView.hidden = true
-            setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
-                line1VerticalSpaceConstraint, line1HeightConstraint)
-        }
+			ratingStackView.hidden = true
+			setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
+								 line1VerticalSpaceConstraint, lineTopHeightConstraint)
+		}
 	}
 	
+	private final func showSynopsis() {
+		guard let movie = self.movie else { return }
+		
+		let synopsisForLanguage = movie.synopsisForLanguage
+		
+		if (synopsisForLanguage.0.characters.count > 0) {
+			storyHeadlineLabel.text = NSLocalizedString("Synopsis", comment: "") + ":"
+			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: "") + "  ▼",
+			                         forState: UIControlState.Normal)
+			storyLabel.text = synopsisForLanguage.0
+			
+			if (synopsisForLanguage.1 != movie.currentCountry.languageArrayIndex) {
+				// synopsis is english as fallback
+				storyHeadlineLabel.text = NSLocalizedString("SynopsisEnglish", comment: "") + ":"
+			}
+		}
+		else {
+			// hide everything related to synopsis
+			setConstraintsToZero(storyLabelTopSpaceConstraint, storyHeadlineLabelTopSpaceConstraint, lineStoryHeightConstraint)
+			storyHeadlineLabel.addConstraint(NSLayoutConstraint(item: storyHeadlineLabel, attribute: NSLayoutAttribute.Height,
+				relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 0))
+			storyLabel.addConstraint(NSLayoutConstraint(item: storyLabel, attribute: NSLayoutAttribute.Height,
+				relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 0))
+		}
+	}
 	
-	/**
-		Creates all the buttons for trailers. If there are no trailers, all trailer-related UI elements will be hidden.
-	
-		- parameter movie: The movie record for which the trailers are shown
-	 */
-	func generateTrailerButtons(movie: MovieRecord) {
+	private final func showLinkButtons() {
+		guard let movie = self.movie else { return }
+		
+		if (movie.imdbId != nil) {
+			imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+			imdbButton.setTitle(NSLocalizedString("ShowOnImdb", comment: ""), forState: UIControlState.Normal)
+		}
+	}
+
+	private final func showTrailers()	{
+		guard let movie = self.movie else { return }
+		trailerHeadlineLabel.text = NSLocalizedString("TrailerHeadline", comment: "") + ":"
+		
+		allTrailerIds = movie.trailerIds[movie.currentCountry.languageArrayIndex]
+		
+		if (movie.currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) {
+			allTrailerIds.appendContentsOf(movie.trailerIds[MovieCountry.USA.languageArrayIndex])
+		}
+		
 		if (allTrailerIds.count == 0) {
 			// no trailers: hide all related UI elements
-			setConstraintsToZero(trailerStackViewVerticalSpaceConstraint, trailerHeadlineLabelVerticalSpaceConstraint, line5VerticalSpaceConstraint, line5HeightConstraint)
+			setConstraintsToZero(trailerStackViewVerticalSpaceConstraint, trailerHeadlineLabelVerticalSpaceConstraint)
 			trailerHeadlineLabel.addConstraint(NSLayoutConstraint(item: trailerHeadlineLabel, attribute: NSLayoutAttribute.Height,
 				relatedBy: NSLayoutRelation.Equal, toItem: nil, attribute: NSLayoutAttribute.NotAnAttribute, multiplier: 1.0, constant: 0))
 			return
 		}
 		
-		guard let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup) else { return }
-		guard let basePath = pathUrl.path else { return }
-
+		guard let basePath = self.baseImagePath else { return }
+		
 		for (index, trailerId) in allTrailerIds.enumerate() {
 			// try to load existing trailer-image
 			let trailerImageFilePath = basePath + Constants.trailerFolder + "/" + trailerId + ".jpg"
@@ -465,7 +429,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 						}
 					}
 				})
-
+				
 				task.resume()
 			}
 			
@@ -483,29 +447,126 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		trailerStackView.layoutIfNeeded()
 	}
 
-	/**
-		Updates a trailer button with a new image.
-	
-		- parameter index:		The index of the button inside the stackview
-		- parameter trailerId:	The id of the trailer, which is also the filename of the trailer-image
-	*/
-	func updateTrailerButton(index: Int, trailerId: String) {
-        if (index >= trailerStackView.arrangedSubviews.count) {
-            return
-        }
-        
-		guard let buttonToUpdate = trailerStackView.arrangedSubviews[index] as? UIButton else { return }
-		guard let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup) else { return }
-		guard let basePath = pathUrl.path else { return }
-
-		let trailerImageFilePath = basePath + Constants.trailerFolder + "/" + trailerId + ".jpg"
+	private final func showDirectors() {
+		guard let movie = self.movie else { return }
 		
-		guard let trailerImage = UIImage(contentsOfFile: trailerImageFilePath)?.CGImage else { return }
-
-		let scaledImage = UIImage(CGImage: trailerImage, scale: 1.5, orientation: UIImageOrientation.Up)
-
-		dispatch_async(dispatch_get_main_queue()) {
-			buttonToUpdate.setImage(scaledImage, forState: UIControlState.Normal)
+		if (movie.directors.count > 0) {
+			directorHeadlineLabel.text = NSLocalizedString("Director", comment: "") + ":"
+			
+			if (movie.directors.count > 1) {
+				directorHeadlineLabel.text = NSLocalizedString("Directors", comment: "") + ":"
+			}
+			
+			for directorIndex in 0...movie.directors.count-1 {
+				if let newSubview = addPersonToStackView(false,
+				                                         filename: movie.directorPictures[directorIndex],
+				                                         foldername: Constants.directorThumbnailFolder,
+				                                         title: movie.directors[directorIndex],
+				                                         subtitle: nil)
+				{
+					directorStackView.addArrangedSubview(newSubview)
+				}
+			}
+		}
+		else {
+			// no directors
+			
+			// TODO
+			
+		}
+	}
+	
+	private final func addPersonToStackView(hidden: Bool,
+	                                        filename: String,
+	                                        foldername: String,
+	                                        title: String,
+	                                        subtitle: String?) -> UIView?
+	{
+		let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 45, height: 45))
+		imageView.contentMode = UIViewContentMode.ScaleAspectFill
+		imageView.image = UIImage(named: "welcome")
+		
+		guard let basePath = self.baseImagePath else {
+			return nil
+		}
+		
+		if (filename.characters.count > 0) {
+			
+			let actorImageFilePath = basePath + foldername + filename
+			imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
+			
+			if (imageView.image == nil) {
+				// image not found: use default-image
+				imageView.image = UIImage(named: "welcome")
+				
+				// load the correct image from YouTube
+				guard let sourceImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w45" + filename) else {
+					return nil
+				}
+				
+				let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceImageUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+					
+					if let error = error {
+						NSLog("Error getting actor thumbnail: \(error.description)")
+					}
+					else if let receivedPath = location?.path {
+						// move received poster to target path where it belongs and update the button
+						do {
+							try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: actorImageFilePath)
+							imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
+						}
+						catch let error as NSError {
+							if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+								// ignoring, because it's okay it it's already there
+							}
+							else {
+								NSLog("Error moving actor/director thumbnail: \(error.description)")
+							}
+						}
+					}
+				})
+				
+				task.resume()
+			}
+		}
+		
+		let personNameLabel = UILabel()
+		personNameLabel.text = title
+		personNameLabel.font = UIFont.systemFontOfSize(14.0)
+		
+		let innerStackView = UIStackView(arrangedSubviews: [personNameLabel])
+		innerStackView.axis = .Vertical
+		innerStackView.alignment = UIStackViewAlignment.Leading
+		innerStackView.distribution = UIStackViewDistribution.Fill
+		innerStackView.spacing = 0
+		
+		if let subtitle = subtitle where subtitle.characters.count > 0 {
+			let characterNameLabel = UILabel()
+			characterNameLabel.text = NSLocalizedString("ActorAs", comment: "") + " " + subtitle
+			characterNameLabel.font = UIFont.systemFontOfSize(12.0)
+			innerStackView.addArrangedSubview(characterNameLabel)
+		}
+		
+		let outerStackView = UIStackView(arrangedSubviews: [imageView, innerStackView])
+		outerStackView.axis = .Horizontal
+		outerStackView.alignment = UIStackViewAlignment.Center
+		outerStackView.distribution = UIStackViewDistribution.Fill
+		outerStackView.spacing = 8
+		outerStackView.hidden = hidden
+		
+		return outerStackView
+	}
+	
+	private final func shrinkStoryIfNeeded() {
+		let numLinesOfStory = round(storyLabel.frame.height / storyLabel.font.lineHeight)
+		
+		if (numLinesOfStory > 9) {
+			// set height to 8 lines and show button
+			storyLabel.numberOfLines = 8
+		}
+		else {
+			moreStoryButton.hidden = true
+			setConstraintsToZero(moreStoryButtonHeightConstraint, moreStoryButtonVerticalSpaceConstraint)
 		}
 	}
 	
@@ -520,12 +581,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	// MARK: - Button callbacks
 
-
-	func imdbButtonTapped(sender: UIButton) {
+	
+	final func imdbButtonTapped(sender: UIButton) {
 		showImdbPage()
 	}
 
-	func trailerButtonTapped(sender: UIButton) {
+	final func trailerButtonTapped(sender: UIButton) {
 		
 		guard let movie = movie else { return }
 		
@@ -555,7 +616,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 	
-	func addFavoriteButtonTapped(sender:UIButton) {
+	final func addFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
 			Favorites.addMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
@@ -563,7 +624,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 
-	func removeFavoriteButtonTapped(sender:UIButton) {
+	final func removeFavoriteButtonTapped(sender:UIButton) {
 		if let movie = movie {
 			Favorites.removeMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
@@ -583,8 +644,23 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			self.presentViewController(webVC, animated: true, completion: nil)
 		}
 	}
-	
 
+	@IBAction func moreStoryButtonTapped(sender: AnyObject) {
+		showCompleteStory = !showCompleteStory
+		
+		if (showCompleteStory) {
+			moreStoryButton.setTitle("▲  " + NSLocalizedString("ShowShortSynopsis", comment: "") + "  ▲",
+			                         forState: UIControlState.Normal)
+			storyLabel.numberOfLines = 0
+		}
+		else {
+			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: "") + "  ▼",
+			                         forState: UIControlState.Normal)
+			storyLabel.numberOfLines = 8
+		}
+	}
+
+	
 	// MARK: - Helpers
 	
 	
@@ -616,8 +692,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 
-	
-	private func showImdbPage() {
+	private final func showImdbPage() {
 		// check if we open the idmb app or the webview
 		
 		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
@@ -638,5 +713,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			}
 		}
 	}
-
+	
+	final func cropImage(inputImage: UIImage?) -> UIImage? {
+		if let imageRef = CGImageCreateWithImageInRect(inputImage?.CGImage, CGRect(x: 0, y: 0, width: 45, height: 60)) {
+			return UIImage(CGImage: imageRef)
+		}
+		
+		return nil
+	}
 }

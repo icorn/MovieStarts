@@ -17,7 +17,13 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		super.init(recordType: recordType)
 
 		self.viewForError = viewForError
-		queryKeys = [Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic]
+		queryKeys = [
+			// version 1.2
+			Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic,
+			
+			// version 2.0
+			Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
+		]
 		
 		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 		
@@ -121,9 +127,11 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter record:	The record from the CloudKit database
 	*/
 	internal func recordFetchedCallback(record: CKRecord) {
-		
 		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
-		guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("recordFetchedMigrationMoviesCallback: Corrupt countrycode \(prefsCountryString)"); return }
+		guard let country = MovieCountry(rawValue: prefsCountryString) else {
+			NSLog("recordFetchedMigrationMoviesCallback: Corrupt countrycode \(prefsCountryString)")
+			return
+		}
 		
 		let newMovieRecord = MovieRecord(country: country)
 		newMovieRecord.initWithCKRecord(record)

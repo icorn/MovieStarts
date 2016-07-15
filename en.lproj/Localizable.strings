@@ -37,7 +37,12 @@
 "aka"				= "aka";
 "IMDbRating"		= "IMDb Score";
 "Score unknown"		= "n/a";
+"ActorAs"			= "as";
+"ShowAllActors"		= "Show all actors";
+"ShowLessActors"	= "Show less actors";
 
+"ShowCompleteSynopsis"		= "Show complete synopsis";
+"ShowShortSynopsis"			= "Show shorter synopsis";
 "ShowOnImdb"				= "Show Details on IMDb";
 "TrailerHeadline"			= "Trailers";
 "AddToFavorites"			= "Add to Favorites";
@@ -97,10 +102,10 @@
 "UpdateFeatures"			= "New Features";
 "UpdateMessagePush"			= "There is a new feature in this version of the app: You can turn on notifications in the settings to get a push notification when your favorite movies will be released.";
 
-"UpdateDatabase1_2Title"	= "Update";
-"UpdateDatabase1_2Text"		= "Downloading missing movie ratings from the server.";
-"RatingUpdateStart"			= "Downloading ratings...";
-"RatingUpdateProgress"		= "ratings downloaded...";
+"UpdateDatabaseTitle"		= "Update";
+"UpdateDatabaseText"		= "Updating database to new version.";
+"RatingUpdateStart"			= "Downloading movies...";
+"RatingUpdateProgress"		= "movies downloaded...";
 "UpdateFailedHeadline"		= "Update Error";
 "UpdateFailedText"			= "Error loading the update. We will try to load the update again at the next restart of the app.";
 

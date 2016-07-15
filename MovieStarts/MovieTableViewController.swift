@@ -432,18 +432,22 @@ class MovieTableViewController: UITableViewController {
 		
 		let migrateFromVersion = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsMigrateFromVersion) as? Int
 
-		if let migrateFromVersion = migrateFromVersion where migrateFromVersion < Constants.version1_2 {
+		if let migrateFromVersion = migrateFromVersion where migrateFromVersion < Constants.version2_0 {
 			
-			// we have to migrate the database from an older version to version 1.2: Get new database fields for all records
+			// we have to migrate the database from an older version to version 2.0: Get new database fields for all records
 			
-			appDelegate.versionOfPreviousLaunch = Constants.version1_2
+			appDelegate.versionOfPreviousLaunch = Constants.version2_0
 			retval = true
 			var updateWindow: MessageWindow?
 			var updateCounter = 0
 			
 			dispatch_async(dispatch_get_main_queue()) {
-				updateWindow = MessageWindow(parent: tbc.view, darkenBackground: true, titleStringId: "UpdateDatabase1_2Title", textStringId: "UpdateDatabase1_2Text",
-											 buttonStringIds: [], handler: { (buttonIndex) -> () in } )
+				updateWindow = MessageWindow(parent: tbc.view,
+				                             darkenBackground: true,
+				                             titleStringId: "UpdateDatabaseTitle",
+				                             textStringId: "UpdateDatabaseText",
+											 buttonStringIds: [],
+											 handler: { (buttonIndex) -> () in } )
 				
 				updateWindow?.showProgressIndicator(NSLocalizedString("RatingUpdateStart", comment: ""))
 				
@@ -455,78 +459,79 @@ class MovieTableViewController: UITableViewController {
 				
 				let databaseMigrator = MovieDatabaseMigrator(recordType: Constants.dbRecordTypeMovie, viewForError: self.view)
 				
-				databaseMigrator.getMigrationMovies(country,
-											updateMovieHandler: { [unowned self] (movie: MovieRecord) in
-												
-												// update the just received movie
-												updateCounter += 1
-												var updated = false
-												
-												for (nowIndex, nowMovie) in self.nowMovies.enumerate() {
-													if (nowMovie.tmdbId == movie.tmdbId) {
-														self.nowMovies[nowIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
-														updated = true
-														break
-													}
-												}
-												
-												if (updated == false) {
-													for (upcomingSectionIndex, upcomingMovieSection) in tbc.upcomingMovies.enumerate() {
-														for (upcomingMovieIndex, upcomingMovie) in upcomingMovieSection.enumerate() {
-															if (upcomingMovie.tmdbId == movie.tmdbId) {
-																tbc.upcomingMovies[upcomingSectionIndex][upcomingMovieIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
-																break
-															}
-														}
-													}
-												}
-												
-												for (favoriteSectionIndex, favoriteMovieSection) in tbc.favoriteMovies.enumerate() {
-													for (favoriteMovieIndex, favoriteMovie) in favoriteMovieSection.enumerate() {
-														if (favoriteMovie.tmdbId == movie.tmdbId) {
-															tbc.favoriteMovies[favoriteSectionIndex][favoriteMovieIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
-															break
-														}
-													}
-												}
-												
-												updateWindow?.updateProgressIndicator("\(updateCounter) " + NSLocalizedString("RatingUpdateProgress", comment: ""))
-											},
-											
-											completionHandler: { (movies: [MovieRecord]?) in
-												UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-												dispatch_async(dispatch_get_main_queue()) {
-													updateWindow?.close()
-												}
-												
-												// Don't forget to remove the migrate-flag from the prefs
-												NSUserDefaults(suiteName: Constants.movieStartsGroup)?.removeObjectForKey(Constants.prefsMigrateFromVersion)
-												NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
-											},
-											
-											errorHandler: { (errorMessage: String) in
-												UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-												dispatch_async(dispatch_get_main_queue()) {
-													
-													// error in migration
-													updateWindow?.close()
-													tbc.migrationHasFailedInThisSession = true
-													
-													// tell user about the error
-													var infoWindow: MessageWindow?
-													
-													dispatch_async(dispatch_get_main_queue()) {
-														infoWindow = MessageWindow(parent: tbc.view, darkenBackground: true, titleStringId: "UpdateFailedHeadline", textStringId: "UpdateFailedText",
-															buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
-																infoWindow?.close()
-															}
-														)
-													}
-												}
-												
-												NSLog(errorMessage)
-											}
-										)
+				databaseMigrator.getMigrationMovies(
+					country,
+					updateMovieHandler: { [unowned self] (movie: MovieRecord) in
+						
+						// update the just received movie
+						updateCounter += 1
+						var updated = false
+						
+						for (nowIndex, nowMovie) in self.nowMovies.enumerate() {
+							if (nowMovie.tmdbId == movie.tmdbId) {
+								self.nowMovies[nowIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
+								updated = true
+								break
+							}
+						}
+						
+						if (updated == false) {
+							for (upcomingSectionIndex, upcomingMovieSection) in tbc.upcomingMovies.enumerate() {
+								for (upcomingMovieIndex, upcomingMovie) in upcomingMovieSection.enumerate() {
+									if (upcomingMovie.tmdbId == movie.tmdbId) {
+										tbc.upcomingMovies[upcomingSectionIndex][upcomingMovieIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
+										break
+									}
+								}
+							}
+						}
+						
+						for (favoriteSectionIndex, favoriteMovieSection) in tbc.favoriteMovies.enumerate() {
+							for (favoriteMovieIndex, favoriteMovie) in favoriteMovieSection.enumerate() {
+								if (favoriteMovie.tmdbId == movie.tmdbId) {
+									tbc.favoriteMovies[favoriteSectionIndex][favoriteMovieIndex].migrate(movie, updateKeys: databaseMigrator.queryKeys)
+									break
+								}
+							}
+						}
+						
+						updateWindow?.updateProgressIndicator("\(updateCounter) " + NSLocalizedString("RatingUpdateProgress", comment: ""))
+					},
+					
+					completionHandler: { (movies: [MovieRecord]?) in
+						UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+						dispatch_async(dispatch_get_main_queue()) {
+							updateWindow?.close()
+						}
+						
+						// Don't forget to remove the migrate-flag from the prefs
+						NSUserDefaults(suiteName: Constants.movieStartsGroup)?.removeObjectForKey(Constants.prefsMigrateFromVersion)
+						NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+					},
+					
+					errorHandler: { (errorMessage: String) in
+						UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+						dispatch_async(dispatch_get_main_queue()) {
+							
+							// error in migration
+							updateWindow?.close()
+							tbc.migrationHasFailedInThisSession = true
+							
+							// tell user about the error
+							var infoWindow: MessageWindow?
+							
+							dispatch_async(dispatch_get_main_queue()) {
+								infoWindow = MessageWindow(parent: tbc.view, darkenBackground: true, titleStringId: "UpdateFailedHeadline", textStringId: "UpdateFailedText",
+									buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+										infoWindow?.close()
+									}
+								)
+							}
+						}
+						
+						NSLog(errorMessage)
+					}
+				)
 			}
 		}
 		
