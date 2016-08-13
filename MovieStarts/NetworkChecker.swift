@@ -95,6 +95,7 @@ class NetworkChecker {
 				
 				if let error = error {
 					NSLog("CloudKit error description: \(error.description)")
+					log.error("CloudKit error description (\(error.code)): \(error.description)")
 				}
 				
 				errorCallback?()

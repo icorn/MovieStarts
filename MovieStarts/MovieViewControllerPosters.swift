@@ -217,6 +217,7 @@ extension MovieViewController {
 			
 			if let error = error {
 				NSLog("Error getting missing thumbnail: \(error.description)")
+				log.error("Error getting missing thumbnail (\(error.code)): \(error.description)")
 				
 				if (Int32(error.code) == CFNetworkErrors.CFURLErrorTimedOut.rawValue) {
 					dispatch_async(dispatch_get_main_queue()) {
@@ -244,6 +245,8 @@ extension MovieViewController {
 					}
 					else {
 						NSLog("Error moving missing poster: \(error.description)")
+						log.error("Error getting missing poster (\(error.code)): \(error.description)")
+
 						dispatch_async(dispatch_get_main_queue()) {
 							errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 								errorWindow?.close()
@@ -264,6 +267,7 @@ extension MovieViewController {
 				// poster not loaded or error
 				if let error = error {
 					NSLog("Error getting big poster: \(error.code) (\(error.description))")
+					log.error("Error getting big poster (\(error.code)): \(error.description)")
 				}
 
 				dispatch_async(dispatch_get_main_queue()) {
