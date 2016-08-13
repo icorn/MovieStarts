@@ -1,5 +1,5 @@
 //
-//  MovieViewControllerActorStackview.swift
+//  MovieViewControllerInfoStackview.swift
 //  MovieStarts
 //
 //  Created by Oliver Eichhorn on 13.07.16.
@@ -12,161 +12,129 @@ import UIKit
 
 extension MovieViewController {
 
-	final func showActors() {
+	final func showInfos() {
 		guard let movie = self.movie else { return }
 		
-		if (movie.actors.count > 0) {
-			actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "") + ":"
+		var titleLabels: [UILabel] = []
+		var valueLabels: [UILabel] = []
+		
+		// release date
+		
+		if (movie.releaseDate[movie.currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending)
+		{
+			titleLabels.append(createTitleLabelWithText(NSLocalizedString("ReleaseDate", comment: "") + ":"))
+			valueLabels.append(createValueLabelWithText(movie.releaseDateString))
+		}
+		
+		// budget
+		
+		if let budget = movie.budgetString {
+			titleLabels.append(createTitleLabelWithText(NSLocalizedString("Budget", comment: "") + ":"))
+			valueLabels.append(createValueLabelWithText(budget))
+		}
+		
+		// directors
+		
+		if (movie.directors.count == 1) {
+			titleLabels.append(createTitleLabelWithText(NSLocalizedString("Director", comment: "") + ":"))
+			valueLabels.append(createValueLabelWithText(movie.directors[0]))
+		}
+		else if (movie.directors.count > 1) {
+			titleLabels.append(createTitleLabelWithText(NSLocalizedString("Directors", comment: "") + ":"))
 			
-			for actorIndex in 0...movie.actors.count-1 {
-				addActorToStackView(actorIndex, hidden: actorIndex > 4)
+			var directorsString = ""
+			for director in movie.directors {
+				directorsString = directorsString + director + "\n"
 			}
 			
-			if (movie.actors.count > 5) {
-				addShowAllActorsButtonToStackView()
-			}
+			directorsString = directorsString.substringToIndex(directorsString.endIndex.predecessor().predecessor())
+			
+			let label = createValueLabelWithText(directorsString)
+			label.numberOfLines = movie.directors.count
+			valueLabels.append(label)
 		}
-		else {
-			// no actors
-			
-			// TODO
-			
+		
+		let maxTitleWidth = getMaxLabelWidth(titleLabels)
+		let maxValueWidth = getMaxLabelWidth(valueLabels)
+		
+		for i in 0 ..< titleLabels.count {
+			addInfoToStackView(titleLabels[i], valueLabel: valueLabels[i], maxTitleWidth: maxTitleWidth, maxValueWidth: maxValueWidth);
 		}
 	}
 	
-	private final func addShowAllActorsButtonToStackView() {
-		let showAllActorsButton = UIButton()
-		showAllActorsButton.titleLabel?.font = UIFont.systemFontOfSize(14.0)
-		showAllActorsButton.setTitle("▼  " + NSLocalizedString("ShowAllActors", comment: "") + "  ▼", forState: .Normal)
-		showAllActorsButton.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0),
-		                                  forState: UIControlState.Normal)
-		showAllActorsButton.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0),
-		                                  forState: UIControlState.Highlighted)
-		showAllActorsButton.addTarget(self, action: #selector(MovieViewController.showAllActorsButtonPressed(_:)),
-		                              forControlEvents: UIControlEvents.TouchUpInside)
-		actorStackView.addArrangedSubview(showAllActorsButton)
-	}
-	
-	private final func addShowLessActorsButtonToStackView() {
-		let showLessActorsButton = UIButton()
-		showLessActorsButton.titleLabel?.font = UIFont.systemFontOfSize(14.0)
-		showLessActorsButton.setTitle("▲  " + NSLocalizedString("ShowLessActors", comment: "") + "  ▲", forState: .Normal)
-		showLessActorsButton.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0),
-		                                   forState: UIControlState.Normal)
-		showLessActorsButton.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0),
-		                                   forState: UIControlState.Highlighted)
-		showLessActorsButton.addTarget(self, action: #selector(MovieViewController.showLessActorsButtonPressed(_:)),
-		                               forControlEvents: UIControlEvents.TouchUpInside)
-		actorStackView.addArrangedSubview(showLessActorsButton)
-	}
-	
-	private final func addActorToStackView(actorIndex: Int, hidden: Bool) {
-		guard let movie = self.movie else { return }
+	private final func addInfoToStackView(titleLabel: UILabel, valueLabel: UILabel, maxTitleWidth: CGFloat, maxValueWidth: CGFloat) {
+		let view = UIView()
+		let paddingHorizontal: CGFloat = 10.0
+		let paddingCenter: CGFloat = 5.0
+		let paddingVertical: CGFloat = 2.0
 		
-		// actor thumbnail
+		// calculate height of view and labels
 		
-		let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 45, height: 45))
-		imageView.contentMode = UIViewContentMode.ScaleAspectFill
-		imageView.image = UIImage(named: "welcome")
+		let textAttributes = [NSFontAttributeName: valueLabel.font]
+		var titleLabelHeight: CGFloat = 24.0
 		
-		guard let basePath = self.baseImagePath else { return }
-		
-		if (movie.profilePictures[actorIndex].characters.count > 0) {
-			
-			let actorImageFilePath = basePath + Constants.actorThumbnailFolder + movie.profilePictures[actorIndex]
-			imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
-			
-			if (imageView.image == nil) {
-				// actor-image not found: use default-image
-				imageView.image = UIImage(named: "welcome")
-				
-				// load the correct image from YouTube
-				guard let sourceImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w45" + movie.profilePictures[actorIndex]) else {
-					return
-				}
-				
-				let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceImageUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
-					
-					if let error = error {
-						NSLog("Error getting actor thumbnail: \(error.description)")
-					}
-					else if let receivedPath = location?.path {
-						// move received poster to target path where it belongs and update the button
-						do {
-							try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: actorImageFilePath)
-							imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
-						}
-						catch let error as NSError {
-							if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
-								// ignoring, because it's okay it it's already there
-							}
-							else {
-								NSLog("Error moving actor thumbnail: \(error.description)")
-							}
-						}
-					}
-				})
-				
-				task.resume()
-			}
+		if let titleRect = titleLabel.text?.boundingRectWithSize(CGSizeMake(320, 200),
+		    options: .UsesLineFragmentOrigin, attributes: textAttributes, context: nil)
+		{
+			titleLabelHeight = titleRect.size.height + 1
 		}
 		
-		let actorNameLabel = UILabel()
-		actorNameLabel.text = movie.actors[actorIndex]
-		actorNameLabel.font = UIFont.systemFontOfSize(14.0)
+		var valueLabelHeight: CGFloat = 24.0
 		
-		let innerStackView = UIStackView(arrangedSubviews: [actorNameLabel])
-		innerStackView.axis = .Vertical
-		innerStackView.alignment = UIStackViewAlignment.Leading
-		innerStackView.distribution = UIStackViewDistribution.Fill
-		innerStackView.spacing = 0
-		
-		if (movie.characters[actorIndex].characters.count > 0) {
-			let characterNameLabel = UILabel()
-			characterNameLabel.text = NSLocalizedString("ActorAs", comment: "") + " " + movie.characters[actorIndex]
-			characterNameLabel.font = UIFont.systemFontOfSize(12.0)
-			innerStackView.addArrangedSubview(characterNameLabel)
+		if let valueRect = valueLabel.text?.boundingRectWithSize(CGSizeMake(320, 200),
+			options: .UsesLineFragmentOrigin, attributes: textAttributes, context: nil)
+		{
+			valueLabelHeight = valueRect.size.height + 1
 		}
 		
-		let outerStackView = UIStackView(arrangedSubviews: [imageView, innerStackView])
-		outerStackView.axis = .Horizontal
-		outerStackView.alignment = UIStackViewAlignment.Center
-		outerStackView.distribution = UIStackViewDistribution.Fill
-		outerStackView.spacing = 8
-		outerStackView.hidden = hidden
-		
-		actorStackView.addArrangedSubview(outerStackView)
-	}
-	
-	
-	// MARK: - Button callbacks
+		let viewHeight = valueLabelHeight + 2 * paddingVertical
 
-	
-	func showAllActorsButtonPressed(sender: UIButton!) {
-		guard let movie = self.movie else { return }
-		
-		UIView.animateWithDuration(0.2, animations: {
-			for actorIndex in 5...movie.actors.count-1 {
-				self.actorStackView.arrangedSubviews[actorIndex].hidden = false
-			}
-			}, completion: { (_) in
-				self.actorStackView.removeLastArrangedSubView()
-				self.addShowLessActorsButtonToStackView()
-		})
-	}
-	
-	func showLessActorsButtonPressed(sender: UIButton!) {
-		guard let movie = self.movie else { return }
-		
-		UIView.animateWithDuration(0.2, animations: {
-			for actorIndex in 5...movie.actors.count-1 {
-				self.actorStackView.arrangedSubviews[actorIndex].hidden = true
-			}
-			}, completion: { (_) in
-				self.actorStackView.removeLastArrangedSubView()
-				self.addShowAllActorsButtonToStackView()
-		})
-	}
-	
+		// set up view and labels
 
+		view.heightAnchor.constraintEqualToConstant(viewHeight).active = true
+		view.widthAnchor.constraintEqualToConstant(paddingHorizontal + maxTitleWidth + paddingCenter +
+			maxValueWidth + paddingHorizontal).active = true
+		
+		titleLabel.frame = CGRect(x: 0.0, y: paddingVertical, width: maxTitleWidth + paddingHorizontal, height: titleLabelHeight)
+		titleLabel.textAlignment = NSTextAlignment.Right
+		
+		valueLabel.frame = CGRect(x: maxTitleWidth + paddingHorizontal + paddingCenter,
+		                          y: paddingVertical,
+		                          width: maxValueWidth + paddingHorizontal,
+		                          height: valueLabelHeight)
+		view.addSubview(titleLabel)
+		view.addSubview(valueLabel)
+		
+		infoStackView.addArrangedSubview(view)
+	}
+	
+	private final func createTitleLabelWithText(text: String) -> UILabel {
+		let label = UILabel()
+		label.text = text
+		label.font = UIFont.systemFontOfSize(14.0)
+		return label
+	}
+	
+	private final func createValueLabelWithText(text: String) -> UILabel {
+		let label = UILabel()
+		label.text = text
+		label.font = UIFont.systemFontOfSize(14.0)
+		return label
+	}
+
+	private final func getMaxLabelWidth(labels: [UILabel]) -> CGFloat {
+		var maxWidth: CGFloat = 0.0
+		
+		for label in labels {
+			let textAttributes = [NSFontAttributeName: label.font]
+			let rect = label.text?.boundingRectWithSize(CGSizeMake(320, 200),
+			     options: .UsesLineFragmentOrigin, attributes: textAttributes, context: nil)
+			
+			if let rect = rect where (rect.size.width > maxWidth) {
+				maxWidth = rect.size.width
+			}
+		}
+		
+		return maxWidth
+	}
 }

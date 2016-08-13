@@ -84,6 +84,7 @@
 		4F7203811B9D9463006A4282 /* welcome.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F72037E1B9D9463006A4282 /* welcome.png */; };
 		4F7203821B9D9463006A4282 /* welcome@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F72037F1B9D9463006A4282 /* welcome@2x.png */; };
 		4F7203831B9D9463006A4282 /* welcome@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7203801B9D9463006A4282 /* welcome@3x.png */; };
+		4F739F821D5F348D00AC797D /* MovieViewControllerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F739F811D5F348D00AC797D /* MovieViewControllerInfo.swift */; };
 		4F7A99961BABF0B500ED38C9 /* favoritetab.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A99931BABF0B500ED38C9 /* favoritetab.png */; };
 		4F7A99971BABF0B500ED38C9 /* favoritetab@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A99941BABF0B500ED38C9 /* favoritetab@2x.png */; };
 		4F7A99981BABF0B500ED38C9 /* favoritetab@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A99951BABF0B500ED38C9 /* favoritetab@3x.png */; };
@@ -294,6 +295,7 @@
 		4F72037E1B9D9463006A4282 /* welcome.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = welcome.png; sourceTree = "<group>"; };
 		4F72037F1B9D9463006A4282 /* welcome@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome@2x.png"; sourceTree = "<group>"; };
 		4F7203801B9D9463006A4282 /* welcome@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "welcome@3x.png"; sourceTree = "<group>"; };
+		4F739F811D5F348D00AC797D /* MovieViewControllerInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieViewControllerInfo.swift; sourceTree = "<group>"; };
 		4F7A99931BABF0B500ED38C9 /* favoritetab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favoritetab.png; sourceTree = "<group>"; };
 		4F7A99941BABF0B500ED38C9 /* favoritetab@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoritetab@2x.png"; sourceTree = "<group>"; };
 		4F7A99951BABF0B500ED38C9 /* favoritetab@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "favoritetab@3x.png"; sourceTree = "<group>"; };
@@ -582,6 +584,7 @@
 				4F6914811A8C041D00B8FFCE /* MovieTableViewController.swift */,
 				4F7B49D41B04B77100F54454 /* MovieViewController.swift */,
 				4F851AF81D36D2BD00448540 /* MovieViewControllerActors.swift */,
+				4F739F811D5F348D00AC797D /* MovieViewControllerInfo.swift */,
 				4FAE075A1B555615009C7507 /* NowTableViewController.swift */,
 				4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */,
 				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
@@ -1057,6 +1060,7 @@
 				4F6914961A8C09BA00B8FFCE /* UpcomingTableViewController.swift in Sources */,
 				4FFE43481BA6B4D10080D9F3 /* MessageWindow.swift in Sources */,
 				4F0FED021CF9F0C4003B9975 /* MovieDatabaseProtocol.swift in Sources */,
+				4F739F821D5F348D00AC797D /* MovieViewControllerInfo.swift in Sources */,
 				4F851AF71D32E65F00448540 /* StackViewExtension.swift in Sources */,
 				4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */,
 				4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */,

@@ -22,9 +22,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var subtitleText1: UILabel!
 	@IBOutlet weak var subtitleText2: UILabel!
 	@IBOutlet weak var subtitleText3: UILabel!
-	@IBOutlet weak var releaseDateHeadlineLabel: UILabel!
-	@IBOutlet weak var releaseDateLabel: UILabel!
-	@IBOutlet weak var directorHeadlineLabel: UILabel!
+	@IBOutlet weak var infoHeadlineLabel: UILabel!
 	@IBOutlet weak var actorHeadlineLabel: UILabel!
 	@IBOutlet weak var storyHeadlineLabel: UILabel!
 	@IBOutlet weak var storyLabel: UILabel!
@@ -32,7 +30,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
 	@IBOutlet weak var actorStackView: UIStackView!
-	@IBOutlet weak var directorStackView: UIStackView!
+	@IBOutlet weak var infoStackView: UIStackView!
 	
 	@IBOutlet weak var ratingStackView: UIStackView!
 	@IBOutlet weak var imdbRatingLabel: UILabel!
@@ -49,20 +47,19 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	// constraints
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var directorHeadlineLabelHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var lineReleaseDateHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var infoHeadlineLabelHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var line2VerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var lineStoryHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var lineTrailersHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var lineTopHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var line1VerticalSpaceConstraint: NSLayoutConstraint!
 	
-	@IBOutlet weak var directorHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
+	@IBOutlet weak var infoHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var actorHeadlineLabelHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var storyHeadlineLabelTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var storyLabelTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var lineDirectorsHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var lineInfoHeightConstraint: NSLayoutConstraint!
 	
 	@IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
@@ -123,11 +120,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			// show movie data
 			showPoster()
 			showTitles()
-			showReleaseDate()
 			showRatings()
-			showDirectors()
-			showActors()
 			showSynopsis()
+			showActors()
+			showInfos()
 			showLinkButtons()
 			showTrailers()
 
@@ -241,27 +237,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 
-	private final func showReleaseDate() {
-		guard let movie = self.movie else { return }
-		releaseDateHeadlineLabel.text = NSLocalizedString("ReleaseDate", comment: "") + ":"
-		
-		if (movie.releaseDate[movie.currentCountry.countryArrayIndex].compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending) {
-			releaseDateLabel?.text = movie.releaseDateString
-		}
-		else {
-			// no release date (cannot happen)
-			releaseDateLabel?.text = "-"
-		}
-	}
-	
 	private final func showRatings() {
 		guard let movie = self.movie else { return }
 	
 		self.showRatingsFlag = (movie.ratingImdb != nil) || (movie.ratingTomato != nil) || (movie.ratingMetacritic != nil)
 		
 		if (self.showRatingsFlag) {
-			setConstraintsToZero(line1VerticalSpaceConstraint, lineTopHeightConstraint, lineReleaseDateHeightConstraint,
-								 line2VerticalSpaceConstraint)
+			setConstraintsToZero(line1VerticalSpaceConstraint, lineTopHeightConstraint /*, line2VerticalSpaceConstraint*/ )
 			
 			// IMDb rating
 			
@@ -412,6 +394,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceImageUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
 					if let error = error {
 						NSLog("Error getting poster from Youtube: \(error.description)")
+						log.error("Error getting poster from Youtube (\(error.code)): \(error.description)")
 					}
 					else if let receivedPath = location?.path {
 						// move received poster to target path where it belongs and update the button
@@ -425,6 +408,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 							}
 							else {
 								NSLog("Error moving trailer-poster: \(error.description)")
+								log.error("Error moving trailer-poster (\(error.code)): \(error.description)")
 							}
 						}
 					}
@@ -447,116 +431,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		trailerStackView.layoutIfNeeded()
 	}
 
-	private final func showDirectors() {
-		guard let movie = self.movie else { return }
-		
-		if (movie.directors.count > 0) {
-			directorHeadlineLabel.text = NSLocalizedString("Director", comment: "") + ":"
-			
-			if (movie.directors.count > 1) {
-				directorHeadlineLabel.text = NSLocalizedString("Directors", comment: "") + ":"
-			}
-			
-			for directorIndex in 0...movie.directors.count-1 {
-				if let newSubview = addPersonToStackView(false,
-				                                         filename: movie.directorPictures[directorIndex],
-				                                         foldername: Constants.directorThumbnailFolder,
-				                                         title: movie.directors[directorIndex],
-				                                         subtitle: nil)
-				{
-					directorStackView.addArrangedSubview(newSubview)
-				}
-			}
-		}
-		else {
-			// no directors
-			
-			// TODO
-			
-		}
-	}
-	
-	private final func addPersonToStackView(hidden: Bool,
-	                                        filename: String,
-	                                        foldername: String,
-	                                        title: String,
-	                                        subtitle: String?) -> UIView?
-	{
-		let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 45, height: 45))
-		imageView.contentMode = UIViewContentMode.ScaleAspectFill
-		imageView.image = UIImage(named: "welcome")
-		
-		guard let basePath = self.baseImagePath else {
-			return nil
-		}
-		
-		if (filename.characters.count > 0) {
-			
-			let actorImageFilePath = basePath + foldername + filename
-			imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
-			
-			if (imageView.image == nil) {
-				// image not found: use default-image
-				imageView.image = UIImage(named: "welcome")
-				
-				// load the correct image from YouTube
-				guard let sourceImageUrl = NSURL(string: "http://image.tmdb.org/t/p/w45" + filename) else {
-					return nil
-				}
-				
-				let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceImageUrl, completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
-					
-					if let error = error {
-						NSLog("Error getting actor thumbnail: \(error.description)")
-					}
-					else if let receivedPath = location?.path {
-						// move received poster to target path where it belongs and update the button
-						do {
-							try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: actorImageFilePath)
-							imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
-						}
-						catch let error as NSError {
-							if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
-								// ignoring, because it's okay it it's already there
-							}
-							else {
-								NSLog("Error moving actor/director thumbnail: \(error.description)")
-							}
-						}
-					}
-				})
-				
-				task.resume()
-			}
-		}
-		
-		let personNameLabel = UILabel()
-		personNameLabel.text = title
-		personNameLabel.font = UIFont.systemFontOfSize(14.0)
-		
-		let innerStackView = UIStackView(arrangedSubviews: [personNameLabel])
-		innerStackView.axis = .Vertical
-		innerStackView.alignment = UIStackViewAlignment.Leading
-		innerStackView.distribution = UIStackViewDistribution.Fill
-		innerStackView.spacing = 0
-		
-		if let subtitle = subtitle where subtitle.characters.count > 0 {
-			let characterNameLabel = UILabel()
-			characterNameLabel.text = NSLocalizedString("ActorAs", comment: "") + " " + subtitle
-			characterNameLabel.font = UIFont.systemFontOfSize(12.0)
-			innerStackView.addArrangedSubview(characterNameLabel)
-		}
-		
-		let outerStackView = UIStackView(arrangedSubviews: [imageView, innerStackView])
-		outerStackView.axis = .Horizontal
-		outerStackView.alignment = UIStackViewAlignment.Center
-		outerStackView.distribution = UIStackViewDistribution.Fill
-		outerStackView.spacing = 8
-		outerStackView.hidden = hidden
-		
-		return outerStackView
-	}
-	
 	private final func shrinkStoryIfNeeded() {
 		let numLinesOfStory = round(storyLabel.frame.height / storyLabel.font.lineHeight)
 		

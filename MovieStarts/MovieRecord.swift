@@ -193,6 +193,38 @@ public class MovieRecord : CustomStringConvertible {
 		}
 	}
 	
+	/// The budget as string
+	var budgetString: String? {
+		if let budget = budget {
+			let numberFormatter = NSNumberFormatter()
+			numberFormatter.numberStyle = NSNumberFormatterStyle.DecimalStyle
+			
+			if (budget > 1000000) {
+				// millions
+				numberFormatter.minimumFractionDigits = 1
+				
+				if let millions = numberFormatter.stringFromNumber(Double(budget) / 1000000.0) {
+					if (millions.endsWith("0")) {
+						return "$" + millions.substringToIndex(millions.endIndex.predecessor().predecessor()) + " " + NSLocalizedString("Mio.", comment: "")
+					}
+					else {
+						return "$" + millions + " " + NSLocalizedString("Mio.", comment: "")
+					}
+				}
+			}
+			else {
+				// under a million
+				numberFormatter.minimumFractionDigits = 0
+				
+				if let thousands = numberFormatter.stringFromNumber(budget) {
+					return "$" + thousands
+				}
+			}
+		}
+		
+		return nil
+	}
+	
 	/// The subtitle for the detail view of the movie.
 	private var detailSubtitle: String? {
 		var detailText = ""

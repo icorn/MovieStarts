@@ -40,6 +40,8 @@
 "ActorAs"			= "als";
 "ShowAllActors"		= "Alle Schauspieler zeigen";
 "ShowLessActors"	= "Weniger Schauspieler zeigen";
+"Budget"			= "Budget";
+"Mio."				= "Mio.";
 
 "ShowCompleteSynopsis"		= "Kompletten Inhalt zeigen";
 "ShowShortSynopsis"			= "Weniger Inhalt zeigen";
