@@ -65,10 +65,17 @@ public class WatchMovieRecord : CustomStringConvertible {
 		let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
 		var url: NSURL?
 		
-		if let posterUrl = posterUrl where posterUrl.characters.count > 0 {
+		if let posterUrl = posterUrl {
+			if (posterUrl.characters.count > 0) {
+				url = pathUrl?.URLByAppendingPathComponent(Constants.thumbnailFolder + posterUrl)
+			}
+		}
+
+/* TODO
+		if let posterUrl = posterUrl where (posterUrl.characters.count > 0) {
 			url = pathUrl?.URLByAppendingPathComponent(Constants.thumbnailFolder + posterUrl)
 		}
-		
+*/
 		return url
 	}
 	
@@ -82,10 +89,10 @@ public class WatchMovieRecord : CustomStringConvertible {
 		let fileManager = NSFileManager.defaultManager()
 		let documentDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first
 		
-		if let documentDir = documentDir {
+		if let documentDir = documentDir, let posterUrl = posterUrl {
 			// try to load the poster for the current language
-			if let posterUrl = posterUrl where posterUrl.characters.count > 0 {
-				let movieFileNamePath = documentDir.URLByAppendingPathComponent(posterUrl).path
+			if let movieFileURL = documentDir.URLByAppendingPathComponent(posterUrl) {
+				let movieFileNamePath = movieFileURL.path
 
 				if let movieFileNamePath = movieFileNamePath {
 					_thumbnailImage = UIImage(contentsOfFile: movieFileNamePath)
@@ -106,12 +113,14 @@ public class WatchMovieRecord : CustomStringConvertible {
 	var releaseDateString: String {
 		var retval = NSLocalizedString("NoReleaseDate", comment: "")
 		
-		if let releaseDate = releaseDate where releaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
-			let dateFormatter = NSDateFormatter()
-			dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
-			dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
-			dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
-			retval = dateFormatter.stringFromDate(releaseDate)
+		if let releaseDate = releaseDate {
+			if (releaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending) {
+				let dateFormatter = NSDateFormatter()
+				dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+				dateFormatter.timeStyle = NSDateFormatterStyle.NoStyle
+				dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+				retval = dateFormatter.stringFromDate(releaseDate)
+			}
 		}
 		
 		return retval
@@ -127,7 +136,7 @@ public class WatchMovieRecord : CustomStringConvertible {
 		let calendarLocal = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)
 		let timezoneGMT = NSTimeZone(abbreviation: "GMT")
 		
-		if let calendarGMT = calendarGMT, calendarLocal = calendarLocal, timezoneGMT = timezoneGMT {
+		if let calendarGMT = calendarGMT, let calendarLocal = calendarLocal, let timezoneGMT = timezoneGMT {
 			calendarGMT.timeZone = timezoneGMT
 			calendarLocal.timeZone = NSTimeZone.localTimeZone()
 			
@@ -152,9 +161,11 @@ public class WatchMovieRecord : CustomStringConvertible {
 	func isNowPlaying() -> Bool {
 		var retval = false
 		
-		if let localReleaseDate = releaseDateInLocalTimezone where localReleaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending {
-			let now = NSDate()
-			retval = (localReleaseDate.compare(now) != NSComparisonResult.OrderedDescending)
+		if let localReleaseDate = releaseDateInLocalTimezone {
+			if (localReleaseDate.compare(NSDate(timeIntervalSince1970: 0)) == NSComparisonResult.OrderedDescending) {
+				let now = NSDate()
+				retval = (localReleaseDate.compare(now) != NSComparisonResult.OrderedDescending)
+			}
 		}
 		
 		return retval

@@ -18,7 +18,8 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 		
 		let fileManager = NSFileManager.defaultManager()
 		guard let documentDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else { return }
-		guard let movieFileNamePath = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName).path else { return }
+		guard let movieFileNameURL = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName) else { return }
+		guard let movieFileNamePath = movieFileNameURL.path else { return }
 
 		if fileManager.fileExistsAtPath(movieFileNamePath) {
 			

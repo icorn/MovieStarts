@@ -36,7 +36,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 
 	// MARK: Transfer File
 
-	
+
 	func session(session: WCSession, didReceiveFile file: WCSessionFile) {
 		
 		// move received files from inbox to documents folder
@@ -47,26 +47,26 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		if (file.metadata?[Constants.watchMetadataThumbnail] != nil) {
 			
 			// thumbnail received
-			
 			guard let inputFilename = file.fileURL.lastPathComponent else { return }
-			let documentFilename = documentDir.URLByAppendingPathComponent(inputFilename)
 
-			print("Watch has received thumbnail \(inputFilename)")
-			
-			do {
-				try fileManager.moveItemAtURL(file.fileURL, toURL: documentFilename)
+			if let documentFilename = documentDir.URLByAppendingPathComponent(inputFilename) {
+				print("Watch has received thumbnail \(inputFilename)")
 				
-				// update interface controller
-				dispatch_async(dispatch_get_main_queue()) {
-					self.rootInterfaceController?.loadMovieDataFromFile()
-				}
-			} catch let error as NSError {
-				if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
-					// ignoring, because it's okay it it's already there
-				}
-				else {
-					NSLog("Error moving thumbnail file from \(file.fileURL.absoluteString) to \(documentFilename)")
-					NSLog("\(error.description)")
+				do {
+					try fileManager.moveItemAtURL(file.fileURL, toURL: documentFilename)
+					
+					// update interface controller
+					dispatch_async(dispatch_get_main_queue()) {
+						self.rootInterfaceController?.loadMovieDataFromFile()
+					}
+				} catch let error as NSError {
+					if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+						// ignoring, because it's okay it it's already there
+					}
+					else {
+						NSLog("Error moving thumbnail file from \(file.fileURL.absoluteString) to \(documentFilename)")
+						NSLog("\(error.description)")
+					}
 				}
 			}
 		}
@@ -76,7 +76,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			
 			print("Watch has received a movie list.")
 
-			let documentFilename = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName)
+			guard let documentFilename = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName) else { return }
 			
 			// first delete old movie list
 			do {
@@ -127,9 +127,9 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 					// check, if this thumbnail of poster-url from the favorite is on the watch
 					
 					for fileInDocDir in filesInDocDirSave {
-						guard let filename = fileInDocDir.lastPathComponent where filename.endsWith(".jpg") else { continue }
+						guard let filename = fileInDocDir.lastPathComponent else { continue }
 						
-						if posterUrl.containsString(filename) {
+						if ((filename.endsWith(".jpg")) && posterUrl.containsString(filename)) {
 							thumbnailFound = true
 							break
 						}
@@ -163,11 +163,14 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		}
 	}
 
-	func session(session: WCSession, didReceiveApplicationContext applicationContext: [String : AnyObject]) {
-		dispatch_async(dispatch_get_main_queue()) {
-			// make sure to put on the main queue to update UI!
-		}
-	}
-
+	
+	// new
+	// TODO
+	
+	@available(watchOSApplicationExtension 2.2, *)
+	func session(_: WCSession, activationDidCompleteWithState: WCSessionActivationState, error: NSError?) {}
+	func sessionDidBecomeInactive(_: WCSession) {}
+	func sessionDidDeactivate(_: WCSession) {}
+	
 }
 

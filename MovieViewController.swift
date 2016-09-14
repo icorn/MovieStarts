@@ -589,7 +589,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	}
 	
 	final func cropImage(inputImage: UIImage?) -> UIImage? {
-		if let imageRef = CGImageCreateWithImageInRect(inputImage?.CGImage, CGRect(x: 0, y: 0, width: 45, height: 60)) {
+		guard let inputImage = inputImage, let inputCgImage = inputImage.CGImage else { return nil }
+		
+		if let imageRef = CGImageCreateWithImageInRect(inputCgImage, CGRect(x: 0, y: 0, width: 45, height: 60)) {
 			return UIImage(CGImage: imageRef)
 		}
 		

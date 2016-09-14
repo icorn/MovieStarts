@@ -130,8 +130,10 @@ extension MovieViewController {
 			let rect = label.text?.boundingRectWithSize(CGSizeMake(320, 200),
 			     options: .UsesLineFragmentOrigin, attributes: textAttributes, context: nil)
 			
-			if let rect = rect where (rect.size.width > maxWidth) {
-				maxWidth = rect.size.width
+			if let rect = rect {
+				if (rect.size.width > maxWidth) {
+					maxWidth = rect.size.width
+				}
 			}
 		}
 		

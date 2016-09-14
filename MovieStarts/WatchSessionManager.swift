@@ -30,10 +30,13 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
         // paired - the user has to have their device paired to the watch
         // watchAppInstalled - the user must have your watch app installed
 		
-        if let session = session where session.paired && session.watchAppInstalled {
+		guard let session = session else { return nil }
+		
+        if session.paired && session.watchAppInstalled {
             return session
         }
-        return nil
+
+		return nil
     }
 	
 	func sessionWatchStateDidChange(session: WCSession) {
@@ -324,14 +327,14 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		
 		let tempFilename = NSUUID().UUIDString
 		guard let documentDirUrl = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else { return }
-		let tempPathUrl = documentDirUrl.URLByAppendingPathComponent(tempFilename)
-		
-		if ((favoritesDicts as NSArray).writeToURL(tempPathUrl, atomically: true) == false) {
-			NSLog("Error writing movie list to URL \(tempPathUrl.absoluteString)")
-		}
-		else {
-			if (transferFile(tempPathUrl, metadata: [Constants.watchMetadataMovieList : 1]) == nil) {
-				NSLog("Error transfering movie list to watch.")
+		if let tempPathUrl = documentDirUrl.URLByAppendingPathComponent(tempFilename) {
+			if ((favoritesDicts as NSArray).writeToURL(tempPathUrl, atomically: true) == false) {
+				NSLog("Error writing movie list to URL \(tempPathUrl.absoluteString)")
+			}
+			else {
+				if (transferFile(tempPathUrl, metadata: [Constants.watchMetadataMovieList : 1]) == nil) {
+					NSLog("Error transfering movie list to watch.")
+				}
 			}
 		}
 	}
@@ -369,5 +372,16 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			}
 		}
 	}
+	
+	
+	
+	// new
+	// TODO
+	
+	@available(iOS 9.3, *)
+	func session(_: WCSession, activationDidCompleteWithState: WCSessionActivationState, error: NSError?) {}
+	func sessionDidBecomeInactive(_: WCSession) {}
+	func sessionDidDeactivate(_: WCSession) {}
+
 }
 

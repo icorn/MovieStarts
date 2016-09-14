@@ -113,7 +113,8 @@ class MovieInterfaceController: WKInterfaceController {
 		let fileManager = NSFileManager.defaultManager()
 
 		guard let documentDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else { return }
-		guard let moviesPlistFile = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName).path else { return }
+		guard let moviesPlistUrl = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName) else { return }
+		guard let moviesPlistFile = moviesPlistUrl.path else { return }
 
 		let loadedDictArray: [NSDictionary]? = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary]
 		
