@@ -24,7 +24,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var subtitleText3: UILabel!
 	@IBOutlet weak var infoHeadlineLabel: UILabel!
 	@IBOutlet weak var actorHeadlineLabel: UILabel!
-	@IBOutlet weak var storyHeadlineLabel: UILabel!
 	@IBOutlet weak var storyLabel: UILabel!
 	@IBOutlet weak var imdbButton: UIButton!
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
@@ -48,26 +47,17 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var infoHeadlineLabelHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var line2VerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var lineStoryHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var lineTrailersHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var lineTopHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var line1VerticalSpaceConstraint: NSLayoutConstraint!
 	
-	@IBOutlet weak var infoHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var actorHeadlineLabelHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var storyHeadlineLabelTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var storyLabelTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var lineInfoHeightConstraint: NSLayoutConstraint!
-	
-	@IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
+
 	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ratingStackViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ratingStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var imdbImageViewWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var tomatoesImageViewWidthConstraint: NSLayoutConstraint!
-	@IBOutlet weak var lineActorsHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var moreStoryButtonHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var moreStoryButtonVerticalSpaceConstraint: NSLayoutConstraint!
 	
@@ -330,21 +320,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		let synopsisForLanguage = movie.synopsisForLanguage
 		
 		if (synopsisForLanguage.0.characters.count > 0) {
-			storyHeadlineLabel.text = NSLocalizedString("Synopsis", comment: "") + ":"
-			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: "") + "  ▼",
+			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: ""),
 			                         for: UIControlState())
 			storyLabel.text = synopsisForLanguage.0
-			
-			if (synopsisForLanguage.1 != movie.currentCountry.languageArrayIndex) {
-				// synopsis is english as fallback
-				storyHeadlineLabel.text = NSLocalizedString("SynopsisEnglish", comment: "") + ":"
-			}
 		}
 		else {
 			// hide everything related to synopsis
-			setConstraintsToZero(constraints: storyLabelTopSpaceConstraint, storyHeadlineLabelTopSpaceConstraint, lineStoryHeightConstraint)
-			storyHeadlineLabel.addConstraint(NSLayoutConstraint(item: storyHeadlineLabel, attribute: NSLayoutAttribute.height,
-				relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 0))
 			storyLabel.addConstraint(NSLayoutConstraint(item: storyLabel, attribute: NSLayoutAttribute.height,
 				relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 0))
 		}
@@ -361,7 +342,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
 	fileprivate final func showTrailers()	{
 		guard let movie = self.movie else { return }
-		trailerHeadlineLabel.text = NSLocalizedString("TrailerHeadline", comment: "") + ":"
+		trailerHeadlineLabel.text = NSLocalizedString("TrailerHeadline", comment: "")
 		
 		allTrailerIds = movie.trailerIds[movie.currentCountry.languageArrayIndex]
 		
@@ -371,7 +352,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		if (allTrailerIds.count == 0) {
 			// no trailers: hide all related UI elements
-			setConstraintsToZero(constraints: trailerStackViewVerticalSpaceConstraint, trailerHeadlineLabelVerticalSpaceConstraint)
+			setConstraintsToZero(constraints: trailerStackViewVerticalSpaceConstraint)
 			trailerHeadlineLabel.addConstraint(NSLayoutConstraint(item: trailerHeadlineLabel, attribute: NSLayoutAttribute.height,
 				relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 0))
 			return
@@ -525,12 +506,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		showCompleteStory = !showCompleteStory
 		
 		if (showCompleteStory) {
-			moreStoryButton.setTitle("▲  " + NSLocalizedString("ShowShortSynopsis", comment: "") + "  ▲",
+			moreStoryButton.setTitle("▲  " + NSLocalizedString("ShowShortSynopsis", comment: ""),
 			                         for: UIControlState())
 			storyLabel.numberOfLines = 0
 		}
 		else {
-			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: "") + "  ▼",
+			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: ""),
 			                         for: UIControlState())
 			storyLabel.numberOfLines = 8
 		}
@@ -588,15 +569,5 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				self.present(webVC, animated: true, completion: nil)
 			}
 		}
-	}
-	
-	final func cropImage(_ inputImage: UIImage?) -> UIImage? {
-		guard let inputImage = inputImage, let inputCgImage = inputImage.cgImage else { return nil }
-		
-		if let imageRef = inputCgImage.cropping(to: CGRect(x: 0, y: 0, width: 45, height: 60)) {
-			return UIImage(cgImage: imageRef)
-		}
-		
-		return nil
 	}
 }

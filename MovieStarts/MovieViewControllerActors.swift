@@ -16,7 +16,7 @@ extension MovieViewController {
 		guard let movie = self.movie else { return }
 		
 		if (movie.actors.count > 0) {
-			actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "") + ":"
+			actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "")
 			
 			for actorIndex in 0...movie.actors.count-1 {
 				addActorToStackView(actorIndex: actorIndex, hidden: actorIndex > 4)
@@ -37,7 +37,7 @@ extension MovieViewController {
 	fileprivate final func addShowAllActorsButtonToStackView() {
 		let showAllActorsButton = UIButton()
 		showAllActorsButton.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
-		showAllActorsButton.setTitle("▼  " + NSLocalizedString("ShowAllActors", comment: "") + "  ▼", for: UIControlState())
+		showAllActorsButton.setTitle("▼  " + NSLocalizedString("ShowAllActors", comment: ""), for: UIControlState())
 		showAllActorsButton.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0),
 		                                  for: UIControlState())
 		showAllActorsButton.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0),
@@ -50,7 +50,7 @@ extension MovieViewController {
 	fileprivate final func addShowLessActorsButtonToStackView() {
 		let showLessActorsButton = UIButton()
 		showLessActorsButton.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
-		showLessActorsButton.setTitle("▲  " + NSLocalizedString("ShowLessActors", comment: "") + "  ▲", for: UIControlState())
+		showLessActorsButton.setTitle("▲  " + NSLocalizedString("ShowLessActors", comment: ""), for: UIControlState())
 		showLessActorsButton.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0),
 		                                   for: UIControlState())
 		showLessActorsButton.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0),
@@ -62,80 +62,13 @@ extension MovieViewController {
 	
 	fileprivate final func addActorToStackView(actorIndex: Int, hidden: Bool) {
 		guard let movie = self.movie else { return }
-		
-		// actor thumbnail
-		
-		let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 45, height: 45))
-		imageView.contentMode = UIViewContentMode.scaleAspectFill
-		imageView.image = UIImage(named: "welcome")
-		
-		guard let basePath = self.baseImagePath else { return }
-		
-		if (movie.profilePictures[actorIndex].characters.count > 0) {
-			
-			let actorImageFilePath = basePath + Constants.actorThumbnailFolder + movie.profilePictures[actorIndex]
-			imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
-			
-			if (imageView.image == nil) {
-				// actor-image not found: use default-image
-				imageView.image = UIImage(named: "welcome")
-				
-				// load the correct image from YouTube
-				guard let sourceImageUrl = URL(string: "http://image.tmdb.org/t/p/w45" + movie.profilePictures[actorIndex]) else {
-					return
-				}
-				
-				let task = URLSession.shared.downloadTask(with: sourceImageUrl, completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
-					
-					if let error = error {
-						NSLog("Error getting actor thumbnail: \(error.localizedDescription)")
-					}
-					else if let receivedPath = location?.path {
-						// move received poster to target path where it belongs and update the button
-						do {
-							try FileManager.default.moveItem(atPath: receivedPath, toPath: actorImageFilePath)
-							imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
-						}
-						catch let error as NSError {
-							if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
-								// ignoring, because it's okay it it's already there
-							}
-							else {
-								NSLog("Error moving actor thumbnail: \(error.localizedDescription)")
-							}
-						}
-					}
-				})
-				
-				task.resume()
-			}
-		}
-		
-		let actorNameLabel = UILabel()
-		actorNameLabel.text = movie.actors[actorIndex]
-		actorNameLabel.font = UIFont.systemFont(ofSize: 14.0)
-		
-		let innerStackView = UIStackView(arrangedSubviews: [actorNameLabel])
-		innerStackView.axis = .vertical
-		innerStackView.alignment = UIStackViewAlignment.leading
-		innerStackView.distribution = UIStackViewDistribution.fill
-		innerStackView.spacing = 0
-		
-		if (movie.characters[actorIndex].characters.count > 0) {
-			let characterNameLabel = UILabel()
-			characterNameLabel.text = NSLocalizedString("ActorAs", comment: "") + " " + movie.characters[actorIndex]
-			characterNameLabel.font = UIFont.systemFont(ofSize: 12.0)
-			innerStackView.addArrangedSubview(characterNameLabel)
-		}
-		
-		let outerStackView = UIStackView(arrangedSubviews: [imageView, innerStackView])
-		outerStackView.axis = .horizontal
-		outerStackView.alignment = UIStackViewAlignment.center
-		outerStackView.distribution = UIStackViewDistribution.fill
-		outerStackView.spacing = 8
-		outerStackView.isHidden = hidden
-		
-		actorStackView.addArrangedSubview(outerStackView)
+
+        let actorView = ActorView()
+        actorView.setupWithActor(movie.actors[actorIndex],
+                                 characterName: movie.characters[actorIndex],
+                                 profilePicture: movie.profilePictures[actorIndex],
+                                 hidden: hidden)
+        self.actorStackView.addArrangedSubview(actorView)
 	}
 	
 	
@@ -146,7 +79,9 @@ extension MovieViewController {
 		guard let movie = self.movie else { return }
 
         for actorIndex in 5...movie.actors.count-1 {
-            self.actorStackView.arrangedSubviews[actorIndex].alpha = 0.0
+            self.actorStackView.arrangedSubviews[actorIndex].alpha = 1.0
+            (self.actorStackView.arrangedSubviews[actorIndex] as? ActorView)?.imageView?.frame =
+                CGRect(x: ActorView.imageSize/2, y: ActorView.imageSize/2, width: 0, height: 0)
         }
 
 		UIView.animate(
@@ -154,7 +89,8 @@ extension MovieViewController {
             animations: {
                 for actorIndex in 5...movie.actors.count-1 {
                     self.actorStackView.arrangedSubviews[actorIndex].isHidden = false
-                    self.actorStackView.arrangedSubviews[actorIndex].alpha = 1.0
+                    (self.actorStackView.arrangedSubviews[actorIndex] as? ActorView)?.imageView?.frame =
+                        CGRect(x: 0, y: 0, width: ActorView.imageSize, height: ActorView.imageSize)
                 }
             },
 		    completion: { (_) in
@@ -171,6 +107,10 @@ extension MovieViewController {
             withDuration: 0.2,
             animations: {
                 for actorIndex in 5...movie.actors.count-1 {
+/*
+                    (self.actorStackView.arrangedSubviews[actorIndex] as? ActorView)?.imageView?.frame =
+                        CGRect(x: ActorView.imageSize/2, y: ActorView.imageSize/2, width: 0, height: 0)
+*/
                     self.actorStackView.arrangedSubviews[actorIndex].isHidden = true
                     self.actorStackView.arrangedSubviews[actorIndex].alpha = 0.0
                 }

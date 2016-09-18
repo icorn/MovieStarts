@@ -81,7 +81,7 @@ class DetailInterfaceController: WKInterfaceController {
 					text += actor + ", "
 				}
 
-				actorHeadlineLabel.setText(NSLocalizedString("Actors", comment: "") + ":")
+				actorHeadlineLabel.setText(NSLocalizedString("Actors", comment: ""))
 				actorLabel.setText(text.substringByRemovingLastCharacters(numberOfCharacters: 2))
 			}
 			else {
@@ -90,7 +90,7 @@ class DetailInterfaceController: WKInterfaceController {
 			
 			// synopsis
 			if let synopsis = movie.synopsis , synopsis.characters.count > 0 {
-				synopsisHeadlineLabel.setText(NSLocalizedString("Synopsis", comment: "") + ":")
+				synopsisHeadlineLabel.setText(NSLocalizedString("Synopsis", comment: ""))
 				synopsisLabel.setText(synopsis)
 			}
 			else {
