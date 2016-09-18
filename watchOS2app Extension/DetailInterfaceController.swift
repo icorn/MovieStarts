@@ -34,15 +34,15 @@ class DetailInterfaceController: WKInterfaceController {
 	
 	
 	
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
 		
 		separator.setHeight(10.0)
 		
 		let movie: WatchMovieRecord? = (context as? WatchMovieRecord)
 		
 		if let movie = movie {
-			if let title = movie.title where title.characters.count > 0 {
+			if let title = movie.title , title.characters.count > 0 {
 				titleLabel.setText(title)
 			}
 			else if let movieOrigTitle = movie.origTitle {
@@ -50,7 +50,7 @@ class DetailInterfaceController: WKInterfaceController {
 			}
 			
 			// data-label
-			dataLabel.setText(DetailTitleMaker.makeMovieDetailTitleComplete(movie))
+			dataLabel.setText(DetailTitleMaker.makeMovieDetailTitleComplete(movie: movie))
 
 			// directors
 			if (movie.directors.count > 0) {
@@ -67,7 +67,7 @@ class DetailInterfaceController: WKInterfaceController {
 					directorHeadlineLabel.setText(NSLocalizedString("Directors", comment: "") + ":")
 				}
 				
-				directorLabel.setText(text.substringToIndex(text.endIndex.predecessor().predecessor()))
+				directorLabel.setText(text.substringByRemovingLastCharacters(numberOfCharacters: 2))
 			}
 			else {
 				directorGroup.setHidden(true)
@@ -82,14 +82,14 @@ class DetailInterfaceController: WKInterfaceController {
 				}
 
 				actorHeadlineLabel.setText(NSLocalizedString("Actors", comment: "") + ":")
-				actorLabel.setText(text.substringToIndex(text.endIndex.predecessor().predecessor()))
+				actorLabel.setText(text.substringByRemovingLastCharacters(numberOfCharacters: 2))
 			}
 			else {
 				actorGroup.setHidden(true)
 			}
 			
 			// synopsis
-			if let synopsis = movie.synopsis where synopsis.characters.count > 0 {
+			if let synopsis = movie.synopsis , synopsis.characters.count > 0 {
 				synopsisHeadlineLabel.setText(NSLocalizedString("Synopsis", comment: "") + ":")
 				synopsisLabel.setText(synopsis)
 			}

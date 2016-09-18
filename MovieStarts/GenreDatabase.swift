@@ -14,21 +14,21 @@ class GenreDatabase : DatabaseParent {
 	var genresPlistFile: String = ""
 	var allCKRecords: [CKRecord] = []
 
-	var errorHandler: ((errorMessage: String) -> ())?
+	var errorHandler: ((String) -> ())?
 	var finishHandler: (([Int : [String]]) -> ())?
 
 	
-	init(finishHandler: (([Int : [String]]) -> ())?, errorHandler: ((errorMessage: String) -> ())?) {
+	init(finishHandler: (([Int : [String]]) -> ())?, errorHandler: ((String) -> ())?) {
 		self.finishHandler = finishHandler
 		self.errorHandler = errorHandler
 		
 		super.init(recordType: Constants.dbRecordTypeGenre)
 
-		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 		var genresPlistPath = ""
 		
-		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
-			genresPlistPath = fileUrlPath
+		if let fileUrl = fileUrl {
+			genresPlistPath = fileUrl.path
 		}
 		else {
 			NSLog("Error getting url for app-group.")
@@ -52,7 +52,7 @@ class GenreDatabase : DatabaseParent {
 		
 		var genreDict: [Int: String] = [:]
 
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
 		if let country = MovieCountry(rawValue: prefsCountryString) {
 			if let loadedDict = NSDictionary(contentsOfFile: genresPlistFile) as? [String: [String]] {
@@ -79,7 +79,7 @@ class GenreDatabase : DatabaseParent {
 		let predicate = NSPredicate(value: true)
 		let query = CKQuery(recordType: self.recordType, predicate: predicate)
 		let queryOperation = CKQueryOperation(query: query)
-		let operationQueue = NSOperationQueue()
+		let operationQueue = OperationQueue()
 		
 		executeQueryOperation(queryOperation, onOperationQueue: operationQueue)
 	}
@@ -90,15 +90,15 @@ class GenreDatabase : DatabaseParent {
 		- parameter queryOperation:		The query operation containing the predicates
 		- parameter onOperationQueue:	The queue for the query operation
 	*/
-	private func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
+	fileprivate func executeQueryOperation(_ queryOperation: CKQueryOperation, onOperationQueue operationQueue: OperationQueue) {
 		queryOperation.database = cloudKitDatabase
-		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
+		queryOperation.qualityOfService = QualityOfService.userInitiated
 		
 		queryOperation.recordFetchedBlock = { (record : CKRecord) -> Void in
 			self.allCKRecords.append(record)
 		}
 		
-		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: NSError?) -> Void in
+		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: Error?) -> Void in
 			if let cursor = cursor {
 				// some objects are here, ask for more
 				let queryCursorOperation = CKQueryOperation(cursor: cursor)
@@ -106,7 +106,7 @@ class GenreDatabase : DatabaseParent {
 			}
 			else {
 				// download finished (with error or not)
-				self.queryOperationFinished(error)
+				self.queryOperationFinished(error: error as NSError?)
 			}
 		}
 		
@@ -120,12 +120,12 @@ class GenreDatabase : DatabaseParent {
 	
 		- parameter error:	The error object
 	*/
-	private func queryOperationFinished(error: NSError?) {
+	fileprivate func queryOperationFinished(error: NSError?) {
 		if let error = error {
 			let msg = "Error querying records: Code=\(error.code) Domain=\(error.domain) Error: (\(error.localizedDescription))"
 			NSLog(msg)
 			allCKRecords = []
-			errorHandler?(errorMessage: msg)
+			errorHandler?(msg)
 			return
 		}
 		else {
@@ -136,7 +136,7 @@ class GenreDatabase : DatabaseParent {
 			var genreDictToReturn: [Int: [String]] = [:]
 			
 			for ckRecord in self.allCKRecords {
-				if let genreId = ckRecord.objectForKey(Constants.dbIdGenreId) as? Int, genreNames = ckRecord.objectForKey(Constants.dbIdGenreNames) as? [String] {
+				if let genreId = ckRecord.object(forKey: Constants.dbIdGenreId) as? Int, let genreNames = ckRecord.object(forKey: Constants.dbIdGenreNames) as? [String] {
 					genreDictToWrite[String(genreId)] = genreNames
 					genreDictToReturn[genreId] = genreNames
 				}
@@ -144,10 +144,10 @@ class GenreDatabase : DatabaseParent {
 
 			// write dictionary to file
 
-			if ((genreDictToWrite as NSDictionary).writeToFile(genresPlistFile, atomically: true) == false) {
+			if ((genreDictToWrite as NSDictionary).write(toFile: genresPlistFile, atomically: true) == false) {
 				let msg = "Error writing genre dictionary to file."
 				NSLog(msg)
-				errorHandler?(errorMessage: msg)
+				errorHandler?(msg)
 				return
 			}
 

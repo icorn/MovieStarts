@@ -14,59 +14,58 @@ import WatchConnectivity
 class WatchSessionManager: NSObject, WCSessionDelegate {
 	
 	static let sharedManager = WatchSessionManager()
-	private let session = WCSession.defaultSession()
+	fileprivate let session = WCSession.default()
 	var launchStatus: LaunchStatus?
 	var rootInterfaceController: MovieInterfaceController?
 	
 	
-	private override init() {
+	fileprivate override init() {
 		super.init()
 	}
 
 	// Activate Session
 	func startSession() {
 		session.delegate = self
-		session.activateSession()
+		session.activate()
 	}
 	
 	var isReachable: Bool {
-		return session.reachable
+		return session.isReachable
 	}
 
 
 	// MARK: Transfer File
 
 
-	func session(session: WCSession, didReceiveFile file: WCSessionFile) {
+	func session(_ session: WCSession, didReceive file: WCSessionFile) {
 		
 		// move received files from inbox to documents folder
 		
-		let fileManager = NSFileManager.defaultManager()
-		guard let documentDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else { return }
+		let fileManager = FileManager.default
+		guard let documentDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
 
 		if (file.metadata?[Constants.watchMetadataThumbnail] != nil) {
 			
 			// thumbnail received
-			guard let inputFilename = file.fileURL.lastPathComponent else { return }
+			let inputFilename = file.fileURL.lastPathComponent
 
-			if let documentFilename = documentDir.URLByAppendingPathComponent(inputFilename) {
-				print("Watch has received thumbnail \(inputFilename)")
+			let documentFilename = documentDir.appendingPathComponent(inputFilename)
+			print("Watch has received thumbnail \(inputFilename)")
+			
+			do {
+				try fileManager.moveItem(at: file.fileURL, to: documentFilename)
 				
-				do {
-					try fileManager.moveItemAtURL(file.fileURL, toURL: documentFilename)
-					
-					// update interface controller
-					dispatch_async(dispatch_get_main_queue()) {
-						self.rootInterfaceController?.loadMovieDataFromFile()
-					}
-				} catch let error as NSError {
-					if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
-						// ignoring, because it's okay it it's already there
-					}
-					else {
-						NSLog("Error moving thumbnail file from \(file.fileURL.absoluteString) to \(documentFilename)")
-						NSLog("\(error.description)")
-					}
+				// update interface controller
+				DispatchQueue.main.async {
+					self.rootInterfaceController?.loadMovieDataFromFile()
+				}
+			} catch let error as NSError {
+				if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+					// ignoring, because it's okay it it's already there
+				}
+				else {
+					NSLog("Error moving thumbnail file from \(file.fileURL.absoluteString) to \(documentFilename)")
+					NSLog("\(error.description)")
 				}
 			}
 		}
@@ -76,17 +75,17 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			
 			print("Watch has received a movie list.")
 
-			guard let documentFilename = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName) else { return }
+			let documentFilename = documentDir.appendingPathComponent(Constants.watchMovieFileName)
 			
 			// first delete old movie list
 			do {
-				try fileManager.removeItemAtURL(documentFilename)
+				try fileManager.removeItem(at: documentFilename)
 			} catch {
 				// ignoring, because it might be not there and can therefore not be deleted
 			}
 			
 			do {
-				try fileManager.moveItemAtURL(file.fileURL, toURL: documentFilename)
+				try fileManager.moveItem(at: file.fileURL, to: documentFilename)
 			} catch let error as NSError {
 				NSLog("Error moving movielist file from \(file.fileURL.absoluteString) to \(documentFilename)")
 				NSLog("\(error.description)")
@@ -94,23 +93,22 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 			
 			// update interface controller
 			
-			dispatch_async(dispatch_get_main_queue()) {
+			DispatchQueue.main.async {
 				self.rootInterfaceController?.loadMovieDataFromFile()
 			}
 			
 			// Now that we have the latest movie list: Check if we have all needed thumbnails
 			
-			guard let documentFilenamePath = documentFilename.path else { return }
-			let loadedDictArray: [NSDictionary]? = NSArray(contentsOfFile: documentFilenamePath) as? [NSDictionary]
+			let loadedDictArray: [NSDictionary]? = NSArray(contentsOfFile: documentFilename.path) as? [NSDictionary]
 			
 			if let loadedDictArray = loadedDictArray {
 				
 				// get content of document directory
 				
-				var filesInDocDir: [NSURL]?
+				var filesInDocDir: [URL]?
 				
 				do {
-					try filesInDocDir = fileManager.contentsOfDirectoryAtURL(documentDir, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles)
+					try filesInDocDir = fileManager.contentsOfDirectory(at: documentDir, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
 				} catch let error as NSError {
 					NSLog("Error reading documents dir: \(error.description)")
 					return
@@ -127,9 +125,9 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 					// check, if this thumbnail of poster-url from the favorite is on the watch
 					
 					for fileInDocDir in filesInDocDirSave {
-						guard let filename = fileInDocDir.lastPathComponent else { continue }
+						let filename = fileInDocDir.lastPathComponent
 						
-						if ((filename.endsWith(".jpg")) && posterUrl.containsString(filename)) {
+						if ((filename.endsWith(".jpg")) && posterUrl.contains(filename)) {
 							thumbnailFound = true
 							break
 						}
@@ -140,8 +138,8 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 						
 						do {
 							try WatchSessionManager.sharedManager.updateApplicationContext(
-								[Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueThumbnailsOnly,
-								 Constants.watchAppContextGetThumbnail : posterUrl])
+								[Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueThumbnailsOnly as AnyObject,
+								 Constants.watchAppContextGetThumbnail : posterUrl as AnyObject])
 						} catch let error as NSError {
 							NSLog("Error updating AppContext (thumbnail): \(error.description)")
 						}
@@ -154,8 +152,8 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 
 	// MARK: Application Context
 
-	
-	func updateApplicationContext(applicationContext: [String : AnyObject]) throws {
+
+	func updateApplicationContext(_ applicationContext: [String : AnyObject]) throws {
 		do {
 			try session.updateApplicationContext(applicationContext)
 		} catch let error {
@@ -164,13 +162,25 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 	}
 
 	
-	// new
-	// TODO
-	
+    // MARK: WCSessionDelegate - Asynchronous Activation
+
+    
 	@available(watchOSApplicationExtension 2.2, *)
-	func session(_: WCSession, activationDidCompleteWithState: WCSessionActivationState, error: NSError?) {}
-	func sessionDidBecomeInactive(_: WCSession) {}
-	func sessionDidDeactivate(_: WCSession) {}
-	
+	func session(_: WCSession, activationDidCompleteWith activationDidCompleteWithState: WCSessionActivationState, error: Error?) {
+        if let error = error {
+            print("session activation failed with error: \(error.localizedDescription)")
+            return
+        }
+
+        /*
+            Called when the activation of a session finishes. Your implementation
+            should check the value of the activationState parameter to see if
+            communication with the counterpart app is possible. When the state is
+            WCSessionActivationStateActivated, you may communicate normally with
+            the other app.
+        */
+
+        print("session activated with state: \(activationDidCompleteWithState.rawValue)")
+	}
 }
 

@@ -76,8 +76,8 @@ class MovieInterfaceController: WKInterfaceController {
 */
 	}
 	
-    override func awakeWithContext(context: AnyObject?) {
-        super.awakeWithContext(context)
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
 		
 		WatchSessionManager.sharedManager.rootInterfaceController = self
 
@@ -86,7 +86,7 @@ class MovieInterfaceController: WKInterfaceController {
 		let menuIcon = UIImage(named: "refreshMenuItem@2x.png")
 
 		if let menuIcon = menuIcon {
-			addMenuItemWithImage(menuIcon, title: NSLocalizedString("menuItemRefresh", comment: ""), action: #selector(MovieInterfaceController.refreshButtonTapped))
+			addMenuItem(with: menuIcon, title: NSLocalizedString("menuItemRefresh", comment: ""), action: #selector(MovieInterfaceController.refreshButtonTapped))
 		}
 		
 		// go on depending on launch-status
@@ -94,50 +94,48 @@ class MovieInterfaceController: WKInterfaceController {
 		guard let launchStatus = WatchSessionManager.sharedManager.launchStatus else { return }
 
 		switch (launchStatus) {
-			case .ShowMovieList: 	loadMovieDataFromFile()
-			case .ConnectError: 	showSingleTextCell(NSLocalizedString("WatchConnectError", comment: ""))
-			case .UserShouldStartPhone:	showSingleTextCell(NSLocalizedString("WatchUserShouldStartPhone", comment: ""))
+			case .showMovieList: 	loadMovieDataFromFile()
+			case .connectError: 	showSingleTextCell(text: NSLocalizedString("WatchConnectError", comment: ""))
+			case .userShouldStartPhone:	showSingleTextCell(text: NSLocalizedString("WatchUserShouldStartPhone", comment: ""))
 		}
 	}
 	
 	
 	func showSingleTextCell(text: String) {
 		movieTable.setRowTypes([ROW_TYPE_EMPTY])
-		let row: EmptyRow? = movieTable.rowControllerAtIndex(0) as? EmptyRow
+		let row: EmptyRow? = movieTable.rowController(at: 0) as? EmptyRow
 		row?.textLabel.setText(text)
 	}
 	
 	
 	func loadMovieDataFromFile() {
 		var favoriteMovies: [WatchMovieRecord] = []
-		let fileManager = NSFileManager.defaultManager()
+		let fileManager = FileManager.default
 
-		guard let documentDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else { return }
-		guard let moviesPlistUrl = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName) else { return }
-		guard let moviesPlistFile = moviesPlistUrl.path else { return }
-
-		let loadedDictArray: [NSDictionary]? = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary]
+		guard let documentDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+		let moviesPlistUrl = documentDir.appendingPathComponent(Constants.watchMovieFileName)
+		let loadedDictArray: [NSDictionary]? = NSArray(contentsOfFile: moviesPlistUrl.path) as? [NSDictionary]
 		
 		if let loadedDictArray = loadedDictArray {
-			favoriteMovies = movieDictsToMovieRecords(loadedDictArray)
+			favoriteMovies = movieDictsToMovieRecords(dictArray: loadedDictArray as NSArray)
 			
-			favoriteMovies.sortInPlace {
-				let date0 = $0.releaseDate ?? NSDate(timeIntervalSince1970: 0)
-				let date1 = $1.releaseDate ?? NSDate(timeIntervalSince1970: 0)
+			favoriteMovies.sort {
+				let date0 = $0.releaseDate ?? Date(timeIntervalSince1970: 0)
+				let date1 = $1.releaseDate ?? Date(timeIntervalSince1970: 0)
 				let title0 = $0.sortTitle ?? ""
 				let title1 = $1.sortTitle ?? ""
 
 				if ($0.isNowPlaying() && $1.isNowPlaying()) {
 					// both movies are playing now: sort by title
-					return title0.compare(title1) == NSComparisonResult.OrderedAscending
+					return title0.compare(title1) == ComparisonResult.orderedAscending
 				}
 				else if (date0 != date1) {
 					// dates are different: compare dates
-					return date0.compare(date1) == NSComparisonResult.OrderedAscending
+					return date0.compare(date1) == ComparisonResult.orderedAscending
 				}
 				else {
 					// dates are equal: compare titles
-					return title0.compare(title1) == NSComparisonResult.OrderedAscending
+					return title0.compare(title1) == ComparisonResult.orderedAscending
 				}
 			}
 		}
@@ -146,12 +144,12 @@ class MovieInterfaceController: WKInterfaceController {
 
 		if (favoriteMovies.count > 0) {
 			// set up table with favorite movies
-			setUpFavorites(favoriteMovies)
+			setUpFavorites(movies: favoriteMovies)
 		}
 		else {
 			// no favorite movies, tell the user
 			movieTable.setRowTypes([ROW_TYPE_EMPTY])
-			let row: EmptyRow? = movieTable.rowControllerAtIndex(0) as? EmptyRow
+			let row: EmptyRow? = movieTable.rowController(at: 0) as? EmptyRow
 			row?.textLabel.setText(NSLocalizedString("WatchNoFavorites", comment: ""))
 		}
     }
@@ -166,13 +164,13 @@ class MovieInterfaceController: WKInterfaceController {
 		super.didDeactivate()
 	}
 	
-	override func table(table: WKInterfaceTable, didSelectRowAtIndex rowIndex: Int) {
+	override func table(_ table: WKInterfaceTable, didSelectRowAt rowIndex: Int) {
 		
-		let row: AnyObject? = movieTable.rowControllerAtIndex(rowIndex)
+		let row: AnyObject? = movieTable.rowController(at: rowIndex) as AnyObject?
 		
 		if let row = row as? MovieRow {
 			if let movie = row.movie {
-				pushControllerWithName("DetailInterfaceController", context: movie)
+				pushController(withName: "DetailInterfaceController", context: movie)
 			}
 		}
 	}
@@ -180,10 +178,10 @@ class MovieInterfaceController: WKInterfaceController {
 
 	func refreshButtonTapped() {
 		do {
-			try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueEveryting])
+			try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueEveryting as AnyObject])
 		} catch let error as NSError {
 			NSLog("Error updating AppContext: \(error.description)")
-			WatchSessionManager.sharedManager.launchStatus = LaunchStatus.ConnectError
+			WatchSessionManager.sharedManager.launchStatus = LaunchStatus.connectError
 			return
 		}
 	}
@@ -192,8 +190,8 @@ class MovieInterfaceController: WKInterfaceController {
 	// MARK: - Private helper-functions
 	
 	
-	private func setUpFavorites(movies: [WatchMovieRecord]) {
-		var oldDate: NSDate? = nil
+	fileprivate func setUpFavorites(movies: [WatchMovieRecord]) {
+		var oldDate: Date? = nil
 		var rowTypeArray: [String] = []
 		var rowContentArray: [AnyObject] = []
 	
@@ -204,14 +202,14 @@ class MovieInterfaceController: WKInterfaceController {
 			
 			if (movie.isNowPlaying() && (rowTypeArray.count == 0)) {
 				// it's a current movie, but there is no section yet
-				rowContentArray.append(NSLocalizedString("WatchNowPlaying", comment: ""))
+				rowContentArray.append(NSLocalizedString("WatchNowPlaying", comment: "") as AnyObject)
 				rowTypeArray.append(ROW_TYPE_DATE)
 			}
 			else if ((movie.isNowPlaying() == false) && ((oldDate == nil) || (oldDate != movie.releaseDate))) {
 				// upcoming movies: a new sections starts
-				rowContentArray.append(movie.releaseDateString)
+				rowContentArray.append(movie.releaseDateString as AnyObject)
 				rowTypeArray.append(ROW_TYPE_DATE)
-				oldDate = releaseDate
+				oldDate = releaseDate as Date?
 			}
 			
 			// add movie-row
@@ -223,27 +221,27 @@ class MovieInterfaceController: WKInterfaceController {
 	
 		self.movieTable.setRowTypes(rowTypeArray)
 	
-		for (index, content) in rowContentArray.enumerate() {
+		for (index, content) in rowContentArray.enumerated() {
 			if (content is String) {
-				let row: DateRow? = movieTable.rowControllerAtIndex(index) as? DateRow
+				let row: DateRow? = movieTable.rowController(at: index) as? DateRow
 	
-				if let dateString: String? = content as? String {
+				if let dateString = content as? String {
 					row?.dateLabel.setText(dateString)
 				}
 	
 			}
 			else if let content = content as? WatchMovieRecord {
 				let movie = content
-				let row: MovieRow? = movieTable.rowControllerAtIndex(index) as? MovieRow
+				let row: MovieRow? = movieTable.rowController(at: index) as? MovieRow
 				row?.titleLabel.setText(movie.title ?? movie.origTitle)
-				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie))
+				row?.detailLabel.setText(DetailTitleMaker.makeMovieDetailTitle(movie: movie))
 				row?.posterImage.setImage(movie.thumbnailImage.0)
 				row?.movie = movie
 			}
 		}
 	}
 	
-	private func movieDictsToMovieRecords(dictArray: NSArray) -> [WatchMovieRecord] {
+	fileprivate func movieDictsToMovieRecords(dictArray: NSArray) -> [WatchMovieRecord] {
 		var movieRecordArray: [WatchMovieRecord] = []
 		
 		for dict in dictArray {
@@ -255,7 +253,7 @@ class MovieInterfaceController: WKInterfaceController {
 						title: dict[Constants.dbIdTitle] as? String,
 						sortTitle: dict[Constants.dbIdSortTitle] as? String,
 						synopsis: dict[Constants.dbIdSynopsis] as? String,
-						releaseDate: dict[Constants.dbIdRelease] as? NSDate,
+						releaseDate: dict[Constants.dbIdRelease] as? Date,
 						genreNames: (dict[Constants.dbIdGenreNames] as? [String]) ?? [],
 						countries: dict[Constants.dbIdProductionCountries] as? String,
 						certification: dict[Constants.dbIdCertification] as? String,

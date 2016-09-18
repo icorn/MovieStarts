@@ -24,8 +24,8 @@ class DatabaseParent {
 		cloudKitDatabase = cloudKitContainer.publicCloudDatabase
 	}
 
-	
-	func checkCloudKit(handler: (CKAccountStatus, NSError?) -> ()) {
-		cloudKitContainer.accountStatusWithCompletionHandler(handler)
+    func checkCloudKit(handler: @escaping (CKAccountStatus, Error?) -> ()) {
+		cloudKitContainer.accountStatus(completionHandler: handler)
 	}
+	
 }

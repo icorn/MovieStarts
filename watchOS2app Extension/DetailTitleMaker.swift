@@ -13,7 +13,7 @@ class DetailTitleMaker {
 
 	class func makeMovieDetailTitle(movie: WatchMovieRecord) -> String {
 		
-		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
+		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie: movie)
 
 		let genreName = movie.genreNames.first
 
@@ -22,7 +22,7 @@ class DetailTitleMaker {
 		}
 		
 		if (detailText.characters.count > 0) {
-			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor().predecessor())
+			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 3)
 		}
 		
 		return detailText
@@ -31,7 +31,7 @@ class DetailTitleMaker {
 	
 	class func makeMovieDetailTitleComplete(movie: WatchMovieRecord) -> String {
 
-		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie)
+		var detailText = DetailTitleMaker.makeMinuteAndCertificationString(movie: movie)
 
 		// add genres
 		
@@ -40,7 +40,7 @@ class DetailTitleMaker {
 				detailText += genreName + ", "
 			}
 			
-			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor()) + " | "
+			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 2)
 		}
 
 		// add countries
@@ -50,7 +50,7 @@ class DetailTitleMaker {
 		}
 		
 		if (detailText.characters.count > 0) {
-			detailText = detailText.substringToIndex(detailText.endIndex.predecessor().predecessor().predecessor())
+			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 3)
 		}
 		
 		return detailText
@@ -60,11 +60,11 @@ class DetailTitleMaker {
 	class func makeMinuteAndCertificationString(movie: WatchMovieRecord) -> String {
 		var detailText = ""
 		
-		if let runtime = movie.runtime where runtime > 0 {
+		if let runtime = movie.runtime , runtime > 0 {
 			detailText += "\(runtime) m | "
 		}
 		
-		if let cert = movie.certification where cert.characters.count > 0 {
+		if let cert = movie.certification , cert.characters.count > 0 {
 			detailText += "\(cert) | "
 		}
 		

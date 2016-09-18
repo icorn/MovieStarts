@@ -26,17 +26,17 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 			Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
 		]
 
-		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 
-		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
-			moviesPlistPath = fileUrlPath
+		if let fileUrl = fileUrl {
+			moviesPlistPath = fileUrl.path
 		}
         else {
             NSLog("Error getting url for app-group.")
 			var errorWindow: MessageWindow?
 
 			if let viewForError = viewForError {
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 						errorWindow?.close()
 					})
@@ -61,7 +61,7 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 	*/
 	func isDatabaseOnDevice() -> Bool {
 		if let moviesPlistFile = moviesPlistFile {
-			if (NSFileManager.defaultManager().fileExistsAtPath(moviesPlistFile)) {
+			if (FileManager.default.fileExists(atPath: moviesPlistFile)) {
 				return true
 			}
 		}
@@ -78,11 +78,11 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter stopIndicator:		Callback which is called to stop the progress indicator
 		- parameter updateIndicator:	Callback which is called to update the progress indicator with a new progress
 	*/
-	func getAllMovies(	completionHandler: (movies: [MovieRecord]?) -> (),
-						errorHandler: (errorMessage: String) -> (),
+	func getAllMovies(	completionHandler: @escaping ([MovieRecord]?) -> (),
+						errorHandler: @escaping (String) -> (),
 						showIndicator: (() -> ())?,
 						stopIndicator: (() -> ())?,
-						updateIndicator: ((counter: Int) -> ())?,
+						updateIndicator: ((Int) -> ())?,
 						finishHandler: (() -> ())?)
 	{
 		self.completionHandler 	= completionHandler
@@ -92,44 +92,44 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 		self.updateIndicator	= updateIndicator
 		self.finishHandler		= finishHandler
 		
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		guard let country = MovieCountry(rawValue: prefsCountryString) else { return }
 
 		if let moviesPlistFile = moviesPlistFile {
 			// try to load movies from device
 			if let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary] {
 				// successfully loaded movies from device
-				loadedMovieRecordArray = MovieDatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
+				loadedMovieRecordArray = MovieDatabaseHelper.dictArrayToMovieRecordArray(dictArray: loadedDictArray, country: country)
 				
 				if loadedMovieRecordArray != nil {
 					cleanUpExistingMovies(&(loadedMovieRecordArray!))
 				}
 				
-				completionHandler(movies: loadedMovieRecordArray)
+				completionHandler(loadedMovieRecordArray)
 			}
 			else {
 				// movies are not on the device: get them from the cloud
 				
-				UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+				UIApplication.shared.isNetworkActivityIndicatorVisible = true
 				
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					showIndicator?()
 				}
 
 				// get all movies which started a month ago or later
-				let compareDate = NSDate().dateByAddingTimeInterval(-30 * 24 * 60 * 60)
+				let compareDate = Date().addingTimeInterval(-30 * 24 * 60 * 60)
 				let predicate = NSPredicate(format: "(%K > %@) AND (hidden == 0)", argumentArray: [country.databaseKeyRelease, compareDate])
 				let query = CKQuery(recordType: self.recordType, predicate: predicate)
 				
 				let queryOperation = CKQueryOperation(query: query)
-				let operationQueue = NSOperationQueue()
+				let operationQueue = OperationQueue()
 				
-				executeQueryOperation(queryOperation, onOperationQueue: operationQueue)
+				executeQueryOperation(queryOperation: queryOperation, onOperationQueue: operationQueue)
 			}
 		}
 		else {
 			NSLog("No group folder found")
-			errorHandler(errorMessage: "*** No group folder found")
+			errorHandler("*** No group folder found")
 		}
 	}
 	
@@ -139,8 +139,8 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter queryOperation:		The query operation containing the predicates
 		- parameter onOperationQueue:	The queue for the query operation
 	*/
-	internal func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+	internal func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: OperationQueue) {
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 
 		if let country = MovieCountry(rawValue: prefsCountryString) {
 			queryOperation.desiredKeys = self.queryKeys + country.languageQueryKeys + country.countryQueryKeys
@@ -150,7 +150,7 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 		}
 		
 		queryOperation.database = cloudKitDatabase
-		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
+		queryOperation.qualityOfService = QualityOfService.userInitiated
 		queryOperation.recordFetchedBlock = self.recordFetchedCallback
 		
 /*
@@ -159,15 +159,15 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 			self.updateIndicator?(counter: self.allCKRecords.count)
 		}
 */
-		queryOperation.queryCompletionBlock = { [unowned self] (cursor: CKQueryCursor?, error: NSError?) -> Void in
+		queryOperation.queryCompletionBlock = { [unowned self] (cursor: CKQueryCursor?, error: Error?) -> Void in
 			if let cursor = cursor {
 				// some objects are here, ask for more
 				let queryCursorOperation = CKQueryOperation(cursor: cursor)
-				self.executeQueryOperation(queryCursorOperation, onOperationQueue: operationQueue)
+				self.executeQueryOperation(queryOperation: queryCursorOperation, onOperationQueue: operationQueue)
 			}
 			else {
 				// download finished (with error or not)
-				self.queryOperationFinished(error)
+				self.queryOperationFinished(error: error)
 			}
 		}
 		
@@ -183,7 +183,7 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 	*/
 	internal func recordFetchedCallback(record: CKRecord) {
 		self.allCKRecords.append(record)
-		self.updateIndicator?(counter: self.allCKRecords.count)
+		self.updateIndicator?(self.allCKRecords.count)
 	}
 	
 	
@@ -192,19 +192,19 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 		MovieRecord objects are generated and saved.
 		- parameter error:	The error object
 	*/
-	internal func queryOperationFinished(error: NSError?) {
-		if let error = error {
+	internal func queryOperationFinished(error: Error?) {
+		if let error = error as? NSError {
 			if let saveStopIndicator = self.stopIndicator {
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					saveStopIndicator()
 				}
 			}
 			
-			self.errorHandler?(errorMessage: "Error querying records: Code=\(error.code) Domain=\(error.domain) Error: (\(error.localizedDescription))")
+			self.errorHandler?("Error querying records: Code=\(error.code) Domain=\(error.domain) Error: (\(error.localizedDescription))")
 			var errorWindow: MessageWindow?
 			
 			if let viewForError = viewForError {
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudQueryError", buttonStringIds: ["Close"], error: error,
 					handler: { (buttonIndex) -> () in
 						errorWindow?.close()
@@ -221,14 +221,14 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 			// received all records from the cloud
 			
 			var movieRecordArray: [MovieRecord] = []
-			let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+			let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 			let country = MovieCountry(rawValue: prefsCountryString)
 			
 			if let country = country {
 				// generate array of MovieRecord objects and store the thumbnail posters to "disc"
 				for ckRecord in self.allCKRecords {
 					let newRecord = MovieRecord(country: country)
-					newRecord.initWithCKRecord(ckRecord)
+					newRecord.initWithCKRecord(ckRecord: ckRecord)
 					movieRecordArray.append(newRecord)
 				}
 			}
@@ -238,17 +238,17 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 			
 			if (movieRecordArray.isEmpty) {
 				if let saveStopIndicator = self.stopIndicator {
-					dispatch_async(dispatch_get_main_queue()) {
+					DispatchQueue.main.async {
 						saveStopIndicator()
 					}
 				}
 				
-				self.errorHandler?(errorMessage: "First start: No records found in Cloud.")
+				self.errorHandler?("First start: No records found in Cloud.")
 				
 				var errorWindow: MessageWindow?
 				
 				if let viewForError = viewForError {
-					dispatch_async(dispatch_get_main_queue()) {
+					DispatchQueue.main.async {
 						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoRecordsInCloudTitle",
 							textStringId: "NoRecordsInCloudText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 								errorWindow?.close()
@@ -261,31 +261,31 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 			
 			// Get all thumbnails
 			
-			let targetPath = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)?.path
+			let targetPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
 			let sourcePath = Constants.imageBaseUrl + PosterSizePath.Small.rawValue
 			
-			if let country = country, targetPath = targetPath {
+			if let country = country, let targetPath = targetPath {
 				for movieRecord in movieRecordArray {
 					let posterUrl = movieRecord.posterUrl[country.languageArrayIndex]
 					let tmdbId = movieRecord.tmdbId
 					
-					if NSFileManager.defaultManager().fileExistsAtPath(targetPath + Constants.thumbnailFolder + posterUrl) {
+					if FileManager.default.fileExists(atPath: targetPath + Constants.thumbnailFolder + posterUrl) {
 						// don't load the thumbnail if it's already here
 						continue
 					}
 
-					if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
-						let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl,
-							completionHandler: { [unowned self] (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+					if let sourceUrl = URL(string: sourcePath + posterUrl) {
+						let task = URLSession.shared.downloadTask(with: sourceUrl,
+							completionHandler: { [unowned self] (location: URL?, response: URLResponse?, error: Error?) -> Void in
 							if let error = error {
-								NSLog("Error getting thumbnail: \(error.description)")
+								NSLog("Error getting thumbnail: \(error.localizedDescription)")
 							}
 							else if let receivedPath = location?.path {
 								// move received thumbnail to target path where it belongs and update the thumbnail in the table view
 								do {
-									try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: targetPath + Constants.thumbnailFolder + posterUrl)
+									try FileManager.default.moveItem(atPath: receivedPath, toPath: targetPath + Constants.thumbnailFolder + posterUrl)
 									if let tmdbId = tmdbId {
-										self.updateThumbnailHandler?(tmdbId: tmdbId)
+										self.updateThumbnailHandler?(tmdbId)
 									}
 								}
 								catch let error as NSError {
@@ -293,7 +293,7 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 										// ignoring, because it's okay it it's already there
 									}
 									else {
-										NSLog("Error moving poster: \(error.description)")
+										NSLog("Error moving poster: \(error.localizedDescription)")
 									}
 								}
 							}
@@ -304,28 +304,28 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 				}
 			}
 
-			let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
-			userDefaults?.setObject(NSDate(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
+			let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
+			userDefaults?.set(Date(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
 			userDefaults?.synchronize()
 			
 			// finish movies
-			if let completionHandler = self.completionHandler, errorHandler = self.errorHandler {
+			if let completionHandler = self.completionHandler, let errorHandler = self.errorHandler {
 				loadGenreDatabase({ [unowned self] () -> () in
-					self.writeMovies(movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
+					self.writeMovies(allMovieRecords: movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
 				})
 			}
 			else {
 				if let saveStopIndicator = self.stopIndicator {
-					dispatch_async(dispatch_get_main_queue()) {
+					DispatchQueue.main.async {
 						saveStopIndicator()
 					}
 				}
-				self.errorHandler?(errorMessage: "One of the handlers is nil!")
+				self.errorHandler?("One of the handlers is nil!")
 				
 				var errorWindow: MessageWindow?
 				
 				if let viewForError = viewForError {
-					dispatch_async(dispatch_get_main_queue()) {
+					DispatchQueue.main.async {
 						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "InternalErrorText", buttonStringIds: ["Close"],
 							handler: { (buttonIndex) -> () in
 								errorWindow?.close()

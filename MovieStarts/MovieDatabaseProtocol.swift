@@ -15,8 +15,8 @@ protocol MovieDatabaseProtocol {
 	
 	init(recordType: String, viewForError: UIView?)
 	
-	func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue)
-	func queryOperationFinished(error: NSError?)
+	func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: OperationQueue)
+	func queryOperationFinished(error: Error?)
 	func recordFetchedCallback(record: CKRecord)
 }
 

@@ -12,21 +12,21 @@ import UIKit
 
 class NotificationManager {
 
-	static let secondsInDay = (60 * 60 * 24) as NSTimeInterval
+	static let secondsInDay = (60 * 60 * 24) as TimeInterval
 	
 	
 	// MARK: - Public functions
 	
 	
 	static func removeAllFavoriteNotifications() {
-		UIApplication.sharedApplication().cancelAllLocalNotifications()
+		UIApplication.shared.cancelAllLocalNotifications()
 		NSLog("Removed all notifications")
 	}
 	
 	static func updateFavoriteNotifications(favoriteMovies: [[MovieRecord]]?) {
-		let notificationsOn: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotifications) as? Bool
+		let notificationsOn: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotifications) as? Bool
 		
-		if let notificationsOn = notificationsOn where notificationsOn == true {
+		if let notificationsOn = notificationsOn , notificationsOn == true {
 			// notifications are turned on, let's proceed
 		}
 		else {
@@ -39,36 +39,36 @@ class NotificationManager {
 		
 		// preparation
 		guard let flatMovies = (favoriteMovies?.flatMap { $0 }),
-		      let notificationDay = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotificationDay) as? Int,
-		      let notificationTime = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotificationTime) as? Int
+		      let notificationDay = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotificationDay) as? Int,
+		      let notificationTime = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotificationTime) as? Int
 		else {
 			return
 		}
 
-		let now = NSDate()
-		var fireMovies: [NSDate : [MovieRecord]] = [:]
+		let now = Date()
+		var fireMovies: [Date : [MovieRecord]] = [:]
 		
 		// now put upcoming favorites into date-groups
 		for movie in flatMovies {
 			// calculate alarm-time for the movie
 			guard let releaseTime = movie.releaseDateInLocalTimezone else { continue }
-			var alarmTime = releaseTime.dateByAddingTimeInterval(NSTimeInterval(notificationDay) * NotificationManager.secondsInDay)
+			var alarmTime = releaseTime.addingTimeInterval(TimeInterval(notificationDay) * NotificationManager.secondsInDay)
 			alarmTime = alarmTime.setHour(notificationTime)
 
 			// Only add movies whose alarm is in the future
-			if (now.compare(alarmTime) == NSComparisonResult.OrderedAscending) {
-				if (fireMovies[alarmTime] == nil) {
-					fireMovies[alarmTime] = [movie]
+			if (now.compare(alarmTime as Date) == ComparisonResult.orderedAscending) {
+				if (fireMovies[alarmTime as Date] == nil) {
+					fireMovies[alarmTime as Date] = [movie]
 				}
 				else {
-					fireMovies[alarmTime]?.append(movie)
+					fireMovies[alarmTime as Date]?.append(movie)
 				}
 			}
 		}
 		
 		// add a notification for each group
 		for fireDate in fireMovies.keys {
-			addFavoriteNotification(fireMovies[fireDate], fireDate: /*now.dateByAddingTimeInterval(30)*/ fireDate, notificationDay: notificationDay)
+			addFavoriteNotification(movies: fireMovies[fireDate], fireDate: /*now.dateByAddingTimeInterval(30)*/ fireDate, notificationDay: notificationDay)
 		}
 	}
 	
@@ -85,7 +85,7 @@ class NotificationManager {
 			}
 		}
 		else {
-			let movieCountString = NSLocalizedString("\(movieCount)", comment: "").capitalizedString
+			let movieCountString = NSLocalizedString("\(movieCount)", comment: "").capitalized
 			
 			switch(notificationDay) {
 			case 0: retval = "\(movieCountString) " + NSLocalizedString("MoviesReleasedToday", comment: "")
@@ -101,7 +101,7 @@ class NotificationManager {
 	
 	
 	static func notifyAboutOneMovie(appDelegate: AppDelegate, movieID: String, movieTitle: String, movieDate: String, notificationDay: Int) {
-		let messageBody = NotificationManager.generateNotificationText(1, notificationDay: notificationDay, firstMovieTitle: movieTitle, movieDate: movieDate)
+		let messageBody = NotificationManager.generateNotificationText(movieCount: 1, notificationDay: notificationDay, firstMovieTitle: movieTitle, movieDate: movieDate)
 		
 		var messageWindow: MessageWindow?
 		messageWindow = MessageWindow(parent: appDelegate.movieTabBarController!.view, darkenBackground: true, titleStringId: "NotificationMsgWindowTitle",
@@ -117,7 +117,7 @@ class NotificationManager {
 	}
 	
 	static func notifyAboutMultipleMovies(appDelegate: AppDelegate, movieIDs: [String], movieTitles: [String], movieDate: String, notificationDay: Int) {
-		var messageBody = NotificationManager.generateNotificationText(movieIDs.count, notificationDay: notificationDay, firstMovieTitle: movieTitles[0], movieDate: movieDate) + ":\n"
+		var messageBody = NotificationManager.generateNotificationText(movieCount: movieIDs.count, notificationDay: notificationDay, firstMovieTitle: movieTitles[0], movieDate: movieDate) + ":\n"
 		
 		for title in movieTitles {
 			messageBody += "\n\u{25CF} " + title
@@ -125,7 +125,7 @@ class NotificationManager {
 		
 		var messageWindow: MessageWindow?
 		messageWindow = MessageWindow(parent: appDelegate.movieTabBarController!.view, darkenBackground: true, titleStringId: "NotificationMsgWindowTitle",
-			textString: messageBody, textStringAlignment: NSTextAlignment.Left, buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+			textString: messageBody, textStringAlignment: NSTextAlignment.left, buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 			
 			messageWindow?.close()
 		})
@@ -135,8 +135,8 @@ class NotificationManager {
 	// MARK: - Private functions
 
 	
-	private static func addFavoriteNotification(movies: [MovieRecord]?, fireDate: NSDate, notificationDay: Int) {
-		guard let movies = movies where movies.count > 0 else { return }
+	fileprivate static func addFavoriteNotification(movies: [MovieRecord]?, fireDate: Date, notificationDay: Int) {
+		guard let movies = movies , movies.count > 0 else { return }
 		
 		let notification = UILocalNotification()
 		
@@ -144,7 +144,7 @@ class NotificationManager {
 		notification.hasAction = true
 		notification.soundName = UILocalNotificationDefaultSoundName
 		notification.alertBody = NotificationManager.generateNotificationText(
-			movies.count,
+			movieCount: movies.count,
 			notificationDay: notificationDay,
 			firstMovieTitle: movies[0].title[movies[0].currentCountry.languageArrayIndex],
 			movieDate: movies[0].releaseDateStringLong)
@@ -179,7 +179,7 @@ class NotificationManager {
 			NSLog("Added notification at \(fireDate) for \(movies.count) movies")
 		}
 		
-		UIApplication.sharedApplication().scheduleLocalNotification(notification)
+		UIApplication.shared.scheduleLocalNotification(notification)
 	}
 
 }

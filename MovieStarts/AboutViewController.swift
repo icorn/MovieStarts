@@ -31,9 +31,9 @@ class AboutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-		let appInfo = NSBundle.mainBundle().infoDictionary
+		let appInfo = Bundle.main.infoDictionary
 		
-		if let appInfo = appInfo, version = appInfo["CFBundleShortVersionString"] as? String {
+		if let appInfo = appInfo, let version = appInfo["CFBundleShortVersionString"] as? String {
 			versionLabel.text = NSLocalizedString("Version", comment: "") + " " + version
 		}
 
@@ -49,32 +49,32 @@ class AboutViewController: UIViewController {
 		reachabilityLabel.text = "" // NSLocalizedString("reachability", comment: "")
 		mitLicenseLabel.text = "" // NSLocalizedString("mitLicense", comment: "")
 		
-		reachabilityLabel.hidden = true
-		mitLicenseLabel.hidden = true
-		bottomLine.hidden = true
+		reachabilityLabel.isHidden = true
+		mitLicenseLabel.isHidden = true
+		bottomLine.isHidden = true
 	}
 
-	@IBAction func webLinkTouched(sender: AnyObject) {
-		let url = NSURL(string: "http://MovieStartsApp.com")
+	@IBAction func webLinkTouched(_ sender: AnyObject) {
+		let url = URL(string: "http://MovieStartsApp.com")
 
-		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
-			UIApplication.sharedApplication().openURL(url)
+		if let url = url , UIApplication.shared.canOpenURL(url) {
+			UIApplication.shared.openURL(url)
 		}
 	}
 	
-	@IBAction func emailLinkTouched(sender: AnyObject) {
-		let url = NSURL(string: "mailto:info@MovieStartsApp.com")
+	@IBAction func emailLinkTouched(_ sender: AnyObject) {
+		let url = URL(string: "mailto:info@MovieStartsApp.com")
 		
-		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
-			UIApplication.sharedApplication().openURL(url)
+		if let url = url , UIApplication.shared.canOpenURL(url) {
+			UIApplication.shared.openURL(url)
 		}
 	}
 	
-	@IBAction func twitterLinkgTouched(sender: AnyObject) {
-		let url = NSURL(string: "https://twitter.com/MovieStartsApp")
+	@IBAction func twitterLinkgTouched(_ sender: AnyObject) {
+		let url = URL(string: "https://twitter.com/MovieStartsApp")
 		
-		if let url = url where UIApplication.sharedApplication().canOpenURL(url) {
-			UIApplication.sharedApplication().openURL(url)
+		if let url = url , UIApplication.shared.canOpenURL(url) {
+			UIApplication.shared.openURL(url)
 		}
 	}
 	

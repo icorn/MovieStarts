@@ -23,17 +23,17 @@ class MovieDatabaseParent : DatabaseParent {
 	var updatedCKRecords: [CKRecord] = []
 	var allCKRecords: [CKRecord] = []
 	
-	var completionHandler: ((movies: [MovieRecord]?) -> ())?
-	var errorHandler: ((errorMessage: String) -> ())?
+	var completionHandler: (([MovieRecord]?) -> ())?
+	var errorHandler: ((String) -> ())?
 	var finishHandler: (() -> ())?
-	var updateMovieHandler: ((movie: MovieRecord) -> ())?
-	var addNewMovieHandler: ((movie: MovieRecord) -> ())?
-	var removeMovieHandler: ((movie: MovieRecord) -> ())?
-	var updateThumbnailHandler: ((tmdbId: Int) -> ())?
+	var updateMovieHandler: ((MovieRecord) -> ())?
+	var addNewMovieHandler: ((MovieRecord) -> ())?
+	var removeMovieHandler: ((MovieRecord) -> ())?
+	var updateThumbnailHandler: ((Int) -> ())?
 	
 	var showIndicator: (() -> ())?
 	var stopIndicator: (() -> ())?
-	var updateIndicator: ((counter: Int) -> ())?
+	var updateIndicator: ((Int) -> ())?
 	
 	
 	/**
@@ -43,23 +43,23 @@ class MovieDatabaseParent : DatabaseParent {
 		- parameter completionHandler:			The handler which is called upon completion
 		- parameter errorHandler:				The handler which is called if an error occurs
 	*/
-	func writeMovies(allMovieRecords: [MovieRecord], updatedMoviesAsRecordArray: [CKRecord], completionHandler: (movies: [MovieRecord]?) -> (), errorHandler: (errorMessage: String) -> ()) {
+	func writeMovies(allMovieRecords: [MovieRecord], updatedMoviesAsRecordArray: [CKRecord], completionHandler: ([MovieRecord]?) -> (), errorHandler: (String) -> ()) {
 		
 		// write it to device
 		
 		if let filename = self.moviesPlistFile {
-			if ((MovieDatabaseHelper.movieRecordArrayToDictArray(allMovieRecords) as NSArray).writeToFile(filename, atomically: true) == false) {
+			if ((MovieDatabaseHelper.movieRecordArrayToDictArray(movieRecords: allMovieRecords) as NSArray).write(toFile: filename, atomically: true) == false) {
 				if let saveStopIndicator = self.stopIndicator {
-					dispatch_async(dispatch_get_main_queue()) {
+					DispatchQueue.main.async {
 						saveStopIndicator()
 					}
 				}
 				
-				errorHandler(errorMessage: "*** Error writing movies-file")
+				errorHandler("*** Error writing movies-file")
 				var errorWindow: MessageWindow?
 				
 				if let viewForError = viewForError {
-					dispatch_async(dispatch_get_main_queue()) {
+					DispatchQueue.main.async {
 						errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalErrorTitle", textStringId: "ErrorWritingFile", buttonStringIds: ["Close"],
 						                            handler: { (buttonIndex) -> () in
 														errorWindow?.close()
@@ -72,21 +72,21 @@ class MovieDatabaseParent : DatabaseParent {
 			}
 		}
 		else {
-			errorHandler(errorMessage: "*** Filename for movies-list is broken")
+			errorHandler("*** Filename for movies-list is broken")
 			return
 		}
 		
 		// and store the latest modification-date of the records
 		if (updatedMoviesAsRecordArray.count > 0) {
-			MovieDatabaseHelper.storeLastModification(updatedMoviesAsRecordArray)
+			MovieDatabaseHelper.storeLastModification(ckrecords: updatedMoviesAsRecordArray)
 		}
 		
 		// success
-		dispatch_async(dispatch_get_main_queue()) {
+		DispatchQueue.main.async {
 			self.finishHandler?()
 		}
 		
-		completionHandler(movies: allMovieRecords)
+		completionHandler(allMovieRecords)
 	}
 
 	
@@ -94,25 +94,25 @@ class MovieDatabaseParent : DatabaseParent {
 		Checks if there are movies which are too old and removes them.
 		- parameter existingMovies:	The array of existing movies to check
 	*/
-	func cleanUpExistingMovies(inout existingMovies: [MovieRecord]) {
-		let compareDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast) // 30 days ago
+	func cleanUpExistingMovies(_ existingMovies: inout [MovieRecord]) {
+		let compareDate = Date(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast) // 30 days ago
 		let oldNumberOfMovies = existingMovies.count
 		var removedMovies = 0
 		
 		print("Cleaning up old movies...")
 		
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
 		if let country = MovieCountry(rawValue: prefsCountryString) {
 			
-			for index in (0 ..< existingMovies.count).reverse() {
+			for index in (0 ..< existingMovies.count).reversed() {
 				let releaseDate = existingMovies[index].releaseDate[country.countryArrayIndex]
 				
-				if releaseDate.compare(compareDate) == NSComparisonResult.OrderedAscending {
+				if releaseDate.compare(compareDate) == ComparisonResult.orderedAscending {
 					// movie is too old
-					removeMovieHandler?(movie: existingMovies[index])
+					removeMovieHandler?(existingMovies[index])
 					print("   '\(existingMovies[index].origTitle)' (\(releaseDate)) removed")
-					existingMovies.removeAtIndex(index)
+					existingMovies.remove(at: index)
 				}
 			}
 			
@@ -120,7 +120,7 @@ class MovieDatabaseParent : DatabaseParent {
 			
 			if (removedMovies > 0) {
 				// udpate the watch
-				WatchSessionManager.sharedManager.sendAllFavoritesToWatch(true, sendThumbnails: false)
+				WatchSessionManager.sharedManager.sendAllFavoritesToWatch(sendList: true, sendThumbnails: false)
 			}
 		}
 		
@@ -132,7 +132,7 @@ class MovieDatabaseParent : DatabaseParent {
 		Loads the genre database.
 		- parameter genresLoadedHandler: This handler is called after the genres are read, even if an error occured.
 	*/
-	func loadGenreDatabase(genresLoadedHandler: (() -> ())) {
+	func loadGenreDatabase(_ genresLoadedHandler: @escaping (() -> ())) {
 		
 		let genreDatabase = GenreDatabase(
 			finishHandler: { (genres) -> () in
@@ -153,14 +153,14 @@ class MovieDatabaseParent : DatabaseParent {
 		- returns: All movies as array of MovieRecord objects, or nil on error
 	*/
 	func readDatabaseFromFile() -> [MovieRecord]? {
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		guard let country = MovieCountry(rawValue: prefsCountryString) else { return nil }
 		
 		if let moviesPlistFile = moviesPlistFile {
 			// try to load movies from device
 			if let loadedDictArray = NSArray(contentsOfFile: moviesPlistFile) as? [NSDictionary] {
 				// successfully loaded movies from device
-				return MovieDatabaseHelper.dictArrayToMovieRecordArray(loadedDictArray, country: country)
+				return MovieDatabaseHelper.dictArrayToMovieRecordArray(dictArray: loadedDictArray, country: country)
 			}
 		}
 		
@@ -172,11 +172,14 @@ class MovieDatabaseParent : DatabaseParent {
 		Tries to write the movies to the device.
 	*/
 	func writeMoviesToDevice() {
-		if let completionHandler = completionHandler, errorHandler = errorHandler, loadedMovieRecordArray = loadedMovieRecordArray {
-			writeMovies(loadedMovieRecordArray, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
+		if let completionHandler = completionHandler,
+           let errorHandler = errorHandler,
+           let loadedMovieRecordArray = loadedMovieRecordArray
+        {
+			writeMovies(allMovieRecords: loadedMovieRecordArray, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
 		}
 		else {
-			errorHandler?(errorMessage: "One of the handlers is nil!")
+			errorHandler?("One of the handlers is nil!")
 		}
 	}
 }

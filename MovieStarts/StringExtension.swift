@@ -10,17 +10,34 @@ import Foundation
 
 
 extension String {
-	func beginsWith (str: String) -> Bool {
-		if let range = self.rangeOfString(str) {
-			return range.startIndex == self.startIndex
+	func beginsWith (_ str: String) -> Bool {
+		if let range = self.range(of: str) {
+			return range.lowerBound == self.startIndex
 		}
 		return false
 	}
 	
-	func endsWith (str: String) -> Bool {
-		if let range = self.rangeOfString(str, options:NSStringCompareOptions.BackwardsSearch) {
-			return range.endIndex == self.endIndex
+	func endsWith (_ str: String) -> Bool {
+		if let range = self.range(of: str, options:NSString.CompareOptions.backwards) {
+			return range.upperBound == self.endIndex
 		}
 		return false
+	}
+	
+	/// Removes the last characters of the string and returns it.
+	///
+	/// - parameter numberOfCharacters: the number of characters to remove
+	///
+	/// - returns: the new shorter string
+	func substringByRemovingLastCharacters(numberOfCharacters: Int) -> String {
+		if (numberOfCharacters > self.characters.count) {
+			return ""
+		}
+		else if (numberOfCharacters < 0) {
+			return self
+		}
+		else {
+			return self.substring(to: self.index(self.endIndex, offsetBy: -numberOfCharacters))
+		}
 	}
 }

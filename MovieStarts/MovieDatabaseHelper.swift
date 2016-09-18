@@ -10,7 +10,7 @@ import Foundation
 import CloudKit
 
 
-public class MovieDatabaseHelper {
+open class MovieDatabaseHelper {
 	
    /**
 		Converts an array of MovieRecord objects to an array of NSDictionaries.
@@ -19,11 +19,11 @@ public class MovieDatabaseHelper {
 	
 		- returns: An array of NSDictionarys which contain the data of the input parameter movieRecords.
 	*/
-	public class func movieRecordArrayToDictArray(movieRecords: [MovieRecord]) -> [NSDictionary] {
+	open class func movieRecordArrayToDictArray(movieRecords: [MovieRecord]) -> [NSDictionary] {
 		var retval: [NSDictionary] = []
 	
 		for record in movieRecords {
-			retval.append(record.toDictionary())
+			retval.append(record.toDictionary() as NSDictionary)
 		}
 	
 		return retval
@@ -38,7 +38,7 @@ public class MovieDatabaseHelper {
 	
 		- returns: An array of MovieRecord objects, generated of the input parameter dictArray.
 	*/
-	public class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]?, country: MovieCountry) -> [MovieRecord] {
+	open class func dictArrayToMovieRecordArray(dictArray: [NSDictionary]?, country: MovieCountry) -> [MovieRecord] {
 		var retval: [MovieRecord] = []
 		
 		if let dictArray = dictArray {
@@ -62,18 +62,18 @@ public class MovieDatabaseHelper {
 		- parameter ckrecords:	The new or updated CKRecords from the CloudKit database
 	*/
 	class func storeLastModification(ckrecords: [CKRecord]) {
-		var latestModification = NSDate(timeIntervalSince1970: 0)
+		var latestModification = Date(timeIntervalSince1970: 0)
 		
 		for movie in ckrecords {
 			if let movieModDate = movie.modificationDate {
-				if (latestModification.compare(movieModDate) == NSComparisonResult.OrderedAscending) {
+				if (latestModification.compare(movieModDate) == ComparisonResult.orderedAscending) {
 					latestModification = movieModDate
 				}
 			}
 		}
 		
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(latestModification, forKey: Constants.prefsLatestDbModification)
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(latestModification, forKey: Constants.prefsLatestDbModification)
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 	}
 	
 	
@@ -83,10 +83,10 @@ public class MovieDatabaseHelper {
 		- parameter existingMovies:	The array with the existing movies
 		- parameter updatedMovies:	The array with the updated movies
 	*/
-	public class func joinMovieRecordArrays(inout existingMovies: [MovieRecord], updatedMovies: [MovieRecord]) {
+	open class func joinMovieRecordArrays(existingMovies: inout [MovieRecord], updatedMovies: [MovieRecord]) {
 		
 		for updatedMovie in updatedMovies {
-			let movieIndex = MovieDatabaseHelper.findArrayIndexOfMovie(updatedMovie, array: existingMovies)
+			let movieIndex = MovieDatabaseHelper.findArrayIndexOfMovie(updatedMovie: updatedMovie, array: existingMovies)
 			
 			if let movieIndex = movieIndex {
 				// update existing movie
@@ -106,7 +106,7 @@ public class MovieDatabaseHelper {
 		- parameter updatedMovie:	The movie record to search for
 		- parameter array:			The array to be searched
 	*/
-	public class func findArrayIndexOfMovie(updatedMovie: MovieRecord, array: [MovieRecord]) -> Int? {
+	open class func findArrayIndexOfMovie(updatedMovie: MovieRecord, array: [MovieRecord]) -> Int? {
 		var foundIndex: Int?
 		
 		if let updatedMovieId = updatedMovie.tmdbId {

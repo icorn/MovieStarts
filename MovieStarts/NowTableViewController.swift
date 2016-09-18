@@ -11,21 +11,21 @@ import UIKit
 class NowTableViewController: MovieTableViewController {
 
 	override func viewDidLoad() {
-		currentTab = MovieTab.NowPlaying
+		currentTab = MovieTab.nowPlaying
 
         super.viewDidLoad()
 		navigationItem.title = NSLocalizedString("NowPlayingLong", comment: "")
     }
 	
-	func addMovie(newMovie: MovieRecord) {
+	func addMovie(_ newMovie: MovieRecord) {
 		tableView.beginUpdates()
 		
 		var indexForInsert: Int?
 		
-		for (index, movie) in nowMovies.enumerate() {
+		for (index, movie) in nowMovies.enumerated() {
 			let titleFromArray = movie.sortTitle[movie.currentCountry.languageArrayIndex], newMovieTitle = newMovie.sortTitle[movie.currentCountry.languageArrayIndex]
 			
-			if newMovieTitle.localizedCaseInsensitiveCompare(titleFromArray) == NSComparisonResult.OrderedAscending {
+			if newMovieTitle.localizedCaseInsensitiveCompare(titleFromArray) == ComparisonResult.orderedAscending {
 				// we found the right index for the new movie
 				indexForInsert = index
 				break
@@ -34,26 +34,26 @@ class NowTableViewController: MovieTableViewController {
 		
 		if let indexForInsert = indexForInsert {
 			// insert new movie 
-			nowMovies.insert(newMovie, atIndex: indexForInsert)
-			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: indexForInsert, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+			nowMovies.insert(newMovie, at: indexForInsert)
+			tableView.insertRows(at: [IndexPath(row: indexForInsert, section: 0)], with: UITableViewRowAnimation.automatic)
 		}
 		else {
 			nowMovies.append(newMovie)
-			tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: nowMovies.count-1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+			tableView.insertRows(at: [IndexPath(row: nowMovies.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
 		}
 		
 		tableView.endUpdates()
 	}
 	
 	
-	func removeMovie(movieToRemove: MovieRecord) {
+	func removeMovie(_ movieToRemove: MovieRecord) {
 		tableView.beginUpdates()
 		
 		// find the index of the existing movie in the table
 		
 		var indexForExistingMovie: Int?
 		
-		for (index, movie) in nowMovies.enumerate() {
+		for (index, movie) in nowMovies.enumerated() {
 			if (movie.id == movieToRemove.id) {
 				indexForExistingMovie = index
 				break
@@ -61,22 +61,22 @@ class NowTableViewController: MovieTableViewController {
 		}
 
 		if let indexForExistingMovie = indexForExistingMovie {
-			nowMovies.removeAtIndex(indexForExistingMovie)
-			tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: indexForExistingMovie, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+			nowMovies.remove(at: indexForExistingMovie)
+			tableView.deleteRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableViewRowAnimation.automatic)
 		}
 		
 		tableView.endUpdates()
 	}
 	
 
-	func updateMovie(updatedMovie: MovieRecord) {
+	func updateMovie(_ updatedMovie: MovieRecord) {
 		tableView.beginUpdates()
 		
 		// find the index of the existing movie in the table
 		
 		var indexForExistingMovie: Int?
 		
-		for (index, movie) in nowMovies.enumerate() {
+		for (index, movie) in nowMovies.enumerated() {
 			if (movie.id == updatedMovie.id) {
 				indexForExistingMovie = index
 				break
@@ -90,16 +90,16 @@ class NowTableViewController: MovieTableViewController {
 				// the title has changed. we have to move and update the table cell to a new position.
 				
 				// remove movie from old position
-				nowMovies.removeAtIndex(indexForExistingMovie)
+				nowMovies.remove(at: indexForExistingMovie)
 				
 				// find the new position of the movie
 				
 				var indexForUpdatedMovie: Int?
 				
-				for (index, movie) in nowMovies.enumerate() {
+				for (index, movie) in nowMovies.enumerated() {
 					let movieTitle = movie.sortTitle[movie.currentCountry.languageArrayIndex]
 					
-					if updatedMovie.sortTitle[updatedMovie.currentCountry.languageArrayIndex].localizedCaseInsensitiveCompare(movieTitle) == NSComparisonResult.OrderedAscending {
+					if updatedMovie.sortTitle[updatedMovie.currentCountry.languageArrayIndex].localizedCaseInsensitiveCompare(movieTitle) == ComparisonResult.orderedAscending {
 						// we found the right index for the new movie
 						indexForUpdatedMovie = index
 						break
@@ -108,33 +108,33 @@ class NowTableViewController: MovieTableViewController {
 
 				if let indexForUpdatedMovie = indexForUpdatedMovie {
 					// move movie to new position. this is two separate actions, hence the endUpdate and beginUpdate.
-					nowMovies.insert(updatedMovie, atIndex: indexForUpdatedMovie)
-					tableView.moveRowAtIndexPath(NSIndexPath(forRow: indexForExistingMovie, inSection: 0), toIndexPath: NSIndexPath(forRow: indexForUpdatedMovie, inSection: 0))
+					nowMovies.insert(updatedMovie, at: indexForUpdatedMovie)
+					tableView.moveRow(at: IndexPath(row: indexForExistingMovie, section: 0), to: IndexPath(row: indexForUpdatedMovie, section: 0))
                     tableView.endUpdates()
 
                     tableView.beginUpdates()
-                    tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: indexForUpdatedMovie, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+                    tableView.reloadRows(at: [IndexPath(row: indexForUpdatedMovie, section: 0)], with: UITableViewRowAnimation.none)
 				}
 				else {
  
 					// move movie to the end. this is two separate actions, hence the endUpdate and beginUpdate.
 					nowMovies.append(updatedMovie)
-					tableView.moveRowAtIndexPath(NSIndexPath(forRow: indexForExistingMovie, inSection: 0), toIndexPath: NSIndexPath(forRow: nowMovies.count-1, inSection: 0))
+					tableView.moveRow(at: IndexPath(row: indexForExistingMovie, section: 0), to: IndexPath(row: nowMovies.count-1, section: 0))
                     tableView.endUpdates()
 
                     tableView.beginUpdates()
-                    tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: nowMovies.count-1, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+                    tableView.reloadRows(at: [IndexPath(row: nowMovies.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
 				}
 			}
-			else if (nowMovies[indexForExistingMovie].hasVisibleChanges(updatedMovie)) {
+			else if (nowMovies[indexForExistingMovie].hasVisibleChanges(updatedMovie: updatedMovie)) {
 				// some data has changed which is shown in the table cell -> change the cell with an animation
 				nowMovies[indexForExistingMovie] = updatedMovie
-				tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: indexForExistingMovie, inSection: 0)], withRowAnimation: UITableViewRowAnimation.Automatic)
+				tableView.reloadRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableViewRowAnimation.automatic)
 			}
 			else {
 				// some data has changed which is now visible in the table cell -> change the cell, no animation
 				nowMovies[indexForExistingMovie] = updatedMovie
-				tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: indexForExistingMovie, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+				tableView.reloadRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableViewRowAnimation.none)
 			}
 		}
 		
@@ -145,10 +145,10 @@ class NowTableViewController: MovieTableViewController {
 	override func updateThumbnail(tmdbId: Int) -> Bool {
 		var updated = false
 		
-		for (index, movie) in nowMovies.enumerate() {
+		for (index, movie) in nowMovies.enumerated() {
 			if (movie.tmdbId == tmdbId) {
 				tableView.beginUpdates()
-				tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: UITableViewRowAnimation.None)
+				tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: UITableViewRowAnimation.none)
 				tableView.endUpdates()
 				updated = true
 				break

@@ -10,8 +10,8 @@ import Foundation
 
 
 enum LaunchStatus {
-	case ShowMovieList
+	case showMovieList
 //	case LoadingFromPhone
-	case ConnectError
-	case UserShouldStartPhone
+	case connectError
+	case userShouldStartPhone
 }

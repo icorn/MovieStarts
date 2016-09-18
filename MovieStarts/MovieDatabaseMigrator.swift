@@ -25,17 +25,17 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 			Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
 		]
 		
-		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 		
-		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
-			moviesPlistPath = fileUrlPath
+		if let fileUrl = fileUrl {
+			moviesPlistPath = fileUrl.path
 		}
 		else {
 			NSLog("Error getting url for app-group.")
 			var errorWindow: MessageWindow?
 			
 			if let viewForError = viewForError {
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 						errorWindow?.close()
 					})
@@ -58,9 +58,9 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		Update records after software update with new database fields.
 	*/
 	func getMigrationMovies(country: MovieCountry,
-	                        updateMovieHandler: (movie: MovieRecord) -> (),
-	                        completionHandler: (movies: [MovieRecord]?) -> (),
-	                        errorHandler: (errorMessage: String) -> ())
+	                        updateMovieHandler: @escaping (MovieRecord) -> (),
+	                        completionHandler: @escaping ([MovieRecord]?) -> (),
+	                        errorHandler: @escaping (String) -> ())
 	{
 		self.updateMovieHandler = updateMovieHandler
 		self.completionHandler  = completionHandler
@@ -68,21 +68,21 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		
 		self.loadedMovieRecordArray = readDatabaseFromFile()
 		
-		let minReleaseDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast)
+		let minReleaseDate = Date(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast)
 		
 		NSLog("Getting records for migration after releasedate \(minReleaseDate)")
 		
-		UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+		UIApplication.shared.isNetworkActivityIndicatorVisible = true
 		
 		// get new database fields for current records
 		let migrationPredicate = NSPredicate(format: "(%K > %@)", argumentArray: [country.databaseKeyRelease, minReleaseDate])
-		let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [migrationPredicate])
+		let predicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [migrationPredicate])
 		
 		let query = CKQuery(recordType: self.recordType, predicate: predicate)
 		let queryOperation = CKQueryOperation(query: query)
 		
-		let operationQueue = NSOperationQueue()
-		executeQueryOperation(queryOperation, onOperationQueue: operationQueue)
+		let operationQueue = OperationQueue()
+		executeQueryOperation(queryOperation: queryOperation, onOperationQueue: operationQueue)
 	}
 	
 	
@@ -91,12 +91,12 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter queryOperation:		The query operation containing the predicates
 		- parameter onOperationQueue:	The queue for the query operation
 	*/
-	internal func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
+	internal func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: OperationQueue) {
 		
 		queryOperation.desiredKeys = self.queryKeys
 		queryOperation.desiredKeys?.append(Constants.dbIdTmdbId)
 		queryOperation.database = cloudKitDatabase
-		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
+		queryOperation.qualityOfService = QualityOfService.userInitiated
 		queryOperation.resultsLimit = 10
 		queryOperation.recordFetchedBlock = self.recordFetchedCallback
 /*
@@ -104,15 +104,15 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 			self.recordFetchedCallback(record)
 		}
 */
-		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: NSError?) -> Void in
+		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: Error?) -> Void in
 			if let cursor = cursor {
 				// some objects are here, ask for more
 				let queryCursorOperation = CKQueryOperation(cursor: cursor)
-				self.executeQueryOperation(queryCursorOperation, onOperationQueue: operationQueue)
+				self.executeQueryOperation(queryOperation: queryCursorOperation, onOperationQueue: operationQueue)
 			}
 			else {
 				// download finished (with error or not)
-				self.queryOperationFinished(error)
+				self.queryOperationFinished(error: error)
 			}
 		}
 		
@@ -127,19 +127,19 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter record:	The record from the CloudKit database
 	*/
 	internal func recordFetchedCallback(record: CKRecord) {
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		guard let country = MovieCountry(rawValue: prefsCountryString) else {
 			NSLog("recordFetchedMigrationMoviesCallback: Corrupt countrycode \(prefsCountryString)")
 			return
 		}
 		
 		let newMovieRecord = MovieRecord(country: country)
-		newMovieRecord.initWithCKRecord(record)
+		newMovieRecord.initWithCKRecord(ckRecord: record)
 		
 		if let existingMovieRecords = loadedMovieRecordArray {
 			for existingMovieRecord in existingMovieRecords {
 				if (existingMovieRecord.id == newMovieRecord.id) {
-					self.updateMovieHandler?(movie: newMovieRecord)
+					self.updateMovieHandler?(newMovieRecord)
 					updatedCKRecords.append(record)
 					break
 				}
@@ -153,17 +153,17 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		MovieRecord objects are generated and save.
 		- parameter error:	The error object
 	*/
-	internal func queryOperationFinished(error: NSError?) {
-		if let error = error {
+	internal func queryOperationFinished(error: Error?) {
+		if let error = error as? NSError {
 			// there was an error
-			self.errorHandler?(errorMessage: "Error querying updated records: \(error.code) (\(error.description))")
+			self.errorHandler?("Error querying updated records: \(error.code) (\(error.localizedDescription))")
 			return
 		}
 		else if let existingRecords = self.loadedMovieRecordArray {
 			// received records from the cloud
 			
 			if (updatedCKRecords.count > 0) {
-				let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+				let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 				guard let country = MovieCountry(rawValue: prefsCountryString) else {
 					NSLog("queryOperationFinishedMigrationMovies: Corrupt countrycode \(prefsCountryString)");
 					return
@@ -172,11 +172,11 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 				// update the existing movies
 				for updateCKRecord in self.updatedCKRecords {
 					let updateMovieRecord = MovieRecord(country: country)
-					updateMovieRecord.initWithCKRecord(updateCKRecord)
+					updateMovieRecord.initWithCKRecord(ckRecord: updateCKRecord)
 
 					for existingRecord in existingRecords {
 						if (existingRecord.tmdbId == updateMovieRecord.tmdbId) {
-							existingRecord.migrate(updateMovieRecord, updateKeys: self.queryKeys)
+							existingRecord.migrate(updateRecord: updateMovieRecord, updateKeys: self.queryKeys)
 							break
 						}
 					}
@@ -184,7 +184,7 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 				
 				// save updated movies
 				writeMoviesToDevice()
-				self.completionHandler?(movies: nil)
+				self.completionHandler?(nil)
 			}
 		}
 	}

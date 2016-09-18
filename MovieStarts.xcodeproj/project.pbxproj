@@ -144,13 +144,13 @@
 		4FB552EE1C94CBC80053A81B /* certified@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FB552E21C94CBC80053A81B /* certified@3x.png */; };
 		4FB552F21C9560390053A81B /* TomatoImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB552F11C9560390053A81B /* TomatoImage.swift */; };
 		4FBB03CC1BA862B50053CE99 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBB03CB1BA862B50053CE99 /* AboutViewController.swift */; };
-		4FC69FFF1D2C542F00D21C59 /* AES256CBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC69FF81D2C542F00D21C59 /* AES256CBC.swift */; };
-		4FC6A0001D2C542F00D21C59 /* BaseDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC69FF91D2C542F00D21C59 /* BaseDestination.swift */; };
-		4FC6A0011D2C542F00D21C59 /* ConsoleDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC69FFA1D2C542F00D21C59 /* ConsoleDestination.swift */; };
-		4FC6A0021D2C542F00D21C59 /* FileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC69FFB1D2C542F00D21C59 /* FileDestination.swift */; };
-		4FC6A0031D2C542F00D21C59 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC69FFC1D2C542F00D21C59 /* Filter.swift */; };
-		4FC6A0041D2C542F00D21C59 /* SBPlatformDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC69FFD1D2C542F00D21C59 /* SBPlatformDestination.swift */; };
-		4FC6A0051D2C542F00D21C59 /* SwiftyBeaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FC69FFE1D2C542F00D21C59 /* SwiftyBeaver.swift */; };
+		4FCA67911D8E904A00FC20C2 /* AES256CBC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA678A1D8E904A00FC20C2 /* AES256CBC.swift */; };
+		4FCA67921D8E904A00FC20C2 /* BaseDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA678B1D8E904A00FC20C2 /* BaseDestination.swift */; };
+		4FCA67931D8E904A00FC20C2 /* ConsoleDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA678C1D8E904A00FC20C2 /* ConsoleDestination.swift */; };
+		4FCA67941D8E904A00FC20C2 /* FileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA678D1D8E904A00FC20C2 /* FileDestination.swift */; };
+		4FCA67951D8E904A00FC20C2 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA678E1D8E904A00FC20C2 /* Filter.swift */; };
+		4FCA67961D8E904A00FC20C2 /* SBPlatformDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA678F1D8E904A00FC20C2 /* SBPlatformDestination.swift */; };
+		4FCA67971D8E904A00FC20C2 /* SwiftyBeaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA67901D8E904A00FC20C2 /* SwiftyBeaver.swift */; };
 		4FCFBA0E1C0A370E00D43C27 /* YoutubeBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FCFBA0D1C0A370E00D43C27 /* YoutubeBack.png */; };
 		4FCFBA111C0C9D7800D43C27 /* GenreDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCFBA101C0C9D7800D43C27 /* GenreDatabase.swift */; };
 		4FDAF8351BFBFDC100A6380F /* noposter@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FDAF8321BFBFDC100A6380F /* noposter@2x.png */; };
@@ -358,13 +358,13 @@
 		4FB552E21C94CBC80053A81B /* certified@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "certified@3x.png"; sourceTree = "<group>"; };
 		4FB552F11C9560390053A81B /* TomatoImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TomatoImage.swift; sourceTree = "<group>"; };
 		4FBB03CB1BA862B50053CE99 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
-		4FC69FF81D2C542F00D21C59 /* AES256CBC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AES256CBC.swift; sourceTree = "<group>"; };
-		4FC69FF91D2C542F00D21C59 /* BaseDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDestination.swift; sourceTree = "<group>"; };
-		4FC69FFA1D2C542F00D21C59 /* ConsoleDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleDestination.swift; sourceTree = "<group>"; };
-		4FC69FFB1D2C542F00D21C59 /* FileDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDestination.swift; sourceTree = "<group>"; };
-		4FC69FFC1D2C542F00D21C59 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
-		4FC69FFD1D2C542F00D21C59 /* SBPlatformDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SBPlatformDestination.swift; sourceTree = "<group>"; };
-		4FC69FFE1D2C542F00D21C59 /* SwiftyBeaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyBeaver.swift; sourceTree = "<group>"; };
+		4FCA678A1D8E904A00FC20C2 /* AES256CBC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AES256CBC.swift; sourceTree = "<group>"; };
+		4FCA678B1D8E904A00FC20C2 /* BaseDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDestination.swift; sourceTree = "<group>"; };
+		4FCA678C1D8E904A00FC20C2 /* ConsoleDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleDestination.swift; sourceTree = "<group>"; };
+		4FCA678D1D8E904A00FC20C2 /* FileDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDestination.swift; sourceTree = "<group>"; };
+		4FCA678E1D8E904A00FC20C2 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		4FCA678F1D8E904A00FC20C2 /* SBPlatformDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SBPlatformDestination.swift; sourceTree = "<group>"; };
+		4FCA67901D8E904A00FC20C2 /* SwiftyBeaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyBeaver.swift; sourceTree = "<group>"; };
 		4FCFBA0D1C0A370E00D43C27 /* YoutubeBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = YoutubeBack.png; sourceTree = "<group>"; };
 		4FCFBA101C0C9D7800D43C27 /* GenreDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenreDatabase.swift; sourceTree = "<group>"; };
 		4FDAF8321BFBFDC100A6380F /* noposter@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "noposter@2x.png"; sourceTree = "<group>"; };
@@ -638,9 +638,9 @@
 				4F63E6311A9A8C9D00528FB3 /* Icons */,
 				4F63E6321A9A8CAD00528FB3 /* In-App-Graphics */,
 				4FAFF8C71A8BFFE500864078 /* Info.plist */,
-				4FC69FF71D2C542F00D21C59 /* SwiftyBeaver */,
 				4F63E62A1A9A415100528FB3 /* Launch Images */,
 				4F63E6231A99CB5D00528FB3 /* Localizable.strings */,
+				4FCA67891D8E904A00FC20C2 /* SwiftyBeaver */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -667,21 +667,6 @@
 			name = Source;
 			sourceTree = "<group>";
 		};
-		4FC69FF71D2C542F00D21C59 /* SwiftyBeaver */ = {
-			isa = PBXGroup;
-			children = (
-				4FC69FF81D2C542F00D21C59 /* AES256CBC.swift */,
-				4FC69FF91D2C542F00D21C59 /* BaseDestination.swift */,
-				4FC69FFA1D2C542F00D21C59 /* ConsoleDestination.swift */,
-				4FC69FFB1D2C542F00D21C59 /* FileDestination.swift */,
-				4FC69FFC1D2C542F00D21C59 /* Filter.swift */,
-				4FC69FFD1D2C542F00D21C59 /* SBPlatformDestination.swift */,
-				4FC69FFE1D2C542F00D21C59 /* SwiftyBeaver.swift */,
-			);
-			name = SwiftyBeaver;
-			path = sources;
-			sourceTree = "<group>";
-		};
 		4FC6A0081D3022E800D21C59 /* User Interface */ = {
 			isa = PBXGroup;
 			children = (
@@ -690,6 +675,20 @@
 				4F8ED3EB1B4442C7008C24FE /* MovieTableViewCell.xib */,
 			);
 			name = "User Interface";
+			sourceTree = "<group>";
+		};
+		4FCA67891D8E904A00FC20C2 /* SwiftyBeaver */ = {
+			isa = PBXGroup;
+			children = (
+				4FCA678A1D8E904A00FC20C2 /* AES256CBC.swift */,
+				4FCA678B1D8E904A00FC20C2 /* BaseDestination.swift */,
+				4FCA678C1D8E904A00FC20C2 /* ConsoleDestination.swift */,
+				4FCA678D1D8E904A00FC20C2 /* FileDestination.swift */,
+				4FCA678E1D8E904A00FC20C2 /* Filter.swift */,
+				4FCA678F1D8E904A00FC20C2 /* SBPlatformDestination.swift */,
+				4FCA67901D8E904A00FC20C2 /* SwiftyBeaver.swift */,
+			);
+			path = SwiftyBeaver;
 			sourceTree = "<group>";
 		};
 		4FCFBA0F1C0C9C1300D43C27 /* Database */ = {
@@ -1034,25 +1033,20 @@
 				4F7B49D51B04B77100F54454 /* MovieViewController.swift in Sources */,
 				4F934C971BCDBD3900BCAFB0 /* WatchMovieRecord.swift in Sources */,
 				4FDAF8391C04CEBE00A6380F /* PosterSizePath.swift in Sources */,
-				4FC6A0011D2C542F00D21C59 /* ConsoleDestination.swift in Sources */,
 				4FECDF201A8FE27D00F84A52 /* MovieDatabaseLoader.swift in Sources */,
 				4FFC9FB31BAF1803007A24CA /* DatabaseParent.swift in Sources */,
 				4FCFBA111C0C9D7800D43C27 /* GenreDatabase.swift in Sources */,
-				4FC6A0031D2C542F00D21C59 /* Filter.swift in Sources */,
+				4FCA67961D8E904A00FC20C2 /* SBPlatformDestination.swift in Sources */,
 				4F2D38301C5A7A29000927E7 /* NSDateExtension.swift in Sources */,
-				4FC6A0051D2C542F00D21C59 /* SwiftyBeaver.swift in Sources */,
 				4FBB03CC1BA862B50053CE99 /* AboutViewController.swift in Sources */,
 				4F95FC291C10A9C9008F482B /* Reach.swift in Sources */,
 				4F70ACC01BCC419100E34987 /* WatchSessionManager.swift in Sources */,
-				4FC6A0041D2C542F00D21C59 /* SBPlatformDestination.swift in Sources */,
 				4F7A99AD1BAEA0CE00ED38C9 /* MovieViewControllerPosters.swift in Sources */,
 				4F7A99A81BAE1A6700ED38C9 /* AnimatedTabBar.swift in Sources */,
 				4F87F9261A8DEE31001869A1 /* Constants.swift in Sources */,
+				4FCA67951D8E904A00FC20C2 /* Filter.swift in Sources */,
 				4FAE075B1B555615009C7507 /* NowTableViewController.swift in Sources */,
-				4FC69FFF1D2C542F00D21C59 /* AES256CBC.swift in Sources */,
-				4FC6A0001D2C542F00D21C59 /* BaseDestination.swift in Sources */,
 				4FB552F21C9560390053A81B /* TomatoImage.swift in Sources */,
-				4FC6A0021D2C542F00D21C59 /* FileDestination.swift in Sources */,
 				4F5857441BCFDF2E0066DDE1 /* StringExtension.swift in Sources */,
 				4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */,
 				4F885C7E1CA8475E00659D2D /* MovieDatabaseMigrator.swift in Sources */,
@@ -1067,15 +1061,20 @@
 				4F739F821D5F348D00AC797D /* MovieViewControllerInfo.swift in Sources */,
 				4F851AF71D32E65F00448540 /* StackViewExtension.swift in Sources */,
 				4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */,
+				4FCA67921D8E904A00FC20C2 /* BaseDestination.swift in Sources */,
+				4FCA67931D8E904A00FC20C2 /* ConsoleDestination.swift in Sources */,
+				4FCA67941D8E904A00FC20C2 /* FileDestination.swift in Sources */,
 				4F3AA98A1B71FEFD00640D04 /* FavoriteTableViewController.swift in Sources */,
 				4F63E61E1A992BCA00528FB3 /* MovieDatabaseHelper.swift in Sources */,
 				4F63E6401A9D24BA00528FB3 /* StartViewController.swift in Sources */,
+				4FCA67911D8E904A00FC20C2 /* AES256CBC.swift in Sources */,
 				4FAFF8C91A8BFFE500864078 /* AppDelegate.swift in Sources */,
 				4F2C91181B6374810044A27B /* Favorites.swift in Sources */,
 				4F6914821A8C041D00B8FFCE /* MovieTableViewController.swift in Sources */,
 				4F0953411B9F17D50040BBC9 /* SettingsTableViewController.swift in Sources */,
 				4F7A99AF1BAF01E600ED38C9 /* NetworkChecker.swift in Sources */,
 				4F851AF91D36D2BD00448540 /* MovieViewControllerActors.swift in Sources */,
+				4FCA67971D8E904A00FC20C2 /* SwiftyBeaver.swift in Sources */,
 				4F885C7C1CA5C39000659D2D /* MovieDatabaseParent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1154,7 +1153,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MovieStarts.app/MovieStarts";
 			};
 			name = Debug;
@@ -1170,7 +1169,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MovieStarts.app/MovieStarts";
 			};
 			name = Release;
@@ -1186,7 +1185,7 @@
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1203,7 +1202,7 @@
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1223,7 +1222,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos3.0;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1243,7 +1242,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos3.0;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
@@ -1369,7 +1368,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -1394,7 +1393,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

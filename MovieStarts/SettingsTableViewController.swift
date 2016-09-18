@@ -41,7 +41,7 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 	
 	var movieTabBarController: TabBarController? {
 		get {
-			return navigationController?.parentViewController as? TabBarController
+			return navigationController?.parent as? TabBarController
 		}
 	}
 
@@ -58,13 +58,13 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		notificationLabel.text = NSLocalizedString("SettingsNotifications", comment: "")
 		notificationTimeLabel.text = NSLocalizedString("SettingsNotificationTime", comment: "")
 		
-		imdbSwitch.addTarget(self, action: #selector(SettingsTableViewController.imdbSwitchTapped), forControlEvents: UIControlEvents.TouchUpInside)
-		youtubeSwitch.addTarget(self, action: #selector(SettingsTableViewController.youtubeSwitchTapped), forControlEvents: UIControlEvents.TouchUpInside)
-		notificationSwitch.addTarget(self, action: #selector(SettingsTableViewController.notificationSwitchTapped), forControlEvents: UIControlEvents.TouchUpInside)
+		imdbSwitch.addTarget(self, action: #selector(SettingsTableViewController.imdbSwitchTapped), for: UIControlEvents.touchUpInside)
+		youtubeSwitch.addTarget(self, action: #selector(SettingsTableViewController.youtubeSwitchTapped), for: UIControlEvents.touchUpInside)
+		notificationSwitch.addTarget(self, action: #selector(SettingsTableViewController.notificationSwitchTapped), for: UIControlEvents.touchUpInside)
 		
 		// set up picker view
 		for hour in Constants.notificationTimeMin...Constants.notificationTimeMax {
-			notificationTimeArray[timeComponent].append(NSDateFormatter.localizedStringFromDate(NSDate().setHour(hour), dateStyle: NSDateFormatterStyle.NoStyle, timeStyle: NSDateFormatterStyle.ShortStyle))
+			notificationTimeArray[timeComponent].append(DateFormatter.localizedString(from: Date().setHour(hour), dateStyle: DateFormatter.Style.none, timeStyle: DateFormatter.Style.short))
 		}
 		
 		timePicker.delegate = self
@@ -73,7 +73,7 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		timePicker.selectRow(5, inComponent: timeComponent, animated: false)
     }
 	
-	override func viewDidAppear(animated: Bool) {
+	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		
 		// set up the switches
@@ -83,8 +83,8 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		
 		// set up picker
 		
-		if let day = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotificationDay) as? Int,
-		   let time = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotificationTime) as? Int
+		if let day = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotificationDay) as? Int,
+		   let time = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotificationTime) as? Int
 		{
 			timePicker.selectRow(day + Constants.notificationDays - 1, inComponent: dayComponent, animated: false)
 			timePicker.selectRow(time - Constants.notificationTimeMin, inComponent: timeComponent, animated: false)
@@ -98,18 +98,18 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 	
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		switch section {
 			case sectionUseApps:
 				return 2
 			case sectionNotifications:
-				let notificationsOn: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsNotifications) as? Bool
+				let notificationsOn: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotifications) as? Bool
 
-				if let notificationsOn = notificationsOn where notificationsOn == true {
+				if let notificationsOn = notificationsOn , notificationsOn == true {
 					return 2
 				}
 				else {
@@ -122,7 +122,7 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		}
 	}
 	
-	override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+	override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
 		switch section {
 			case sectionUseApps: 		return NSLocalizedString("SettingsUseApps", comment: "")
 			case sectionNotifications:	return NSLocalizedString("SettingsNotificationsHeader", comment: "")
@@ -130,7 +130,7 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		}
 	}
 
-	override func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+	override func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
 		switch section {
 			case sectionUseApps: 		return NSLocalizedString("SettingsUseAppsFooter", comment: "")
 			case sectionNotifications:	return NSLocalizedString("SettingsNotificationsFooter", comment: "")
@@ -138,15 +138,15 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		}
 	}
 	
-	override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-		if (indexPath.section == sectionAbout) {
-			if (indexPath.item == itemRate) {
-				guard let rateUrl = NSURL(string: "itms-apps://itunes.apple.com/app/id1043041023") else { return }
-				UIApplication.sharedApplication().openURL(rateUrl)
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		if ((indexPath as NSIndexPath).section == sectionAbout) {
+			if ((indexPath as NSIndexPath).item == itemRate) {
+				guard let rateUrl = URL(string: "itms-apps://itunes.apple.com/app/id1043041023") else { return }
+				UIApplication.shared.openURL(rateUrl)
 			}
-			else if (indexPath.item == itemAbout) {
+			else if ((indexPath as NSIndexPath).item == itemAbout) {
 				if let storyboard = self.storyboard {
-					if let aboutController: AboutViewController = storyboard.instantiateViewControllerWithIdentifier("AboutViewController") as? AboutViewController {
+					if let aboutController: AboutViewController = storyboard.instantiateViewController(withIdentifier: "AboutViewController") as? AboutViewController {
 						navigationController?.pushViewController(aboutController, animated: true)
 					}
 				}
@@ -157,28 +157,28 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 	
 	// MARK: - UIPickerView 
  
-	func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+	func numberOfComponents(in pickerView: UIPickerView) -> Int {
 		return 2
 	}
 	
-	func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+	func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
 		return notificationTimeArray[component].count
 	}
 
-	func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-		var label = UILabel(frame: CGRect(x: 0, y: 0, width: timePicker.rowSizeForComponent(component).width, height: timePicker.rowSizeForComponent(component).height))
+	func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+		var label = UILabel(frame: CGRect(x: 0, y: 0, width: timePicker.rowSize(forComponent: component).width, height: timePicker.rowSize(forComponent: component).height))
 		
 		if let view = view as? UILabel {
 			label = view
 		}
 		
-		label.font = UIFont.systemFontOfSize(22)
+		label.font = UIFont.systemFont(ofSize: 22)
 		label.text = notificationTimeArray[component][row]
 
 		return label
 	}
 	
-	func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+	func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
 		switch (component) {
 			case dayComponent: return pickerView.frame.width * 0.66
 			case timeComponent: return pickerView.frame.width * 0.33
@@ -186,9 +186,9 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		}
 	}
 	
-	func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+	func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 		saveNotificationTime()
-		NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+		NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
 	}
 	
 
@@ -196,20 +196,20 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 
 	
 	func imdbSwitchTapped() {
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(imdbSwitch.on, forKey: Constants.prefsUseImdbApp)
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(imdbSwitch.isOn, forKey: Constants.prefsUseImdbApp)
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 	}
 	
 	func youtubeSwitchTapped() {
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(youtubeSwitch.on, forKey: Constants.prefsUseYoutubeApp)
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(youtubeSwitch.isOn, forKey: Constants.prefsUseYoutubeApp)
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 	}
 	
 	func notificationSwitchTapped() {
-		if (notificationSwitch.on) {
+		if (notificationSwitch.isOn) {
 			// notification switch was turned on: try to activate notifications
-			UIApplication.sharedApplication().registerUserNotificationSettings(
-				UIUserNotificationSettings(forTypes: [UIUserNotificationType.Alert, /*UIUserNotificationType.Badge,*/ UIUserNotificationType.Sound], categories: nil))
+			UIApplication.shared.registerUserNotificationSettings(
+				UIUserNotificationSettings(types: [UIUserNotificationType.alert, /*UIUserNotificationType.Badge,*/ UIUserNotificationType.sound], categories: nil))
 			saveNotificationTime()
 			
 			// if registration was successfull, the AppDelegate calls "switchNotifications(true)"
@@ -220,73 +220,73 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 		}
 	}
 
-	func switchNotifications(on: Bool) {
+	func switchNotifications(_ on: Bool) {
 		if (notificationSwitch != nil) {
 			notificationSwitch.setOn(on, animated: false)
 		}
 		
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(on, forKey: Constants.prefsNotifications)
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(on, forKey: Constants.prefsNotifications)
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 
 		if (on) {
 			if (tableView != nil) {
-				tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 1, inSection: sectionNotifications)], withRowAnimation: UITableViewRowAnimation.Middle)
+				tableView.insertRows(at: [IndexPath(row: 1, section: sectionNotifications)], with: UITableViewRowAnimation.middle)
 			}
-			NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+			NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
 		}
 		else {
-			let indexPathToDelete = NSIndexPath(forRow: 1, inSection: sectionNotifications)
+			let indexPathToDelete = IndexPath(row: 1, section: sectionNotifications)
 
-			if ((tableView != nil) && (tableView.cellForRowAtIndexPath(indexPathToDelete) != nil)) {
+			if ((tableView != nil) && (tableView.cellForRow(at: indexPathToDelete) != nil)) {
 				// delete time-setting-row if it exists
-				tableView.deleteRowsAtIndexPaths([indexPathToDelete], withRowAnimation: UITableViewRowAnimation.Middle)
+				tableView.deleteRows(at: [indexPathToDelete], with: UITableViewRowAnimation.middle)
 			}
 			
 			NotificationManager.removeAllFavoriteNotifications()
 		}
 	}
 	
-	private func saveNotificationTime() {
-		let day = timePicker.selectedRowInComponent(dayComponent) - Constants.notificationDays + 1
-		let time = timePicker.selectedRowInComponent(timeComponent) + Constants.notificationTimeMin
+	fileprivate func saveNotificationTime() {
+		let day = timePicker.selectedRow(inComponent: dayComponent) - Constants.notificationDays + 1
+		let time = timePicker.selectedRow(inComponent: timeComponent) + Constants.notificationTimeMin
 		
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(day, forKey: Constants.prefsNotificationDay)
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(time, forKey: Constants.prefsNotificationTime)
-		NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(day, forKey: Constants.prefsNotificationDay)
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(time, forKey: Constants.prefsNotificationTime)
+		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 	}
 	
-	private func setUpSwitch(prefKey: String, switcher: UISwitch, label: UILabel?, urlString: String?) {
+	fileprivate func setUpSwitch(_ prefKey: String, switcher: UISwitch, label: UILabel?, urlString: String?) {
 		
 		// set switch on or off
-		let useApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(prefKey) as? Bool
+		let useApp: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: prefKey) as? Bool
 		
-		if let useApp = useApp where useApp == true {
-			switcher.on = true
+		if let useApp = useApp , useApp == true {
+			switcher.isOn = true
 		}
 		else {
-			switcher.on = false
+			switcher.isOn = false
 		}
 		
-		if let label = label, urlString = urlString {
+		if let label = label, let urlString = urlString {
 			// set switch to enabled or not
-			let url: NSURL? = NSURL(string: urlString)
+			let url: URL? = URL(string: urlString)
 		
 			if let url = url {
-				if UIApplication.sharedApplication().canOpenURL(url) {
+				if UIApplication.shared.canOpenURL(url) {
 					// app is installed
-					switcher.enabled = true
-					label.enabled = true
+					switcher.isEnabled = true
+					label.isEnabled = true
 				}
 				else {
 					// app is *not* installed
-					switcher.enabled = false
-					label.enabled = false
+					switcher.isEnabled = false
+					label.isEnabled = false
 				}
 			}
 			else {
 				// this actually cannot happen. still:
-				switcher.enabled = false
-				label.enabled = false
+				switcher.isEnabled = false
+				label.isEnabled = false
 			}
 		}
 	}

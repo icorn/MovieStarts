@@ -16,24 +16,24 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 		
 		// if we have no movie plist: ask the phone
 		
-		let fileManager = NSFileManager.defaultManager()
-		guard let documentDir = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else { return }
-		guard let movieFileNameURL = documentDir.URLByAppendingPathComponent(Constants.watchMovieFileName) else { return }
-		guard let movieFileNamePath = movieFileNameURL.path else { return }
+		let fileManager = FileManager.default
+		guard let documentDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+		let movieFileNameURL = documentDir.appendingPathComponent(Constants.watchMovieFileName)
+		let movieFileNamePath = movieFileNameURL.path
 
-		if fileManager.fileExistsAtPath(movieFileNamePath) {
+		if fileManager.fileExists(atPath: movieFileNamePath) {
 			
 			// set launchstatus to: show movie list
-			WatchSessionManager.sharedManager.launchStatus = LaunchStatus.ShowMovieList
+			WatchSessionManager.sharedManager.launchStatus = LaunchStatus.showMovieList
 
 			// clean up thumbnails which are no longer needed
 			let loadedDictArray: [NSDictionary]? = NSArray(contentsOfFile: movieFileNamePath) as? [NSDictionary]
 			guard let movieDictArray = loadedDictArray else { return }
 			
-			var filesInDocDir: [NSURL]?
+			var filesInDocDir: [URL]?
 			
 			do {
-				try filesInDocDir = fileManager.contentsOfDirectoryAtURL(documentDir, includingPropertiesForKeys: nil, options: NSDirectoryEnumerationOptions.SkipsHiddenFiles)
+				try filesInDocDir = fileManager.contentsOfDirectory(at: documentDir, includingPropertiesForKeys: nil, options: FileManager.DirectoryEnumerationOptions.skipsHiddenFiles)
 			} catch let error as NSError {
 				NSLog("Error reading documents dir: \(error.description)")
 				return
@@ -41,13 +41,13 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 			
 			if let filesInDocDir = filesInDocDir {
 				for fileInDocDir in filesInDocDir {
-					guard let filename = fileInDocDir.lastPathComponent else { continue }
+					let filename = fileInDocDir.lastPathComponent
 					
 					if filename.endsWith(".jpg") {
 						// found a thumbnail. now check if it's still needed.
-						if (isThumbnailInFavorites(movieDictArray, filename: filename) == false) {
+						if (isThumbnailInFavorites(movieDictArray: movieDictArray, filename: filename) == false) {
 							do {
-								try fileManager.removeItemAtURL(fileInDocDir)
+								try fileManager.removeItem(at: fileInDocDir)
 							} catch let error as NSError {
 								NSLog("Error deleting unneeded thumbnail: \(error.description)")
 							}
@@ -62,16 +62,16 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 			print("No movie list on the Watch, asking Phone to give my some.")
 			
 			do {
-				try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueEveryting])
+				try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueEveryting as AnyObject])
 			} catch let error as NSError {
 				NSLog("Error updating AppContext: \(error.description)")
-				WatchSessionManager.sharedManager.launchStatus = LaunchStatus.ConnectError
+				WatchSessionManager.sharedManager.launchStatus = LaunchStatus.connectError
 				return
 			}
 			
 			// Tell user to start the iPhone app
 			print("iPhone is not reachable, movies will come after iPhone is turned on. Tell the user about it.")
-			WatchSessionManager.sharedManager.launchStatus = LaunchStatus.UserShouldStartPhone
+			WatchSessionManager.sharedManager.launchStatus = LaunchStatus.userShouldStartPhone
 		}
 	}
 
@@ -84,7 +84,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
         // Use this method to pause ongoing tasks, disable timers, etc.
     }
 
-	func handleUserActivity(userInfo: [NSObject : AnyObject]?) {
+	private func handleUserActivity(userInfo: [AnyHashable: Any]?) {
 		// called if app is launched by glance
 		
 		// available in future versions?? See https://forums.developer.apple.com/thread/7633
@@ -102,12 +102,12 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
 		- parameter movieDictArray: The array of dictionaries, each representing a favorite movie
 		- parameter filename:		The filename to search for
 	*/
-	private func isThumbnailInFavorites(movieDictArray: [NSDictionary], filename: String) -> Bool {
+	fileprivate func isThumbnailInFavorites(movieDictArray: [NSDictionary], filename: String) -> Bool {
 		for dict in movieDictArray {
 			guard let dict = (dict as? [String : AnyObject]) else { continue }
 			guard let posterUrl = dict[Constants.dbIdPosterUrl] as? String else { continue }
 			
-			if posterUrl.containsString(filename) {
+			if posterUrl.contains(filename) {
 				return true
 			}
 		}

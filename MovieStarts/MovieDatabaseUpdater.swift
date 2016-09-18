@@ -26,17 +26,17 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 			Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
 		]
 
-		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 
-		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
-			moviesPlistPath = fileUrlPath
+		if let fileUrl = fileUrl {
+			moviesPlistPath = fileUrl.path
 		}
         else {
             NSLog("Error getting url for app-group.")
 			var errorWindow: MessageWindow?
 
 			if let viewForError = viewForError {
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
 						errorWindow?.close()
 					})
@@ -58,13 +58,13 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 	/**
 		Checks if there are new or updates movies in the cloud and gets them.
 	*/
-	func getUpdatedMovies(	allMovies: [MovieRecord],
+	func getUpdatedMovies(	_ allMovies: [MovieRecord],
 							country: MovieCountry,
-							addNewMovieHandler: (movie: MovieRecord) -> (),
-							updateMovieHandler: (movie: MovieRecord) -> (),
-							removeMovieHandler: (movie: MovieRecord) -> (),
-							completionHandler: (movies: [MovieRecord]?) -> (),
-							errorHandler: (errorMessage: String) -> ())
+							addNewMovieHandler: @escaping (MovieRecord) -> (),
+							updateMovieHandler: @escaping (MovieRecord) -> (),
+							removeMovieHandler: @escaping (MovieRecord) -> (),
+							completionHandler: @escaping ([MovieRecord]?) -> (),
+							errorHandler: @escaping (String) -> ())
 	{
 		self.addNewMovieHandler = addNewMovieHandler
 		self.updateMovieHandler = updateMovieHandler
@@ -74,25 +74,25 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		
 		self.loadedMovieRecordArray = allMovies
 		
-		let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
-		let latestModDate: NSDate? = userDefaults?.objectForKey(Constants.prefsLatestDbModification) as? NSDate
+		let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
+		let latestModDate: Date? = userDefaults?.object(forKey: Constants.prefsLatestDbModification) as? Date
 		
-		if let modDate: NSDate = latestModDate {
-			let minReleaseDate = NSDate(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast)
+		if let modDate: Date = latestModDate {
+			let minReleaseDate = Date(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast)
 			
 			NSLog("Getting records after modification date \(modDate) and after releasedate \(minReleaseDate)")
 			
-			UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+			UIApplication.shared.isNetworkActivityIndicatorVisible = true
 			
 			// get records modified after the last modification of the local database
 			let predicateModificationDate = NSPredicate(format: "(%K > %@) AND (modificationDate > %@)", argumentArray: [country.databaseKeyRelease, minReleaseDate, modDate])
-			let predicate = NSCompoundPredicate(type: NSCompoundPredicateType.AndPredicateType, subpredicates: [predicateModificationDate])
+			let predicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [predicateModificationDate])
 			
 			let query = CKQuery(recordType: self.recordType, predicate: predicate)
 			let queryOperation = CKQueryOperation(query: query)
 
-			let operationQueue = NSOperationQueue()
-			executeQueryOperation(queryOperation, onOperationQueue: operationQueue)
+			let operationQueue = OperationQueue()
+			executeQueryOperation(queryOperation: queryOperation, onOperationQueue: operationQueue)
 		}
 		else {
 			NSLog("ERROR: mo last mod.data of db")
@@ -105,8 +105,8 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter queryOperation:		The query operation containing the predicates
 		- parameter onOperationQueue:	The queue for the query operation
 	*/
-	internal func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: NSOperationQueue) {
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+	internal func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: OperationQueue) {
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
 		if let country = MovieCountry(rawValue: prefsCountryString) {
 			queryOperation.desiredKeys = self.queryKeys + country.languageQueryKeys + country.countryQueryKeys
@@ -116,22 +116,22 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		}
 		
 		queryOperation.database = cloudKitDatabase
-		queryOperation.qualityOfService = NSQualityOfService.UserInitiated
+		queryOperation.qualityOfService = QualityOfService.userInitiated
 		queryOperation.recordFetchedBlock = self.recordFetchedCallback
 /*
 		queryOperation.recordFetchedBlock = { (record : CKRecord) -> Void in
 			self.recordFetchedCallback(record)
 		}
 */
-		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: NSError?) -> Void in
+		queryOperation.queryCompletionBlock = { (cursor: CKQueryCursor?, error: Error?) -> Void in
 			if let cursor = cursor {
 				// some objects are here, ask for more
 				let queryCursorOperation = CKQueryOperation(cursor: cursor)
-				self.executeQueryOperation(queryCursorOperation, onOperationQueue: operationQueue)
+				self.executeQueryOperation(queryOperation: queryCursorOperation, onOperationQueue: operationQueue)
 			}
 			else {
 				// download finished (with error or not)
-				self.queryOperationFinished(error)
+				self.queryOperationFinished(error: error)
 			}
 		}
 		
@@ -147,11 +147,11 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 	*/
 	internal func recordFetchedCallback(record: CKRecord) {
 		
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("recordFetchedUpdatedMoviesCallback: Corrupt countrycode \(prefsCountryString)"); return }
 			
 		let newMovieRecord = MovieRecord(country: country)
-		newMovieRecord.initWithCKRecord(record)
+		newMovieRecord.initWithCKRecord(ckRecord: record)
 		var movieAlreadyExists: Bool = false
 		
 		if let existingMovieRecords = loadedMovieRecordArray {
@@ -164,10 +164,10 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		}
 		
 		if (movieAlreadyExists) {
-			self.updateMovieHandler?(movie: newMovieRecord)
+			self.updateMovieHandler?(newMovieRecord)
 		}
 		else {
-			self.addNewMovieHandler?(movie: newMovieRecord)
+			self.addNewMovieHandler?(newMovieRecord)
 		}
 		
 		updatedCKRecords.append(record)
@@ -179,34 +179,34 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		MovieRecord objects are generated and save.
 		- parameter error:	The error object
 	*/
-	internal func queryOperationFinished(error: NSError?) {
-		if let error = error {
+	internal func queryOperationFinished(error: Error?) {
+		if let error = error as? NSError {
 			// there was an error
-			self.errorHandler?(errorMessage: "Error querying updated records: \(error.code) (\(error.description))")
+			self.errorHandler?("Error querying updated records: \(error.code) (\(error.localizedDescription))")
 			return
 		}
 		else {
 			// received records from the cloud
-			let userDefaults = NSUserDefaults(suiteName: Constants.movieStartsGroup)
-			userDefaults?.setObject(NSDate(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
+			let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
+			userDefaults?.set(Date(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
 			userDefaults?.synchronize()
 
 			if (updatedCKRecords.count > 0) {
 				// generate an array of MovieRecords
 				var updatedMovieRecordArray: [MovieRecord] = []
 					
-				let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+				let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 				guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("queryOperationFinishedUpdatedMovies: Corrupt countrycode \(prefsCountryString)"); return }
 					
 				for ckRecord in self.updatedCKRecords {
 					let newRecord = MovieRecord(country: country)
-					newRecord.initWithCKRecord(ckRecord)
+					newRecord.initWithCKRecord(ckRecord: ckRecord)
 					updatedMovieRecordArray.append(newRecord)
 				}
 					
 				// merge both arrays (the existing movies and the updated movies)
 				if (self.loadedMovieRecordArray != nil) {
-					MovieDatabaseHelper.joinMovieRecordArrays(&(self.loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
+					MovieDatabaseHelper.joinMovieRecordArrays(existingMovies: &(self.loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
 				}
 			}
 			
@@ -237,14 +237,14 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 	/**
 		Deleted unneeded poster files from the device, and reads missing poster files from the CloudKit database to the device.
 	*/
-	private func cleanUpPosters() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) {
-            let pathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+	fileprivate func cleanUpPosters() {
+		DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async {
+            let pathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 		
-            if let basePath = pathUrl?.path, movies = self.loadedMovieRecordArray {
-                self.deleteUnneededPosters(basePath, movies: movies)
-                self.downloadMissingPosters(basePath, movies: movies)
-                self.deleteUnneededYoutubeImages(basePath, movies: movies)
+            if let basePath = pathUrl?.path, let movies = self.loadedMovieRecordArray {
+                self.deleteUnneededPosters(basePath: basePath, movies: movies)
+                self.downloadMissingPosters(basePath: basePath, movies: movies)
+                self.deleteUnneededYoutubeImages(basePath: basePath, movies: movies)
             }
 		}
 	}
@@ -256,11 +256,11 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter basePath:	The local basepath for all images
 		- parameter movies:		The array with all movie records
 	*/
-	private func deleteUnneededPosters(basePath: String, movies: [MovieRecord]) {
+	fileprivate func deleteUnneededPosters(basePath: String, movies: [MovieRecord]) {
 		
 		var filenames: [AnyObject]?
 		do {
-			filenames = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.thumbnailFolder)
+			filenames = try FileManager.default.contentsOfDirectory(atPath: basePath + Constants.thumbnailFolder) as [AnyObject]?
 		} catch let error as NSError {
 			NSLog("Error getting thumbnail folder: \(error.description)")
 			filenames = nil
@@ -275,7 +275,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
                         if (found == false) {
                             for posterUrl in movie.posterUrl {
                                 if ((posterUrl.characters.count > 3) &&
-                                    (posterfilenameString == posterUrl.substringFromIndex(posterUrl.startIndex.advancedBy(1))))
+                                    (posterfilenameString == posterUrl.substring(from: posterUrl.characters.index(posterUrl.startIndex, offsetBy: 1))))
                                 {
                                     found = true
                                     break
@@ -289,12 +289,12 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 						print("Deleting unneeded poster image \(posterfilenameString)")
 
 						do {
-							try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.thumbnailFolder + "/" + posterfilenameString)
+							try FileManager.default.removeItem(atPath: basePath + Constants.thumbnailFolder + "/" + posterfilenameString)
 						} catch let error as NSError {
 							NSLog("Error removing thumbnail: \(error.description)")
 						}
 						do {
-							try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.bigPosterFolder + "/" + posterfilenameString)
+							try FileManager.default.removeItem(atPath: basePath + Constants.bigPosterFolder + "/" + posterfilenameString)
 						} catch {
 							// this happens all the time, when no hi-res poster was loaded
 							// NSLog("Error removing poster: \(error.description)")
@@ -311,11 +311,11 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter basePath:	The local basepath for all images
 		- parameter movies:		The array with all movie records
 	*/
-	private func deleteUnneededYoutubeImages(basePath: String, movies: [MovieRecord]) {
+	fileprivate func deleteUnneededYoutubeImages(basePath: String, movies: [MovieRecord]) {
 		
 		var filenames: [AnyObject]?
 		do {
-			filenames = try NSFileManager.defaultManager().contentsOfDirectoryAtPath(basePath + Constants.trailerFolder)
+			filenames = try FileManager.default.contentsOfDirectory(atPath: basePath + Constants.trailerFolder) as [AnyObject]?
 		} catch let error as NSError {
 			NSLog("Error getting trailer folder: \(error.description)")
 			filenames = nil
@@ -345,7 +345,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 						print("Deleting unneeded trailer image \(trailerfilenameString)")
 
 						do {
-							try NSFileManager.defaultManager().removeItemAtPath(basePath + Constants.trailerFolder + "/" + trailerfilenameString)
+							try FileManager.default.removeItem(atPath: basePath + Constants.trailerFolder + "/" + trailerfilenameString)
 						} catch let error as NSError {
 							NSLog("Error removing trailer image: \(error.description)")
 						}
@@ -361,9 +361,9 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter basePath:	The local basepath for all images
 		- parameter movies:		The array with all movie records
 	*/
-	private func downloadMissingPosters(basePath: String, movies: [MovieRecord]) {
+	fileprivate func downloadMissingPosters(basePath: String, movies: [MovieRecord]) {
 		
-		let prefsCountryString = (NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Small.rawValue
 
 		guard let country = MovieCountry(rawValue: prefsCountryString) else { return }
@@ -376,21 +376,21 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 				posterUrl = movie.posterUrl[MovieCountry.England.languageArrayIndex]
 			}
 			
-			if ((posterUrl.characters.count > 0) && (NSFileManager.defaultManager().fileExistsAtPath(basePath + Constants.thumbnailFolder + posterUrl) == false)) {
+			if ((posterUrl.characters.count > 0) && (FileManager.default.fileExists(atPath: basePath + Constants.thumbnailFolder + posterUrl) == false)) {
 				// poster file is missing
 				
-				if let sourceUrl = NSURL(string: sourcePath + posterUrl) {
-					let task = NSURLSession.sharedSession().downloadTaskWithURL(sourceUrl,
-						completionHandler: { (location: NSURL?, response: NSURLResponse?, error: NSError?) -> Void in
+				if let sourceUrl = URL(string: sourcePath + posterUrl) {
+					let task = URLSession.shared.downloadTask(with: sourceUrl,
+						completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
 						if let error = error {
-							NSLog("Error getting missing thumbnail: \(error.description)")
+							NSLog("Error getting missing thumbnail: \(error.localizedDescription)")
 						}
 						else if let receivedPath = location?.path {
 							// move received thumbnail to target path where it belongs and update the thumbnail in the table view
 							do {
-								try NSFileManager.defaultManager().moveItemAtPath(receivedPath, toPath: basePath + Constants.thumbnailFolder + posterUrl)
+								try FileManager.default.moveItem(atPath: receivedPath, toPath: basePath + Constants.thumbnailFolder + posterUrl)
 								if let tmdbId = movie.tmdbId {
-									self.updateThumbnailHandler?(tmdbId: tmdbId)
+									self.updateThumbnailHandler?(tmdbId)
 								}
 							}
 							catch let error as NSError {
@@ -398,7 +398,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 									// ignoring, because it's okay it it's already there
 								}
 								else {
-									NSLog("Error moving missing poster: \(error.description)")
+									NSLog("Error moving missing poster: \(error.localizedDescription)")
 								}
 							}
 						}

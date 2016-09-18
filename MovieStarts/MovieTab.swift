@@ -10,7 +10,7 @@ import Foundation
 
 
 enum MovieTab {
-	case NowPlaying
-	case Upcoming
-	case Favorites
+	case nowPlaying
+	case upcoming
+	case favorites
 }

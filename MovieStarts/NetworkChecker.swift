@@ -58,20 +58,20 @@ class NetworkChecker {
 		- parameter okCallback:		The callback which is called on success
 		- parameter errorCallback:	The optional callback which is called on failure (even before the user has clicked "close" in the error-window)
 	*/
-	class func checkCloudKit(viewForError: UIView, database: DatabaseParent, okCallback: () -> (), errorCallback: (() -> ())?) {
+	class func checkCloudKit(viewForError: UIView, database: DatabaseParent, okCallback: @escaping () -> (), errorCallback: (() -> ())?) {
 
-		database.checkCloudKit({ (status: CKAccountStatus, error: NSError?) -> () in
+		database.checkCloudKit(handler: { (status: CKAccountStatus, error: Error?) -> () in
 			
 			var errorWindow: MessageWindow?
 			
 			switch status {
-			case .Available:
+			case .available:
 				okCallback()
 				
-			case .NoAccount:
+			case .noAccount:
 				NSLog("CloudKit error: no account")
 				errorCallback?()
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccount", buttonStringIds: ["Close"],
 						handler: { (buttonIndex) -> () in
 							errorWindow?.close()
@@ -79,10 +79,10 @@ class NetworkChecker {
 					)
 				}
 				
-			case .Restricted:
+			case .restricted:
 				NSLog("CloudKit error: Restricted")
 				errorCallback?()
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestricted", buttonStringIds: ["Close"],
 						handler: { (buttonIndex) -> () in
 							errorWindow?.close()
@@ -90,16 +90,16 @@ class NetworkChecker {
 					)
 				}
 				
-			case .CouldNotDetermine:
+			case .couldNotDetermine:
 				NSLog("CloudKit error: CouldNotDetermine")
 				
-				if let error = error {
-					NSLog("CloudKit error description: \(error.description)")
-					log.error("CloudKit error description (\(error.code)): \(error.description)")
+				if let error = error as? NSError {
+					NSLog("CloudKit error description: \(error.localizedDescription)")
+					log.error("CloudKit error description (\(error.code)): \(error.localizedDescription)")
 				}
 				
 				errorCallback?()
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermine", buttonStringIds: ["Close"],
 						handler: { (buttonIndex) -> () in
 							errorWindow?.close()

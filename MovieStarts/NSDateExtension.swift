@@ -9,13 +9,13 @@
 import Foundation
 
 
-extension NSDate {
+extension Date {
 	
-	func setHour(hour: Int) -> NSDate {
-		let calendar = NSCalendar(calendarIdentifier: NSCalendarIdentifierGregorian)!
-		let components = calendar.components(([.Day, .Month, .Year]), fromDate: self)
+	func setHour(_ hour: Int) -> Date {
+		let calendar = Calendar(identifier: Calendar.Identifier.gregorian)
+		var components = (calendar as NSCalendar).components(([.day, .month, .year]), from: self)
 		components.hour = hour
-		return calendar.dateFromComponents(components)!
+		return calendar.date(from: components)!
 	}
 	
 }

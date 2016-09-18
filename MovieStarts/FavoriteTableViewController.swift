@@ -11,19 +11,19 @@ import UIKit
 class FavoriteTableViewController: MovieTableViewController {
 
 	override func viewDidLoad() {
-		currentTab = MovieTab.Favorites
+		currentTab = MovieTab.favorites
 		checkForEmptyList()
 		
 		super.viewDidLoad()
 		navigationItem.title = NSLocalizedString("FavoritesLong", comment: "")
 	}
 	
-	override func viewWillAppear(animated: Bool) {
+	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		checkForEmptyList()
 	}
 	
-	private func checkForEmptyList() {
+	fileprivate func checkForEmptyList() {
 		if (moviesInSections.count == 0) {
 			// there are no favorites: show message in background view and hide separators
 			
@@ -32,41 +32,41 @@ class FavoriteTableViewController: MovieTableViewController {
 			let textInset: CGFloat = 10
 			
 			let headlineLabel = UILabel(frame: CGRect(x: 0, y: tableView.frame.height / 4, width: tableView.frame.width, height: headlineHeight))
-			headlineLabel.textColor = UIColor.grayColor()
-			headlineLabel.font = UIFont.boldSystemFontOfSize(30)
+			headlineLabel.textColor = UIColor.gray
+			headlineLabel.font = UIFont.boldSystemFont(ofSize: 30)
 			headlineLabel.text = NSLocalizedString("NoFavorites", comment: "")
-			headlineLabel.textAlignment = NSTextAlignment.Center
+			headlineLabel.textAlignment = NSTextAlignment.center
 			noEntriesBackView.addSubview(headlineLabel)
 			
 			let textLabel = UILabel(frame: CGRect(x: textInset, y: tableView.frame.height / 4 + headlineHeight + 20, width: tableView.frame.width - 2 * textInset, height: 0))
-			textLabel.textColor = UIColor.grayColor()
-			textLabel.font = UIFont.boldSystemFontOfSize(18)
+			textLabel.textColor = UIColor.gray
+			textLabel.font = UIFont.boldSystemFont(ofSize: 18)
 			textLabel.text = NSLocalizedString("HowToAddFavorites", comment: "")
-			textLabel.textAlignment = NSTextAlignment.Center
+			textLabel.textAlignment = NSTextAlignment.center
 			textLabel.numberOfLines = 0
 			textLabel.sizeToFit()
 			noEntriesBackView.addSubview(textLabel)
 			
-			tableView.separatorStyle =  UITableViewCellSeparatorStyle.None
+			tableView.separatorStyle =  UITableViewCellSeparatorStyle.none
 			tableView.backgroundView = noEntriesBackView
 		}
 		else {
 			// there are favorites: no background view and normal separators
 			
 			tableView.backgroundView = nil
-			tableView.separatorStyle =  UITableViewCellSeparatorStyle.SingleLine
+			tableView.separatorStyle =  UITableViewCellSeparatorStyle.singleLine
 		}
 	}
 	
 	
-	func addFavorite(newFavorite: MovieRecord) {
+	func addFavorite(_ newFavorite: MovieRecord) {
 		tableView.beginUpdates()
 		addFavoritePrivate(newFavorite)
 		tableView.endUpdates()
-		NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+		NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
 	}
 
-	private func addFavoritePrivate(newFavorite: MovieRecord) {
+	fileprivate func addFavoritePrivate(_ newFavorite: MovieRecord) {
 		// search apropriate section for the new favorite
 		var sectionToSearchFor: String!
 		
@@ -88,24 +88,24 @@ class FavoriteTableViewController: MovieTableViewController {
 		
 		if let foundSectionIndex = foundSectionIndex {
 			// the section for the new favorite already exists
-			addMovieToExistingSection(foundSectionIndex, newMovie: newFavorite)
+			addMovieToExistingSection(foundSectionIndex: foundSectionIndex, newMovie: newFavorite)
 		}
 		else {
 			// the section doesn't exist yet
-			addMovieToNewSection(sectionToSearchFor, newMovie: newFavorite)
+			addMovieToNewSection(sectionName: sectionToSearchFor, newMovie: newFavorite)
 		}
-		
 	}
-	
-	func removeFavorite(removedFavoriteId: String) {
+
+
+	func removeFavorite(_ removedFavoriteId: String) {
 		tableView.beginUpdates()
 		removeFavoritePrivate(removedFavoriteId)
 		tableView.endUpdates()
-		NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+		NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
 	}
 	
 	
-	private func removeFavoritePrivate(removedFavoriteId: String) {
+	fileprivate func removeFavoritePrivate(_ removedFavoriteId: String) {
 		var rowId: Int?
 		var sectionId: Int?
 		
@@ -120,39 +120,39 @@ class FavoriteTableViewController: MovieTableViewController {
 			}
 		}
 		
-		if let rowId = rowId, sectionId = sectionId {
+		if let rowId = rowId, let sectionId = sectionId {
 			// remove cell
-			let indexPath: NSIndexPath = NSIndexPath(forRow: rowId, inSection: sectionId)
-			tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+			let indexPath: IndexPath = IndexPath(row: rowId, section: sectionId)
+			tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
 			
 			// remove movie from datasource
-			moviesInSections[sectionId].removeAtIndex(rowId)
+			moviesInSections[sectionId].remove(at: rowId)
 			
 			// if the section is now empty: remove it also
 			if moviesInSections[sectionId].isEmpty {
 				// remove section from datasource
-				moviesInSections.removeAtIndex(sectionId)
-				sections.removeAtIndex(sectionId)
+				moviesInSections.remove(at: sectionId)
+				sections.remove(at: sectionId)
 				
 				// remove section from table
-				let indexSet: NSIndexSet = NSIndexSet(index: sectionId)
-				tableView.deleteSections(indexSet, withRowAnimation: UITableViewRowAnimation.Automatic)
+				let indexSet: IndexSet = IndexSet(integer: sectionId)
+				tableView.deleteSections(indexSet, with: UITableViewRowAnimation.automatic)
 			}
 		}
 	}
 	
 	
-	func updateFavorite(updatedMovie: MovieRecord) {
+	func updateFavorite(_ updatedMovie: MovieRecord) {
 		tableView.beginUpdates()
 		
 		// find the index of the existing movie in the table
 		
-		var indexPathForUpdateMovie: NSIndexPath?
+		var indexPathForUpdateMovie: IndexPath?
 		
-		for (sectionIndex, section) in moviesInSections.enumerate() {
-			for (movieIndex, movie) in section.enumerate() {
+		for (sectionIndex, section) in moviesInSections.enumerated() {
+			for (movieIndex, movie) in section.enumerated() {
 				if (movie.id == updatedMovie.id) {
-					indexPathForUpdateMovie = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
+					indexPathForUpdateMovie = IndexPath(row: movieIndex, section: sectionIndex)
 					break
 				}
 			}
@@ -161,46 +161,45 @@ class FavoriteTableViewController: MovieTableViewController {
 		// check for changes
 		
 		if let indexPathForUpdateMovie = indexPathForUpdateMovie {
-			if ((moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row].title != updatedMovie.title) ||
-				(moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row].releaseDate != updatedMovie.releaseDate))
+			if ((moviesInSections[(indexPathForUpdateMovie as NSIndexPath).section][(indexPathForUpdateMovie as NSIndexPath).row].title != updatedMovie.title) ||
+				(moviesInSections[(indexPathForUpdateMovie as NSIndexPath).section][(indexPathForUpdateMovie as NSIndexPath).row].releaseDate != updatedMovie.releaseDate))
 			{
 				// the title or the date has changed. we have to move the table cell to a new position.
 				removeFavoritePrivate(updatedMovie.id)
 				addFavoritePrivate(updatedMovie)
 				
 				// update notifications for favorites
-				NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+				NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
 			}
-			else if (moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row].hasVisibleChanges(updatedMovie)) {
+			else if (moviesInSections[(indexPathForUpdateMovie as NSIndexPath).section][(indexPathForUpdateMovie as NSIndexPath).row].hasVisibleChanges(updatedMovie: updatedMovie)) {
 				// some data has changed which is shown in the table cell -> change the cell with an animation
-				moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row] = updatedMovie
-				tableView.reloadRowsAtIndexPaths([indexPathForUpdateMovie], withRowAnimation: UITableViewRowAnimation.Automatic)
+				moviesInSections[(indexPathForUpdateMovie as NSIndexPath).section][(indexPathForUpdateMovie as NSIndexPath).row] = updatedMovie
+				tableView.reloadRows(at: [indexPathForUpdateMovie], with: UITableViewRowAnimation.automatic)
 			}
 			else {
 				// some data has changed which is now visible in the table cell -> change the cell, no animation
-				moviesInSections[indexPathForUpdateMovie.section][indexPathForUpdateMovie.row] = updatedMovie
-				tableView.reloadRowsAtIndexPaths([indexPathForUpdateMovie], withRowAnimation: UITableViewRowAnimation.None)
+				moviesInSections[(indexPathForUpdateMovie as NSIndexPath).section][(indexPathForUpdateMovie as NSIndexPath).row] = updatedMovie
+				tableView.reloadRows(at: [indexPathForUpdateMovie], with: UITableViewRowAnimation.none)
 			}
 		}
 		
 		tableView.endUpdates()
-		
 		WatchSessionManager.sharedManager.updateFavoritesOnWatch()
 	}
 	
 	
-	func showFavoriteMovie(movieID: String) {
+	func showFavoriteMovie(_ movieID: String) {
 		// we use the array from the tab-controller, because the local one might not be initialized yet
 		guard let moviesInSections = movieTabBarController?.favoriteMovies else { return }
 		
-		for (sectionIndex, section) in moviesInSections.enumerate() {
-			for (movieIndex, movie) in section.enumerate() {
+		for (sectionIndex, section) in moviesInSections.enumerated() {
+			for (movieIndex, movie) in section.enumerated() {
 				if (movie.id == movieID) {
 					// we found the movie to show: select the row and show it
-					let indexPath = NSIndexPath(forRow: movieIndex, inSection: sectionIndex)
-					tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: UITableViewScrollPosition.None)
-					tableView(tableView, didSelectRowAtIndexPath: indexPath)
-					tabBarController?.tabBar.hidden = false
+					let indexPath = IndexPath(row: movieIndex, section: sectionIndex)
+					tableView.selectRow(at: indexPath, animated: false, scrollPosition: UITableViewScrollPosition.none)
+					tableView(tableView, didSelectRowAt: indexPath)
+					tabBarController?.tabBar.isHidden = false
 					return
 				}
 			}

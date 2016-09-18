@@ -25,9 +25,9 @@ class StartViewController: UIViewController {
 		
 		// show launch screen again
 		
-		let aboutViews = NSBundle.mainBundle().loadNibNamed("LaunchScreen", owner: self, options: nil)
+		let aboutViews = Bundle.main.loadNibNamed("LaunchScreen", owner: self, options: nil)
 		
-		if let aboutViews = aboutViews where (aboutViews.count > 0) && (aboutViews[0] is UIView) {
+		if let aboutViews = aboutViews , (aboutViews.count > 0) && (aboutViews[0] is UIView) {
 			aboutView = aboutViews[0] as? UIView
 			
 			if let aboutView = aboutView {
@@ -37,7 +37,7 @@ class StartViewController: UIViewController {
 		}
     }
 	
-	override func viewDidAppear(animated: Bool) {
+	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		
 		// read movies from device or from cloud
@@ -63,15 +63,15 @@ class StartViewController: UIViewController {
 			welcomeWindow = MessageWindow(parent: view, darkenBackground: false, titleStringId: "WelcomeTitle", textStringId: "WelcomeText", buttonStringIds: countryStringIds,
 				handler: { (buttonIndex) -> () in
 					// store selected country in preferences
-					NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(countries[buttonIndex].rawValue, forKey: Constants.prefsCountry)
-					NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+					UserDefaults(suiteName: Constants.movieStartsGroup)?.set(countries[buttonIndex].rawValue, forKey: Constants.prefsCountry)
+					UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 
 					// check network, load database if all is OK
 //					if (NetworkChecker.checkReachability(self.view) == false) { return }
 
 					guard let database = self.movieDatabaseLoader else { return }
 					
-					NetworkChecker.checkCloudKit(self.view, database: database,
+					NetworkChecker.checkCloudKit(viewForError: self.view, database: database,
 						okCallback: { () -> () in
 							self.loadMovieDatabase()
 						},
@@ -95,14 +95,14 @@ class StartViewController: UIViewController {
 	*/
 	func loadMovieDatabase() {
 		movieDatabaseLoader?.getAllMovies(
-			{ [unowned self] (movies: [MovieRecord]?) in
+			completionHandler: { [unowned self] (movies: [MovieRecord]?) in
 				
 				// show the next view controller
 				
-				UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				self.myTabBarController = self.storyboard?.instantiateViewControllerWithIdentifier("TabBarController") as? TabBarController
+				UIApplication.shared.isNetworkActivityIndicatorVisible = false
+				self.myTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "TabBarController") as? TabBarController
 				
-				if let tabBarController = self.myTabBarController, allMovies = movies {
+				if let tabBarController = self.myTabBarController, let allMovies = movies {
 					self.movieDatabaseLoader?.updateThumbnailHandler = tabBarController.updateThumbnailHandler
 					
 					// store movies in tabbarcontroller
@@ -112,7 +112,7 @@ class StartViewController: UIViewController {
 
 					// show tabbarcontroller
 					
-					self.presentViewController(tabBarController, animated: true, completion: { () in
+					self.present(tabBarController, animated: true, completion: { () in
 						if let saveAboutView = self.aboutView {
 							saveAboutView.removeFromSuperview()
 						}
@@ -121,13 +121,13 @@ class StartViewController: UIViewController {
 					// iOS bug: Sometimes the main runloop doesn't wake up!
 					// To wake it up, enqueue an empty block into the main runloop.
 					
-					dispatch_async(dispatch_get_main_queue()) {}
+					DispatchQueue.main.async {}
 				}
 			},
 			
 			errorHandler: { (errorMessage: String) in
-				dispatch_async(dispatch_get_main_queue()) {
-					UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+				DispatchQueue.main.async {
+					UIApplication.shared.isNetworkActivityIndicatorVisible = false
 					NSLog(errorMessage)
 				}
 			},
@@ -145,7 +145,7 @@ class StartViewController: UIViewController {
 			},
 			
 			finishHandler: { [unowned self] () in
-				dispatch_async(dispatch_get_main_queue()) {
+				DispatchQueue.main.async {
 					self.welcomeWindow?.close()
 					self.welcomeWindow = nil
 				}

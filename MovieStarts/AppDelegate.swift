@@ -54,7 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 
-	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
 		// add log destinations. at least one is needed
 		
@@ -75,10 +75,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// create folders for image asset
 		
-		let appPathUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+		let appPathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 
-		if let appPathUrl = appPathUrl, absolutePath = appPathUrl.path {
-			let fileManager = NSFileManager.defaultManager()
+		if let appPathUrl = appPathUrl {
+			let fileManager = FileManager.default
 
 			
 			
@@ -88,98 +88,98 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			
 			// create thumbnail folder
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.thumbnailFolder,
+				try fileManager.createDirectory(atPath: appPathUrl.path + Constants.thumbnailFolder,
 				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for thumbnails at \(absolutePath + Constants.thumbnailFolder).")
+				NSLog("Error creating folder for thumbnails at \(appPathUrl.path + Constants.thumbnailFolder).")
 				NSLog(error.debugDescription)
 			}
 			
 			// create big poster folder
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.bigPosterFolder,
+				try fileManager.createDirectory(atPath: appPathUrl.path + Constants.bigPosterFolder,
 				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for big posters at \(absolutePath + Constants.bigPosterFolder).")
+				NSLog("Error creating folder for big posters at \(appPathUrl.path + Constants.bigPosterFolder).")
 				NSLog(error.debugDescription)
 			}
 
 			// create trailer folder
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.trailerFolder,
+				try fileManager.createDirectory(atPath: appPathUrl.path + Constants.trailerFolder,
 				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for trailer covers at \(absolutePath + Constants.trailerFolder).")
+				NSLog("Error creating folder for trailer covers at \(appPathUrl.path + Constants.trailerFolder).")
 				NSLog(error.debugDescription)
 			}
 			
 			// create actor thumbnail folder
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.actorThumbnailFolder,
+				try fileManager.createDirectory(atPath: appPathUrl.path + Constants.actorThumbnailFolder,
 				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for actor thumbnails at \(absolutePath + Constants.actorThumbnailFolder).")
+				NSLog("Error creating folder for actor thumbnails at \(appPathUrl.path + Constants.actorThumbnailFolder).")
 				NSLog(error.debugDescription)
 			}
 			
 			// create actor big picture folder
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.actorBigFolder,
+				try fileManager.createDirectory(atPath: appPathUrl.path + Constants.actorBigFolder,
 				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for big actor images at \(absolutePath + Constants.actorBigFolder).")
+				NSLog("Error creating folder for big actor images at \(appPathUrl.path + Constants.actorBigFolder).")
 				NSLog(error.debugDescription)
 			}
 			
 			// create director thumbnail folder
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.directorThumbnailFolder,
+				try fileManager.createDirectory(atPath: appPathUrl.path + Constants.directorThumbnailFolder,
 				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for director thumbnails at \(absolutePath + Constants.directorThumbnailFolder).")
+				NSLog("Error creating folder for director thumbnails at \(appPathUrl.path + Constants.directorThumbnailFolder).")
 				NSLog(error.debugDescription)
 			}
 			
 			// create director big picture folder
 			do {
-				try fileManager.createDirectoryAtPath(absolutePath + Constants.directorBigFolder,
+				try fileManager.createDirectory(atPath: appPathUrl.path + Constants.directorBigFolder,
 				                                      withIntermediateDirectories: true, attributes: nil)
 			}
 			catch let error as NSError {
-				NSLog("Error creating folder for big director images at \(absolutePath + Constants.directorBigFolder).")
+				NSLog("Error creating folder for big director images at \(appPathUrl.path + Constants.directorBigFolder).")
 				NSLog(error.debugDescription)
 			}
 		}
 
 		// read favorites from file
-		let favorites = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsFavorites)
+		let favorites = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsFavorites)
 		if let favorites = favorites as? [String] {
 			Favorites.IDs = favorites
 		}
 		
 		// set some colors, etc.
 		UITabBar.appearance().tintColor = UIColor(red: 0.0, green: 200.0/255.0, blue: 200.0/255.0, alpha: 1.0)
-		UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: UIFont.systemFontOfSize(14.0)], forState: .Normal)
-		UINavigationBar.appearance().tintColor = UIColor.whiteColor()
+		UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14.0)], for: UIControlState())
+		UINavigationBar.appearance().tintColor = UIColor.white
 
 		// check if use-app-prefs are stored. If not, set them to "false"
-		let useImdbApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseImdbApp) as? Bool
-		let useYoutubeApp: Bool? = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsUseYoutubeApp) as? Bool
+		let useImdbApp: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsUseImdbApp) as? Bool
+		let useYoutubeApp: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsUseYoutubeApp) as? Bool
 		
 		if useImdbApp == nil {
-			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsUseImdbApp)
-			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+			UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsUseImdbApp)
+			UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 		}
 		
 		if useYoutubeApp == nil {
-			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsUseYoutubeApp)
-			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+			UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsUseYoutubeApp)
+			UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 		}
 		
 		// start watch session (if there is a watch)
@@ -187,7 +187,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// Handle launching from a notification
 		if let launchOptions = launchOptions {
-			if let notification = launchOptions[UIApplicationLaunchOptionsLocalNotificationKey] as? UILocalNotification {
+			if let notification = launchOptions[UIApplicationLaunchOptionsKey.localNotification] as? UILocalNotification {
 				// save received notification for later
 				movieReleaseNotification = notification
 			}
@@ -195,7 +195,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// getting version of the last launch to find out if we need to set the "migrate" flag
 		
-		let oldVersion = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsVersion)
+		let oldVersion = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsVersion)
 
 		if let oldVersion = oldVersion as? Int {
 			versionOfPreviousLaunch = oldVersion
@@ -204,8 +204,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// if this is a new version: write it to disc
 		if (versionOfPreviousLaunch != Constants.versionCurrent) {
 			// write old version to disc
-			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(Constants.versionCurrent, forKey: Constants.prefsVersion)
-			NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+			UserDefaults(suiteName: Constants.movieStartsGroup)?.set(Constants.versionCurrent, forKey: Constants.prefsVersion)
+			UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 			
 			// check if movie database exists locally
 			
@@ -217,11 +217,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 					// special case: if the prefs-entry already exists (from a previously failed update-try from an older version), 
 					// don't override it: the database file is from the older version (because previous update failed).
 					
-					let previousMigrateFromVersion = NSUserDefaults(suiteName: Constants.movieStartsGroup)?.objectForKey(Constants.prefsMigrateFromVersion)
+					let previousMigrateFromVersion = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsMigrateFromVersion)
 					
 					if (previousMigrateFromVersion == nil) {
-						NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(versionOfPreviousLaunch, forKey: Constants.prefsMigrateFromVersion)
-						NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+						UserDefaults(suiteName: Constants.movieStartsGroup)?.set(versionOfPreviousLaunch, forKey: Constants.prefsMigrateFromVersion)
+						UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 					}
 				}
 			}
@@ -232,25 +232,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return true
 	}
 
-	func applicationWillResignActive(application: UIApplication) {
+	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
 		// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 	}
 
-	func applicationDidEnterBackground(application: UIApplication) {
+	func applicationDidEnterBackground(_ application: UIApplication) {
 		// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
 		// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 	}
 
-	func applicationWillEnterForeground(application: UIApplication) {
+	func applicationWillEnterForeground(_ application: UIApplication) {
 		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 	}
 
-	func applicationDidBecomeActive(application: UIApplication) {
+	func applicationDidBecomeActive(_ application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	}
 
-	func applicationWillTerminate(application: UIApplication) {
+	func applicationWillTerminate(_ application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
 
@@ -258,18 +258,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: - Handling local notifications
  
 	
-	func application(application: UIApplication, didRegisterUserNotificationSettings notificationSettings: UIUserNotificationSettings) {
+	func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
 		
-		if (notificationSettings.types.contains(UIUserNotificationType.Alert)) {
+		if (notificationSettings.types.contains(UIUserNotificationType.alert)) {
 			// user has allowed notifications
 			if let settings = settingsTableViewController {
 				settings.switchNotifications(true)
 			}
 			else {
 				NSLog("Settings dialog not available. This should never happen.")
-				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(true, forKey: Constants.prefsNotifications)
-				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
-				NotificationManager.updateFavoriteNotifications(movieTabBarController?.favoriteMovies)
+				UserDefaults(suiteName: Constants.movieStartsGroup)?.set(true, forKey: Constants.prefsNotifications)
+				UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+				NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
 			}
 		}
 		else {
@@ -279,8 +279,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 			else {
 				NSLog("Settings dialog not available. This should never happen.")
-				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.setObject(false, forKey: Constants.prefsNotifications)
-				NSUserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+				UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsNotifications)
+				UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 				NotificationManager.removeAllFavoriteNotifications()
 			}
 			
@@ -297,11 +297,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 
-	func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
+	func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
 
 		guard let userInfo = notification.userInfo,
-			  let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] where movieIDs.count > 0,
-			  let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] where movieTitles.count > 0,
+			  let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] , movieIDs.count > 0,
+			  let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] , movieTitles.count > 0,
 			  let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
 			  let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else {
 			return
@@ -309,19 +309,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let state = application.applicationState
 
-		if (state == UIApplicationState.Active) {
+		if (state == UIApplicationState.active) {
 			// app was in foreground
 			
 			if (movieTitles.count == 1) {
 				// only one movie
-				NotificationManager.notifyAboutOneMovie(self, movieID: movieIDs[0], movieTitle: movieTitles[0], movieDate: movieDate, notificationDay: notificationDay)
+				NotificationManager.notifyAboutOneMovie(appDelegate: self, movieID: movieIDs[0], movieTitle: movieTitles[0], movieDate: movieDate, notificationDay: notificationDay)
 			}
 			else {
 				// multiple movies
-				NotificationManager.notifyAboutMultipleMovies(self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+				NotificationManager.notifyAboutMultipleMovies(appDelegate: self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
 			}
 		}
-		else if (state == UIApplicationState.Inactive) {
+		else if (state == UIApplicationState.inactive) {
 			// app was in background, but in memory
 			
 			if (movieTitles.count == 1) {
@@ -331,25 +331,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 			else {
 				// multiple movies
-				NotificationManager.notifyAboutMultipleMovies(self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+				NotificationManager.notifyAboutMultipleMovies(appDelegate: self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
 			}
 		}
 	}
 
 	
-	private func databaseFileExists() -> Bool {
-		let fileUrl = NSFileManager.defaultManager().containerURLForSecurityApplicationGroupIdentifier(Constants.movieStartsGroup)
+	fileprivate func databaseFileExists() -> Bool {
+		let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 		
-		if let fileUrl = fileUrl, fileUrlPath = fileUrl.path {
+		if let fileUrl = fileUrl {
 			var moviesPlistFile: String
-			if fileUrlPath.hasSuffix("/") {
-				moviesPlistFile = fileUrlPath + Constants.dbRecordTypeMovie + ".plist"
+			if fileUrl.path.hasSuffix("/") {
+				moviesPlistFile = fileUrl.path + Constants.dbRecordTypeMovie + ".plist"
 			}
 			else {
-				moviesPlistFile = fileUrlPath + "/" + Constants.dbRecordTypeMovie + ".plist"
+				moviesPlistFile = fileUrl.path + "/" + Constants.dbRecordTypeMovie + ".plist"
 			}
 			
-			if (NSFileManager.defaultManager().fileExistsAtPath(moviesPlistFile)) {
+			if (FileManager.default.fileExists(atPath: moviesPlistFile)) {
 				return true
 			}
 		}
