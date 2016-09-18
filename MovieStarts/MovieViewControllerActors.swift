@@ -144,29 +144,42 @@ extension MovieViewController {
 	
 	func showAllActorsButtonPressed(_ sender: UIButton!) {
 		guard let movie = self.movie else { return }
-		
-		UIView.animate(withDuration: 0.2, animations: {
-			for actorIndex in 5...movie.actors.count-1 {
-				self.actorStackView.arrangedSubviews[actorIndex].isHidden = false
-			}
-			}, completion: { (_) in
-				self.actorStackView.removeLastArrangedSubView()
-				self.addShowLessActorsButtonToStackView()
-		})
+
+        for actorIndex in 5...movie.actors.count-1 {
+            self.actorStackView.arrangedSubviews[actorIndex].alpha = 0.0
+        }
+
+		UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                for actorIndex in 5...movie.actors.count-1 {
+                    self.actorStackView.arrangedSubviews[actorIndex].isHidden = false
+                    self.actorStackView.arrangedSubviews[actorIndex].alpha = 1.0
+                }
+            },
+		    completion: { (_) in
+                self.actorStackView.removeLastArrangedSubView()
+                self.addShowLessActorsButtonToStackView()
+            }
+        )
 	}
 	
 	func showLessActorsButtonPressed(_ sender: UIButton!) {
 		guard let movie = self.movie else { return }
 		
-		UIView.animate(withDuration: 0.2, animations: {
-			for actorIndex in 5...movie.actors.count-1 {
-				self.actorStackView.arrangedSubviews[actorIndex].isHidden = true
-			}
-			}, completion: { (_) in
+		UIView.animate(
+            withDuration: 0.2,
+            animations: {
+                for actorIndex in 5...movie.actors.count-1 {
+                    self.actorStackView.arrangedSubviews[actorIndex].isHidden = true
+                    self.actorStackView.arrangedSubviews[actorIndex].alpha = 0.0
+                }
+			},
+            completion: { (_) in
 				self.actorStackView.removeLastArrangedSubView()
 				self.addShowAllActorsButtonToStackView()
-		})
+            }
+        )
 	}
-	
-
 }
+
