@@ -107,10 +107,6 @@ extension MovieViewController {
             withDuration: 0.2,
             animations: {
                 for actorIndex in 5...movie.actors.count-1 {
-/*
-                    (self.actorStackView.arrangedSubviews[actorIndex] as? ActorView)?.imageView?.frame =
-                        CGRect(x: ActorView.imageSize/2, y: ActorView.imageSize/2, width: 0, height: 0)
-*/
                     self.actorStackView.arrangedSubviews[actorIndex].isHidden = true
                     self.actorStackView.arrangedSubviews[actorIndex].alpha = 0.0
                 }
