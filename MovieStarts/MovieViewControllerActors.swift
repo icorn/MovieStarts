@@ -28,9 +28,8 @@ extension MovieViewController {
 		}
 		else {
 			// no actors
-			
-			// TODO
-			
+            setConstraintsToZero(actorHeadlineLabelHeightConstraint, actorHeadlineLabelVerticalSpaceConstraint,
+                                 actorStackViewVerticalSpaceConstraint)
 		}
 	}
 	

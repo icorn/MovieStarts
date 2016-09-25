@@ -46,11 +46,17 @@
 "ShowCompleteSynopsis"		= "Show complete synopsis";
 "ShowShortSynopsis"			= "Show shorter synopsis";
 "ShowOnImdb"				= "Show Details on IMDb";
-"TrailerHeadline"			= "Trailers";
 "AddToFavorites"			= "Add to Favorites";
 "RemoveFromFavorites"		= "Remove from Favorites";
 "AddToFavoritesShort"		= "Add to\nFavorites";
 "RemoveFromFavoritesShort"	= "Remove from\nFavorites";
+
+"TrailerSingular"           = "Trailer";
+"TrailerPlural"             = "Trailers";
+"TrailerEnglishSingular"    = "Trailer (english)";
+"TrailerEnglishPlural"      = "Trailers (english)";
+"TrailerGermanSingular"     = "Trailer (german)";
+"TrailerGermanPlural"       = "Trailers (german)";
 
 "HintTitle"				= "Hint";
 "PosterHintText"		= "To load a big version of the movie poster, just tap on the thumbnail in the upper left corner.";

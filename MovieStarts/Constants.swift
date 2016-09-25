@@ -58,8 +58,9 @@ public struct Constants {
 
 	static let tagFavoriteView				= 10000
 	static let tagTableCell					= 10001
-	static let tagTrailer					= 20000
-	
+	static let tagTrailerEnglish            = 20000
+    static let tagTrailerGerman             = 20100
+
 	static let version1_0					= 10
 	static let version1_1					= 11
 	static let version1_2					= 12
