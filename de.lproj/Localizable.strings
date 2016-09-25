@@ -43,8 +43,8 @@
 "Budget"			= "Budget";
 "Mio."				= "Mio.";
 
-"ShowCompleteSynopsis"		= "Kompletten Inhalt zeigen";
-"ShowShortSynopsis"			= "Weniger Inhalt zeigen";
+"ShowCompleteSynopsis"		= "Kompletter Inhalt";
+"ShowShortSynopsis"			= "Weniger Inhalt";
 "ShowOnImdb"				= "Zeige Details auf IMDb";
 "AddToFavorites"			= "Als Favorit markieren";
 "RemoveFromFavorites"		= "Aus Favoriten entfernen";

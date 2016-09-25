@@ -43,8 +43,8 @@
 "Budget"			= "Budget";
 "Mio."				= "million";
 
-"ShowCompleteSynopsis"		= "Show complete synopsis";
-"ShowShortSynopsis"			= "Show shorter synopsis";
+"ShowCompleteSynopsis"		= "Complete synopsis";
+"ShowShortSynopsis"			= "Shorter synopsis";
 "ShowOnImdb"				= "Show Details on IMDb";
 "AddToFavorites"			= "Add to Favorites";
 "RemoveFromFavorites"		= "Remove from Favorites";
