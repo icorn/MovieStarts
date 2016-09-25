@@ -295,7 +295,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				metascoreRatingLabel.text = NSLocalizedString("Score unknown", comment: "")
 				metascoreRatingLabel.textColor = UIColor.darkGray
 				metascoreInnerView.backgroundColor = UIColor.clear
-				metascoreRatingLabel.textColor = UIColor.black
 			}
 		}
 		else {
