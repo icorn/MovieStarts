@@ -41,7 +41,7 @@ open class BaseDestination: Hashable, Equatable {
     open var asynchronously = true
 
     /// do not log any message which has a lower level than this one
-    open var minLevel = SwiftyBeaver.Level.Verbose
+    open var minLevel = SwiftyBeaver.Level.verbose
 
     /// set custom log level words for each level
     open var levelString = LevelString()
@@ -50,21 +50,21 @@ open class BaseDestination: Hashable, Equatable {
     open var levelColor = LevelColor()
 
     public struct LevelString {
-        public var Verbose = "VERBOSE"
-        public var Debug = "DEBUG"
-        public var Info = "INFO"
-        public var Warning = "WARNING"
-        public var Error = "ERROR"
+        public var verbose = "VERBOSE"
+        public var debug = "DEBUG"
+        public var info = "INFO"
+        public var warning = "WARNING"
+        public var error = "ERROR"
     }
 
     // For a colored log level word in a logged line
     // empty on default
     public struct LevelColor {
-        public var Verbose = ""     // silver
-        public var Debug = ""       // green
-        public var Info = ""        // blue
-        public var Warning = ""     // yellow
-        public var Error = ""       // red
+        public var verbose = ""     // silver
+        public var debug = ""       // green
+        public var info = ""        // blue
+        public var warning = ""     // yellow
+        public var error = ""       // red
     }
 
     var reset = ""
@@ -143,6 +143,11 @@ open class BaseDestination: Hashable, Equatable {
                     text += formatDate(remainingPhrase)
                 case "d":
                     text += remainingPhrase
+                case "Z":
+                    // start of datetime format in UTC timezone
+                    text += formatDate(remainingPhrase, timeZone: "UTC")
+                case "z":
+                    text += remainingPhrase
                 case "C":
                     // color code ("" on default)
                     text += escape + colorForLevel(level) + remainingPhrase
@@ -162,21 +167,21 @@ open class BaseDestination: Hashable, Equatable {
         var str = ""
 
         switch level {
-        case SwiftyBeaver.Level.Debug:
-            str = levelString.Debug
+        case SwiftyBeaver.Level.debug:
+            str = levelString.debug
 
-        case SwiftyBeaver.Level.Info:
-            str = levelString.Info
+        case SwiftyBeaver.Level.info:
+            str = levelString.info
 
-        case SwiftyBeaver.Level.Warning:
-            str = levelString.Warning
+        case SwiftyBeaver.Level.warning:
+            str = levelString.warning
 
-        case SwiftyBeaver.Level.Error:
-            str = levelString.Error
+        case SwiftyBeaver.Level.error:
+            str = levelString.error
 
         default:
             // Verbose is default
-            str = levelString.Verbose
+            str = levelString.verbose
         }
         return str
     }
@@ -186,20 +191,20 @@ open class BaseDestination: Hashable, Equatable {
         var color = ""
 
         switch level {
-        case SwiftyBeaver.Level.Debug:
-            color = levelColor.Debug
+        case SwiftyBeaver.Level.debug:
+            color = levelColor.debug
 
-        case SwiftyBeaver.Level.Info:
-            color = levelColor.Info
+        case SwiftyBeaver.Level.info:
+            color = levelColor.info
 
-        case SwiftyBeaver.Level.Warning:
-            color = levelColor.Warning
+        case SwiftyBeaver.Level.warning:
+            color = levelColor.warning
 
-        case SwiftyBeaver.Level.Error:
-            color = levelColor.Error
+        case SwiftyBeaver.Level.error:
+            color = levelColor.error
 
         default:
-            color = levelColor.Verbose
+            color = levelColor.verbose
         }
         return color
     }
@@ -227,8 +232,11 @@ open class BaseDestination: Hashable, Equatable {
     }
 
     /// returns a formatted date string
-    func formatDate(_ dateFormat: String) -> String {
-        //formatter.timeZone = NSTimeZone(abbreviation: "UTC")
+    /// optionally in a given abbreviated timezone like "UTC"
+    func formatDate(_ dateFormat: String, timeZone: String = "") -> String {
+        if !timeZone.isEmpty {
+            formatter.timeZone = TimeZone(abbreviation: timeZone)
+        }
         formatter.dateFormat = dateFormat
         let dateStr = formatter.string(from: NSDate() as Date)
         return dateStr
