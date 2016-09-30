@@ -206,15 +206,15 @@ extension MovieViewController {
 
         if (button.tag >= Constants.tagTrailerGerman) {
             // german flag
-            flagImageView = UIImageView(image: UIImage())
+            flagImageView = UIImageView(image: UIImage(named: "flagGermany.png"))
         }
         else {
             // english flag
-            flagImageView = UIImageView(image: UIImage())
+            flagImageView = UIImageView(image: UIImage(named: "imdb.png"))
         }
 
         if let flagImageView = flagImageView {
-            flagImageView.frame = CGRect(x: 5.0, y: 5.0, width: 30, height: 20)
+            flagImageView.frame = CGRect(x: 176.0, y: 8.0, width: 30, height: 18)
             button.addSubview(flagImageView)
         }
     }
