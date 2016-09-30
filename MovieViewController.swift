@@ -27,7 +27,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var storyLabel: UILabel!
 	@IBOutlet weak var imdbButton: UIButton!
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
-    @IBOutlet weak var trailerHeadlineLabel2: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
     @IBOutlet weak var trailerStackView2: UIStackView!
 	@IBOutlet weak var actorStackView: UIStackView!
@@ -67,11 +66,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var moreStoryButtonHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var moreStoryButtonVerticalSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
-    @IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint2: NSLayoutConstraint!
-	
+
     @IBOutlet weak var imdbOuterView: UIView!
+    @IBOutlet weak var tomatoesOuterView: UIView!
+    @IBOutlet weak var metascoreOuterView: UIView!
     @IBOutlet weak var imdbInnerView: UIView!
-    
+
 	var posterImageViewTopConstraint: NSLayoutConstraint?
 	var posterImageViewLeadingConstraint: NSLayoutConstraint?
 	var posterImageViewWidthConstraint: NSLayoutConstraint?
@@ -123,15 +123,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			showInfos()
 			showLinkButtons()
 
-            configureTrailerLabels()
+            configureTrailerLabel()
 			showTrailersIn(trailerStackView,
-			               label: trailerHeadlineLabel,
-			               spaceConstraints: [trailerStackViewVerticalSpaceConstraint, trailerHeadlineLabelVerticalSpaceConstraint],
+			               spaceConstraint: trailerStackViewVerticalSpaceConstraint,
 			               trailerIDs: movie.trailerIds[MovieCountry.USA.languageArrayIndex],
 			               tagStart: Constants.tagTrailerEnglish)
             showTrailersIn(trailerStackView2,
-                           label: trailerHeadlineLabel2,
-                           spaceConstraints: [trailerStackViewVerticalSpaceConstraint2, trailerHeadlineLabelVerticalSpaceConstraint2],
+                           spaceConstraint: trailerStackViewVerticalSpaceConstraint2,
                            trailerIDs: movie.trailerIds[MovieCountry.Germany.languageArrayIndex],
                            tagStart: Constants.tagTrailerGerman)
 

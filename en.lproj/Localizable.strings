@@ -51,12 +51,8 @@
 "AddToFavoritesShort"		= "Add to\nFavorites";
 "RemoveFromFavoritesShort"	= "Remove from\nFavorites";
 
-"TrailerSingular"           = "Trailer";
-"TrailerPlural"             = "Trailers";
-"TrailerEnglishSingular"    = "Trailer (english)";
-"TrailerEnglishPlural"      = "Trailers (english)";
-"TrailerGermanSingular"     = "Trailer (german)";
-"TrailerGermanPlural"       = "Trailers (german)";
+"TrailersSingular"           = "Trailer";
+"TrailersPlural"             = "Trailers";
 
 "HintTitle"				= "Hint";
 "PosterHintText"		= "To load a big version of the movie poster, just tap on the thumbnail in the upper left corner.";

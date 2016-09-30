@@ -43,20 +43,16 @@
 "Budget"			= "Budget";
 "Mio."				= "Mio.";
 
-"ShowCompleteSynopsis"		= "Kompletter Inhalt";
-"ShowShortSynopsis"			= "Weniger Inhalt";
+"ShowCompleteSynopsis"		= "Komplette Beschreibung";
+"ShowShortSynopsis"			= "Kürzere Beschreibung";
 "ShowOnImdb"				= "Zeige Details auf IMDb";
 "AddToFavorites"			= "Als Favorit markieren";
 "RemoveFromFavorites"		= "Aus Favoriten entfernen";
 "AddToFavoritesShort"		= "Als Favorit\nmarkieren";
 "RemoveFromFavoritesShort"	= "Aus Favoriten\nentfernen";
 
-"TrailerSingular"           = "Trailer";
-"TrailerPlural"             = "Trailer";
-"TrailerEnglishSingular"    = "Trailer (englisch)";
-"TrailerEnglishPlural"      = "Trailer (englisch)";
-"TrailerGermanSingular"     = "Trailer (deutsch)";
-"TrailerGermanPlural"       = "Trailer (deutsch)";
+"TrailersSingular"           = "Trailer";
+"TrailersPlural"             = "Trailer";
 
 "HintTitle"				= "Tipp";
 "PosterHintText"		= "Um eine große Version des Filmposters zu laden, tappe einfach auf das kleine Poster oben links.";

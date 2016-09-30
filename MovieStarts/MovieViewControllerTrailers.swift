@@ -13,59 +13,52 @@ import SafariServices
 
 extension MovieViewController {
 
-    final func configureTrailerLabels() {
+    final func configureTrailerLabel() {
         guard let movie = self.movie else { return }
 
-        if (movie.currentCountry.languageArrayIndex == MovieCountry.USA.languageArrayIndex) {
-            // english speaking country
+        let numberOfTrailers = movie.trailerIds[MovieCountry.USA.languageArrayIndex].count +
+            movie.trailerIds[MovieCountry.Germany.languageArrayIndex].count
 
-            if (movie.trailerIds[MovieCountry.USA.languageArrayIndex].count == 1) {
-                trailerHeadlineLabel.text = NSLocalizedString("TrailerSingular", comment: "")
-            }
-            else {
-                trailerHeadlineLabel.text = NSLocalizedString("TrailerPlural", comment: "")
-            }
-        }
-        else {
-            // non-english speaking country (german speaking)
-            if (movie.trailerIds[MovieCountry.USA.languageArrayIndex].count == 1) {
-                trailerHeadlineLabel.text  = NSLocalizedString("TrailerEnglishSingular", comment: "")
-            }
-            else {
-                trailerHeadlineLabel.text  = NSLocalizedString("TrailerEnglishPlural", comment: "")
-            }
-
-            if (movie.trailerIds[MovieCountry.Germany.languageArrayIndex].count == 1) {
-                trailerHeadlineLabel2.text = NSLocalizedString("TrailerGermanSingular", comment: "")
-            }
-            else {
-                trailerHeadlineLabel2.text = NSLocalizedString("TrailerGermanPlural", comment: "")
-            }
-        }
-    }
-
-
-    final func showTrailersIn(_ stackview: UIStackView,
-                              label: UILabel,
-                              spaceConstraints: [NSLayoutConstraint],
-                              trailerIDs: [String],
-                              tagStart: Int){
-
-        if (trailerIDs.count == 0) {
-            // no trailers: hide all related UI elements
-            setConstraintsToZero(spaceConstraints)
-            label.addConstraint(
-                NSLayoutConstraint(item: label,
+        if (numberOfTrailers == 0) {
+            setConstraintsToZero(trailerHeadlineLabelVerticalSpaceConstraint)
+            trailerHeadlineLabel.addConstraint(
+                NSLayoutConstraint(item: trailerHeadlineLabel,
                                    attribute: NSLayoutAttribute.height,
                                    relatedBy: NSLayoutRelation.equal,
                                    toItem: nil,
                                    attribute: NSLayoutAttribute.notAnAttribute,
                                    multiplier: 1.0,
                                    constant: 0))
+        }
+        else if (numberOfTrailers == 1) {
+            trailerHeadlineLabel.text = NSLocalizedString("TrailersSingular", comment: "")
+        }
+        else {
+            trailerHeadlineLabel.text = NSLocalizedString("TrailersPlural", comment: "")
+        }
+    }
+
+
+    final func showTrailersIn(_ stackview: UIStackView,
+                              spaceConstraint: NSLayoutConstraint,
+                              trailerIDs: [String],
+                              tagStart: Int){
+
+        if (trailerIDs.count == 0) {
+            // no trailers: hide all related UI elements
+            setConstraintsToZero(spaceConstraint)
             return
         }
 
         guard let basePath = self.baseImagePath else { return }
+        guard let movie = self.movie else { return }
+
+        var showFlag = false
+
+        if (movie.currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) {
+            // non-english country: show the little flag
+            showFlag = true
+        }
 
         for (index, trailerId) in trailerIDs.enumerated() {
             // try to load existing trailer-image
@@ -86,7 +79,8 @@ extension MovieViewController {
                                                             controller: self,
                                                             filepath: trailerImageFilePath,
                                                             trailerId: trailerId,
-                                                            trailerIndex: index)
+                                                            trailerIndex: index,
+                                                            showFlag: showFlag)
                             })
 
                 task.resume()
@@ -99,6 +93,9 @@ extension MovieViewController {
                 button.setImage(scaledImage, for: UIControlState())
                 button.contentMode = .scaleAspectFit
                 button.addTarget(self, action: #selector(MovieViewController.trailerButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+                if (showFlag) {
+                    addFlagToButton(button)
+                }
                 stackview.addArrangedSubview(button)
             }
         }
@@ -114,7 +111,8 @@ extension MovieViewController {
                                             controller: MovieViewController,
                                             filepath: String,
                                             trailerId: String,
-                                            trailerIndex: Int) -> Void {
+                                            trailerIndex: Int,
+                                            showFlag: Bool) -> Void {
 
         if let error = error as? NSError {
             NSLog("Error getting poster from Youtube: \(error.localizedDescription)")
@@ -124,7 +122,10 @@ extension MovieViewController {
             // move received poster to target path where it belongs and update the button
             do {
                 try FileManager.default.moveItem(atPath: receivedPath, toPath: filepath)
-                controller.updateTrailerButton(index: trailerIndex, trailerId: trailerId, stackview: stackview)
+                controller.updateTrailerButton(index: trailerIndex,
+                                               trailerId: trailerId,
+                                               stackview: stackview,
+                                               showFlag: showFlag)
             }
             catch let error as NSError {
                 if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
@@ -145,7 +146,7 @@ extension MovieViewController {
         - parameter index:		The index of the button inside the stackview
         - parameter trailerId:	The id of the trailer, which is also the filename of the trailer-image
     */
-    final func updateTrailerButton(index: Int, trailerId: String, stackview: UIStackView) {
+    final func updateTrailerButton(index: Int, trailerId: String, stackview: UIStackView, showFlag: Bool) {
         if (index >= stackview.arrangedSubviews.count) {
             return
         }
@@ -161,6 +162,10 @@ extension MovieViewController {
 
         DispatchQueue.main.async {
             buttonToUpdate.setImage(scaledImage, for: UIControlState())
+
+            if (showFlag) {
+                self.addFlagToButton(buttonToUpdate)
+            }
         }
     }
 
@@ -195,4 +200,22 @@ extension MovieViewController {
         }
     }
 
+
+    final func addFlagToButton(_ button: UIButton) {
+        var flagImageView: UIImageView?
+
+        if (button.tag >= Constants.tagTrailerGerman) {
+            // german flag
+            flagImageView = UIImageView(image: UIImage())
+        }
+        else {
+            // english flag
+            flagImageView = UIImageView(image: UIImage())
+        }
+
+        if let flagImageView = flagImageView {
+            flagImageView.frame = CGRect(x: 5.0, y: 5.0, width: 30, height: 20)
+            button.addSubview(flagImageView)
+        }
+    }
 }
