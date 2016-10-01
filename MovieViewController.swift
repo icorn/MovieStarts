@@ -25,7 +25,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var infoHeadlineLabel: UILabel!
 	@IBOutlet weak var actorHeadlineLabel: UILabel!
 	@IBOutlet weak var storyLabel: UILabel!
-	@IBOutlet weak var imdbButton: UIButton!
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
     @IBOutlet weak var trailerStackView2: UIStackView!
@@ -71,6 +70,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
     @IBOutlet weak var tomatoesOuterView: UIView!
     @IBOutlet weak var metascoreOuterView: UIView!
     @IBOutlet weak var imdbInnerView: UIView!
+    @IBOutlet weak var linksStackView: UIStackView!
 
 	var posterImageViewTopConstraint: NSLayoutConstraint?
 	var posterImageViewLeadingConstraint: NSLayoutConstraint?
@@ -323,11 +323,27 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	fileprivate final func showLinkButtons() {
 		guard let movie = self.movie else { return }
-		
-		if (movie.imdbId != nil) {
-			imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
-			imdbButton.setTitle(NSLocalizedString("ShowOnImdb", comment: ""), for: UIControlState())
-		}
+
+        if (movie.imdbId != nil) {
+            let imdbButton = UIButton()
+            imdbButton.setImage(UIImage(named: "imdb.png"), for: UIControlState.normal)
+            imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+            self.linksStackView.addArrangedSubview(imdbButton)
+        }
+
+        if (movie.tomatoURL != nil) {
+            let tomatoButton = UIButton()
+            tomatoButton.setImage(UIImage(named: "fresh.png"), for: UIControlState.normal)
+//            tomatoButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+            self.linksStackView.addArrangedSubview(tomatoButton)
+        }
+
+        if (movie.tmdbId != nil) {
+            let tmdbButton = UIButton()
+            tmdbButton.setImage(UIImage(named: "tmdb.png"), for: UIControlState.normal)
+//            tmdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+            self.linksStackView.addArrangedSubview(tmdbButton)
+        }
 	}
 
 	fileprivate final func shrinkStoryIfNeeded() {

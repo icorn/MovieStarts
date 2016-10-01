@@ -297,12 +297,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="PEc-g4-0iK"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SrP-NY-9g9" userLabel="imdbButton">
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <state key="normal" title="imdbButton">
-                                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </state>
-                                            </button>
+                                            <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="50" distribution="equalSpacing" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="xmn-ie-vpS" userLabel="linksStackView"/>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iff-xr-iIA" userLabel="bottomLine">
                                                 <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
@@ -314,6 +309,9 @@
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="Iff-xr-iIA" secondAttribute="bottom" placeholder="YES" id="0P7-z6-yGz"/>
                                             <constraint firstItem="pCJ-Ys-xwo" firstAttribute="top" secondItem="Joe-oI-bJB" secondAttribute="bottom" constant="8" id="1zC-Ck-t2n"/>
+                                            <constraint firstItem="Iff-xr-iIA" firstAttribute="top" secondItem="xmn-ie-vpS" secondAttribute="bottom" constant="8" id="29B-84-jJR"/>
+                                            <constraint firstItem="xmn-ie-vpS" firstAttribute="top" secondItem="nKR-nb-xcB" secondAttribute="bottom" constant="8" id="2JE-Xt-GoK"/>
+                                            <constraint firstItem="xmn-ie-vpS" firstAttribute="centerX" secondItem="Hxp-mG-nWN" secondAttribute="centerX" id="8LH-hi-4aU"/>
                                             <constraint firstItem="IDh-DI-GX7" firstAttribute="leading" secondItem="asT-cd-qc4" secondAttribute="leading" id="9vy-bY-Mee"/>
                                             <constraint firstAttribute="trailing" secondItem="Joe-oI-bJB" secondAttribute="trailing" constant="16" id="AES-e8-h8u"/>
                                             <constraint firstItem="x55-LK-1rP" firstAttribute="top" secondItem="eV1-Lj-IO0" secondAttribute="bottom" constant="8" id="AU9-Xb-8ti"/>
@@ -348,11 +346,8 @@
                                             <constraint firstItem="dwk-PI-SML" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="aZv-YU-pzW"/>
                                             <constraint firstItem="VdW-4b-UKZ" firstAttribute="top" secondItem="IDh-DI-GX7" secondAttribute="bottom" constant="4" id="bTk-sZ-cUR"/>
                                             <constraint firstItem="Joe-oI-bJB" firstAttribute="top" secondItem="dwk-PI-SML" secondAttribute="bottom" constant="7" id="bsk-QQ-Lp5"/>
-                                            <constraint firstItem="SrP-NY-9g9" firstAttribute="top" secondItem="nKR-nb-xcB" secondAttribute="bottom" constant="6" id="dft-T8-PHY"/>
                                             <constraint firstItem="x55-LK-1rP" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="eTO-j6-vqV"/>
-                                            <constraint firstItem="Iff-xr-iIA" firstAttribute="top" secondItem="SrP-NY-9g9" secondAttribute="bottom" constant="4" id="eYm-rV-KpO"/>
                                             <constraint firstItem="IDh-DI-GX7" firstAttribute="leading" secondItem="EVT-wh-LDJ" secondAttribute="leading" id="g7m-2s-zet"/>
-                                            <constraint firstAttribute="trailing" secondItem="SrP-NY-9g9" secondAttribute="trailing" constant="16" id="h3G-47-EWa"/>
                                             <constraint firstItem="EVT-wh-LDJ" firstAttribute="top" secondItem="VdW-4b-UKZ" secondAttribute="bottom" constant="4" id="hel-oJ-fdt"/>
                                             <constraint firstAttribute="trailing" secondItem="Iff-xr-iIA" secondAttribute="trailing" constant="16" id="i6G-15-Bc9"/>
                                             <constraint firstItem="IDh-DI-GX7" firstAttribute="trailing" secondItem="asT-cd-qc4" secondAttribute="trailing" id="jC1-CY-fHv"/>
@@ -365,7 +360,6 @@
                                             <constraint firstItem="pCJ-Ys-xwo" firstAttribute="trailing" secondItem="Joe-oI-bJB" secondAttribute="trailing" id="tVb-ZX-Yxc"/>
                                             <constraint firstAttribute="trailing" secondItem="IDh-DI-GX7" secondAttribute="trailing" constant="16" id="toy-yp-EwI"/>
                                             <constraint firstItem="Joe-oI-bJB" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="vGw-XG-2Or"/>
-                                            <constraint firstItem="SrP-NY-9g9" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="vRu-8x-acd"/>
                                             <constraint firstAttribute="trailing" secondItem="9NL-Yw-BuV" secondAttribute="trailing" constant="16" id="z7G-7o-Je2"/>
                                             <constraint firstAttribute="trailing" secondItem="Fv6-kd-gT2" secondAttribute="trailing" constant="16" id="zY8-uV-xp8"/>
                                         </constraints>
@@ -398,7 +392,6 @@
                         <outlet property="actorStackViewVerticalSpaceConstraint" destination="MXc-6e-T2Q" id="ox1-tl-VPh"/>
                         <outlet property="bottomLine" destination="Iff-xr-iIA" id="FTD-VW-SwJ"/>
                         <outlet property="contentView" destination="Hxp-mG-nWN" id="zjH-d3-C7a"/>
-                        <outlet property="imdbButton" destination="SrP-NY-9g9" id="bTP-Ub-ajB"/>
                         <outlet property="imdbHeadlineLabel" destination="Yvi-4c-RqT" id="fQW-n9-8qJ"/>
                         <outlet property="imdbImageView" destination="Xpy-Tw-WCd" id="EeL-WT-u4K"/>
                         <outlet property="imdbImageViewWidthConstraint" destination="iuw-A0-MCT" id="cdG-o3-d7t"/>
@@ -410,6 +403,7 @@
                         <outlet property="infoStackView" destination="Ub9-Fp-6kR" id="X3j-Mc-fzc"/>
                         <outlet property="line1VerticalSpaceConstraint" destination="AU9-Xb-8ti" id="Pi2-sp-XXm"/>
                         <outlet property="lineTopHeightConstraint" destination="xST-UW-B5K" id="x82-Ip-5fu"/>
+                        <outlet property="linksStackView" destination="xmn-ie-vpS" id="SFV-BB-86A"/>
                         <outlet property="metascoreInnerView" destination="PwF-QZ-tiv" id="sda-vu-mzp"/>
                         <outlet property="metascoreOuterView" destination="U3T-Cd-cig" id="vMR-4G-FRi"/>
                         <outlet property="metascoreRatingLabel" destination="EG9-A3-iTW" id="79N-Vu-F97"/>
@@ -453,7 +447,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2483" y="-353"/>
+            <point key="canvasLocation" x="2481.5999999999999" y="-353.52323838080963"/>
         </scene>
         <!--UpcomingNavigationController-->
         <scene sceneID="ts5-aq-tbx">
