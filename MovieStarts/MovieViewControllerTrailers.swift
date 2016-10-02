@@ -210,7 +210,7 @@ extension MovieViewController {
         }
         else {
             // english flag
-            flagImageView = UIImageView(image: UIImage(named: "imdb.png"))
+            flagImageView = UIImageView(image: UIImage(named: "imdb"))
         }
 
         if let flagImageView = flagImageView {

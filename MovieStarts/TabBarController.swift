@@ -41,8 +41,8 @@ class TabBarController: UITabBarController {
 				
 				// set tab bar images
 
-				saveItems[Constants.tabIndexNowPlaying].image = UIImage(named: "video.png")
-				saveItems[Constants.tabIndexUpcoming].image = UIImage(named: "calendar.png")
+				saveItems[Constants.tabIndexNowPlaying].image = UIImage(named: "video")
+				saveItems[Constants.tabIndexUpcoming].image = UIImage(named: "calendar")
 				saveItems[Constants.tabIndexFavorites].image = UIImage(named: "favorite")
 				saveItems[Constants.tabIndexSettings].image = UIImage(named: "settings")
 			}

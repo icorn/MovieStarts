@@ -453,7 +453,7 @@
         <scene sceneID="ts5-aq-tbx">
             <objects>
                 <navigationController title="UpcomingNavigationController" id="hD1-in-9iX" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="1" title="Upcoming" image="Calendar.png" id="J9l-4c-wzx"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="Upcoming" image="calendar" id="J9l-4c-wzx"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="oNt-Gs-9za">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -532,7 +532,7 @@
         <scene sceneID="VyT-Oz-EW5">
             <objects>
                 <navigationController title="FavoritesNavigationController" id="S4U-1Q-lHo" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="2" title="Favorites" image="favoritetab.png" id="wqa-LQ-bZm"/>
+                    <tabBarItem key="tabBarItem" tag="2" title="Favorites" image="favorite" id="wqa-LQ-bZm"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="J79-vK-JJM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -598,7 +598,7 @@
         <scene sceneID="gVw-8b-BRz">
             <objects>
                 <navigationController title="NowNavigationController" id="kK1-8l-NS4" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Now Playing" image="Video.png" id="RGi-jq-dEF"/>
+                    <tabBarItem key="tabBarItem" title="Now Playing" image="video" id="RGi-jq-dEF"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="28j-pf-VFM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -659,7 +659,7 @@
         <scene sceneID="z53-VI-vcc">
             <objects>
                 <navigationController title="SettingsNavigationController" id="4Ah-gM-WwL" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" tag="3" title="Settings" image="Settings.png" id="PAq-6e-U3F"/>
+                    <tabBarItem key="tabBarItem" tag="3" title="Settings" image="settings" id="PAq-6e-U3F"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="FBv-tm-rXl">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -855,7 +855,7 @@
                             <outlet property="delegate" destination="ga5-U8-Txn" id="0YL-V8-cwD"/>
                         </connections>
                     </tableView>
-                    <tabBarItem key="tabBarItem" tag="3" title="Settings" image="Settings.png" id="NN6-eC-XmP"/>
+                    <tabBarItem key="tabBarItem" tag="3" title="Settings" image="settings" id="NN6-eC-XmP"/>
                     <navigationItem key="navigationItem" id="Db9-Ib-geM"/>
                     <connections>
                         <outlet property="aboutLabel" destination="iAa-SH-HfO" id="F0J-Gq-GMN"/>
@@ -1151,13 +1151,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Calendar.png" width="20" height="19"/>
-        <image name="Settings.png" width="20" height="20"/>
-        <image name="Video.png" width="20" height="20"/>
         <image name="about-icon" width="100" height="100"/>
         <image name="arrowmedium.png" width="20" height="20"/>
-        <image name="favoritetab.png" width="31" height="25"/>
+        <image name="calendar" width="20" height="19"/>
+        <image name="favorite" width="22" height="18"/>
         <image name="fresh.png" width="20" height="20"/>
         <image name="powered-by-tmdb" width="97" height="100"/>
+        <image name="settings" width="20" height="20"/>
+        <image name="video" width="20" height="20"/>
     </resources>
 </document>
