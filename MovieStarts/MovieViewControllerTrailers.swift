@@ -67,7 +67,7 @@ extension MovieViewController {
 
             if (trailerImage == nil) {
                 // trailer-image not found: use default-image
-                trailerImage = UIImage(named: "YoutubeBack.png")?.cgImage
+                trailerImage = UIImage(named: "no-trailer")?.cgImage
 
                 // load the correct image from YouTube
                 guard let sourceImageUrl = URL(string: "https://img.youtube.com/vi/" + trailerId + "/mqdefault.jpg") else { continue }
@@ -206,7 +206,7 @@ extension MovieViewController {
 
         if (button.tag >= Constants.tagTrailerGerman) {
             // german flag
-            flagImageView = UIImageView(image: UIImage(named: "flagGermany.png"))
+            flagImageView = UIImageView(image: UIImage(named: "germany"))
         }
         else {
             // english flag

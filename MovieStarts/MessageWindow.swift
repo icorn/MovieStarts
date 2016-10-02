@@ -70,7 +70,7 @@ class MessageWindow: NSObject {
 			backView.alpha = 0.7
 		}
 		
-		let logoImage = UIImage(named: "welcome")
+		let logoImage = UIImage(named: "message-icon")
 		if let logoImage = logoImage {
 			logoImageView = UIImageView()
 			logoImageView?.translatesAutoresizingMaskIntoConstraints = false

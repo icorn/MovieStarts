@@ -236,13 +236,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				imdbRatingLabel.text =  "\(scoreString)"
 				
 				if (score >= 7.0) {
-					imdbImageView.image = UIImage.init(named: "arrowup.png")
+					imdbImageView.image = UIImage.init(named: "arrow-up")
 				}
 				else if (score < 6.0) {
-					imdbImageView.image = UIImage.init(named: "arrowdown.png")
+					imdbImageView.image = UIImage.init(named: "arrow-down")
 				}
 				else {
-					imdbImageView.image = UIImage.init(named: "arrowmedium.png")
+					imdbImageView.image = UIImage.init(named: "arrow-medium")
 				}
 			}
 			else {
@@ -326,21 +326,21 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
         if (movie.imdbId != nil) {
             let imdbButton = UIButton()
-            imdbButton.setImage(UIImage(named: "imdb.png"), for: UIControlState.normal)
+            imdbButton.setImage(UIImage(named: "imdb"), for: UIControlState.normal)
             imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
             self.linksStackView.addArrangedSubview(imdbButton)
         }
 
         if (movie.tomatoURL != nil) {
             let tomatoButton = UIButton()
-            tomatoButton.setImage(UIImage(named: "fresh.png"), for: UIControlState.normal)
+            tomatoButton.setImage(UIImage(named: "rotten-tomatoes"), for: UIControlState.normal)
 //            tomatoButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
             self.linksStackView.addArrangedSubview(tomatoButton)
         }
 
         if (movie.tmdbId != nil) {
             let tmdbButton = UIButton()
-            tmdbButton.setImage(UIImage(named: "tmdb.png"), for: UIControlState.normal)
+            tmdbButton.setImage(UIImage(named: "tmdb"), for: UIControlState.normal)
 //            tmdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
             self.linksStackView.addArrangedSubview(tmdbButton)
         }
@@ -445,13 +445,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			if (Favorites.IDs.contains(movie.id)) {
 				// this movie is a favorite: show remove-button
 				if let navigationController = navigationController, let topViewController = navigationController.topViewController {
-					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite.png"), style: UIBarButtonItemStyle.done, target: self, action: #selector(MovieViewController.removeFavoriteButtonTapped(_:)))
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite"), style: UIBarButtonItemStyle.done, target: self, action: #selector(MovieViewController.removeFavoriteButtonTapped(_:)))
 				}
 			}
 			else {
 				// this movie is not a favorite: show add-button
 				if let navigationController = navigationController, let topViewController = navigationController.topViewController {
-					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favoriteframe.png"), style: UIBarButtonItemStyle.done, target: self, action: #selector(MovieViewController.addFavoriteButtonTapped(_:)))
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite-frame"), style: UIBarButtonItemStyle.done, target: self, action: #selector(MovieViewController.addFavoriteButtonTapped(_:)))
 				}
 			}
 		}

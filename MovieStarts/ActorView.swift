@@ -19,7 +19,7 @@ class ActorView: UIStackView {
         guard let imageView = self.imageView else { return }
 
         imageView.contentMode = UIViewContentMode.scaleAspectFill
-        imageView.image = UIImage(named: "noactor")
+        imageView.image = UIImage(named: "no-actor")
 
         let basePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
 
@@ -29,7 +29,7 @@ class ActorView: UIStackView {
 
             if (imageView.image == nil) {
                 // actor-image not found: use default-image
-                imageView.image = UIImage(named: "noactor")
+                imageView.image = UIImage(named: "no-actor")
 
                 // load the correct image from YouTube
                 guard let sourceImageUrl = URL(string: "http://image.tmdb.org/t/p/w45" + profilePicture) else {

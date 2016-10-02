@@ -297,7 +297,7 @@
                                                     <constraint firstAttribute="height" constant="1" id="PEc-g4-0iK"/>
                                                 </constraints>
                                             </view>
-                                            <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="50" distribution="equalSpacing" alignment="center" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="xmn-ie-vpS" userLabel="linksStackView"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="50" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xmn-ie-vpS" userLabel="linksStackView"/>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iff-xr-iIA" userLabel="bottomLine">
                                                 <color key="backgroundColor" red="0.86274509799999999" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
@@ -891,7 +891,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" restorationIdentifier="ContentView" translatesAutoresizingMaskIntoConstraints="NO" id="E39-Ln-ziu" userLabel="ContentView">
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="abouticon.png" translatesAutoresizingMaskIntoConstraints="NO" id="y83-Lm-RPB">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="about-icon" translatesAutoresizingMaskIntoConstraints="NO" id="y83-Lm-RPB">
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="100" id="fVK-p9-0qF"/>
                                                     <constraint firstAttribute="width" constant="100" id="xbh-6h-QR0"/>
@@ -989,10 +989,10 @@
                                                     <constraint firstAttribute="height" constant="1" id="piU-42-2yz"/>
                                                 </constraints>
                                             </view>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tmdb.png" translatesAutoresizingMaskIntoConstraints="NO" id="KBP-uJ-OEA">
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="powered-by-tmdb" translatesAutoresizingMaskIntoConstraints="NO" id="KBP-uJ-OEA">
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="100" id="ITy-Eg-jWF"/>
-                                                    <constraint firstAttribute="height" constant="68" id="qYr-wX-dEB"/>
+                                                    <constraint firstAttribute="width" constant="97" id="ITy-Eg-jWF"/>
+                                                    <constraint firstAttribute="height" constant="100" id="qYr-wX-dEB"/>
                                                 </constraints>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This product uses the TMDb API but is not endorsed or certified by TMDb." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hrX-um-F2x">
@@ -1154,10 +1154,10 @@
         <image name="Calendar.png" width="20" height="19"/>
         <image name="Settings.png" width="20" height="20"/>
         <image name="Video.png" width="20" height="20"/>
-        <image name="abouticon.png" width="100" height="100"/>
+        <image name="about-icon" width="100" height="100"/>
         <image name="arrowmedium.png" width="20" height="20"/>
         <image name="favoritetab.png" width="31" height="25"/>
         <image name="fresh.png" width="20" height="20"/>
-        <image name="tmdb.png" width="100" height="68"/>
+        <image name="powered-by-tmdb" width="97" height="100"/>
     </resources>
 </document>

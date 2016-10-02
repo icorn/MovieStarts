@@ -138,7 +138,7 @@ open class MovieRecord : CustomStringConvertible {
 			}
 		}
 		
-		_thumbnailImage = UIImage(named: "noposter.png")
+		_thumbnailImage = UIImage(named: "no-poster")
 		_thumbnailFound = false
 		return (_thumbnailImage, _thumbnailFound)
 	}
