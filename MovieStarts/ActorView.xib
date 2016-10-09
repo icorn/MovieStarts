@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ActorView" customModule="MovieStarts" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no-actor" translatesAutoresizingMaskIntoConstraints="NO" id="LsO-vp-2tG">
+                    <constraints>
+                        <constraint firstAttribute="height" constant="60" id="cpI-6F-a1O"/>
+                        <constraint firstAttribute="width" constant="45" id="x1X-vf-8M0"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jwt-GM-5Ec">
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wtu-mq-pvn">
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="200" id="YiN-N9-ync"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstItem="LsO-vp-2tG" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Co6-jE-5wM"/>
+                <constraint firstItem="Jwt-GM-5Ec" firstAttribute="leading" secondItem="LsO-vp-2tG" secondAttribute="trailing" constant="8" id="DIh-iD-7bE"/>
+                <constraint firstItem="wtu-mq-pvn" firstAttribute="leading" secondItem="LsO-vp-2tG" secondAttribute="trailing" constant="8" id="ESr-DX-nab"/>
+                <constraint firstItem="wtu-mq-pvn" firstAttribute="top" secondItem="Jwt-GM-5Ec" secondAttribute="bottom" constant="3" id="J6X-l6-6gK"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="wtu-mq-pvn" secondAttribute="trailing" constant="8" id="JgC-6f-tPT"/>
+                <constraint firstItem="LsO-vp-2tG" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="OwC-vL-nLE"/>
+                <constraint firstItem="Jwt-GM-5Ec" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="10" id="Yz0-Bp-0cb"/>
+                <constraint firstAttribute="bottom" secondItem="LsO-vp-2tG" secondAttribute="bottom" id="cjm-d1-BjU"/>
+                <constraint firstAttribute="trailing" secondItem="Jwt-GM-5Ec" secondAttribute="trailing" constant="8" id="fZ6-Fg-gfv"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="actorNameLabel" destination="Jwt-GM-5Ec" id="7w7-wP-Ikf"/>
+                <outlet property="characterLabelMaxWidth" destination="YiN-N9-ync" id="6wu-N0-4cD"/>
+                <outlet property="characterNameLabel" destination="wtu-mq-pvn" id="kY0-hP-MIR"/>
+                <outlet property="imageView" destination="LsO-vp-2tG" id="arV-Yy-xJf"/>
+            </connections>
+            <point key="canvasLocation" x="46.5" y="-206.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="no-actor" width="45" height="60"/>
+    </resources>
+</document>

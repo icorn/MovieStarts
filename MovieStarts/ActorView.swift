@@ -8,19 +8,25 @@
 
 import UIKit
 
-class ActorView: UIStackView {
+class ActorView: UIView { // UIStackView {
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var actorNameLabel: UILabel!
+    @IBOutlet weak var characterNameLabel: UILabel!
+    @IBOutlet weak var characterLabelMaxWidth: NSLayoutConstraint!
 
-    static let imageSize = 45
-    var imageView: UIImageView?
+    static let imageSize = CGFloat(45.0)
 
-    open func setupWithActor(_ actorName: String, characterName: String, profilePicture: String, hidden: Bool) {
 
-        self.imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: ActorView.imageSize, height: ActorView.imageSize))
-        guard let imageView = self.imageView else { return }
+    class func instanceFromNib() -> ActorView {
+        return UINib(nibName: "ActorView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! ActorView
+    }
 
-        imageView.contentMode = UIViewContentMode.scaleAspectFill
-        imageView.image = UIImage(named: "no-actor")
-
+    open func setupWithActorWithName(_ actorName: String,
+                                     characterName: String,
+                                     profilePicture: String,
+                                     hidden: Bool,
+                                     parentWidth: CGFloat)
+    {
         let basePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
 
         if let basePath = basePath, (profilePicture.characters.count > 0) {
@@ -31,7 +37,7 @@ class ActorView: UIStackView {
                 // actor-image not found: use default-image
                 imageView.image = UIImage(named: "no-actor")
 
-                // load the correct image from YouTube
+                // load the correct image from tmdb
                 guard let sourceImageUrl = URL(string: "http://image.tmdb.org/t/p/w45" + profilePicture) else {
                     return
                 }
@@ -45,7 +51,7 @@ class ActorView: UIStackView {
                         // move received poster to target path where it belongs and update the button
                         do {
                             try FileManager.default.moveItem(atPath: receivedPath, toPath: actorImageFilePath)
-                            imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
+                            self.imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
                         }
                         catch let error as NSError {
                             if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
@@ -62,29 +68,13 @@ class ActorView: UIStackView {
             }
         }
 
-        let actorNameLabel = UILabel()
         actorNameLabel.text = actorName
-        actorNameLabel.font = UIFont.systemFont(ofSize: 14.0)
 
-        let innerStackView = UIStackView(arrangedSubviews: [actorNameLabel])
-        innerStackView.axis = .vertical
-        innerStackView.alignment = UIStackViewAlignment.leading
-        innerStackView.distribution = UIStackViewDistribution.fill
-        innerStackView.spacing = 0
-        
         if (characterName.characters.count > 0) {
-            let characterNameLabel = UILabel()
             characterNameLabel.text = NSLocalizedString("ActorAs", comment: "") + " " + characterName
-            characterNameLabel.font = UIFont.systemFont(ofSize: 12.0)
-            innerStackView.addArrangedSubview(characterNameLabel)
         }
 
-        self.addArrangedSubview(imageView)
-        self.addArrangedSubview(innerStackView)
-        self.axis = .horizontal
-        self.alignment = UIStackViewAlignment.center
-        self.distribution = UIStackViewDistribution.fill
-        self.spacing = 8
+        self.characterLabelMaxWidth.constant = parentWidth - ActorView.imageSize - 48.0
         self.isHidden = hidden
     }
 
@@ -93,7 +83,7 @@ class ActorView: UIStackView {
         guard let inputImage = inputImage, let inputCgImage = inputImage.cgImage else { return nil }
 
         if let imageRef = inputCgImage.cropping(to:
-            CGRect(x: 0, y: 0, width: ActorView.imageSize, height: ActorView.imageSize + 15))
+            CGRect(x: 0.0, y: 0.0, width: ActorView.imageSize, height: ActorView.imageSize + 15.0))
         {
             return UIImage(cgImage: imageRef)
         }

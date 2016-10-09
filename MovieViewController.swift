@@ -40,9 +40,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var metascoreRatingLabel: UILabel!
 	@IBOutlet weak var metascoreInnerView: UIView!
 	@IBOutlet weak var moreStoryButton: UIButton!
-	
-	@IBOutlet weak var bottomLine: UIView!
-	
+
 	// constraints
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
@@ -71,6 +69,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
     @IBOutlet weak var metascoreOuterView: UIView!
     @IBOutlet weak var imdbInnerView: UIView!
     @IBOutlet weak var linksStackView: UIStackView!
+    @IBOutlet weak var linksHeadlineLabel: UILabel!
 
 	var posterImageViewTopConstraint: NSLayoutConstraint?
 	var posterImageViewLeadingConstraint: NSLayoutConstraint?
@@ -141,9 +140,15 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			shrinkStoryIfNeeded()
 
 			// Set nice distance between lowest line and the bottom of the content view.
-
-			contentView.addConstraint(NSLayoutConstraint(item: bottomLine, attribute: NSLayoutAttribute.bottom,
-				relatedBy: NSLayoutRelation.equal, toItem: contentView, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 10))
+/*
+			contentView.addConstraint(NSLayoutConstraint(item: linksStackView,
+			                                             attribute: NSLayoutAttribute.bottom,
+			                                             relatedBy: NSLayoutRelation.equal,
+			                                             toItem: contentView,
+			                                             attribute: NSLayoutAttribute.bottom,
+			                                             multiplier: 1.0,
+			                                             constant: 10))
+*/
 		}
 	}
 	
@@ -327,21 +332,24 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         if (movie.imdbId != nil) {
             let imdbButton = UIButton()
             imdbButton.setImage(UIImage(named: "imdb"), for: UIControlState.normal)
-            imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+            imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)),
+                                 for: UIControlEvents.touchUpInside)
             self.linksStackView.addArrangedSubview(imdbButton)
         }
 
         if (movie.tomatoURL != nil) {
             let tomatoButton = UIButton()
             tomatoButton.setImage(UIImage(named: "rotten-tomatoes"), for: UIControlState.normal)
-//            tomatoButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+            tomatoButton.addTarget(self, action: #selector(MovieViewController.rottenTomatoesButtonTapped(_:)),
+                                   for: UIControlEvents.touchUpInside)
             self.linksStackView.addArrangedSubview(tomatoButton)
         }
 
         if (movie.tmdbId != nil) {
             let tmdbButton = UIButton()
             tmdbButton.setImage(UIImage(named: "tmdb"), for: UIControlState.normal)
-//            tmdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+            tmdbButton.addTarget(self, action: #selector(MovieViewController.tmdbButtonTapped(_:)),
+                                 for: UIControlEvents.touchUpInside)
             self.linksStackView.addArrangedSubview(tmdbButton)
         }
 	}
@@ -375,6 +383,24 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		showImdbPage()
 	}
 
+    final func rottenTomatoesButtonTapped(_ sender: UIButton) {
+        if let tomatoURLString = movie?.tomatoURL {
+            guard let webUrl = URL(string: tomatoURLString) else { return }
+            let webVC = SFSafariViewController(url: webUrl)
+            webVC.delegate = self
+            self.present(webVC, animated: true, completion: nil)
+        }
+    }
+    
+    final func tmdbButtonTapped(_ sender: UIButton) {
+        guard let tmdbId = movie?.tmdbId else { return }
+        guard let tmdbURL = URL(string: "http://themoviedb.org/movie/\(tmdbId)") else { return }
+
+        let webVC = SFSafariViewController(url: tmdbURL)
+        webVC.delegate = self
+        self.present(webVC, animated: true, completion: nil)
+    }
+    
 	final func addFavoriteButtonTapped(_ sender:UIButton) {
 		if let movie = movie {
 			Favorites.addMovie(movie, tabBarController: movieTabBarController)
