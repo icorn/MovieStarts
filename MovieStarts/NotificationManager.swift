@@ -111,7 +111,7 @@ class NotificationManager {
 			
 			if (buttonIndex == 1) {
 				appDelegate.movieTabBarController?.selectedIndex = Constants.tabIndexFavorites
-				appDelegate.favoriteTableViewController?.showFavoriteMovie(movieID)
+				appDelegate.favoriteViewController?.showFavoriteMovie(movieID)
 			}
 		})
 	}

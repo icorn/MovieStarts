@@ -406,19 +406,19 @@ class TabBarController: UITabBarController {
 	}
 	
 
-	var nowPlayingController: NowTableViewController? {
+	var nowPlayingController: NowViewController? {
 		get {
 			return findTableViewController()
 		}
 	}
 	
-	var upcomingController: UpcomingTableViewController? {
+	var upcomingController: UpcomingViewController? {
 		get {
 			return findTableViewController()
 		}
 	}
 	
-	var favoriteController: FavoriteTableViewController? {
+	var favoriteController: FavoriteViewController? {
 		get {
 			return findTableViewController()
 		}

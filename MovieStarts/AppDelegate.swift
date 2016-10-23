@@ -37,20 +37,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		return stvc
 	}
-	var favoriteTableViewController: FavoriteTableViewController? {
-		var ftvc: FavoriteTableViewController?
+	var favoriteViewController: FavoriteViewController? {
+		var fvc: FavoriteViewController?
 		
 		if let viewControllersOfRoot = movieTabBarController?.viewControllers {
 			for viewControllerOfRoot in viewControllersOfRoot where viewControllerOfRoot is UINavigationController {
 				if let viewControllersOfNav = (viewControllerOfRoot as? UINavigationController)?.viewControllers {
-					for viewControllerOfNav in viewControllersOfNav where viewControllerOfNav is FavoriteTableViewController {
-						ftvc = viewControllerOfNav as? FavoriteTableViewController
+					for viewControllerOfNav in viewControllersOfNav where viewControllerOfNav is FavoriteViewController {
+						fvc = viewControllerOfNav as? FavoriteViewController
 						break
 					}
 				}
 			}
 		}
-		return ftvc
+		return fvc
 	}
 	
 
@@ -327,7 +327,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if (movieTitles.count == 1) {
 				// only one movie
 				self.movieTabBarController?.selectedIndex = Constants.tabIndexFavorites
-				self.favoriteTableViewController?.showFavoriteMovie(movieIDs[0])
+				self.favoriteViewController?.showFavoriteMovie(movieIDs[0])
 			}
 			else {
 				// multiple movies
