@@ -51,7 +51,19 @@ class TabBarController: UITabBarController {
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+
+        // hack: load all children of tabbarcontroller to be able to delete and add movies before children are visible
+
+        for viewController in self.viewControllers!
+        {
+            if let navController = viewController as? UINavigationController {
+                for child in navController.childViewControllers {
+                    // access "view" to force loading it
+                    child.view.isHidden = false
+                }
+            }
+        }
+
 		if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let notification = appDelegate.movieReleaseNotification {
 			// we have a notification for the user
 			guard let userInfo = notification.userInfo,

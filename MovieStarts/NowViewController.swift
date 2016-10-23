@@ -15,23 +15,7 @@ class NowViewController: MovieListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // set up custom datasource and delegate
-/*
-        self.movieTableViewDataSource = MovieTableViewDataSource(tabBarController: (navigationController?.parent as? TabBarController)!,
-                                                            favoriteIconManager: self,
-                                                            movieTab: MovieTab.nowPlaying)
-        self.tableView.dataSource = self.movieTableViewDataSource
-
-        self.movieTableViewDelegate = MovieTableViewDelegate(movieTableViewDataSource: self.movieTableViewDataSource!,
-                                                        favoriteIconManager: self,
-                                                        tableView: self.tableView,
-                                                        vcWithTable: self)
-        self.tableView.delegate = movieTableViewDelegate
-*/
-
         (self.tableView.dataSource as? MovieTableViewDataSource)?.currentTab = MovieTab.nowPlaying
-
-        // set up title
         navigationItem.title = NSLocalizedString("NowPlayingLong", comment: "")
     }
 

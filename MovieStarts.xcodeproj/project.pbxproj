@@ -451,7 +451,6 @@
 				4F7A99AE1BAF01E600ED38C9 /* NetworkChecker.swift */,
 				4F2D38311C5BC984000927E7 /* NotificationManager.swift */,
 				4F95FC281C10A9C9008F482B /* Reach.swift */,
-				4FDD6B031DBD2F2800904FF2 /* Delete */,
 				4F87F9271A8DF0C1001869A1 /* View Controllers */,
 				4F70ACBF1BCC419100E34987 /* WatchSessionManager.swift */,
 			);
@@ -507,13 +506,6 @@
 				4FB552F11C9560390053A81B /* TomatoImage.swift */,
 			);
 			name = Enums;
-			sourceTree = "<group>";
-		};
-		4FDD6B031DBD2F2800904FF2 /* Delete */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Delete;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

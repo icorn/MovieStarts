@@ -18,12 +18,11 @@ protocol FavoriteIconDelegate {
 class MovieTableViewDataSource : NSObject, UITableViewDataSource {
 
     var tabBarController: TabBarController
-    var currentTab: MovieTab?
     var favoriteIconManager: FavoriteIconDelegate
+    var currentTab: MovieTab?
 
-    init(tabBarController: TabBarController, favoriteIconManager: FavoriteIconDelegate /*, movieTab: MovieTab*/) {
+    init(tabBarController: TabBarController, favoriteIconManager: FavoriteIconDelegate) {
         self.tabBarController = tabBarController
-//        self.currentTab = movieTab
         self.favoriteIconManager = favoriteIconManager
     }
 

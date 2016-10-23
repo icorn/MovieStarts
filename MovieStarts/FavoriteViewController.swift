@@ -15,28 +15,8 @@ class FavoriteViewController: MovieListViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // set up custom datasource and delegate
-/*
-        self.movieTableViewDataSource =
-            MovieTableViewDataSource(tabBarController: (navigationController?.parent as? TabBarController)!,
-                                     favoriteIconManager: self,
-                                     movieTab: MovieTab.favorites)
-        self.tableView.dataSource = self.movieTableViewDataSource
-
-        // TODO ???
-
-        self.movieTableViewDelegate = MovieTableViewDelegate(movieTableViewDataSource: self.movieTableViewDataSource!,
-                                                             favoriteIconManager: self,
-                                                             tableView: self.tableView,
-                                                             vcWithTable: self)
-        self.tableView.delegate = movieTableViewDelegate
-*/
-
         (self.tableView.dataSource as? MovieTableViewDataSource)?.currentTab = MovieTab.favorites
-
-        // set up title
         navigationItem.title = NSLocalizedString("FavoritesLong", comment: "")
-
         checkForEmptyList()
     }
 
@@ -133,10 +113,6 @@ class FavoriteViewController: MovieListViewController {
 
 
     func removeFavorite(_ removedFavoriteId: String) {
-        if (tableView == nil) {
-            return
-        }
-
         tableView.beginUpdates()
         removeFavoritePrivate(removedFavoriteId)
         tableView.endUpdates()

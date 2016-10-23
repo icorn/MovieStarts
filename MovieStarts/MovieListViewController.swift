@@ -15,27 +15,23 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
     var movieTableViewDelegate: MovieTableViewDelegate?
     var tableViewOutlet: UITableView!
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableViewOutlet.register(UINib(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
 
-
-
-
-        self.movieTableViewDataSource = MovieTableViewDataSource(tabBarController: (navigationController?.parent as? TabBarController)!,
-                                                                 favoriteIconManager: self /*,
-                                                                 movieTab: MovieTab.nowPlaying */ )
+        // set up data source
+        self.movieTableViewDataSource =
+            MovieTableViewDataSource(tabBarController: (navigationController?.parent as? TabBarController)!,
+                                     favoriteIconManager: self)
         self.tableViewOutlet.dataSource = self.movieTableViewDataSource
 
+        // set up delegate
         self.movieTableViewDelegate = MovieTableViewDelegate(movieTableViewDataSource: self.movieTableViewDataSource!,
                                                              favoriteIconManager: self,
                                                              tableView: self.tableViewOutlet,
                                                              vcWithTable: self)
         self.tableViewOutlet.delegate = movieTableViewDelegate
-
-
-
     }
 
     var settingsTableViewController: SettingsTableViewController? {
@@ -207,14 +203,17 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
 
                             for (nowIndex, nowMovie) in movieListDataSource.nowMovies.enumerated() {
                                 if (nowMovie.tmdbId == movie.tmdbId) {
-                                    movieListDataSource.nowMovies[nowIndex].migrate(updateRecord: movie, updateKeys: databaseMigrator.queryKeys)
+                                    movieListDataSource.nowMovies[nowIndex].migrate(updateRecord: movie,
+                                                                                    updateKeys: databaseMigrator.queryKeys)
                                     updated = true
                                     break
                                 }
                             }
 
                             if (updated == false) {
-                                for (upcomingSectionIndex, upcomingMovieSection) in movieListDataSource.tabBarController.upcomingMovies.enumerated() {
+                                for (upcomingSectionIndex, upcomingMovieSection) in
+                                    movieListDataSource.tabBarController.upcomingMovies.enumerated()
+                                {
                                     for (upcomingMovieIndex, upcomingMovie) in upcomingMovieSection.enumerated() {
                                         if (upcomingMovie.tmdbId == movie.tmdbId) {
                                             movieListDataSource.tabBarController.upcomingMovies[upcomingSectionIndex][upcomingMovieIndex].migrate(updateRecord: movie, updateKeys: databaseMigrator.queryKeys)
@@ -224,7 +223,9 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                 }
                             }
 
-                            for (favoriteSectionIndex, favoriteMovieSection) in movieListDataSource.tabBarController.favoriteMovies.enumerated() {
+                            for (favoriteSectionIndex, favoriteMovieSection) in
+                                movieListDataSource.tabBarController.favoriteMovies.enumerated()
+                            {
                                 for (favoriteMovieIndex, favoriteMovie) in favoriteMovieSection.enumerated() {
                                     if (favoriteMovie.tmdbId == movie.tmdbId) {
                                         movieListDataSource.tabBarController.favoriteMovies[favoriteSectionIndex][favoriteMovieIndex].migrate(updateRecord: movie, updateKeys: databaseMigrator.queryKeys)
@@ -233,7 +234,8 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                 }
                             }
 
-                            updateWindow?.updateProgressIndicator("\(updateCounter) " + NSLocalizedString("RatingUpdateProgress", comment: ""))
+                            updateWindow?.updateProgressIndicator("\(updateCounter) " +
+                                NSLocalizedString("RatingUpdateProgress", comment: ""))
                         },
 
                         completionHandler: { (movies: [MovieRecord]?) in
@@ -259,10 +261,14 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                 var infoWindow: MessageWindow?
 
                                 DispatchQueue.main.async {
-                                    infoWindow = MessageWindow(parent: movieListDataSource.tabBarController.view, darkenBackground: true, titleStringId: "UpdateFailedHeadline", textStringId: "UpdateFailedText",
-                                                               buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
-                                                                infoWindow?.close()
-                                        }
+                                    infoWindow = MessageWindow(parent: movieListDataSource.tabBarController.view,
+                                                               darkenBackground: true,
+                                                               titleStringId: "UpdateFailedHeadline",
+                                                               textStringId: "UpdateFailedText",
+                                                               buttonStringIds: ["Close"],
+                                                               handler: { (buttonIndex) -> () in
+                                                                   infoWindow?.close()
+                                                               }
                                     )
                                 }
                             }
@@ -298,7 +304,8 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
         // get position of new movie after sorting so we can insert it
         for movieIndex in 0 ..< movieListDataSource.moviesInSections[foundSectionIndex].count {
             if (movieListDataSource.moviesInSections[foundSectionIndex][movieIndex].id == newMovie.id) {
-                tableViewOutlet.insertRows(at: [IndexPath(row: movieIndex, section: foundSectionIndex)], with: UITableViewRowAnimation.automatic)
+                tableViewOutlet.insertRows(at: [IndexPath(row: movieIndex,
+                                                          section: foundSectionIndex)], with: UITableViewRowAnimation.automatic)
                 break
             }
         }
