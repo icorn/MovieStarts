@@ -1,18 +1,21 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="AgC-eL-Hgc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch38" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="8092"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="11508"/>
     </dependencies>
     <scenes>
         <!--MovieStarts-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller identifier="MovieInterfaceController" title="MovieStarts" id="AgC-eL-Hgc" customClass="MovieInterfaceController" customModule="watchOS2app_Extension">
+                <controller identifier="MovieInterfaceController" title="MovieStarts" id="AgC-eL-Hgc" customClass="MovieInterfaceController" customModule="watchOSapp_Extension">
                     <items>
                         <table alignment="left" id="g5i-t9-czj" userLabel="MovieTable">
                             <items>
-                                <tableRow identifier="EmptyRow" selectable="NO" id="sOs-Al-Knj" customClass="EmptyRow" customModule="watchOS2app_Extension">
+                                <tableRow identifier="EmptyRow" selectable="NO" id="sOs-Al-Knj" customClass="EmptyRow" customModule="watchOSapp_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" layout="vertical" spacing="0.0" id="NrZ-i2-v54">
                                         <items>
                                             <label width="1" alignment="left" verticalAlignment="center" text="TextLabel" textAlignment="left" numberOfLines="0" id="6YM-zu-t9r"/>
@@ -23,21 +26,21 @@
                                         <outlet property="textLabel" destination="6YM-zu-t9r" id="XrI-qC-fdb"/>
                                     </connections>
                                 </tableRow>
-                                <tableRow identifier="DateRow" selectable="NO" id="QI8-Dg-wbg" customClass="DateRow" customModule="watchOS2app_Extension">
+                                <tableRow identifier="DateRow" selectable="NO" id="QI8-Dg-wbg" customClass="DateRow" customModule="watchOSapp_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" id="6ki-C0-yOI">
                                         <items>
                                             <label alignment="left" text="DateLabel" id="q1e-Tn-0nH">
-                                                <color key="textColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
                                             </label>
                                         </items>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </group>
                                     <connections>
                                         <outlet property="dateLabel" destination="q1e-Tn-0nH" id="Nwa-bf-GNd"/>
                                     </connections>
                                 </tableRow>
-                                <tableRow identifier="MovieRow" id="Ssi-bd-7CL" customClass="MovieRow" customModule="watchOS2app_Extension">
+                                <tableRow identifier="MovieRow" id="Ssi-bd-7CL" customClass="MovieRow" customModule="watchOSapp_Extension">
                                     <group key="rootItem" width="1" height="0.0" alignment="left" spacing="4" id="EaY-7c-zIc" userLabel="MainGroup">
                                         <items>
                                             <imageView width="24" height="35" alignment="left" verticalAlignment="center" id="pU2-cW-tjj" userLabel="PosterImage"/>
@@ -47,7 +50,7 @@
                                                         <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                                     </label>
                                                     <label width="1" alignment="left" verticalAlignment="center" text="DetailLabel" textAlignment="left" id="MCD-XR-7H1">
-                                                        <color key="textColor" red="0.0" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" red="0.10734559595584869" green="0.83958220481872559" blue="0.82962596416473389" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
                                                     </label>
                                                 </items>
@@ -74,7 +77,7 @@
         <!--Detail-->
         <scene sceneID="eo5-Z9-513">
             <objects>
-                <controller identifier="DetailInterfaceController" title="Detail" id="URM-SA-F8i" customClass="DetailInterfaceController" customModule="watchOS2app_Extension">
+                <controller identifier="DetailInterfaceController" title="Detail" id="URM-SA-F8i" customClass="DetailInterfaceController" customModule="watchOSapp_Extension">
                     <items>
                         <group width="1" alignment="left" layout="vertical" spacing="6" id="3MO-ga-1ty" userLabel="MainGroup">
                             <items>
@@ -83,7 +86,7 @@
                                     <fontDescription key="font" style="UICTFontTextStyleHeadline"/>
                                 </label>
                                 <separator width="1" alignment="center" id="8Tm-fN-U87">
-                                    <color key="color" red="0.0" green="0.86274509803921573" blue="0.86274509803921573" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="color" red="0.10734559595584869" green="0.83958220481872559" blue="0.82962596416473389" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </separator>
                                 <group width="1" alignment="left" layout="vertical" spacing="2" id="wN5-oT-qfF" userLabel="dataGroup">
                                     <items>
@@ -95,7 +98,7 @@
                                 <group width="1" alignment="left" layout="vertical" spacing="2" id="ZBf-44-dhP" userLabel="directorGroup">
                                     <items>
                                         <label width="1" alignment="left" text="directorHeadlineLabel" textAlignment="left" id="gy1-tu-5T3">
-                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
                                         </label>
                                         <label width="1" alignment="left" text="directorLabel" textAlignment="left" numberOfLines="5" id="ofF-EN-Juz">
@@ -106,7 +109,7 @@
                                 <group width="1" alignment="left" layout="vertical" spacing="2" id="Xcq-st-svD" userLabel="actorGroup">
                                     <items>
                                         <label width="1" alignment="left" text="actorHeadlineLabel" textAlignment="left" id="P6u-4h-VLM">
-                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
                                         </label>
                                         <label width="1" alignment="left" text="actorLabel" textAlignment="left" numberOfLines="8" id="50X-g6-pf0">
@@ -117,7 +120,7 @@
                                 <group width="1" alignment="left" layout="vertical" spacing="2" id="yPT-RD-GoH" userLabel="synopsisGroup">
                                     <items>
                                         <label width="1" alignment="left" text="synopsisHeadlineLabel" textAlignment="left" id="azW-WW-Xto">
-                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" red="0.0" green="0.86274509799999999" blue="0.86274509799999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" style="UICTFontTextStyleFootnote"/>
                                         </label>
                                         <label width="1" alignment="left" text="synopsisLabel" textAlignment="left" numberOfLines="50" id="nyD-tJ-ru3">

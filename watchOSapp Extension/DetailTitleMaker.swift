@@ -41,6 +41,7 @@ class DetailTitleMaker {
 			}
 			
 			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 2)
+            detailText += " | "
 		}
 
 		// add countries

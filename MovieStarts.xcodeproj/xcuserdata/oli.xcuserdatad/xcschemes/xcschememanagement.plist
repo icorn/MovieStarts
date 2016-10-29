@@ -9,10 +9,10 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>watchOS2app.xcscheme</key>
+		<key>watchOSapp.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>6</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -23,6 +23,11 @@
 			<true/>
 		</dict>
 		<key>4F4A26821BC934000077AEF5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4F63D8C81DC3EDE700922C4A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
