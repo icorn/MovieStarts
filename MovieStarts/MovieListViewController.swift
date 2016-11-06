@@ -13,7 +13,11 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
 
     var movieTableViewDataSource: MovieTableViewDataSource?
     var movieTableViewDelegate: MovieTableViewDelegate?
+
     var tableViewOutlet: UITableView!
+    var filterViewOutlet: FilterView?
+    var filterViewHeight: NSLayoutConstraint?
+    var filterViewTop: NSLayoutConstraint?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +36,78 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                                              tableView: self.tableViewOutlet,
                                                              vcWithTable: self)
         self.tableViewOutlet.delegate = movieTableViewDelegate
+        navigationItem.setRightBarButtonItems(
+            [UIBarButtonItem(image: UIImage(named: "filter-hollow"),
+                             style: UIBarButtonItemStyle.plain,
+                             target: self,
+                             action: #selector(filterButtonTapped(_:))),
+             UIBarButtonItem(image: UIImage(named: "switch-to-grid"),
+                             style: UIBarButtonItemStyle.plain,
+                             target: self,
+                             action: #selector(gridListSwitchButtonTapped(_:)))
+            ],
+            animated: false)
+
+        self.fillTagListViewWithGenres()
+    }
+
+
+    func filterButtonTapped(_ sender: UIButton!) {
+        if (self.filterViewTop?.constant == 0) {
+            hideFilterView(animated: true)
+        }
+        else {
+            showFilterView(animated: true)
+        }
+    }
+
+    func gridListSwitchButtonTapped(_ sender: UIButton!) {
+    }
+
+    func showFilterView(animated: Bool) {
+        if (animated) {
+            UIView.animate(
+                withDuration: 0.2,
+                delay: 0.0,
+                options: UIViewAnimationOptions.curveEaseOut,
+                animations: {
+                    self.filterViewTop?.constant = 0
+                    self.view.layoutIfNeeded()
+                },
+                completion: { (_) in }
+            )
+        }
+        else {
+            self.filterViewTop?.constant = 0
+        }
+    }
+
+    func hideFilterView(animated: Bool) {
+        guard let realHeight = self.filterViewOutlet?.realHeight else { return }
+
+        if (animated) {
+            UIView.animate(
+                withDuration: 0.2,
+                delay: 0.0,
+                options: UIViewAnimationOptions.curveEaseOut,
+                animations: {
+                    self.filterViewTop?.constant = -realHeight
+                    self.view.layoutIfNeeded()
+                },
+                completion: { (_) in }
+            )
+        }
+        else {
+            self.filterViewTop?.constant = -realHeight
+        }
+    }
+
+    func fillTagListViewWithGenres() {
+        guard let genreDict = movieTableViewDataSource?.tabBarController.genreDict else { return }
+
+        for genreName in genreDict.sorted(by: { (a, b) in a.value < b.value }) {
+            filterViewOutlet?.tagListView.addTag(genreName.value)
+        }
     }
 
     var settingsTableViewController: SettingsTableViewController? {
@@ -54,6 +130,14 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        // set header height and move it up to be invisible
+
+        if let realHeight = self.filterViewOutlet?.realHeight {
+            self.filterViewHeight?.constant = realHeight
+        }
+
+        self.hideFilterView(animated: false)
 
         // reload to update favorite-icon if we come back from detail view.
         tableViewOutlet.reloadData()

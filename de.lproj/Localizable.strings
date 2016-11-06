@@ -10,9 +10,9 @@
 // Tabs
 
 "NowPlayingTabBar"	= "Jetzt";
-"NowPlayingLong"	= "Jetzt im Kino";
+"NowPlayingLong"	= "Jetzt";
 "UpcomingTabBar"	= "Demnächst";
-"UpcomingLong"		= "Demnächst im Kino";
+"UpcomingLong"		= "Demnächst";
 "FavoritesTabBar"	= "Favoriten";
 "FavoritesLong"		= "Favoriten";
 "SettingsTabBar"	= "Einstellungen";
@@ -21,6 +21,10 @@
 "LoadingMovies"		= "Filme laden...";
 "NoFavorites"		= "Keine Favoriten";
 "HowToAddFavorites" = "Du kannst Favoriten entweder in einer Listenansicht durch Wischen nach links oder in einer Detailansicht durch Tap auf den Herz-Button hinzufügen.";
+"OnlyGoodMovies"    = "Nur gute\nFilme";
+"OnlyNewMovies"     = "Nur neue\nFilme";
+"Genres"            = "Genres";
+"TapGenreTag"       = "Antappen schaltet Genre ein oder aus";
 
 // Details view
 

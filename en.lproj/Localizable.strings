@@ -10,9 +10,9 @@
 // Tabs
 
 "NowPlayingTabBar"	= "Now Playing";
-"NowPlayingLong"	= "Now Playing in Theaters";
+"NowPlayingLong"	= "Now Playing";
 "UpcomingTabBar"	= "Upcoming";
-"UpcomingLong"		= "Upcoming Movies in Theaters";
+"UpcomingLong"		= "Upcoming Movies";
 "FavoritesTabBar"	= "Favorites";
 "FavoritesLong"		= "Favorites";
 "SettingsTabBar"	= "Settings";
@@ -21,6 +21,10 @@
 "LoadingMovies"		= "Loading movies...";
 "NoFavorites"		= "No Favorites";
 "HowToAddFavorites" = "You can add favorites either in a movie list by swiping to the left, or in a detail view by tapping the heart shaped favorite button.";
+"OnlyGoodMovies"    = "Only good\nmovies";
+"OnlyNewMovies"     = "Only new\nmovies";
+"Genres"            = "Genres";
+"TapGenreTag"       = "Tap to switch genre on or off";
 
 // Details view
 
