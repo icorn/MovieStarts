@@ -619,7 +619,8 @@
 				4FAFF8C01A8BFFE500864078 /* Frameworks */,
 				4FAFF8C11A8BFFE500864078 /* Resources */,
 				4F8EE10D1BC13B9C00F1710A /* Embed Watch Content */,
-				4F0CCC911CFAFAD7003D5BA4 /* ShellScript */,
+				4F0CCC911CFAFAD7003D5BA4 /* Integrate Fabric */,
+				4F2227021DEB5D3600E1B035 /* Integrate Reveal Server */,
 			);
 			buildRules = (
 			);
@@ -750,18 +751,33 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4F0CCC911CFAFAD7003D5BA4 /* ShellScript */ = {
+		4F0CCC911CFAFAD7003D5BA4 /* Integrate Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Integrate Fabric";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "./Fabric.framework/run cd33404e9b129bee66c039ab4eccd72b4f411510 3b6a49df25d45ea8ffd726a63b25beed7536ed68f3cb68d7de1a71142a1e5554";
+		};
+		4F2227021DEB5D3600E1B035 /* Integrate Reveal Server */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Integrate Reveal Server";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export REVEAL_SERVER_FILENAME=\"RevealServer.framework\"\n\n# Update this path to point to the location of RevealServer.framework in your project.\nexport REVEAL_SERVER_PATH=\"${SRCROOT}/${REVEAL_SERVER_FILENAME}\"\n\n# If configuration is not Debug, skip this script.\n[ \"${CONFIGURATION}\" != \"Debug\" ] && exit 0\n\n# If RevealServer.framework exists at the specified path, run code signing script.\nif [ -d \"${REVEAL_SERVER_PATH}\" ]; then\n\"${REVEAL_SERVER_PATH}/Scripts/copy_and_codesign_revealserver.sh\"\nelse\necho \"Cannot find RevealServer.framework, so Reveal Server will not be started for your app.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1141,9 +1157,9 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SYSTEM_APPS_DIR)/Reveal.app/Contents/SharedSupport/iOS-Libraries",
 					"$(PROJECT_DIR)",
+					"$(inherited)",
+					"$(SRCROOT)",
 				);
 				INFOPLIST_FILE = MovieStarts/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1151,8 +1167,8 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lz",
-					"-framework",
-					Reveal,
+					"-weak_framework",
+					RevealServer,
 				);
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
