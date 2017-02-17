@@ -205,7 +205,6 @@
 		4F7A99A71BAE1A6700ED38C9 /* AnimatedTabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedTabBar.swift; sourceTree = "<group>"; };
 		4F7A99AC1BAEA0CE00ED38C9 /* MovieViewControllerPosters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieViewControllerPosters.swift; sourceTree = "<group>"; };
 		4F7A99AE1BAF01E600ED38C9 /* NetworkChecker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkChecker.swift; sourceTree = "<group>"; };
-		4F7F97201B53F7C100054F18 /* Reveal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reveal.framework; path = "../../../../../../../Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/Reveal.framework"; sourceTree = "<group>"; };
 		4F851AF81D36D2BD00448540 /* MovieViewControllerActors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieViewControllerActors.swift; sourceTree = "<group>"; };
 		4F87F9251A8DEE31001869A1 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4F885C7B1CA5C39000659D2D /* MovieDatabaseParent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseParent.swift; sourceTree = "<group>"; };
@@ -476,7 +475,6 @@
 				4FAFF8C71A8BFFE500864078 /* Info.plist */,
 				4F63E62A1A9A415100528FB3 /* Launch Images */,
 				4F63E6231A99CB5D00528FB3 /* Localizable.strings */,
-				4F7F97201B53F7C100054F18 /* Reveal.framework */,
 				4FCA67891D8E904A00FC20C2 /* SwiftyBeaver-1.1.1 */,
 				4F1F63771DC7FD6400449C88 /* TagListView-1.1.0 */,
 			);
