@@ -21,8 +21,10 @@
 "LoadingMovies"		= "Filme laden...";
 "NoFavorites"		= "Keine Favoriten";
 "HowToAddFavorites" = "Du kannst Favoriten entweder in einer Listenansicht durch Wischen nach links oder in einer Detailansicht durch Tap auf den Herz-Button hinzufügen.";
-"OnlyGoodMovies"    = "Nur gute\nFilme";
-"OnlyNewMovies"     = "Nur neue\nFilme";
+"OnlyGoodMoviesCR"  = "Nur gute\nFilme";
+"OnlyNewMoviesCR"   = "Nur neue\nFilme";
+"OnlyGoodMovies"    = "Nur gute Filme";
+"OnlyNewMovies"     = "Nur neue Filme";
 "Genres"            = "Genres";
 "TapGenreTag"       = "Antappen schaltet Genre ein oder aus";
 

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FilterView" customModule="MovieStarts" customModuleProvider="target">
             <connections>
+                <outlet property="activateFilterLabel" destination="dsG-kk-0r1" id="SWO-JB-Gwr"/>
+                <outlet property="activateFilterSwitch" destination="biy-P6-LzY" id="HD2-gJ-UR1"/>
+                <outlet property="bottomView" destination="Kje-Wh-iN2" id="T8o-3l-n4C"/>
                 <outlet property="genresLabel" destination="lCf-mm-Gz2" id="mdY-oG-Yo1"/>
                 <outlet property="onlyGoodMoviesLabel" destination="sYV-5q-Lhm" id="J6J-RW-Oq8"/>
                 <outlet property="onlyGoodMoviesSwitch" destination="B4e-aX-fbO" id="gLg-gB-NUq"/>
@@ -29,42 +32,31 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t7q-NW-xB2" userLabel="topView">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="47"/>
                     <subviews>
-                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B4e-aX-fbO">
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="biy-P6-LzY" userLabel="Activate Filter Switch">
                             <rect key="frame" x="8" y="8" width="51" height="31"/>
-                            <color key="onTintColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="activateFilterSwitchTapped:" destination="-1" eventType="primaryActionTriggered" id="R8J-et-RUO"/>
+                            </connections>
                         </switch>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nur gute Filme" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sYV-5q-Lhm">
-                            <rect key="frame" x="65" y="15.5" width="95" height="17"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yqQ-lV-Qsw">
-                            <rect key="frame" x="172" y="8" width="51" height="31"/>
-                            <color key="onTintColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </switch>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nur neue Filme" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VkG-ze-xt7">
-                            <rect key="frame" x="229" y="14.5" width="97.5" height="17"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filter aktivieren" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dsG-kk-0r1" userLabel="Activate Filter Label">
+                            <rect key="frame" x="65" y="15" width="99" height="17"/>
                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
                     <color key="backgroundColor" red="0.094117647058823528" green="0.74509803921568629" blue="0.74117647058823533" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="B4e-aX-fbO" firstAttribute="top" secondItem="t7q-NW-xB2" secondAttribute="top" constant="8" id="34x-FB-CHC"/>
-                        <constraint firstItem="yqQ-lV-Qsw" firstAttribute="leading" secondItem="sYV-5q-Lhm" secondAttribute="trailing" constant="12" id="OGI-xV-iHv"/>
-                        <constraint firstItem="sYV-5q-Lhm" firstAttribute="leading" secondItem="B4e-aX-fbO" secondAttribute="trailing" constant="8" id="OSb-kn-gne"/>
-                        <constraint firstItem="VkG-ze-xt7" firstAttribute="centerY" secondItem="B4e-aX-fbO" secondAttribute="centerY" id="Rpo-nl-yD1"/>
-                        <constraint firstAttribute="bottom" secondItem="B4e-aX-fbO" secondAttribute="bottom" constant="8" id="gE9-im-Fr0"/>
-                        <constraint firstItem="yqQ-lV-Qsw" firstAttribute="centerY" secondItem="B4e-aX-fbO" secondAttribute="centerY" id="gY5-6S-NMH"/>
-                        <constraint firstItem="sYV-5q-Lhm" firstAttribute="centerY" secondItem="B4e-aX-fbO" secondAttribute="centerY" id="gYU-Zi-6eB"/>
-                        <constraint firstItem="VkG-ze-xt7" firstAttribute="leading" secondItem="yqQ-lV-Qsw" secondAttribute="trailing" constant="8" id="lXW-RL-3cL"/>
-                        <constraint firstItem="B4e-aX-fbO" firstAttribute="leading" secondItem="t7q-NW-xB2" secondAttribute="leading" constant="8" id="qrS-xa-Usv"/>
+                        <constraint firstItem="dsG-kk-0r1" firstAttribute="centerY" secondItem="biy-P6-LzY" secondAttribute="centerY" id="IvC-yS-F9b"/>
+                        <constraint firstItem="biy-P6-LzY" firstAttribute="leading" secondItem="t7q-NW-xB2" secondAttribute="leading" constant="8" id="NR4-AQ-bXv"/>
+                        <constraint firstItem="biy-P6-LzY" firstAttribute="top" secondItem="t7q-NW-xB2" secondAttribute="top" constant="8" id="c60-Wo-C8Q"/>
+                        <constraint firstAttribute="bottom" secondItem="biy-P6-LzY" secondAttribute="bottom" constant="8" id="j9x-vV-IF3"/>
+                        <constraint firstItem="dsG-kk-0r1" firstAttribute="leading" secondItem="biy-P6-LzY" secondAttribute="trailing" constant="8" id="zD7-hX-qWm"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kje-Wh-iN2" userLabel="bottomView">
-                    <rect key="frame" x="0.0" y="47" width="375" height="64"/>
+                    <rect key="frame" x="0.0" y="47" width="375" height="107"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Genres:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lCf-mm-Gz2">
                             <rect key="frame" x="8" y="8" width="53.5" height="18"/>
@@ -78,7 +70,7 @@
                             <color key="textColor" red="0.0" green="0.38853589863038451" blue="0.39217167139053344" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uCF-1M-2cF" customClass="TagListView" customModule="MovieStarts" customModuleProvider="target">
+                        <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="24" translatesAutoresizingMaskIntoConstraints="NO" id="uCF-1M-2cF" customClass="TagListView" customModule="MovieStarts" customModuleProvider="target">
                             <rect key="frame" x="8" y="32" width="359" height="24"/>
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="24" id="u3o-CL-T4a"/>
@@ -111,24 +103,56 @@
                                 <userDefinedRuntimeAttribute type="number" keyPath="marginX">
                                     <real key="value" value="4"/>
                                 </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="boolean" keyPath="enableRemoveButton" value="NO"/>
                             </userDefinedRuntimeAttributes>
                         </view>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="B4e-aX-fbO">
+                            <rect key="frame" x="8" y="68" width="51" height="31"/>
+                            <connections>
+                                <action selector="onlyGoodMoviesTapped:" destination="-1" eventType="primaryActionTriggered" id="qG5-kA-P2p"/>
+                            </connections>
+                        </switch>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nur gute Filme" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sYV-5q-Lhm">
+                            <rect key="frame" x="65" y="75" width="95" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yqQ-lV-Qsw">
+                            <rect key="frame" x="172" y="68" width="51" height="31"/>
+                            <connections>
+                                <action selector="onlyNewMoviesTapped:" destination="-1" eventType="primaryActionTriggered" id="weN-G8-35I"/>
+                            </connections>
+                        </switch>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nur neue Filme" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VkG-ze-xt7">
+                            <rect key="frame" x="229" y="75" width="97.5" height="17"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.094117647058823528" green="0.60392156860000001" blue="0.60392156860000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.095478378239999995" green="0.74692291020000001" blue="0.74115878339999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="B4e-aX-fbO" firstAttribute="top" secondItem="uCF-1M-2cF" secondAttribute="bottom" constant="12" id="36j-AF-Nts"/>
+                        <constraint firstAttribute="bottom" secondItem="B4e-aX-fbO" secondAttribute="bottom" constant="8" id="6pt-PZ-qix"/>
                         <constraint firstItem="lCf-mm-Gz2" firstAttribute="top" secondItem="Kje-Wh-iN2" secondAttribute="top" constant="8" id="8zL-4C-Eff"/>
                         <constraint firstAttribute="trailing" secondItem="Qwh-xu-tzd" secondAttribute="trailing" constant="8" id="A4I-WW-ii1"/>
+                        <constraint firstItem="yqQ-lV-Qsw" firstAttribute="leading" secondItem="sYV-5q-Lhm" secondAttribute="trailing" constant="12" id="MCX-iH-jll"/>
                         <constraint firstItem="lCf-mm-Gz2" firstAttribute="leading" secondItem="Kje-Wh-iN2" secondAttribute="leading" constant="8" id="O5Q-A8-clX"/>
-                        <constraint firstAttribute="bottom" secondItem="uCF-1M-2cF" secondAttribute="bottom" constant="8" id="eiH-MW-NGb"/>
+                        <constraint firstItem="VkG-ze-xt7" firstAttribute="leading" secondItem="yqQ-lV-Qsw" secondAttribute="trailing" constant="8" id="XHe-K9-YaK"/>
+                        <constraint firstItem="VkG-ze-xt7" firstAttribute="centerY" secondItem="B4e-aX-fbO" secondAttribute="centerY" id="clJ-s5-gc4"/>
                         <constraint firstItem="uCF-1M-2cF" firstAttribute="leading" secondItem="lCf-mm-Gz2" secondAttribute="leading" id="gO5-Ru-dQp"/>
                         <constraint firstItem="Qwh-xu-tzd" firstAttribute="centerY" secondItem="lCf-mm-Gz2" secondAttribute="centerY" id="mda-Yk-YzP"/>
+                        <constraint firstItem="sYV-5q-Lhm" firstAttribute="centerY" secondItem="B4e-aX-fbO" secondAttribute="centerY" id="o5p-DG-UHZ"/>
                         <constraint firstAttribute="trailing" secondItem="uCF-1M-2cF" secondAttribute="trailing" constant="8" id="pb5-TR-v3t"/>
+                        <constraint firstItem="yqQ-lV-Qsw" firstAttribute="centerY" secondItem="B4e-aX-fbO" secondAttribute="centerY" id="sZZ-cB-JEO"/>
+                        <constraint firstItem="sYV-5q-Lhm" firstAttribute="leading" secondItem="B4e-aX-fbO" secondAttribute="trailing" constant="8" id="uPP-xl-Pxr"/>
+                        <constraint firstItem="B4e-aX-fbO" firstAttribute="leading" secondItem="Kje-Wh-iN2" secondAttribute="leading" constant="8" id="wZx-ae-NUe"/>
                         <constraint firstItem="uCF-1M-2cF" firstAttribute="top" secondItem="lCf-mm-Gz2" secondAttribute="bottom" constant="6" id="zsI-2x-Yxc"/>
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="t7q-NW-xB2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="15q-9p-eEX"/>
                 <constraint firstItem="Kje-Wh-iN2" firstAttribute="top" secondItem="t7q-NW-xB2" secondAttribute="bottom" id="KDs-4n-yJH"/>

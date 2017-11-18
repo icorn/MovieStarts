@@ -21,8 +21,10 @@
 "LoadingMovies"		= "Loading movies...";
 "NoFavorites"		= "No Favorites";
 "HowToAddFavorites" = "You can add favorites either in a movie list by swiping to the left, or in a detail view by tapping the heart shaped favorite button.";
-"OnlyGoodMovies"    = "Show only\ngood movies";
-"OnlyNewMovies"     = "Show only\nnew movies";
+"OnlyGoodMoviesCR"  = "Only good\nmovies";
+"OnlyNewMoviesCR"   = "Only new\nmovies";
+"OnlyGoodMovies"    = "Only good movies";
+"OnlyNewMovies"     = "Only new movies";
 "Genres"            = "Genres";
 "TapGenreTag"       = "Tap to switch genre on or off";
 
