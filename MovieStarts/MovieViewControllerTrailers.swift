@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import SafariServices
 
 
 extension MovieViewController {
@@ -191,7 +190,7 @@ extension MovieViewController {
         }
         else {
             guard let webUrl = URL(string: "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1&o=U&noapp=1") else { return }
-            let webVC = SFSafariViewController(url: webUrl)
+            let webVC = RotatableSafariViewController(url: webUrl)
             webVC.delegate = self
             self.present(webVC, animated: true, completion: nil)
         }
