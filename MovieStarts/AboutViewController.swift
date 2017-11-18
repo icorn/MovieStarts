@@ -26,7 +26,9 @@ class AboutViewController: UIViewController {
 	@IBOutlet weak var webLinkButton: UIButton!
 	@IBOutlet weak var emailLinkButton: UIButton!
 	@IBOutlet weak var twitterLinkButton: UIButton!
-	
+    @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
+    
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +55,19 @@ class AboutViewController: UIViewController {
 		mitLicenseLabel.isHidden = true
 		bottomLine.isHidden = true
 	}
+    
+    override func viewDidLayoutSubviews()
+    {
+        super.viewDidLayoutSubviews()
 
+        if #available(iOS 11.0, *)
+        {
+            guard let keyWindow = UIApplication.shared.keyWindow else { return }
+            self.leadingConstraint.constant = keyWindow.safeAreaInsets.left
+            self.trailingConstraint.constant = keyWindow.safeAreaInsets.right
+        }
+    }
+    
 	@IBAction func webLinkTouched(_ sender: AnyObject) {
 		let url = URL(string: "http://MovieStartsApp.com")
 
