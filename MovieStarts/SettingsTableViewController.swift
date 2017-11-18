@@ -195,17 +195,17 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 	// MARK: - Private helper functions
 
 	
-	func imdbSwitchTapped() {
+	@objc func imdbSwitchTapped() {
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(imdbSwitch.isOn, forKey: Constants.prefsUseImdbApp)
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 	}
 	
-	func youtubeSwitchTapped() {
+	@objc func youtubeSwitchTapped() {
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(youtubeSwitch.isOn, forKey: Constants.prefsUseYoutubeApp)
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 	}
 	
-	func notificationSwitchTapped() {
+	@objc func notificationSwitchTapped() {
 		if (notificationSwitch.isOn) {
 			// notification switch was turned on: try to activate notifications
 			UIApplication.shared.registerUserNotificationSettings(

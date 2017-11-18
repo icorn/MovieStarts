@@ -281,7 +281,7 @@ class MessageWindow: NSObject {
 	}
 	
 	
-	func buttonPressed(_ sender: UIButton!) {
+	@objc func buttonPressed(_ sender: UIButton!) {
 		buttonHandler?(sender.tag)
 	}
 	

@@ -75,7 +75,7 @@ extension MovieViewController {
 			labelfont = realLabelfont
 		}
 		
-		let textAttributes = [NSFontAttributeName: labelfont]
+		let textAttributes = [NSAttributedStringKey.font: labelfont]
 		var titleLabelHeight: CGFloat = 24.0
 		
 		if let titleRect = titleLabel.text?.boundingRect(with: CGSize(width: 320, height: 200),
@@ -132,7 +132,7 @@ extension MovieViewController {
 		
 		for label in labels {
 			guard let labelfont = label.font else { continue }
-			let textAttributes = [NSFontAttributeName: labelfont]
+			let textAttributes = [NSAttributedStringKey.font: labelfont]
 			
 			let rect = label.text?.boundingRect(with: CGSize(width: 320, height: 200),
 			                                    options: .usesLineFragmentOrigin,

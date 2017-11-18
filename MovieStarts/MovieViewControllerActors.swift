@@ -76,7 +76,7 @@ extension MovieViewController {
 	// MARK: - Button callbacks
 
 	
-	func showAllActorsButtonPressed(_ sender: UIButton!) {
+	@objc func showAllActorsButtonPressed(_ sender: UIButton!) {
 		guard let movie = self.movie else { return }
 
         for actorIndex in 5...movie.actors.count-1 {
@@ -101,7 +101,7 @@ extension MovieViewController {
         )
 	}
 	
-	func showLessActorsButtonPressed(_ sender: UIButton!) {
+	@objc func showLessActorsButtonPressed(_ sender: UIButton!) {
 		guard let movie = self.movie else { return }
 		
 		UIView.animate(

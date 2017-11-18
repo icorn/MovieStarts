@@ -93,9 +93,8 @@ class NetworkChecker {
 			case .couldNotDetermine:
 				NSLog("CloudKit error: CouldNotDetermine")
 				
-				if let error = error as? NSError {
+				if let error = error as NSError? {
 					NSLog("CloudKit error description: \(error.localizedDescription)")
-					log.error("CloudKit error description (\(error.code)): \(error.localizedDescription)")
 				}
 				
 				errorCallback?()

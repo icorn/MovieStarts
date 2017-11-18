@@ -111,7 +111,7 @@ class MovieDatabaseParent : DatabaseParent {
 				if releaseDate.compare(compareDate) == ComparisonResult.orderedAscending {
 					// movie is too old
 					removeMovieHandler?(existingMovies[index])
-					print("   '\(existingMovies[index].origTitle)' (\(releaseDate)) removed")
+					print("   '\(String(describing: existingMovies[index].origTitle))' (\(releaseDate)) removed")
 					existingMovies.remove(at: index)
 				}
 			}

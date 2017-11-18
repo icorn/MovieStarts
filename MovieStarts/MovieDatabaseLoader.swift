@@ -110,9 +110,8 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 			else {
 				// movies are not on the device: get them from the cloud
 				
-				UIApplication.shared.isNetworkActivityIndicatorVisible = true
-				
 				DispatchQueue.main.async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = true
 					showIndicator?()
 				}
 
@@ -193,7 +192,7 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter error:	The error object
 	*/
 	internal func queryOperationFinished(error: Error?) {
-		if let error = error as? NSError {
+		if let error = error as NSError? {
 			if let saveStopIndicator = self.stopIndicator {
 				DispatchQueue.main.async {
 					saveStopIndicator()

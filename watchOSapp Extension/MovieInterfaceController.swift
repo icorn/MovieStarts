@@ -176,7 +176,7 @@ class MovieInterfaceController: WKInterfaceController {
 	}
 	
 
-	func refreshButtonTapped() {
+	@objc func refreshButtonTapped() {
 		do {
 			try WatchSessionManager.sharedManager.updateApplicationContext([Constants.watchAppContextGetDataFromPhone : Constants.watchAppContextValueEveryting as AnyObject])
 		} catch let error as NSError {

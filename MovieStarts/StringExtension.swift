@@ -30,14 +30,14 @@ extension String {
 	///
 	/// - returns: the new shorter string
 	func substringByRemovingLastCharacters(numberOfCharacters: Int) -> String {
-		if (numberOfCharacters > self.characters.count) {
+		if (numberOfCharacters > self.count) {
 			return ""
 		}
 		else if (numberOfCharacters < 0) {
 			return self
 		}
 		else {
-			return self.substring(to: self.index(self.endIndex, offsetBy: -numberOfCharacters))
+            return String(prefix(self.count - numberOfCharacters))
 		}
 	}
 }

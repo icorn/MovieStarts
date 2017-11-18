@@ -29,7 +29,7 @@ class ActorView: UIView { // UIStackView {
     {
         let basePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
 
-        if let basePath = basePath, (profilePicture.characters.count > 0) {
+        if let basePath = basePath, (profilePicture.count > 0) {
             let actorImageFilePath = basePath + Constants.actorThumbnailFolder + profilePicture
             imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
 
@@ -51,7 +51,10 @@ class ActorView: UIView { // UIStackView {
                         // move received poster to target path where it belongs and update the button
                         do {
                             try FileManager.default.moveItem(atPath: receivedPath, toPath: actorImageFilePath)
-                            self.imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
+
+                            DispatchQueue.main.async {
+                                self.imageView.image = self.cropImage(UIImage(contentsOfFile: actorImageFilePath))
+                            }
                         }
                         catch let error as NSError {
                             if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
@@ -70,7 +73,7 @@ class ActorView: UIView { // UIStackView {
 
         actorNameLabel.text = actorName
 
-        if (characterName.characters.count > 0) {
+        if (characterName.count > 0) {
             characterNameLabel.text = NSLocalizedString("ActorAs", comment: "") + " " + characterName
         }
 

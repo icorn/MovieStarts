@@ -154,7 +154,7 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter error:	The error object
 	*/
 	internal func queryOperationFinished(error: Error?) {
-		if let error = error as? NSError {
+		if let error = error as NSError? {
 			// there was an error
 			self.errorHandler?("Error querying updated records: \(error.code) (\(error.localizedDescription))")
 			return

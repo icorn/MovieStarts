@@ -42,7 +42,7 @@ class DetailInterfaceController: WKInterfaceController {
 		let movie: WatchMovieRecord? = (context as? WatchMovieRecord)
 		
 		if let movie = movie {
-			if let title = movie.title , title.characters.count > 0 {
+			if let title = movie.title , title.count > 0 {
 				titleLabel.setText(title)
 			}
 			else if let movieOrigTitle = movie.origTitle {
@@ -89,7 +89,7 @@ class DetailInterfaceController: WKInterfaceController {
 			}
 			
 			// synopsis
-			if let synopsis = movie.synopsis , synopsis.characters.count > 0 {
+			if let synopsis = movie.synopsis , synopsis.count > 0 {
 				synopsisHeadlineLabel.setText(NSLocalizedString("Synopsis", comment: ""))
 				synopsisLabel.setText(synopsis)
 			}

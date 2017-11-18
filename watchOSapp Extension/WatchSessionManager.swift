@@ -14,7 +14,7 @@ import WatchConnectivity
 class WatchSessionManager: NSObject, WCSessionDelegate {
 	
 	static let sharedManager = WatchSessionManager()
-	fileprivate let session = WCSession.default()
+	fileprivate let session = WCSession.default
 	var launchStatus: LaunchStatus?
 	var rootInterfaceController: MovieInterfaceController?
 	

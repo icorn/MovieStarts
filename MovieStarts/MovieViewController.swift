@@ -76,6 +76,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	var posterImageViewWidthConstraint: NSLayoutConstraint?
 	var posterImageViewHeightConstraint: NSLayoutConstraint?
 	
+    @IBOutlet weak var leadingContraint: NSLayoutConstraint!
+    @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
+    
+    
 	var movieTabBarController: TabBarController? {
 		get {
 			return navigationController?.parent as? TabBarController
@@ -180,9 +184,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			}
 		}
 	}
-	
-	
-	// MARK: - Show-Functions
+	    
+
+    // MARK: - Show-Functions
 
 	
 	fileprivate final func showPoster()
@@ -313,7 +317,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		let synopsisForLanguage = movie.synopsisForLanguage
 		
-		if (synopsisForLanguage.0.characters.count > 0) {
+		if (synopsisForLanguage.0.count > 0) {
 			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: ""),
 			                         for: UIControlState())
 			storyLabel.text = synopsisForLanguage.0
@@ -379,29 +383,29 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	// MARK: - Button callbacks
 
 	
-	final func imdbButtonTapped(_ sender: UIButton) {
+	@objc final func imdbButtonTapped(_ sender: UIButton) {
 		showImdbPage()
 	}
 
-    final func rottenTomatoesButtonTapped(_ sender: UIButton) {
+    @objc final func rottenTomatoesButtonTapped(_ sender: UIButton) {
         if let tomatoURLString = movie?.tomatoURL {
             guard let webUrl = URL(string: tomatoURLString) else { return }
-            let webVC = SFSafariViewController(url: webUrl)
+            let webVC = RotatableSafariViewController(url: webUrl)
             webVC.delegate = self
             self.present(webVC, animated: true, completion: nil)
         }
     }
     
-    final func tmdbButtonTapped(_ sender: UIButton) {
+    @objc final func tmdbButtonTapped(_ sender: UIButton) {
         guard let tmdbId = movie?.tmdbId else { return }
         guard let tmdbURL = URL(string: "http://themoviedb.org/movie/\(tmdbId)") else { return }
 
-        let webVC = SFSafariViewController(url: tmdbURL)
+        let webVC = RotatableSafariViewController(url: tmdbURL)
         webVC.delegate = self
         self.present(webVC, animated: true, completion: nil)
     }
     
-	final func addFavoriteButtonTapped(_ sender:UIButton) {
+	@objc final func addFavoriteButtonTapped(_ sender:UIButton) {
 		if let movie = movie {
 			Favorites.addMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
@@ -409,7 +413,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 
-	final func removeFavoriteButtonTapped(_ sender:UIButton) {
+	@objc final func removeFavoriteButtonTapped(_ sender:UIButton) {
 		if let movie = movie {
 			Favorites.removeMovie(movie, tabBarController: movieTabBarController)
 			setUpFavoriteButton()
@@ -424,7 +428,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBAction func tomatoRatingTapped(_ sender: UITapGestureRecognizer) {
 		if let urlString = movie?.tomatoURL {
 			guard let webUrl = URL(string: urlString) else { return }
-			let webVC = SFSafariViewController(url: webUrl)
+			let webVC = RotatableSafariViewController(url: webUrl)
 			webVC.delegate = self
 			self.present(webVC, animated: true, completion: nil)
 		}
@@ -498,7 +502,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			else {
 				// use the webview
 				guard let webUrl = URL(string: "http://www.imdb.com/title/\(imdbId)") else { return }
-				let webVC = SFSafariViewController(url: webUrl)
+				let webVC = RotatableSafariViewController(url: webUrl)
 				webVC.delegate = self
 				self.present(webVC, animated: true, completion: nil)
 			}

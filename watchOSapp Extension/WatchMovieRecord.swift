@@ -66,7 +66,7 @@ open class WatchMovieRecord : CustomStringConvertible {
 		var url: URL?
 		
 		if let posterUrl = posterUrl {
-			if (posterUrl.characters.count > 0) {
+			if (posterUrl.count > 0) {
 				url = pathUrl?.appendingPathComponent(Constants.thumbnailFolder + posterUrl)
 			}
 		}

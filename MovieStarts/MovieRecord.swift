@@ -99,7 +99,7 @@ open class MovieRecord : CustomStringConvertible {
 		let pathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 		var url: URL?
 		
-		if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
+		if posterUrl[currentCountry.languageArrayIndex].count > 0 {
 			url = pathUrl?.appendingPathComponent(Constants.thumbnailFolder + posterUrl[currentCountry.languageArrayIndex])
 		}
 		
@@ -116,7 +116,7 @@ open class MovieRecord : CustomStringConvertible {
 		
 		if let pathUrl = pathUrl  {
 			// try to load the poster for the current language
-			if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
+			if posterUrl[currentCountry.languageArrayIndex].count > 0 {
 				_thumbnailImage = UIImage(contentsOfFile: pathUrl.path + Constants.thumbnailFolder +
 					posterUrl[currentCountry.languageArrayIndex])
 				
@@ -127,7 +127,7 @@ open class MovieRecord : CustomStringConvertible {
 			}
 			
 			// poster not found or not loaded: try the english one
-			if ((currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) && (posterUrl[MovieCountry.USA.languageArrayIndex].characters.count > 0)) {
+			if ((currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) && (posterUrl[MovieCountry.USA.languageArrayIndex].count > 0)) {
 				_thumbnailImage = UIImage(contentsOfFile: pathUrl.path + Constants.thumbnailFolder +
 					posterUrl[MovieCountry.USA.languageArrayIndex])
 				
@@ -146,7 +146,7 @@ open class MovieRecord : CustomStringConvertible {
 	/// The synopsis for the current languate, or (if there is none) the one in English. Can be empty, but not null.
 	/// Return value: A tuple with the synopsis and the language index.
 	var synopsisForLanguage: (String, Int) {
-		if (synopsis[currentCountry.languageArrayIndex].characters.count > 0) {
+		if (synopsis[currentCountry.languageArrayIndex].count > 0) {
 			return (synopsis[currentCountry.languageArrayIndex], currentCountry.languageArrayIndex)
 		}
 		else {
@@ -171,7 +171,7 @@ open class MovieRecord : CustomStringConvertible {
 		var retval: UIImage?
 		
 		if let pathUrl = pathUrl {
-			if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
+			if posterUrl[currentCountry.languageArrayIndex].count > 0 {
 				retval = UIImage(contentsOfFile: pathUrl.path + Constants.bigPosterFolder + posterUrl[currentCountry.languageArrayIndex])
 			}
 		}
@@ -246,7 +246,7 @@ open class MovieRecord : CustomStringConvertible {
 		
 		// add rating
 		
-		if certification[currentCountry.countryArrayIndex].characters.count > 0 {
+		if certification[currentCountry.countryArrayIndex].count > 0 {
 			if (currentCountry == MovieCountry.Germany) {
 				detailText += "FSK "
 			}
@@ -260,12 +260,12 @@ open class MovieRecord : CustomStringConvertible {
 			detailText += countries
 		}
 		else {
-			if (detailText.characters.count > 2) {
+			if (detailText.count > 2) {
 				detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 2)
 			}
 		}
 		
-		if (detailText.characters.count == 0) {
+		if (detailText.count == 0) {
 			return nil
 		}
 		else {
@@ -595,7 +595,7 @@ open class MovieRecord : CustomStringConvertible {
 		
 		let cert = certification[currentCountry.countryArrayIndex]
 		
-		if (cert.characters.count > 0) {
+		if (cert.count > 0) {
 			var certText = ""
 			
 			if (cert == "PG-13") {
@@ -697,7 +697,7 @@ open class MovieRecord : CustomStringConvertible {
 			(runtime[currentCountry.languageArrayIndex] != updatedMovie.runtime[currentCountry.languageArrayIndex]) ||
 			(productionCountries != updatedMovie.productionCountries) || (genreIds != updatedMovie.genreIds))
 		{
-			if ((posterUrl[currentCountry.languageArrayIndex].characters.count == 0) && (updatedMovie.posterUrl[currentCountry.languageArrayIndex].characters.count > 0)) {
+			if ((posterUrl[currentCountry.languageArrayIndex].count == 0) && (updatedMovie.posterUrl[currentCountry.languageArrayIndex].count > 0)) {
 				return true
 			}
 		}
@@ -776,13 +776,13 @@ open class MovieRecord : CustomStringConvertible {
 			retval += "imdbId: nil | "
 		}
 		
-		if title[currentCountry.languageArrayIndex].characters.count > 0 {
+		if title[currentCountry.languageArrayIndex].count > 0 {
 			retval += "title: \(title[currentCountry.languageArrayIndex]) | "
 		} else {
 			retval += "title: nil | "
 		}
 		
-		if sortTitle[currentCountry.languageArrayIndex].characters.count > 0 {
+		if sortTitle[currentCountry.languageArrayIndex].count > 0 {
 			retval += "sortTitle: \(sortTitle[currentCountry.languageArrayIndex]) | "
 		} else {
 			retval += "sortTitle: nil | "
@@ -800,7 +800,7 @@ open class MovieRecord : CustomStringConvertible {
 			retval += "releaseDate: nil | "
 		}
 		
-		if posterUrl[currentCountry.languageArrayIndex].characters.count > 0 {
+		if posterUrl[currentCountry.languageArrayIndex].count > 0 {
 			retval += "posterUrl: \(posterUrl[currentCountry.languageArrayIndex]) | "
 		} else {
 			retval += "posterUrl: nil | "

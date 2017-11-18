@@ -21,7 +21,7 @@ class DetailTitleMaker {
 			detailText += genreName + " | "
 		}
 		
-		if (detailText.characters.count > 0) {
+		if (detailText.count > 0) {
 			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 3)
 		}
 		
@@ -50,7 +50,7 @@ class DetailTitleMaker {
 			detailText += countries + " | "
 		}
 		
-		if (detailText.characters.count > 0) {
+		if (detailText.count > 0) {
 			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 3)
 		}
 		
@@ -65,7 +65,7 @@ class DetailTitleMaker {
 			detailText += "\(runtime) m | "
 		}
 		
-		if let cert = movie.certification , cert.characters.count > 0 {
+		if let cert = movie.certification , cert.count > 0 {
 			detailText += "\(cert) | "
 		}
 		

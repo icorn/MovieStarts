@@ -18,7 +18,7 @@ extension MovieViewController {
 	
 		- parameter recognizer:	The gesture recognizer - unused.
 	*/
-	func thumbnailTapped(_ recognizer: UITapGestureRecognizer) {
+	@objc func thumbnailTapped(_ recognizer: UITapGestureRecognizer) {
 
 		if let movie = movie, let navigationController = navigationController {
 			let bigPoster = movie.bigPoster
@@ -185,12 +185,12 @@ extension MovieViewController {
 		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Big.rawValue
 		var posterUrl = movie.posterUrl[movie.currentCountry.languageArrayIndex]
 		
-		if (posterUrl.characters.count == 0) {
+		if (posterUrl.count == 0) {
 			// if there is no poster in wanted language, try the english one
 			posterUrl = movie.posterUrl[MovieCountry.USA.languageArrayIndex]
 		}
 		
-		if (posterUrl.characters.count <= 0) {
+		if (posterUrl.count <= 0) {
 			stopSpinners()
 			return
 		}
@@ -216,9 +216,8 @@ extension MovieViewController {
 		                                completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
 			self.stopSpinners()
 			
-			if let error = error as? NSError {
+			if let error = error as NSError? {
 				NSLog("Error getting missing thumbnail: \(error.localizedDescription)")
-				log.error("Error getting missing thumbnail (\(error.code)): \(error.localizedDescription)")
 				
 				if (Int32(error.code) == CFNetworkErrors.cfurlErrorTimedOut.rawValue) {
 					DispatchQueue.main.async {
@@ -246,7 +245,6 @@ extension MovieViewController {
 					}
 					else {
 						NSLog("Error moving missing poster: \(error.localizedDescription)")
-						log.error("Error getting missing poster (\(error.code)): \(error.localizedDescription)")
 
 						DispatchQueue.main.async {
 							errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
@@ -266,9 +264,8 @@ extension MovieViewController {
 				}
 
 				// poster not loaded or error
-				if let error = error as? NSError {
+				if let error = error as NSError? {
 					NSLog("Error getting big poster: \(error.code) (\(error.localizedDescription))")
-					log.error("Error getting big poster (\(error.code)): \(error.localizedDescription)")
 				}
 
 				DispatchQueue.main.async {
@@ -287,8 +284,8 @@ extension MovieViewController {
 		Also removes the loading spinner from the superview.
 	*/
 	fileprivate func stopSpinners() {
-		UIApplication.shared.isNetworkActivityIndicatorVisible = false
-			DispatchQueue.main.async {
+		DispatchQueue.main.async {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
 			self.spinner?.stopAnimating()
 			self.spinnerBackground?.removeFromSuperview()
 		}
@@ -299,7 +296,7 @@ extension MovieViewController {
 	
 		- parameter recognizer:	The gesture recognizer - unused.
 	*/
-	func bigPosterTapped(_ recognizer: UITapGestureRecognizer) {
+	@objc func bigPosterTapped(_ recognizer: UITapGestureRecognizer) {
 		
 		if let bigPosterImageView = bigPosterImageView, let bigPosterScrollView = bigPosterScrollView, let bigPosterBackView = bigPosterBackView, let navigationController = navigationController {
 			

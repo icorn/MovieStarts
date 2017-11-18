@@ -52,7 +52,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
     }
 
 
-    func filterButtonTapped(_ sender: UIButton!) {
+    @objc func filterButtonTapped(_ sender: UIButton!) {
         if (self.filterViewTop?.constant == 0) {
             hideFilterView(animated: true)
         }
@@ -61,7 +61,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
         }
     }
 
-    func gridListSwitchButtonTapped(_ sender: UIButton!) {
+    @objc func gridListSwitchButtonTapped(_ sender: UIButton!) {
     }
 
     func showFilterView(animated: Bool) {
@@ -190,7 +190,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
         }
     }
 
-
+    
     // MARK: - Private helper functions
 
     fileprivate func checkNowPlayingStatus() {
@@ -379,7 +379,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
         movieListDataSource.moviesInSections[foundSectionIndex].sort {
             let otherTitle = $1.sortTitle[$1.currentCountry.languageArrayIndex]
 
-            if (otherTitle.characters.count > 0) {
+            if (otherTitle.count > 0) {
                 return $0.sortTitle[$0.currentCountry.languageArrayIndex].localizedCaseInsensitiveCompare(otherTitle) == ComparisonResult.orderedAscending
             }
             return true

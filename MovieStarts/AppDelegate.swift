@@ -11,7 +11,7 @@ import CloudKit
 import Fabric
 import Crashlytics
 
-let log = SwiftyBeaver.self
+//let log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -57,7 +57,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		
 		// add log destinations. at least one is needed
-		
+/*
+        SwiftyBeaver stuff
+         
 		let console = ConsoleDestination()  // log to Xcode Console
 //		let file = FileDestination()  // log to default swiftybeaver.log file
 		let platform = SBPlatformDestination(appID: "NxnnVL",
@@ -72,7 +74,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //		log.info("a nice information")   // prio 3, INFO in green
 //		log.warning("oh no, that won’t be good")  // prio 4, WARNING in yellow
 //		log.error("ouch, an error did occur!")  // prio 5, ERROR in red
-		
+*/
+        
 		// create folders for image asset
 		
 		let appPathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
@@ -164,9 +167,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		// set some colors, etc.
-		UITabBar.appearance().tintColor = UIColor(red: 0.0, green: 200.0/255.0, blue: 200.0/255.0, alpha: 1.0)
-		UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName: UIFont.systemFont(ofSize: 14.0)], for: UIControlState())
-		UINavigationBar.appearance().tintColor = UIColor.white
+		UITabBar.appearance().tintColor = UIColor.darkTürkisColor()
+        UITabBar.appearance().barTintColor = UIColor.lightGrayBackgroundColor()
+		UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0)], for: UIControlState())
+        
+		UINavigationBar.appearance().tintColor = UIColor.darkTürkisColor()
+        UINavigationBar.appearance().barTintColor = UIColor.lightGrayBackgroundColor()
 
 		// check if use-app-prefs are stored. If not, set them to "false"
 		let useImdbApp: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsUseImdbApp) as? Bool
@@ -232,27 +238,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		return true
 	}
 
-	func applicationWillResignActive(_ application: UIApplication) {
-		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-		// Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
-	}
-
-	func applicationDidEnterBackground(_ application: UIApplication) {
-		// Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-		// If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-	}
-
-	func applicationWillEnterForeground(_ application: UIApplication) {
-		// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-	}
-
-	func applicationDidBecomeActive(_ application: UIApplication) {
-		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-	}
-
-	func applicationWillTerminate(_ application: UIApplication) {
-		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-	}
+	func applicationWillResignActive(_ application: UIApplication) {}
+	func applicationDidEnterBackground(_ application: UIApplication) {}
+	func applicationWillEnterForeground(_ application: UIApplication) {}
+	func applicationDidBecomeActive(_ application: UIApplication) {}
+	func applicationWillTerminate(_ application: UIApplication) {}
 
 	
 	// MARK: - Handling local notifications

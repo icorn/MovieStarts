@@ -114,9 +114,8 @@ extension MovieViewController {
                                             trailerIndex: Int,
                                             showFlag: Bool) -> Void {
 
-        if let error = error as? NSError {
+        if let error = error as NSError? {
             NSLog("Error getting poster from Youtube: \(error.localizedDescription)")
-            log.error("Error getting poster from Youtube (\(error.code)): \(error.localizedDescription)")
         }
         else if let receivedPath = location?.path {
             // move received poster to target path where it belongs and update the button
@@ -133,7 +132,6 @@ extension MovieViewController {
                 }
                 else {
                     NSLog("Error moving trailer-poster: \(error.localizedDescription)")
-                    log.error("Error moving trailer-poster (\(error.code)): \(error.localizedDescription)")
                 }
             }
         }
@@ -147,20 +145,19 @@ extension MovieViewController {
         - parameter trailerId:	The id of the trailer, which is also the filename of the trailer-image
     */
     final func updateTrailerButton(index: Int, trailerId: String, stackview: UIStackView, showFlag: Bool) {
-        if (index >= stackview.arrangedSubviews.count) {
-            return
-        }
-
-        guard let buttonToUpdate = stackview.arrangedSubviews[index] as? UIButton else { return }
-        guard let basePath = self.baseImagePath else { return }
-
-        let trailerImageFilePath = basePath + Constants.trailerFolder + "/" + trailerId + ".jpg"
-
-        guard let trailerImage = UIImage(contentsOfFile: trailerImageFilePath)?.cgImage else { return }
-
-        let scaledImage = UIImage(cgImage: trailerImage, scale: 1.5, orientation: UIImageOrientation.up)
-
         DispatchQueue.main.async {
+            if (index >= stackview.arrangedSubviews.count) {
+                return
+            }
+
+            guard let buttonToUpdate = stackview.arrangedSubviews[index] as? UIButton else { return }
+            guard let basePath = self.baseImagePath else { return }
+
+            let trailerImageFilePath = basePath + Constants.trailerFolder + "/" + trailerId + ".jpg"
+
+            guard let trailerImage = UIImage(contentsOfFile: trailerImageFilePath)?.cgImage else { return }
+
+            let scaledImage = UIImage(cgImage: trailerImage, scale: 1.5, orientation: UIImageOrientation.up)
             buttonToUpdate.setImage(scaledImage, for: UIControlState())
 
             if (showFlag) {
@@ -170,7 +167,7 @@ extension MovieViewController {
     }
 
 
-    final func trailerButtonTapped(_ sender: UIButton) {
+    @objc final func trailerButtonTapped(_ sender: UIButton) {
         guard let movie = self.movie else { return }
 
         var trailerId = ""

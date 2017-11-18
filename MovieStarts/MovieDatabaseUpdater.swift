@@ -180,7 +180,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter error:	The error object
 	*/
 	internal func queryOperationFinished(error: Error?) {
-		if let error = error as? NSError {
+		if let error = error as NSError? {
 			// there was an error
 			self.errorHandler?("Error querying updated records: \(error.code) (\(error.localizedDescription))")
 			return
@@ -273,9 +273,10 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 				if let posterfilenameString = posterfilename as? String {
 					for movie in movies {
                         if (found == false) {
-                            for posterUrl in movie.posterUrl {
-                                if ((posterUrl.characters.count > 3) &&
-                                    (posterfilenameString == posterUrl.substring(from: posterUrl.characters.index(posterUrl.startIndex, offsetBy: 1))))
+                            for posterUrl in movie.posterUrl
+                            {
+                                if ((posterUrl.count > 3) &&
+                                    (posterfilenameString == String(posterUrl.suffix(posterUrl.count - 1))))
                                 {
                                     found = true
                                     break
@@ -329,7 +330,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 					for movie in movies {
 						for trailerIdsForCountry in movie.trailerIds {
 							for trailerId in trailerIdsForCountry {
-								if (trailerId.characters.count > 0) {
+								if (trailerId.count > 0) {
 									if (trailerfilenameString.beginsWith(trailerId)) {
 										found = true
 										break
@@ -371,12 +372,12 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		for movie in movies {
 			var posterUrl = movie.posterUrl[country.languageArrayIndex]
 			
-			if (posterUrl.characters.count == 0) {
+			if (posterUrl.count == 0) {
 				// if there is no poster in wanted language, try the english one
 				posterUrl = movie.posterUrl[MovieCountry.England.languageArrayIndex]
 			}
 			
-			if ((posterUrl.characters.count > 0) && (FileManager.default.fileExists(atPath: basePath + Constants.thumbnailFolder + posterUrl) == false)) {
+			if ((posterUrl.count > 0) && (FileManager.default.fileExists(atPath: basePath + Constants.thumbnailFolder + posterUrl) == false)) {
 				// poster file is missing
 				
 				if let sourceUrl = URL(string: sourcePath + posterUrl) {

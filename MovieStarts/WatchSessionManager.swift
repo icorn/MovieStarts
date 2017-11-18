@@ -14,7 +14,7 @@ import WatchConnectivity
 class WatchSessionManager: NSObject, WCSessionDelegate {
     
     static let sharedManager = WatchSessionManager()
-	fileprivate let session: WCSession? = WCSession.isSupported() ? WCSession.default() : nil
+	fileprivate let session: WCSession? = WCSession.isSupported() ? WCSession.default : nil
 	
     fileprivate override init() {
         super.init()
@@ -61,18 +61,16 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		// handle filed transfer completion
 		
 		if let error = error {
-			NSLog("Error transfering \(fileTransfer.file.fileURL?.absoluteString): \(error.localizedDescription)")
+			NSLog("Error transfering \(fileTransfer.file.fileURL.absoluteString): \(error.localizedDescription)")
 		}
 		else {
 			print("Filetransfer successfull")
 			if (fileTransfer.file.metadata?[Constants.watchMetadataMovieList] != nil) {
 				// successfully transfered a movie list: removed it from phone again
-                if let urlToRemove = fileTransfer.file.fileURL {
-                    do {
-                        try FileManager.default.removeItem(at: urlToRemove)
-                    } catch let error as NSError {
-                        NSLog("Error deleting temp. movie list: \(error.description)")
-                    }
+                do {
+                    try FileManager.default.removeItem(at: fileTransfer.file.fileURL)
+                } catch let error as NSError {
+                    NSLog("Error deleting temp. movie list: \(error.description)")
                 }
 			}
 		}
@@ -241,7 +239,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		
 		var title = "NoName"
 		
-		if (newFavorite.title[newFavorite.currentCountry.languageArrayIndex].characters.count > 0) {
+		if (newFavorite.title[newFavorite.currentCountry.languageArrayIndex].count > 0) {
 			title = newFavorite.title[newFavorite.currentCountry.languageArrayIndex]
 		}
 		
@@ -358,7 +356,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 		if let validSession = validSession {
 			for transfer in validSession.outstandingFileTransfers {
 				if (transfer.file.metadata?[Constants.watchMetadataThumbnail] != nil) {
-					if (transfer.file.fileURL?.path == name) {
+					if (transfer.file.fileURL.path == name) {
 						transfer.cancel()
 						return
 					}
@@ -418,7 +416,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
          */
 
         // Begin the activation process for the new Apple Watch
-        WCSession.default().activate()
+        WCSession.default.activate()
     }
 
 }
