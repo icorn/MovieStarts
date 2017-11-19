@@ -182,7 +182,7 @@ extension MovieViewController {
 
         let useApp: Bool? =
             UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsUseYoutubeApp) as? Bool
-        let url: URL? = URL(string: "https://www.youtube.com/v/\(trailerId)/")
+        let url: URL? = URL(string: "youtube://\(trailerId)")
 
         if let url = url , (useApp == true) && UIApplication.shared.canOpenURL(url) {
             // use the app instead of the webview
