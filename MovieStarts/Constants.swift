@@ -64,8 +64,8 @@ public struct Constants {
 	static let version1_0					= 10
 	static let version1_1					= 11
 	static let version1_2					= 12
-	static let version2_0					= 20
-	static let versionCurrent				= version2_0
+	static let version1_3					= 13
+	static let versionCurrent				= version1_3
 	
 	// MARK: - Watch communication
 	

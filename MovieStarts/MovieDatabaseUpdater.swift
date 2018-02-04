@@ -22,7 +22,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 			// version 1.2
 			Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic,
 		
-			// version 2.0
+			// version 1.3
 			Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
 		]
 

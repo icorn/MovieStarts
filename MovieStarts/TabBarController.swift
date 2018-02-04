@@ -212,7 +212,7 @@ class TabBarController: UITabBarController {
 	
 	func updateMovies(allMovies: [MovieRecord], databaseUpdater: MovieDatabaseUpdater?) {
 		let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
-
+/**/
 		if (userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) != nil) {
 			let latestSuccessfullUpdate: Date? = userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) as? Date
 		
@@ -225,7 +225,7 @@ class TabBarController: UITabBarController {
 				}
 			}
 		}
-
+/**/
 		// check iCloud status
 		
 		databaseUpdater?.checkCloudKit(handler: { [unowned self] (status: CKAccountStatus, error: Error?) -> () in

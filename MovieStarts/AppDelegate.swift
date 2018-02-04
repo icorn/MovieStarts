@@ -209,7 +209,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		// if this is a new version: write it to disc
 		if (versionOfPreviousLaunch != Constants.versionCurrent) {
-			// write old version to disc
+			// write current version to disc
 			UserDefaults(suiteName: Constants.movieStartsGroup)?.set(Constants.versionCurrent, forKey: Constants.prefsVersion)
 			UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 			
@@ -218,7 +218,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			if (databaseFileExists()) {
 				// movie database file exists -> check if we need to migrate the database to a new version
 				
-				if (versionOfPreviousLaunch < Constants.version2_0) {
+				if (versionOfPreviousLaunch < Constants.version1_3) {
 					// set the flag in the prefs, read the flag later in MovieTableViewController.
 					// special case: if the prefs-entry already exists (from a previously failed update-try from an older version), 
 					// don't override it: the database file is from the older version (because previous update failed).

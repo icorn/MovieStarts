@@ -68,7 +68,7 @@ open class MovieRecord : CustomStringConvertible {
 	///  the Rotten Tomatoes url for this movie
 	open var tomatoURL: String?
 	
-	/// four new values for version 2.0
+	/// four new values for version 1.3
 	var budget: Int?
 	var backdrop: String?
 	var profilePictures: [String] = []
@@ -734,7 +734,7 @@ open class MovieRecord : CustomStringConvertible {
 			self.ratingMetacritic = updateRecord.ratingMetacritic
 		}
 		
-		// version 2.0
+		// version 1.3
 		
 		if (updateKeys.contains(Constants.dbIdBudget)) {
 			self.budget = updateRecord.budget
