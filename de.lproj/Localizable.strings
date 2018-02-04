@@ -60,9 +60,6 @@
 "TrailersSingular"           = "Trailer";
 "TrailersPlural"             = "Trailer";
 
-"HintTitle"				= "Tipp";
-"PosterHintText"		= "Um eine große Version des Filmposters zu laden, tappe einfach auf das kleine Poster oben links.";
-
 // Welcome
 
 "WelcomeTitle"			= "Willkommen";

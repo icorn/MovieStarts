@@ -33,7 +33,6 @@ public struct Constants {
 	static let prefsFavorites					= "favorites"
 	static let prefsUseImdbApp					= "useImdbApp"
 	static let prefsUseYoutubeApp				= "userYoutubeApp"
-	static let prefsPosterHintAlreadyShown		= "posterHintAlreadyShown"
 	static let prefsCountry						= "country"
 	static let prefsNotifications				= "notifications"
 	static let prefsNotificationDay				= "notificationDay"

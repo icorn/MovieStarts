@@ -159,30 +159,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 		view.layoutIfNeeded()
-		
-		if (movie?.thumbnailImage.1 == true) {
-			
-			// if needed: show poster-hint
-		
-			let posterHintAlreadyShown: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsPosterHintAlreadyShown) as? Bool
-
-			if (posterHintAlreadyShown == nil) {
-				// hint not already shown: show it
-			
-				var errorWindow: MessageWindow?
-				
-				DispatchQueue.main.async {
-					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "HintTitle", textStringId: "PosterHintText", buttonStringIds: ["Close"],
-						handler: { (buttonIndex) -> () in
-							errorWindow?.close()
-						}
-					)
-				}
-				
-				UserDefaults(suiteName: Constants.movieStartsGroup)?.set(true, forKey: Constants.prefsPosterHintAlreadyShown)
-				UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
-			}
-		}
 	}
 	    
 
