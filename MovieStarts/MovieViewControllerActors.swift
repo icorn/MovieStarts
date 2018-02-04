@@ -62,10 +62,16 @@ extension MovieViewController {
 	fileprivate final func addActorToStackView(actorIndex: Int, hidden: Bool) {
 		guard let movie = self.movie else { return }
         let actorView = ActorView.instanceFromNib()
+        var profilePicture = ""
+        
+        if (movie.profilePictures.count > actorIndex)
+        {
+            profilePicture = movie.profilePictures[actorIndex]
+        }
 
         actorView.setupWithActorWithName(movie.actors[actorIndex],
                                          characterName: movie.characters[actorIndex],
-                                         profilePicture: movie.profilePictures[actorIndex],
+                                         profilePicture: profilePicture,
                                          hidden: hidden,
                                          parentWidth: self.view.frame.width)
 

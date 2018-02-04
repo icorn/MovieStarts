@@ -147,11 +147,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
 
         if (migrateDatabaseIfNeeded() == false) {
             // no database migration needed: if last update is long enough ago: check CloudKit for update
-            let databaseUpdater = MovieDatabaseUpdater(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
-
-            if let allMovies = databaseUpdater.readDatabaseFromFile() {
-                movieTableViewDataSource?.tabBarController.updateMovies(allMovies: allMovies, databaseUpdater: databaseUpdater)
-            }
+            updateDatabaseIfNeeded()
         }
 
         // check if we had notifications turned on in the app, but turned off in the system
@@ -190,6 +186,15 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
         }
     }
 
+    fileprivate func updateDatabaseIfNeeded()
+    {
+        let databaseUpdater = MovieDatabaseUpdater(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
+        
+        if let allMovies = databaseUpdater.readDatabaseFromFile() {
+            movieTableViewDataSource?.tabBarController.updateMovies(allMovies: allMovies, databaseUpdater: databaseUpdater)
+        }
+    }
+    
     
     // MARK: - Private helper functions
 
@@ -322,20 +327,23 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                 NSLocalizedString("RatingUpdateProgress", comment: ""))
                         },
 
-                        completionHandler: { (movies: [MovieRecord]?) in
-                            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                        completionHandler: { [weak self] (movies: [MovieRecord]?) in
                             DispatchQueue.main.async {
+                                UIApplication.shared.isNetworkActivityIndicatorVisible = false
                                 updateWindow?.close()
                             }
 
                             // Don't forget to remove the migrate-flag from the prefs
                             UserDefaults(suiteName: Constants.movieStartsGroup)?.removeObject(forKey: Constants.prefsMigrateFromVersion)
                             UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+                            
+                            // After migration: Do the update
+                            self?.updateDatabaseIfNeeded()
                         },
 
-                        errorHandler: { (errorMessage: String) in
-                            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                        errorHandler: { [weak self] (errorMessage: String) in
                             DispatchQueue.main.async {
+                                UIApplication.shared.isNetworkActivityIndicatorVisible = false
 
                                 // error in migration
                                 updateWindow?.close()
@@ -355,6 +363,9 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                                                }
                                     )
                                 }
+                                
+                                // After migration: Do the update
+                                self?.updateDatabaseIfNeeded()
                             }
 
                             NSLog(errorMessage)

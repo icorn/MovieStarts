@@ -170,12 +170,13 @@ class NotificationManager {
 				notification.alertBody = alertBody + "."
 			}
 			
-			notification.userInfo = [
-				Constants.notificationUserInfoId	: movies.flatMap { $0.id },
-				Constants.notificationUserInfoName	: movies.flatMap { $0.title[$0.currentCountry.languageArrayIndex] },
-				Constants.notificationUserInfoDate 	: movies[0].releaseDateStringLong,
-				Constants.notificationUserInfoDay 	: notificationDay
-			]
+            notification.userInfo = [
+                Constants.notificationUserInfoId    : movies.map { $0.id },
+                Constants.notificationUserInfoName  : movies.map { $0.title[$0.currentCountry.languageArrayIndex] },
+                Constants.notificationUserInfoDate  : movies[0].releaseDateStringLong,
+                Constants.notificationUserInfoDay   : notificationDay
+            ]
+
 			NSLog("Added notification at \(fireDate) for \(movies.count) movies")
 		}
 		
