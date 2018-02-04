@@ -41,14 +41,20 @@ class FavoriteViewController: MovieListViewController {
             let headlineHeight: CGFloat = 40
             let textInset: CGFloat = 10
 
-            let headlineLabel = UILabel(frame: CGRect(x: 0, y: tableView.frame.height / 4, width: tableView.frame.width, height: headlineHeight))
+            let headlineLabel = UILabel(frame: CGRect(x: 0,
+                                                      y: view.frame.height / 4,
+                                                      width: view.frame.width,
+                                                      height: headlineHeight))
             headlineLabel.textColor = UIColor.gray
             headlineLabel.font = UIFont.boldSystemFont(ofSize: 30)
             headlineLabel.text = NSLocalizedString("NoFavorites", comment: "")
             headlineLabel.textAlignment = NSTextAlignment.center
             noEntriesBackView.addSubview(headlineLabel)
 
-            let textLabel = UILabel(frame: CGRect(x: textInset, y: tableView.frame.height / 4 + headlineHeight + 20, width: tableView.frame.width - 2 * textInset, height: 0))
+            let textLabel = UILabel(frame: CGRect(x: textInset,
+                                                  y: view.frame.height / 4 + headlineHeight + 20,
+                                                  width: view.frame.width - 2 * textInset,
+                                                  height: 0))
             textLabel.textColor = UIColor.gray
             textLabel.font = UIFont.boldSystemFont(ofSize: 18)
             textLabel.textAlignment = NSTextAlignment.center
