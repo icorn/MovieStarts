@@ -36,6 +36,10 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                                              tableView: self.tableViewOutlet,
                                                              vcWithTable: self)
         self.tableViewOutlet.delegate = movieTableViewDelegate
+        
+/*
+        show icons for table/grid view and filter
+         
         navigationItem.setRightBarButtonItems(
             [UIBarButtonItem(image: UIImage(named: "filter-hollow"),
                              style: UIBarButtonItemStyle.plain,
@@ -47,7 +51,8 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                              action: #selector(gridListSwitchButtonTapped(_:)))
             ],
             animated: false)
-
+*/
+        
         self.fillTagListViewWithGenres()
     }
 
