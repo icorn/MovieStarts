@@ -249,11 +249,11 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
 
         let migrateFromVersion = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsMigrateFromVersion) as? Int
 
-        if let migrateFromVersion = migrateFromVersion , migrateFromVersion < Constants.version2_0 {
+        if let migrateFromVersion = migrateFromVersion , migrateFromVersion < Constants.version1_3 {
 
-            // we have to migrate the database from an older version to version 2.0: Get new database fields for all records
+            // we have to migrate the database from an older version to version 1.3: Get new database fields for all records
 
-            appDelegate.versionOfPreviousLaunch = Constants.version2_0
+            appDelegate.versionOfPreviousLaunch = Constants.version1_3
             retval = true
             var updateWindow: MessageWindow?
             var updateCounter = 0

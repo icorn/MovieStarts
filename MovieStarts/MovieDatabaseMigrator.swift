@@ -21,7 +21,7 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 			// version 1.2
 			Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic,
 			
-			// version 2.0
+			// version 1.3
 			Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
 		]
 		
@@ -157,7 +157,6 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		if let error = error as NSError? {
 			// there was an error
 			self.errorHandler?("Error querying updated records: \(error.code) (\(error.localizedDescription))")
-			return
 		}
 		else if let existingRecords = self.loadedMovieRecordArray {
 			// received records from the cloud
@@ -186,7 +185,15 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 				writeMoviesToDevice()
 				self.completionHandler?(nil)
 			}
+            else
+            {
+                self.completionHandler?(nil)
+            }
 		}
+        else
+        {
+            self.completionHandler?(nil)
+        }
 	}
 }
 
