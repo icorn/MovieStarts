@@ -51,12 +51,20 @@ class FavoriteViewController: MovieListViewController {
             let textLabel = UILabel(frame: CGRect(x: textInset, y: tableView.frame.height / 4 + headlineHeight + 20, width: tableView.frame.width - 2 * textInset, height: 0))
             textLabel.textColor = UIColor.gray
             textLabel.font = UIFont.boldSystemFont(ofSize: 18)
-            textLabel.text = NSLocalizedString("HowToAddFavorites", comment: "")
             textLabel.textAlignment = NSTextAlignment.center
             textLabel.numberOfLines = 0
+
+            // set text with line-spacing
+            let stringValue = NSLocalizedString("HowToAddFavorites", comment: "")
+            let attrString = NSMutableAttributedString(string: stringValue)
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = 8
+            attrString.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSRange(location: 0, length: stringValue.count))
+            textLabel.attributedText = attrString
+            
             textLabel.sizeToFit()
             noEntriesBackView.addSubview(textLabel)
-
+            
             tableView.separatorStyle =  UITableViewCellSeparatorStyle.none
             tableView.backgroundView = noEntriesBackView
         }

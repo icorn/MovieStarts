@@ -13,14 +13,14 @@
 "NowPlayingLong"	= "Now Playing";
 "UpcomingTabBar"	= "Upcoming";
 "UpcomingLong"		= "Upcoming Movies";
-"FavoritesTabBar"	= "Favorites";
-"FavoritesLong"		= "Favorites";
+"FavoritesTabBar"	= "Watchlist";
+"FavoritesLong"		= "Watchlist";
 "SettingsTabBar"	= "Settings";
 "SettingsLong"		= "Settings";
 "UpdatingMovies"	= "Updating movies...";
 "LoadingMovies"		= "Loading movies...";
-"NoFavorites"		= "No Favorites";
-"HowToAddFavorites" = "You can add favorites either in a movie list by swiping to the left, or in a detail view by tapping the heart shaped favorite button.";
+"NoFavorites"		= "Empty Watchlist";
+"HowToAddFavorites" = "You can add movies to your watchlist either in a movie list by swiping to the left, or in a detail view by tapping the star shaped button.";
 "OnlyGoodMoviesCR"  = "Only good\nmovies";
 "OnlyNewMoviesCR"   = "Only new\nmovies";
 "OnlyGoodMovies"    = "Only good movies";
@@ -52,10 +52,10 @@
 "ShowCompleteSynopsis"		= "Complete synopsis";
 "ShowShortSynopsis"			= "Shorter synopsis";
 "ShowOnImdb"				= "Show Details on IMDb";
-"AddToFavorites"			= "Add to Favorites";
-"RemoveFromFavorites"		= "Remove from Favorites";
-"AddToFavoritesShort"		= "Add to\nFavorites";
-"RemoveFromFavoritesShort"	= "Remove from\nFavorites";
+"AddToFavorites"			= "Add to Watchlist";
+"RemoveFromFavorites"		= "Remove from Watchlist";
+"AddToFavoritesShort"		= "Add to\nWatchlist";
+"RemoveFromFavoritesShort"	= "Remove from\nWatchlist";
 
 "TrailersSingular"           = "Trailer";
 "TrailersPlural"             = "Trailers";
@@ -110,7 +110,7 @@
 
 "UpdateFeature"				= "New Feature";
 "UpdateFeatures"			= "New Features";
-"UpdateMessagePush"			= "There is a new feature in this version of the app: You can turn on notifications in the settings to get a push notification when your favorite movies will be released.";
+"UpdateMessagePush"			= "There is a new feature in this version of the app: You can turn on notifications in the settings to get a push notification when your watchlist movies will be released.";
 
 "UpdateDatabaseTitle"		= "Update";
 "UpdateDatabaseText"		= "Updating database to new version.";
@@ -129,8 +129,8 @@
 "SettingsRateTheApp"	= "Rate this app";
 
 "SettingsNotificationsHeader"	= "Notifications";
-"SettingsNotifications"			= "Notifications for Favorites";
-"SettingsNotificationsFooter"	= "You will get a push notification when one of the movies on your favorites list will be released.";
+"SettingsNotifications"			= "Notifications for Watchlist";
+"SettingsNotificationsFooter"	= "You will get a push notification as soon as one of the movies on your watchlist will be released.";
 "SettingsNotificationTime"		= "Time of the Notification:";
 
 // About
@@ -165,18 +165,18 @@
 "OneMovieReleasedSoon1"			= "will be released on ";
 "OneMovieReleasedSoon2"			= ".";
 
-"MoviesReleasedToday"			= "of your favorite movies have been released today";
-"MoviesReleasedTomorrow"		= "of your favorite movies will be released tomorrow";
-"MoviesReleasedAfterTomorrow"	= "of your favorite movies will be released the day after tomorrow";
-"MoviesReleasedSoon1"			= "of your favorite movies will be released on ";
+"MoviesReleasedToday"			= "of your watchlist movies have been released today";
+"MoviesReleasedTomorrow"		= "of your watchlist movies will be released tomorrow";
+"MoviesReleasedAfterTomorrow"	= "of your watchlist movies will be released the day after tomorrow";
+"MoviesReleasedSoon1"			= "of your watchlist movies will be released on ";
 "MoviesReleasedSoon2"			= "";
 
 // Watch
 
-"WatchNoFavorites"			= "Please set your favorite movies in the MovieStarts app on your iPhone.";
+"WatchNoFavorites"			= "Please set your watchlist in the MovieStarts app on your iPhone.";
 "WatchNowPlaying"			= "Now Playing";
 "WatchConnectError"			= "Error connecting to the iPhone. Please check your network and/or try again later.";
-"WatchUserShouldStartPhone"	= "Please open the MovieStarts iPhone app so that the Watch can access your favorite movies from the iPhone. Future movie updates will be done automatically.";
+"WatchUserShouldStartPhone"	= "Please open the MovieStarts iPhone app so that the Watch can access your watchlist from the iPhone. Future movie updates will be done automatically.";
 
 // Misc.
 

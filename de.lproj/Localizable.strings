@@ -13,14 +13,14 @@
 "NowPlayingLong"	= "Jetzt";
 "UpcomingTabBar"	= "Demnächst";
 "UpcomingLong"		= "Demnächst";
-"FavoritesTabBar"	= "Favoriten";
-"FavoritesLong"		= "Favoriten";
+"FavoritesTabBar"	= "Watchlist";
+"FavoritesLong"		= "Watchlist";
 "SettingsTabBar"	= "Einstellungen";
 "SettingsLong"		= "Einstellungen";
 "UpdatingMovies"	= "Filme aktualisieren...";
 "LoadingMovies"		= "Filme laden...";
-"NoFavorites"		= "Keine Favoriten";
-"HowToAddFavorites" = "Du kannst Favoriten entweder in einer Listenansicht durch Wischen nach links oder in einer Detailansicht durch Tap auf den Herz-Button hinzufügen.";
+"NoFavorites"		= "Leere Watchlist";
+"HowToAddFavorites" = "Du kannst die Watchlist entweder in einer Listenansicht durch Wischen nach links oder in einer Detailansicht durch Tap auf den Stern-Button befüllen.";
 "OnlyGoodMoviesCR"  = "Nur gute\nFilme";
 "OnlyNewMoviesCR"   = "Nur neue\nFilme";
 "OnlyGoodMovies"    = "Nur gute Filme";
@@ -52,10 +52,10 @@
 "ShowCompleteSynopsis"		= "Komplette Beschreibung";
 "ShowShortSynopsis"			= "Kürzere Beschreibung";
 "ShowOnImdb"				= "Zeige Details auf IMDb";
-"AddToFavorites"			= "Als Favorit markieren";
-"RemoveFromFavorites"		= "Aus Favoriten entfernen";
-"AddToFavoritesShort"		= "Als Favorit\nmarkieren";
-"RemoveFromFavoritesShort"	= "Aus Favoriten\nentfernen";
+"AddToFavorites"			= "Zur Watchlist hinzufügen";
+"RemoveFromFavorites"		= "Aus Watchlist entfernen";
+"AddToFavoritesShort"		= "Zur Watchlist\nhinzufügen";
+"RemoveFromFavoritesShort"	= "Aus Watchlist\nentfernen";
 
 "TrailersSingular"           = "Trailer";
 "TrailersPlural"             = "Trailer";
@@ -110,7 +110,7 @@
 
 "UpdateFeature"				= "Neues Feature";
 "UpdateFeatures"			= "Neue Features";
-"UpdateMessagePush"			= "In dieser Version der App gibt es ein neues Feature: In den Einstellungen kannst du Mitteilungen einschalten, um dich daran erinnern zu lassen, wenn deine Favoriten-Filme ins Kino kommen.";
+"UpdateMessagePush"			= "In dieser Version der App gibt es ein neues Feature: In den Einstellungen kannst du Mitteilungen einschalten, um dich daran erinnern zu lassen, wenn deine Watchlist-Filme ins Kino kommen.";
 
 "UpdateDatabaseTitle"		= "Update";
 "UpdateDatabaseText"		= "Datenbank-Update auf die neue Version.";
@@ -129,8 +129,8 @@
 "SettingsRateTheApp"	= "Diese App bewerten";
 
 "SettingsNotificationsHeader"	= "Mitteilungen";
-"SettingsNotifications"			= "Mitteilungen für Favoriten";
-"SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung zum eingestellten Zeitpunkt, wenn ein Film deiner Favoritenliste ins Kino kommt.";
+"SettingsNotifications"			= "Mitteilungen für die Watchlist";
+"SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung zum eingestellten Zeitpunkt, wenn ein Film deiner Watchlist ins Kino kommt.";
 "SettingsNotificationTime"		= "Zeitpunkt der Mitteilung:";
 
 // About
@@ -165,18 +165,18 @@
 "OneMovieReleasedSoon1"			= "kommt am ";
 "OneMovieReleasedSoon2"			= " ins Kino.";
 
-"MoviesReleasedToday"			= "deiner Wunschfilme kommen heute ins Kino";
-"MoviesReleasedTomorrow"		= "deiner Wunschfilme kommen morgen ins Kino";
-"MoviesReleasedAfterTomorrow"	= "deiner Wunschfilme kommen übermorgen ins Kino";
-"MoviesReleasedSoon1"			= "deiner Wunschfilme kommen am ";
+"MoviesReleasedToday"			= "deiner Watchlist-Filme kommen heute ins Kino";
+"MoviesReleasedTomorrow"		= "deiner Watchlist-Filme kommen morgen ins Kino";
+"MoviesReleasedAfterTomorrow"	= "deiner Watchlist-Filme kommen übermorgen ins Kino";
+"MoviesReleasedSoon1"			= "deiner Watchlist-Filme kommen am ";
 "MoviesReleasedSoon2"			= " ins Kino";
 
 // Watch
 
-"WatchNoFavorites"			= "Bitte lege in der MovieStarts iPhone-App deine Favoriten an, um sie hier auf der Watch sehen zu können.";
+"WatchNoFavorites"			= "Bitte lege in der MovieStarts iPhone-App deine Watchlist an, um sie hier auf der Watch sehen zu können.";
 "WatchNowPlaying"			= "Jetzt im Kino";
 "WatchConnectError"			= "Fehler beim Verbinden mit deinem iPhone. Bitte überprüfe das Netzwerk und/oder probiere es später noch einmal.";
-"WatchUserShouldStartPhone"	= "Bitte öffne die MovieStarts iPhone-App, damit die Uhr auf die dort gespeicherten Favoriten zugreifen kann. Spätere Updates werden dann automatisch durchgeführt.";
+"WatchUserShouldStartPhone"	= "Bitte öffne die MovieStarts iPhone-App, damit die Uhr auf die dort gespeicherte Watchlist zugreifen kann. Spätere Updates werden dann automatisch durchgeführt.";
 
 // Misc.
 
