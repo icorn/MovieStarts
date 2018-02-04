@@ -206,11 +206,11 @@ extension MovieViewController {
         }
         else {
             // english flag
-            flagImageView = UIImageView(image: UIImage(named: "imdb"))
+            flagImageView = UIImageView(image: UIImage(named: "usuk"))
         }
 
         if let flagImageView = flagImageView {
-            flagImageView.frame = CGRect(x: 176.0, y: 8.0, width: 30, height: 18)
+            flagImageView.frame = CGRect(x: 172.0, y: 8.0, width: 34, height: 18)
             button.addSubview(flagImageView)
         }
     }
