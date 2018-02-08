@@ -28,11 +28,47 @@ struct Favorites {
 	
 		- parameter id:	the new favorite movie id
 	*/
-	static func addMovie(_ movie: MovieRecord, tabBarController: TabBarController?) {
+	static func addMovie(_ movie: MovieRecord, tabBarController: TabBarController?)
+    {
 		Favorites.IDs.append(movie.id)
 		Favorites.saveFavorites()
 		tabBarController?.favoriteController?.addFavorite(movie)
 		WatchSessionManager.sharedManager.sendNewFavoriteToWatch(movie)
+
+        guard let tabBarController = tabBarController else { return }
+        
+        // if needed: show push-hint
+
+        let notificationsOn: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotifications) as? Bool
+        
+        if let notificationsOn = notificationsOn , notificationsOn == true
+        {
+            // notifications are turned on, we can return
+            return
+        }
+        
+        let pushHintAlreadyShown = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsPushHintAlreadyShown) as? Bool
+
+        if (pushHintAlreadyShown == nil)
+        {
+            // hint not already shown: show it
+            var msgWindow: MessageWindow?
+
+            DispatchQueue.main.async
+            {
+                msgWindow = MessageWindow(parent: tabBarController.view,
+                                            darkenBackground: true,
+                                            titleStringId: "PushHintTitle",
+                                            textStringId: "PushHintText",
+                                            buttonStringIds: ["Close"],
+                                            handler: { (buttonIndex) -> () in
+                                                msgWindow?.close()
+                                            })
+            }
+                
+            UserDefaults(suiteName: Constants.movieStartsGroup)?.set(true, forKey: Constants.prefsPushHintAlreadyShown)
+            UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+        }
 
 		#if RELEASE
 			let imdbId = (movie.imdbId != nil) ? movie.imdbId! : "<unknown ID>"

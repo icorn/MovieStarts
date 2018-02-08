@@ -101,13 +101,15 @@ class MovieTableViewDelegate : NSObject, UITableViewDelegate {
 
                 let currentCell: UITableViewCell? = self.tableView.cellForRow(at: indexPath)
 
-                if (Favorites.IDs.contains(movie.id)) {
+                if (Favorites.IDs.contains(movie.id))
+                {
                     // movie is favorite: remove it as favorite and remove favorite-icon
                     Favorites.removeMovie(movie, tabBarController: self.movieTableViewDataSource.tabBarController)
                     self.favoriteIconManager.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
                 }
-                else {
-                    // movie was no favorite: add to as favorite and add favorite-icon
+                else
+                {
+                    // movie was no favorite: add as favorite and add favorite-icon
                     Favorites.addMovie(movie, tabBarController: self.movieTableViewDataSource.tabBarController)
                     self.favoriteIconManager.addFavoriteIconToCell(currentCell as? MovieTableViewCell)
                 }

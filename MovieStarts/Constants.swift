@@ -39,7 +39,8 @@ public struct Constants {
 	static let prefsNotificationTime			= "notificationTime"
 	static let prefsVersion						= "version"
 	static let prefsMigrateFromVersion			= "migrateFromVersion"
-	
+    static let prefsPushHintAlreadyShown        = "pushHintAlreadyShown"
+
 	static let dbRecordTypeMovie			= "Movie"
 	static let dbRecordTypeGenre			= "Genre"
 	

@@ -29,13 +29,34 @@ class MessageWindow: NSObject {
 	weak var parentView: UIView?
 	var buttonHandler: ((Int) -> ())?
 
-	convenience init(parent: UIView, darkenBackground: Bool, titleStringId: String, textStringId: String, textStringAlignment: NSTextAlignment? = nil, buttonStringIds: [String], error: NSError? = nil, handler: ((Int) -> ())?) {
-		
-		self.init(parent: parent, darkenBackground: darkenBackground, titleStringId: titleStringId, textString: NSLocalizedString(textStringId, comment: ""), textStringAlignment: textStringAlignment, buttonStringIds: buttonStringIds, error: nil, handler: handler)
+	convenience init(parent: UIView,
+                     darkenBackground: Bool,
+                     titleStringId: String,
+                     textStringId: String,
+                     textStringAlignment: NSTextAlignment? = nil,
+                     buttonStringIds: [String],
+                     error: NSError? = nil,
+                     handler: ((Int) -> ())?)
+    {
+		self.init(parent: parent,
+                  darkenBackground: darkenBackground,
+                  titleStringId: titleStringId,
+                  textString: NSLocalizedString(textStringId, comment: ""),
+                  textStringAlignment: textStringAlignment,
+                  buttonStringIds: buttonStringIds,
+                  error: nil,
+                  handler: handler)
 	}
 
-	init(parent: UIView, darkenBackground: Bool, titleStringId: String, textString: String, textStringAlignment: NSTextAlignment? = nil, buttonStringIds: [String], error: NSError? = nil, handler: ((Int) -> ())?) {
-
+	init(parent: UIView,
+         darkenBackground: Bool,
+         titleStringId: String,
+         textString: String,
+         textStringAlignment: NSTextAlignment? = nil,
+         buttonStringIds: [String],
+         error: NSError? = nil,
+         handler: ((Int) -> ())?)
+    {
 		parentView = parent
 		buttonHandler = handler
 		

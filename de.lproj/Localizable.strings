@@ -60,6 +60,9 @@
 "TrailersSingular"           = "Trailer";
 "TrailersPlural"             = "Trailer";
 
+"PushHintTitle"         = "Tipp";
+"PushHintText"          = "Um benachrichtigt zu werden, wenn dieser Film in's Kino kommt, aktiviere 'Mitteilungen für Watchlist' in den App-Einstellungen.";
+
 // Welcome
 
 "WelcomeTitle"			= "Willkommen";
@@ -126,7 +129,7 @@
 "SettingsRateTheApp"	= "Diese App bewerten";
 
 "SettingsNotificationsHeader"	= "Mitteilungen";
-"SettingsNotifications"			= "Mitteilungen für die Watchlist";
+"SettingsNotifications"			= "Mitteilungen für Watchlist";
 "SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung zum eingestellten Zeitpunkt, wenn ein Film deiner Watchlist ins Kino kommt.";
 "SettingsNotificationTime"		= "Zeitpunkt der Mitteilung:";
 
