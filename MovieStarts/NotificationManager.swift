@@ -70,6 +70,8 @@ class NotificationManager {
 		for fireDate in fireMovies.keys {
 			addFavoriteNotification(movies: fireMovies[fireDate], fireDate: /*now.dateByAddingTimeInterval(30)*/ fireDate, notificationDay: notificationDay)
 		}
+        
+        NSLog("Updated \(fireMovies.keys.count) notifications")
 	}
 	
 	static func generateNotificationText(movieCount: Int, notificationDay: Int, firstMovieTitle: String, movieDate: String) -> String {

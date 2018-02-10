@@ -128,10 +128,12 @@
 "SettingsAbout"			= "Über MovieStarts";
 "SettingsRateTheApp"	= "Diese App bewerten";
 
-"SettingsNotificationsHeader"	= "Mitteilungen";
-"SettingsNotifications"			= "Mitteilungen für Watchlist";
-"SettingsNotificationsFooter"	= "Du erhälst eine Mitteilung zum eingestellten Zeitpunkt, wenn ein Film deiner Watchlist ins Kino kommt.";
-"SettingsNotificationTime"		= "Zeitpunkt der Mitteilung:";
+"SettingsNotificationsHeader"	    = "Mitteilungen";
+"SettingsNotifications"			    = "Mitteilungen für Watchlist";
+"SettingsNotificationsFooter"	    = "Du erhälst eine Mitteilung zum eingestellten Zeitpunkt, wenn ein Film deiner Watchlist ins Kino kommt.";
+"SettingsNotificationTime"		    = "Zeitpunkt der Mitteilung";
+"SettingsNotificationTimeAt"        = "um";
+"SettingsNotificationTimeOclock"    = "Uhr";
 
 // About
 

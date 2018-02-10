@@ -128,10 +128,12 @@
 "SettingsAbout"			= "About MovieStarts";
 "SettingsRateTheApp"	= "Rate this app";
 
-"SettingsNotificationsHeader"	= "Notifications";
-"SettingsNotifications"			= "Notifications for Watchlist";
-"SettingsNotificationsFooter"	= "You will get a push notification as soon as one of the movies on your watchlist will be released.";
-"SettingsNotificationTime"		= "Time of the Notification:";
+"SettingsNotificationsHeader"	    = "Notifications";
+"SettingsNotifications"			    = "Notifications for Watchlist";
+"SettingsNotificationsFooter"	    = "You will get a push notification as soon as one of the movies on your watchlist will be released.";
+"SettingsNotificationTime"		    = "Time of the Notification";
+"SettingsNotificationTimeAt"        = "at";
+"SettingsNotificationTimeOclock"    = "";
 
 // About
 
