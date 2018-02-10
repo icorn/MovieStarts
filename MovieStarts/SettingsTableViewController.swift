@@ -141,7 +141,7 @@ class SettingsTableViewController: UITableViewController, UIPickerViewDelegate, 
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		if ((indexPath as NSIndexPath).section == sectionAbout) {
 			if ((indexPath as NSIndexPath).item == itemRate) {
-				guard let rateUrl = URL(string: "itms-apps://itunes.apple.com/app/id1043041023") else { return }
+                guard let rateUrl = URL(string: "itms-apps://itunes.apple.com/app/id1043041023?action=write-review") else { return }
 				UIApplication.shared.openURL(rateUrl)
 			}
 			else if ((indexPath as NSIndexPath).item == itemAbout) {
