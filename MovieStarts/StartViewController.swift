@@ -99,7 +99,11 @@ class StartViewController: UIViewController {
 				
 				// show the next view controller
 				
-				UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                DispatchQueue.main.async
+                {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                }
+                
 				self.myTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "TabBarController") as? TabBarController
 				
 				if let tabBarController = self.myTabBarController, let allMovies = movies {
@@ -126,7 +130,8 @@ class StartViewController: UIViewController {
 			},
 			
 			errorHandler: { (errorMessage: String) in
-				DispatchQueue.main.async {
+				DispatchQueue.main.async
+                {
 					UIApplication.shared.isNetworkActivityIndicatorVisible = false
 					NSLog(errorMessage)
 				}

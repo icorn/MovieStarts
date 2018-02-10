@@ -234,7 +234,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		Fabric.with([Crashlytics.self])
-		
+        UIApplication.configureLinearNetworkActivityIndicatorIfNeeded()
+        
 		return true
 	}
 

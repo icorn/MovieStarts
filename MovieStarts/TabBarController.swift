@@ -405,12 +405,18 @@ class TabBarController: UITabBarController {
                 },
                 
                 completionHandler: { [unowned self] (movies: [MovieRecord]?) in
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    DispatchQueue.main.async
+                    {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    }
                     self.loadGenresFromFile()
                 },
 
                 errorHandler: { (errorMessage: String) in
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    DispatchQueue.main.async
+                    {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    }
                     NSLog(errorMessage)
                 }
             )

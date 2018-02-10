@@ -72,8 +72,11 @@ class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
 		
 		NSLog("Getting records for migration after releasedate \(minReleaseDate)")
 		
-		UIApplication.shared.isNetworkActivityIndicatorVisible = true
-		
+        DispatchQueue.main.async
+        {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        }
+        
 		// get new database fields for current records
 		let migrationPredicate = NSPredicate(format: "(%K > %@)", argumentArray: [country.databaseKeyRelease, minReleaseDate])
 		let predicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [migrationPredicate])

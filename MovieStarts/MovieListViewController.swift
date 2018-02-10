@@ -333,7 +333,8 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                         },
 
                         completionHandler: { [weak self] (movies: [MovieRecord]?) in
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async
+                            {
                                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
                                 updateWindow?.close()
                             }
@@ -347,7 +348,8 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                         },
 
                         errorHandler: { [weak self] (errorMessage: String) in
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async
+                            {
                                 UIApplication.shared.isNetworkActivityIndicatorVisible = false
 
                                 // error in migration

@@ -141,8 +141,9 @@ extension MovieViewController {
 							}
 							
 							// turn on network indicator and spinner
-							UIApplication.shared.isNetworkActivityIndicatorVisible = true
-							DispatchQueue.main.async {
+							DispatchQueue.main.async
+                            {
+                                UIApplication.shared.isNetworkActivityIndicatorVisible = true
 								self.spinnerBackground?.isHidden = false
 								self.spinner?.startAnimating()
 							}
@@ -284,7 +285,8 @@ extension MovieViewController {
 		Also removes the loading spinner from the superview.
 	*/
 	fileprivate func stopSpinners() {
-		DispatchQueue.main.async {
+		DispatchQueue.main.async
+        {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
 			self.spinner?.stopAnimating()
 			self.spinnerBackground?.removeFromSuperview()
