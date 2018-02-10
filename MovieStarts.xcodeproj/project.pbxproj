@@ -21,6 +21,8 @@
 		4F2C91181B6374810044A27B /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C91171B6374810044A27B /* Favorites.swift */; };
 		4F2D38301C5A7A29000927E7 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */; };
 		4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D38311C5BC984000927E7 /* NotificationManager.swift */; };
+		4F2E40A0202F2FE1009B5AEB /* AcknowledgementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2E409F202F2FE1009B5AEB /* AcknowledgementsViewController.swift */; };
+		4F2E40A2202F40EA009B5AEB /* BigLabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2E40A1202F40EA009B5AEB /* BigLabelViewController.swift */; };
 		4F34A5AF1DCFC5360032F7BA /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F34A5AC1DCFC5360032F7BA /* CloseButton.swift */; };
 		4F34A5B01DCFC5360032F7BA /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F34A5AD1DCFC5360032F7BA /* TagListView.swift */; };
 		4F34A5B11DCFC5360032F7BA /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F34A5AE1DCFC5360032F7BA /* TagView.swift */; };
@@ -167,6 +169,8 @@
 		4F2C91171B6374810044A27B /* Favorites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
 		4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		4F2D38311C5BC984000927E7 /* NotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		4F2E409F202F2FE1009B5AEB /* AcknowledgementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsViewController.swift; sourceTree = "<group>"; };
+		4F2E40A1202F40EA009B5AEB /* BigLabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigLabelViewController.swift; sourceTree = "<group>"; };
 		4F34A5AC1DCFC5360032F7BA /* CloseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CloseButton.swift; path = TagListView/CloseButton.swift; sourceTree = "<group>"; };
 		4F34A5AD1DCFC5360032F7BA /* TagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TagListView.swift; path = TagListView/TagListView.swift; sourceTree = "<group>"; };
 		4F34A5AE1DCFC5360032F7BA /* TagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TagView.swift; path = TagListView/TagView.swift; sourceTree = "<group>"; };
@@ -420,7 +424,9 @@
 			isa = PBXGroup;
 			children = (
 				4FBB03CB1BA862B50053CE99 /* AboutViewController.swift */,
+				4F2E409F202F2FE1009B5AEB /* AcknowledgementsViewController.swift */,
 				4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */,
+				4F2E40A1202F40EA009B5AEB /* BigLabelViewController.swift */,
 			);
 			name = "Settings Screens";
 			sourceTree = "<group>";
@@ -844,6 +850,7 @@
 				4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */,
 				4F35FE6D1E70A4F70020EDFB /* ColorExtension.swift in Sources */,
 				4F956C1D1DC4D211008EF031 /* MovieViewController.swift in Sources */,
+				4F2E40A0202F2FE1009B5AEB /* AcknowledgementsViewController.swift in Sources */,
 				4F1B6B63202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift in Sources */,
 				4FAB81E11D95C23D00D5EA5D /* MovieViewControllerTrailers.swift in Sources */,
 				4F63E61E1A992BCA00528FB3 /* MovieDatabaseHelper.swift in Sources */,
@@ -851,6 +858,7 @@
 				4FAFF8C91A8BFFE500864078 /* AppDelegate.swift in Sources */,
 				4F694E691FC0D84A000A2A28 /* Rotatable.swift in Sources */,
 				4F2C91181B6374810044A27B /* Favorites.swift in Sources */,
+				4F2E40A2202F40EA009B5AEB /* BigLabelViewController.swift in Sources */,
 				4F0953411B9F17D50040BBC9 /* SettingsTableViewController.swift in Sources */,
 				4F7A99AF1BAF01E600ED38C9 /* NetworkChecker.swift in Sources */,
 				4F694E6B1FC0D9BA000A2A28 /* RotatableSafariViewController.swift in Sources */,

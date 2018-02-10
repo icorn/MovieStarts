@@ -8,8 +8,8 @@
 
 import UIKit
 
-class AboutViewController: UIViewController {
-
+class AboutViewController: UIViewController
+{
 	@IBOutlet weak var versionLabel: UILabel!
 	@IBOutlet weak var taglineLabel: UILabel!
 	@IBOutlet weak var developerHeadlineLabel: UILabel!
@@ -18,10 +18,7 @@ class AboutViewController: UIViewController {
 	@IBOutlet weak var emailHeadlineLabel: UILabel!
 	@IBOutlet weak var twitterHeadlineLabel: UILabel!
 	@IBOutlet weak var swiftLabel: UILabel!
-	@IBOutlet weak var appzgearLabel: UILabel!
-	@IBOutlet weak var reachabilityLabel: UILabel!
-	@IBOutlet weak var mitLicenseLabel: UILabel!
-	@IBOutlet weak var bottomLine: UIView!
+    @IBOutlet weak var acknowledgmentsButton: UIButton!
 	
 	@IBOutlet weak var webLinkButton: UIButton!
 	@IBOutlet weak var emailLinkButton: UIButton!
@@ -30,12 +27,14 @@ class AboutViewController: UIViewController {
     @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
     
 	
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
 
 		let appInfo = Bundle.main.infoDictionary
 		
-		if let appInfo = appInfo, let version = appInfo["CFBundleShortVersionString"] as? String {
+		if let appInfo = appInfo, let version = appInfo["CFBundleShortVersionString"] as? String
+        {
 			versionLabel.text = NSLocalizedString("Version", comment: "") + " " + version
 		}
 
@@ -47,13 +46,8 @@ class AboutViewController: UIViewController {
 		emailHeadlineLabel.text = NSLocalizedString("emailHeadline", comment: "")
 		twitterHeadlineLabel.text = NSLocalizedString("twitterHeadline", comment: "")
 		swiftLabel.text = NSLocalizedString("swift", comment: "")
-		appzgearLabel.text = NSLocalizedString("appzgear", comment: "")
-		reachabilityLabel.text = "" // NSLocalizedString("reachability", comment: "")
-		mitLicenseLabel.text = "" // NSLocalizedString("mitLicense", comment: "")
-		
-		reachabilityLabel.isHidden = true
-		mitLicenseLabel.isHidden = true
-		bottomLine.isHidden = true
+        acknowledgmentsButton.setTitle(NSLocalizedString("Acknowledgements", comment: ""), for: UIControlState.normal)
+        acknowledgmentsButton.addTarget(self, action: #selector(AboutViewController.acknowledgmentsButtonPressed(_:)), for: UIControlEvents.touchUpInside)
 	}
     
     override func viewDidLayoutSubviews()
@@ -68,7 +62,8 @@ class AboutViewController: UIViewController {
         }
     }
     
-	@IBAction func webLinkTouched(_ sender: AnyObject) {
+	@IBAction func webLinkTouched(_ sender: AnyObject)
+    {
 		let url = URL(string: "http://MovieStartsApp.com")
 
 		if let url = url , UIApplication.shared.canOpenURL(url) {
@@ -76,7 +71,8 @@ class AboutViewController: UIViewController {
 		}
 	}
 	
-	@IBAction func emailLinkTouched(_ sender: AnyObject) {
+	@IBAction func emailLinkTouched(_ sender: AnyObject)
+    {
 		let url = URL(string: "mailto:info@MovieStartsApp.com")
 		
 		if let url = url , UIApplication.shared.canOpenURL(url) {
@@ -84,16 +80,21 @@ class AboutViewController: UIViewController {
 		}
 	}
 	
-	@IBAction func twitterLinkgTouched(_ sender: AnyObject) {
+	@IBAction func twitterLinkgTouched(_ sender: AnyObject)
+    {
 		let url = URL(string: "https://twitter.com/MovieStartsApp")
 		
 		if let url = url , UIApplication.shared.canOpenURL(url) {
 			UIApplication.shared.openURL(url)
 		}
 	}
-	
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+
+    @objc func acknowledgmentsButtonPressed(_ sender: UIButton!)
+    {
+        if let ackController = storyboard?.instantiateViewController(withIdentifier: "AcknowledgementsViewController") as? AcknowledgementsViewController
+        {
+            navigationController?.pushViewController(ackController, animated: true)
+        }
     }
+
 }
