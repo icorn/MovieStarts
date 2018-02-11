@@ -58,7 +58,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 	/**
 		Checks if there are new or updates movies in the cloud and gets them.
 	*/
-	func getUpdatedMovies(	_ allMovies: [MovieRecord],
+	func getUpdatedMovies(_ allMovies: [MovieRecord],
 							country: MovieCountry,
 							addNewMovieHandler: @escaping (MovieRecord) -> (),
 							updateMovieHandler: @escaping (MovieRecord) -> (),
@@ -148,8 +148,8 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		This function is called when a new updated record was fetched from the CloudKit database.
 		- parameter record:	The record from the CloudKit database
 	*/
-	internal func recordFetchedCallback(record: CKRecord) {
-		
+	internal func recordFetchedCallback(record: CKRecord)
+    {
 		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("recordFetchedUpdatedMoviesCallback: Corrupt countrycode \(prefsCountryString)"); return }
 			
@@ -157,19 +157,24 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		newMovieRecord.initWithCKRecord(ckRecord: record)
 		var movieAlreadyExists: Bool = false
 		
-		if let existingMovieRecords = loadedMovieRecordArray {
-			for existingMovieRecord in existingMovieRecords {
-				if (existingMovieRecord.id == newMovieRecord.id) {
+		if let existingMovieRecords = loadedMovieRecordArray
+        {
+			for existingMovieRecord in existingMovieRecords
+            {
+				if (existingMovieRecord.id == newMovieRecord.id)
+                {
 					movieAlreadyExists = true
 					break
 				}
 			}
 		}
 		
-		if (movieAlreadyExists) {
+		if (movieAlreadyExists)
+        {
 			self.updateMovieHandler?(newMovieRecord)
 		}
-		else {
+		else
+        {
 			self.addNewMovieHandler?(newMovieRecord)
 		}
 		
@@ -182,50 +187,59 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		MovieRecord objects are generated and save.
 		- parameter error:	The error object
 	*/
-	internal func queryOperationFinished(error: Error?) {
-		if let error = error as NSError? {
+	internal func queryOperationFinished(error: Error?)
+    {
+		if let error = error as NSError?
+        {
 			// there was an error
 			self.errorHandler?("Error querying updated records: \(error.code) (\(error.localizedDescription))")
 			return
 		}
-		else {
+		else
+        {
 			// received records from the cloud
 			let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
 			userDefaults?.set(Date(), forKey: Constants.prefsLatestDbSuccessfullUpdate)
 			userDefaults?.synchronize()
 
-			if (updatedCKRecords.count > 0) {
+			if (updatedCKRecords.count > 0)
+            {
 				// generate an array of MovieRecords
 				var updatedMovieRecordArray: [MovieRecord] = []
 					
 				let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 				guard let country = MovieCountry(rawValue: prefsCountryString) else { NSLog("queryOperationFinishedUpdatedMovies: Corrupt countrycode \(prefsCountryString)"); return }
 					
-				for ckRecord in self.updatedCKRecords {
+				for ckRecord in self.updatedCKRecords
+                {
 					let newRecord = MovieRecord(country: country)
 					newRecord.initWithCKRecord(ckRecord: ckRecord)
 					updatedMovieRecordArray.append(newRecord)
 				}
 					
 				// merge both arrays (the existing movies and the updated movies)
-				if (self.loadedMovieRecordArray != nil) {
+				if (self.loadedMovieRecordArray != nil)
+                {
 					MovieDatabaseHelper.joinMovieRecordArrays(existingMovies: &(self.loadedMovieRecordArray!), updatedMovies: updatedMovieRecordArray)
 				}
 			}
 			
 			// delete all movies which are too old
-			if (loadedMovieRecordArray != nil) {
+			if (loadedMovieRecordArray != nil)
+            {
 				cleanUpExistingMovies(&loadedMovieRecordArray!)
 			}
 			
-			if (updatedCKRecords.count > 0) {
+			if (updatedCKRecords.count > 0)
+            {
 				// we have updated records: also update genre-database, then clean-up posters
 				loadGenreDatabase({ () -> () in
 					self.cleanUpPosters()
 					self.writeMoviesToDevice()
 				})
 			}
-			else {
+			else
+            {
 				// clean up posters
 				cleanUpPosters()
 				self.writeMoviesToDevice()

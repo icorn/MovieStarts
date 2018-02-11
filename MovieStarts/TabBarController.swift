@@ -281,7 +281,9 @@ class TabBarController: UITabBarController {
 		databaseUpdater?.updateThumbnailHandler = updateThumbnailHandler
 
 		DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
-            databaseUpdater?.getUpdatedMovies(allMovies, country: country,
+            databaseUpdater?.getUpdatedMovies(
+                allMovies,
+                country: country,
                 addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
 
                     if (!movie.isHidden) {

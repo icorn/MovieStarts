@@ -94,31 +94,52 @@ class MovieDatabaseParent : DatabaseParent {
 		Checks if there are movies which are too old and removes them.
 		- parameter existingMovies:	The array of existing movies to check
 	*/
-	func cleanUpExistingMovies(_ existingMovies: inout [MovieRecord]) {
-		let compareDate = Date(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast) // 30 days ago
+	func cleanUpExistingMovies(_ existingMovies: inout [MovieRecord])
+    {
+		let compareDateTooOld = Date(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast) // 30 days ago
 		let oldNumberOfMovies = existingMovies.count
 		var removedMovies = 0
-		
-		print("Cleaning up old movies...")
+        let invalidCalendar = Calendar(identifier: .gregorian)
+        let dateComponents = DateComponents(calendar: invalidCalendar,
+                                            timeZone: TimeZone(secondsFromGMT: 0),
+                                            year: 9999,
+                                            month: 1,
+                                            day: 1,
+                                            hour: 0,
+                                            minute: 0,
+                                            second: 0)
+        let compareDateInvalid = invalidCalendar.date(from: dateComponents)
+
+		print("Cleaning up old & invalid movies...")
 		
 		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
-		if let country = MovieCountry(rawValue: prefsCountryString) {
-			
-			for index in (0 ..< existingMovies.count).reversed() {
+		if let country = MovieCountry(rawValue: prefsCountryString)
+        {
+			for index in (0 ..< existingMovies.count).reversed()
+            {
 				let releaseDate = existingMovies[index].releaseDate[country.countryArrayIndex]
 				
-				if releaseDate.compare(compareDate) == ComparisonResult.orderedAscending {
+				if releaseDate.compare(compareDateTooOld) == ComparisonResult.orderedAscending
+                {
 					// movie is too old
 					removeMovieHandler?(existingMovies[index])
-					print("   '\(String(describing: existingMovies[index].origTitle))' (\(releaseDate)) removed")
+					print("   '\(existingMovies[index].origTitle ?? "nil")' (\(releaseDate)) removed (too old)")
 					existingMovies.remove(at: index)
 				}
+                else if let compareDateInvalid = compareDateInvalid, releaseDate.compare(compareDateInvalid) == ComparisonResult.orderedDescending
+                {
+                    // movie is from year 9999 (-> invalid)
+                    removeMovieHandler?(existingMovies[index])
+                    print("   '\(existingMovies[index].origTitle ?? "nil")' (\(releaseDate)) removed (invalid)")
+                    existingMovies.remove(at: index)
+                }
 			}
 			
 			removedMovies = oldNumberOfMovies - existingMovies.count
 			
-			if (removedMovies > 0) {
+			if (removedMovies > 0)
+            {
 				// udpate the watch
 				WatchSessionManager.sharedManager.sendAllFavoritesToWatch(sendList: true, sendThumbnails: false)
 			}
