@@ -19,7 +19,8 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
     var filterViewHeight: NSLayoutConstraint?
     var filterViewTop: NSLayoutConstraint?
 
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
 
         tableViewOutlet.register(UINib(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: "MovieTableViewCell")
@@ -193,10 +194,11 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
 
     fileprivate func updateDatabaseIfNeeded()
     {
-        let databaseUpdater = MovieDatabaseUpdater(recordType: Constants.dbRecordTypeMovie, viewForError: nil)
+        MovieDatabaseUpdater.sharedInstance.viewForError = self.view
         
-        if let allMovies = databaseUpdater.readDatabaseFromFile() {
-            movieTableViewDataSource?.tabBarController.updateMovies(allMovies: allMovies, databaseUpdater: databaseUpdater)
+        if let allMovies = MovieDatabaseUpdater.sharedInstance.readDatabaseFromFile()
+        {
+            movieTableViewDataSource?.tabBarController.updateMovies(allMovies: allMovies)
         }
     }
     
@@ -285,9 +287,9 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                         return
                     }
 
-                    let databaseMigrator = MovieDatabaseMigrator(recordType: Constants.dbRecordTypeMovie, viewForError: self.view)
+                    MovieDatabaseMigrator.sharedInstance.viewForError = self.view
 
-                    databaseMigrator.getMigrationMovies(
+                    MovieDatabaseMigrator.sharedInstance.getMigrationMovies(
                         country: country,
                         updateMovieHandler: { (movie: MovieRecord) in
 
@@ -298,7 +300,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                             for (nowIndex, nowMovie) in movieListDataSource.nowMovies.enumerated() {
                                 if (nowMovie.tmdbId == movie.tmdbId) {
                                     movieListDataSource.nowMovies[nowIndex].migrate(updateRecord: movie,
-                                                                                    updateKeys: databaseMigrator.queryKeys)
+                                                                                    updateKeys: MovieDatabaseMigrator.sharedInstance.queryKeys)
                                     updated = true
                                     break
                                 }
@@ -310,7 +312,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                 {
                                     for (upcomingMovieIndex, upcomingMovie) in upcomingMovieSection.enumerated() {
                                         if (upcomingMovie.tmdbId == movie.tmdbId) {
-                                            movieListDataSource.tabBarController.upcomingMovies[upcomingSectionIndex][upcomingMovieIndex].migrate(updateRecord: movie, updateKeys: databaseMigrator.queryKeys)
+                                            movieListDataSource.tabBarController.upcomingMovies[upcomingSectionIndex][upcomingMovieIndex].migrate(updateRecord: movie, updateKeys: MovieDatabaseMigrator.sharedInstance.queryKeys)
                                             break
                                         }
                                     }
@@ -322,7 +324,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                             {
                                 for (favoriteMovieIndex, favoriteMovie) in favoriteMovieSection.enumerated() {
                                     if (favoriteMovie.tmdbId == movie.tmdbId) {
-                                        movieListDataSource.tabBarController.favoriteMovies[favoriteSectionIndex][favoriteMovieIndex].migrate(updateRecord: movie, updateKeys: databaseMigrator.queryKeys)
+                                        movieListDataSource.tabBarController.favoriteMovies[favoriteSectionIndex][favoriteMovieIndex].migrate(updateRecord: movie, updateKeys: MovieDatabaseMigrator.sharedInstance.queryKeys)
                                         break
                                     }
                                 }

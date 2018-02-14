@@ -11,10 +11,8 @@ import CloudKit
 import UIKit
 
 
-protocol MovieDatabaseProtocol {
-	
-	init(recordType: String, viewForError: UIView?)
-	
+protocol MovieDatabaseProtocol
+{
 	func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: OperationQueue)
 	func queryOperationFinished(error: Error?)
 	func recordFetchedCallback(record: CKRecord)

@@ -11,50 +11,57 @@ import CloudKit
 import UIKit
 
 
-class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
-	
-	required init(recordType: String, viewForError: UIView?) {
-		super.init(recordType: recordType)
-
-		self.viewForError = viewForError
-		queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries, Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId, Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN,
-		    
-			// version 1.2
-			Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic,
-		
-			// version 1.3
-			Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
-		]
-
-		let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
-
-		if let fileUrl = fileUrl {
-			moviesPlistPath = fileUrl.path
-		}
-        else {
-            NSLog("Error getting url for app-group.")
-			var errorWindow: MessageWindow?
-
-			if let viewForError = viewForError {
-				DispatchQueue.main.async {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
-						errorWindow?.close()
-					})
-				}
-			}
+class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
+{
+    static let sharedInstance = MovieDatabaseUpdater()
+    
+    private init()
+    {
+        let recordType = Constants.dbRecordTypeMovie
+        
+        super.init(recordType: recordType)
+        
+        queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries, Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId, Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN,
+                     
+            // version 1.2
+            Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic,
+            
+            // version 1.3
+            Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
+        ]
+        
+        let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
+        
+        if let fileUrl = fileUrl
+        {
+            moviesPlistPath = fileUrl.path
         }
-		
-		if let saveMoviesPlistPath = self.moviesPlistPath {
-			if saveMoviesPlistPath.hasSuffix("/") {
-				moviesPlistFile = saveMoviesPlistPath + recordType + ".plist"
-			}
-			else {
-				moviesPlistFile = saveMoviesPlistPath + "/" + recordType + ".plist"
-			}
-		}
-	}
-	
-	
+        else
+        {
+            NSLog("Error getting url for app-group.")
+            var errorWindow: MessageWindow?
+            
+            if let viewForError = viewForError {
+                DispatchQueue.main.async {
+                    errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+                        errorWindow?.close()
+                    })
+                }
+            }
+        }
+        
+        if let saveMoviesPlistPath = self.moviesPlistPath
+        {
+            if saveMoviesPlistPath.hasSuffix("/") {
+                moviesPlistFile = saveMoviesPlistPath + recordType + ".plist"
+            }
+            else {
+                moviesPlistFile = saveMoviesPlistPath + "/" + recordType + ".plist"
+            }
+        }
+    }
+    
+
 	/**
 		Checks if there are new or updates movies in the cloud and gets them.
 	*/
@@ -103,6 +110,9 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 	}
 	
 	
+    // MARK: - Internal functions
+    
+    
 	/**
 		Sends a new CloudKit query to get more updated records.
 		- parameter queryOperation:		The query operation containing the predicates
@@ -254,7 +264,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 	/**
 		Deleted unneeded poster files from the device, and reads missing poster files from the CloudKit database to the device.
 	*/
-	fileprivate func cleanUpPosters() {
+	private func cleanUpPosters() {
 		DispatchQueue.global(qos: DispatchQoS.QoSClass.utility).async {
             let pathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 		
@@ -273,7 +283,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter basePath:	The local basepath for all images
 		- parameter movies:		The array with all movie records
 	*/
-	fileprivate func deleteUnneededPosters(basePath: String, movies: [MovieRecord]) {
+	private func deleteUnneededPosters(basePath: String, movies: [MovieRecord]) {
 		
 		var filenames: [AnyObject]?
 		do {
@@ -329,7 +339,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter basePath:	The local basepath for all images
 		- parameter movies:		The array with all movie records
 	*/
-	fileprivate func deleteUnneededYoutubeImages(basePath: String, movies: [MovieRecord]) {
+	private func deleteUnneededYoutubeImages(basePath: String, movies: [MovieRecord]) {
 		
 		var filenames: [AnyObject]?
 		do {
@@ -379,7 +389,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol {
 		- parameter basePath:	The local basepath for all images
 		- parameter movies:		The array with all movie records
 	*/
-	fileprivate func downloadMissingPosters(basePath: String, movies: [MovieRecord]) {
+	private func downloadMissingPosters(basePath: String, movies: [MovieRecord]) {
 		
 		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Small.rawValue

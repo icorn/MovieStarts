@@ -11,13 +11,14 @@ import CloudKit
 import UIKit
 
 
-class MovieDatabaseParent : DatabaseParent {
-	
+class MovieDatabaseParent : DatabaseParent
+{	
+    public var viewForError: UIView?
+    
 	var moviesPlistPath: String?
 	var moviesPlistFile: String?
 
 	var loadedMovieRecordArray: [MovieRecord]?
-	var viewForError: UIView?
 	var queryKeys: [String] = []
 
 	var updatedCKRecords: [CKRecord] = []

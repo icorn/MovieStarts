@@ -11,12 +11,15 @@ import CloudKit
 import UIKit
 
 
-class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
+class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
+{
+    static let sharedInstance = MovieDatabaseLoader()
 
-	required init(recordType: String, viewForError: UIView?) {
+	private init()
+    {
+        let recordType = Constants.dbRecordTypeMovie
 		super.init(recordType: recordType)
 
-		self.viewForError = viewForError
 		queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries, Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId, Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN,
 		
             // version 1.2
@@ -28,10 +31,12 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 
 		let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 
-		if let fileUrl = fileUrl {
+		if let fileUrl = fileUrl
+        {
 			moviesPlistPath = fileUrl.path
 		}
-        else {
+        else
+        {
             NSLog("Error getting url for app-group.")
 			var errorWindow: MessageWindow?
 
@@ -44,11 +49,14 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol {
 			}
         }
 		
-		if let saveMoviesPlistPath = self.moviesPlistPath {
-			if saveMoviesPlistPath.hasSuffix("/") {
+		if let saveMoviesPlistPath = self.moviesPlistPath
+        {
+			if saveMoviesPlistPath.hasSuffix("/")
+            {
 				moviesPlistFile = saveMoviesPlistPath + recordType + ".plist"
 			}
-			else {
+			else
+            {
 				moviesPlistFile = saveMoviesPlistPath + "/" + recordType + ".plist"
 			}
 		}

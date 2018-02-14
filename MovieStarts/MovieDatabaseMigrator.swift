@@ -11,13 +11,17 @@ import CloudKit
 import UIKit
 
 
-class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol {
+class MovieDatabaseMigrator : MovieDatabaseParent, MovieDatabaseProtocol
+{
+    static let sharedInstance = MovieDatabaseMigrator()
 	
-	required init(recordType: String, viewForError: UIView?) {
+	private init()
+    {
+        let recordType = Constants.dbRecordTypeMovie
 		super.init(recordType: recordType)
 
-		self.viewForError = viewForError
-		queryKeys = [
+		queryKeys =
+        [
 			// version 1.2
 			Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic,
 			

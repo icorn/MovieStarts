@@ -210,7 +210,8 @@ class TabBarController: UITabBarController {
 	}
 	
 	
-	func updateMovies(allMovies: [MovieRecord], databaseUpdater: MovieDatabaseUpdater?) {
+	func updateMovies(allMovies: [MovieRecord])
+    {
 		let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
 /**/
 		if (userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) != nil) {
@@ -228,13 +229,13 @@ class TabBarController: UITabBarController {
 /**/
 		// check iCloud status
 		
-		databaseUpdater?.checkCloudKit(handler: { [unowned self] (status: CKAccountStatus, error: Error?) -> () in
+		MovieDatabaseUpdater.sharedInstance.checkCloudKit(handler: { [unowned self] (status: CKAccountStatus, error: Error?) -> () in
 			
 			var errorWindow: MessageWindow?
 			
 			switch status {
 			case .available:
-				self.getUpdatedMoviesFromDatabase(allMovies: allMovies, databaseUpdater: databaseUpdater)
+				self.getUpdatedMoviesFromDatabase(allMovies: allMovies)
 				
 			case .noAccount:
 				NSLog("CloudKit error on update: no account")
@@ -270,7 +271,8 @@ class TabBarController: UITabBarController {
 	}
 	
 	
-	fileprivate func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord], databaseUpdater: MovieDatabaseUpdater?) {
+	fileprivate func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord])
+    {
 		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
 		guard let country = MovieCountry(rawValue: prefsCountryString) else {
@@ -278,10 +280,11 @@ class TabBarController: UITabBarController {
 			return
 		}
 		
-		databaseUpdater?.updateThumbnailHandler = updateThumbnailHandler
+		MovieDatabaseUpdater.sharedInstance.updateThumbnailHandler = updateThumbnailHandler
 
-		DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
-            databaseUpdater?.getUpdatedMovies(
+		DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async
+        {
+            MovieDatabaseUpdater.sharedInstance.getUpdatedMovies(
                 allMovies,
                 country: country,
                 addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
