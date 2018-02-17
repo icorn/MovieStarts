@@ -184,11 +184,13 @@ extension MovieViewController {
             UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsUseYoutubeApp) as? Bool
         let url: URL? = URL(string: "youtube://\(trailerId)")
 
-        if let url = url , (useApp == true) && UIApplication.shared.canOpenURL(url) {
+        if let url = url , (useApp == true) && UIApplication.shared.canOpenURL(url)
+        {
             // use the app instead of the webview
-            UIApplication.shared.openURL(url)
+            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
         }
-        else {
+        else
+        {
             guard let webUrl = URL(string: "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1&o=U&noapp=1") else { return }
             let webVC = RotatableSafariViewController(url: webUrl)
             webVC.delegate = self

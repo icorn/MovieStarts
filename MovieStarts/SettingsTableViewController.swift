@@ -128,7 +128,7 @@ class SettingsTableViewController: UITableViewController
                 if ((indexPath as NSIndexPath).item == itemRate)
                 {
                     guard let rateUrl = URL(string: "itms-apps://itunes.apple.com/app/id1043041023?action=write-review") else { return }
-                    UIApplication.shared.openURL(rateUrl)
+                    UIApplication.shared.open(rateUrl, options: [:], completionHandler: { (Bool) in })
                 }
                 else if ((indexPath as NSIndexPath).item == itemAbout)
                 {

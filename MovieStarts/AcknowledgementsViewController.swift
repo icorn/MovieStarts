@@ -79,7 +79,7 @@ class AcknowledgementsViewController: UITableViewController
             
                     if let url = url, UIApplication.shared.canOpenURL(url)
                     {
-                        UIApplication.shared.openURL(url)
+                        UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
                     }
 
                 case .FTLinear:

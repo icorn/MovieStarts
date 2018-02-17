@@ -66,8 +66,9 @@ class AboutViewController: UIViewController
     {
 		let url = URL(string: "http://MovieStartsApp.com")
 
-		if let url = url , UIApplication.shared.canOpenURL(url) {
-			UIApplication.shared.openURL(url)
+		if let url = url , UIApplication.shared.canOpenURL(url)
+        {
+            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
 		}
 	}
 	
@@ -75,8 +76,9 @@ class AboutViewController: UIViewController
     {
 		let url = URL(string: "mailto:info@MovieStartsApp.com")
 		
-		if let url = url , UIApplication.shared.canOpenURL(url) {
-			UIApplication.shared.openURL(url)
+		if let url = url , UIApplication.shared.canOpenURL(url)
+        {
+            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
 		}
 	}
 	
@@ -84,8 +86,9 @@ class AboutViewController: UIViewController
     {
 		let url = URL(string: "https://twitter.com/MovieStartsApp")
 		
-		if let url = url , UIApplication.shared.canOpenURL(url) {
-			UIApplication.shared.openURL(url)
+		if let url = url , UIApplication.shared.canOpenURL(url)
+        {
+            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
 		}
 	}
 

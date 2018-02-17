@@ -471,11 +471,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		if let imdbId = movie?.imdbId {
 			let url: URL? = URL(string: "imdb:///title/\(imdbId)/")
 			
-			if let url = url , (useApp == true) && UIApplication.shared.canOpenURL(url) {
+			if let url = url , (useApp == true) && UIApplication.shared.canOpenURL(url)
+            {
 				// use the app instead of the webview
-				UIApplication.shared.openURL(url)
+                UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
 			}
-			else {
+			else
+            {
 				// use the webview
 				guard let webUrl = URL(string: "http://www.imdb.com/title/\(imdbId)") else { return }
 				let webVC = RotatableSafariViewController(url: webUrl)
