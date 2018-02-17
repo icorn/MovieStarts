@@ -10,8 +10,8 @@ import UIKit
 import CloudKit
 
 
-class TabBarController: UITabBarController {
-
+class TabBarController: UITabBarController
+{
 	var genreDict: [Int: String] = [:]
 	var nowMovies: [MovieRecord] = []
 	var upcomingMovies: [[MovieRecord]] = []
@@ -23,7 +23,6 @@ class TabBarController: UITabBarController {
 	
 	@IBOutlet weak var movieTabBar: UITabBar!
 
-	
 	// MARK: - UIViewController
 
 	override func viewWillAppear(_ animated: Bool) {
@@ -49,7 +48,8 @@ class TabBarController: UITabBarController {
 		}
     }
 
-	override func viewDidLoad() {
+	override func viewDidLoad()
+    {
 		super.viewDidLoad()
 
         // hack: load all children of tabbarcontroller to be able to delete and add movies before children are visible
@@ -85,14 +85,12 @@ class TabBarController: UITabBarController {
 			}
 			
 			appDelegate.movieReleaseNotification = nil
-		}
+        }
 	}
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-	
-	func loadGenresFromFile() {
+
+    func loadGenresFromFile()
+    {
 		let genreDatabase = GenreDatabase(finishHandler: nil, errorHandler: nil)
 		genreDict = genreDatabase.readGenresFromFile()
 	}
@@ -209,24 +207,14 @@ class TabBarController: UITabBarController {
 		NotificationManager.updateFavoriteNotifications(favoriteMovies: favoriteMovies)
 	}
 	
-	
-	func updateMovies(allMovies: [MovieRecord])
+
+    func updateMovies(_ allMovies: [MovieRecord], onlyIfUpdateIsTooOld checkLastUpdate: Bool)
     {
-		let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
-/**/
-		if (userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) != nil) {
-			let latestSuccessfullUpdate: Date? = userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) as? Date
-		
-			if let latestSuccessfullUpdate = latestSuccessfullUpdate {
-				let hoursSinceLastSuccessfullUpdate = abs(Int(latestSuccessfullUpdate.timeIntervalSinceNow)) / 60 / 60
-				
-				if (hoursSinceLastSuccessfullUpdate < Constants.hoursBetweenDbUpdates) {
-					// last successfull update was inside the tolerance: don't get new update
-					return
-				}
-			}
-		}
-/**/
+        if (checkLastUpdate && (MovieDatabaseUpdater.isLastMovieUpdateOlderThan(minutes: Constants.hoursBetweenDbUpdates * 60) == false))
+        {
+            return
+        }
+        
 		// check iCloud status
 		
 		MovieDatabaseUpdater.sharedInstance.checkCloudKit(handler: { [unowned self] (status: CKAccountStatus, error: Error?) -> () in
@@ -239,7 +227,8 @@ class TabBarController: UITabBarController {
 				
 			case .noAccount:
 				NSLog("CloudKit error on update: no account")
-				DispatchQueue.main.async {
+                NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
+                DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccountUpdate", buttonStringIds: ["Close"],
 						handler: { (buttonIndex) -> () in
 							errorWindow?.close()
@@ -249,6 +238,7 @@ class TabBarController: UITabBarController {
 				
 			case .restricted:
 				NSLog("CloudKit error on update: Restricted")
+                NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
 				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestrictedUpdate", buttonStringIds: ["Close"],
 						handler: { (buttonIndex) -> () in
@@ -259,6 +249,7 @@ class TabBarController: UITabBarController {
 				
 			case .couldNotDetermine:
 				NSLog("CloudKit error on update: CouldNotDetermine")
+                NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
 				DispatchQueue.main.async {
 					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermineUpdate", buttonStringIds: ["Close"],
 						handler: { (buttonIndex) -> () in
@@ -269,14 +260,16 @@ class TabBarController: UITabBarController {
 			}
 		})
 	}
-	
+
 	
 	fileprivate func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord])
     {
 		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
-		guard let country = MovieCountry(rawValue: prefsCountryString) else {
+		guard let country = MovieCountry(rawValue: prefsCountryString) else
+        {
 			NSLog("ERROR getting country from preferences")
+            NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
 			return
 		}
 		
@@ -415,6 +408,7 @@ class TabBarController: UITabBarController {
                         UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     }
                     self.loadGenresFromFile()
+                    NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
                 },
 
                 errorHandler: { (errorMessage: String) in
@@ -423,11 +417,11 @@ class TabBarController: UITabBarController {
                         UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     }
                     NSLog(errorMessage)
+                    NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
                 }
             )
         }
 	}
-	
 
 	var nowPlayingController: NowViewController? {
 		get {

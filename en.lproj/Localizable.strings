@@ -63,6 +63,10 @@
 "PushHintTitle"         = "Hint";
 "PushHintText"          = "To get notified, when this movie is released, activate 'Notifications for Watchlist' in the app settings.";
 
+// Refreshing
+
+"RefreshInProgress"     = "Refresh already in progress...";
+
 // Welcome
 
 "WelcomeTitle"			= "Welcome";

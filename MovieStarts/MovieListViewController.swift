@@ -9,8 +9,8 @@
 import UIKit
 
 
-class MovieListViewController: UIViewController, FavoriteIconDelegate {
-
+class MovieListViewController: UIViewController, FavoriteIconDelegate
+{
     var movieTableViewDataSource: MovieTableViewDataSource?
     var movieTableViewDelegate: MovieTableViewDelegate?
 
@@ -18,6 +18,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
     var filterViewOutlet: FilterView?
     var filterViewHeight: NSLayoutConstraint?
     var filterViewTop: NSLayoutConstraint?
+    var refreshControl: UIRefreshControl?
 
     override func viewDidLoad()
     {
@@ -55,8 +56,45 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
 */
         
         self.fillTagListViewWithGenres()
+        self.refreshControl = UIRefreshControl()
+        
+        if let refreshControl = self.refreshControl
+        {
+            refreshControl.addTarget(self, action: #selector(MovieListViewController.refreshControlActivated(refreshControl:)), for: UIControlEvents.valueChanged)
+            self.tableViewOutlet.refreshControl = refreshControl
+        }
+
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(movieUpdateFinished(notification:)),
+                                               name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification),
+                                               object: nil)
     }
 
+    @objc func refreshControlActivated(refreshControl: UIRefreshControl)
+    {
+        if (MovieDatabaseUpdater.sharedInstance.inProgress)
+        {
+            refreshControl.attributedTitle = NSMutableAttributedString(string: NSLocalizedString("RefreshInProgress", comment: ""))
+            refreshControl.endRefreshing()
+        }
+        else
+        {
+            refreshControl.attributedTitle = NSMutableAttributedString(string: "")
+            self.updateDatabase(onlyIfUpdateIsTooOld: false)
+        }
+    }
+    
+    // sets the refresh-control to "endRefreshing"
+    @objc func movieUpdateFinished(notification: NSNotification)
+    {
+        DispatchQueue.main.async
+        {
+            if let refreshControl = self.refreshControl, refreshControl.isRefreshing == true
+            {
+                self.refreshControl?.endRefreshing()
+            }
+        }
+    }
 
     @objc func filterButtonTapped(_ sender: UIButton!) {
         if (self.filterViewTop?.constant == 0) {
@@ -70,40 +108,48 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
     @objc func gridListSwitchButtonTapped(_ sender: UIButton!) {
     }
 
-    func showFilterView(animated: Bool) {
-        if (animated) {
+    func showFilterView(animated: Bool)
+    {
+        if (animated)
+        {
             UIView.animate(
                 withDuration: 0.2,
                 delay: 0.0,
                 options: UIViewAnimationOptions.curveEaseOut,
-                animations: {
+                animations:
+                {
                     self.filterViewTop?.constant = 0
                     self.view.layoutIfNeeded()
                 },
                 completion: { (_) in }
             )
         }
-        else {
+        else
+        {
             self.filterViewTop?.constant = 0
         }
     }
 
-    func hideFilterView(animated: Bool) {
+    func hideFilterView(animated: Bool)
+    {
         guard let realHeight = self.filterViewOutlet?.realHeight else { return }
 
-        if (animated) {
+        if (animated)
+        {
             UIView.animate(
                 withDuration: 0.2,
                 delay: 0.0,
                 options: UIViewAnimationOptions.curveEaseOut,
-                animations: {
+                animations:
+                {
                     self.filterViewTop?.constant = -realHeight
                     self.view.layoutIfNeeded()
                 },
                 completion: { (_) in }
             )
         }
-        else {
+        else
+        {
             self.filterViewTop?.constant = -realHeight
         }
     }
@@ -151,9 +197,10 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
         // check what's "now playing" and what not. this changes after midnight.
         checkNowPlayingStatus()
 
-        if (migrateDatabaseIfNeeded() == false) {
+        if (migrateDatabaseIfNeeded() == false)
+        {
             // no database migration needed: if last update is long enough ago: check CloudKit for update
-            updateDatabaseIfNeeded()
+            updateDatabase(onlyIfUpdateIsTooOld: true)
         }
 
         // check if we had notifications turned on in the app, but turned off in the system
@@ -192,13 +239,13 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
         }
     }
 
-    fileprivate func updateDatabaseIfNeeded()
+    fileprivate func updateDatabase(onlyIfUpdateIsTooOld: Bool)
     {
         MovieDatabaseUpdater.sharedInstance.viewForError = self.view
         
         if let allMovies = MovieDatabaseUpdater.sharedInstance.readDatabaseFromFile()
         {
-            movieTableViewDataSource?.tabBarController.updateMovies(allMovies: allMovies)
+            movieTableViewDataSource?.tabBarController.updateMovies(allMovies, onlyIfUpdateIsTooOld: onlyIfUpdateIsTooOld)
         }
     }
     
@@ -251,18 +298,20 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
     fileprivate func migrateDatabaseIfNeeded() -> Bool {
         var retval = false
 
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else
+        {
             return retval;
         }
 
-        if (movieTableViewDataSource?.tabBarController.migrationHasFailedInThisSession == true) {
+        if (movieTableViewDataSource?.tabBarController.migrationHasFailedInThisSession == true)
+        {
             return retval;
         }
 
         let migrateFromVersion = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsMigrateFromVersion) as? Int
 
-        if let migrateFromVersion = migrateFromVersion , migrateFromVersion < Constants.version1_3 {
-
+        if let migrateFromVersion = migrateFromVersion , migrateFromVersion < Constants.version1_3
+        {
             // we have to migrate the database from an older version to version 1.3: Get new database fields for all records
 
             appDelegate.versionOfPreviousLaunch = Constants.version1_3
@@ -346,7 +395,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                             UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
                             
                             // After migration: Do the update
-                            self?.updateDatabaseIfNeeded()
+                            self?.updateDatabase(onlyIfUpdateIsTooOld: true)
                         },
 
                         errorHandler: { [weak self] (errorMessage: String) in
@@ -374,7 +423,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate {
                                 }
                                 
                                 // After migration: Do the update
-                                self?.updateDatabaseIfNeeded()
+                                self?.updateDatabase(onlyIfUpdateIsTooOld: true)
                             }
 
                             NSLog(errorMessage)

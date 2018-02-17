@@ -35,8 +35,10 @@ class MovieDatabaseParent : DatabaseParent
 	var showIndicator: (() -> ())?
 	var stopIndicator: (() -> ())?
 	var updateIndicator: ((Int) -> ())?
-	
-	
+
+    var inProgress = false;
+
+    
 	/**
 		Writes the movies and the modification date to file.
 		- parameter allMovieRecords:			The array with all movies. This will be written to file.
@@ -48,14 +50,19 @@ class MovieDatabaseParent : DatabaseParent
 		
 		// write it to device
 		
-		if let filename = self.moviesPlistFile {
-			if ((MovieDatabaseHelper.movieRecordArrayToDictArray(movieRecords: allMovieRecords) as NSArray).write(toFile: filename, atomically: true) == false) {
-				if let saveStopIndicator = self.stopIndicator {
-					DispatchQueue.main.async {
+		if let filename = self.moviesPlistFile
+        {
+			if ((MovieDatabaseHelper.movieRecordArrayToDictArray(movieRecords: allMovieRecords) as NSArray).write(toFile: filename, atomically: true) == false)
+            {
+				if let saveStopIndicator = self.stopIndicator
+                {
+					DispatchQueue.main.async
+                    {
 						saveStopIndicator()
 					}
 				}
 				
+                self.inProgress = false
 				errorHandler("*** Error writing movies-file")
 				var errorWindow: MessageWindow?
 				
@@ -72,7 +79,9 @@ class MovieDatabaseParent : DatabaseParent
 				return
 			}
 		}
-		else {
+		else
+        {
+            self.inProgress = false
 			errorHandler("*** Filename for movies-list is broken")
 			return
 		}
@@ -87,6 +96,7 @@ class MovieDatabaseParent : DatabaseParent
 			self.finishHandler?()
 		}
 		
+        self.inProgress = false
 		completionHandler(allMovieRecords)
 	}
 
@@ -201,6 +211,7 @@ class MovieDatabaseParent : DatabaseParent
 			writeMovies(allMovieRecords: loadedMovieRecordArray, updatedMoviesAsRecordArray: updatedCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
 		}
 		else {
+            self.inProgress = false
 			errorHandler?("One of the handlers is nil!")
 		}
 	}

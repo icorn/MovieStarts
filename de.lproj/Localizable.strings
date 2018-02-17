@@ -63,6 +63,10 @@
 "PushHintTitle"         = "Tipp";
 "PushHintText"          = "Um benachrichtigt zu werden, wenn dieser Film in's Kino kommt, aktiviere 'Mitteilungen für Watchlist' in den App-Einstellungen.";
 
+// Refreshing
+
+"RefreshInProgress"     = "Die Aktualisierung läuft bereits...";
+
 // Welcome
 
 "WelcomeTitle"			= "Willkommen";

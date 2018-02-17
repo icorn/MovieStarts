@@ -14,6 +14,7 @@ import UIKit
 class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 {
     static let sharedInstance = MovieDatabaseUpdater()
+    static let MovieUpdateFinishNotification = "MovieUpdateFinishNotification"
     
     private init()
     {
@@ -21,6 +22,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
         
         super.init(recordType: recordType)
         
+        self.inProgress = false
         queryKeys = [Constants.dbIdTmdbId, Constants.dbIdOrigTitle, Constants.dbIdPopularity, Constants.dbIdVoteAverage, Constants.dbIdVoteCount, Constants.dbIdProductionCountries, Constants.dbIdImdbId, Constants.dbIdDirectors, Constants.dbIdActors, Constants.dbIdHidden, Constants.dbIdGenreIds, Constants.dbIdCharacters, Constants.dbIdId, Constants.dbIdTrailerIdsEN, Constants.dbIdPosterUrlEN, Constants.dbIdSynopsisEN, Constants.dbIdRuntimeEN,
                      
             // version 1.2
@@ -61,6 +63,273 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
         }
     }
     
+    
+/*
+ 
+    TODO
+ 
+    Für die Zukunft: Entweder weiter unten jedes insert/delete/etc. als local-notification an den Rest der App (wäre ideal), oder
+    (falls das mit dem Timing nicht klappt) z. B. den ganzen Controller hier her übergeben, und wir rufen es ähnlich auf wie jetzt.
+    
+    
+    func updateMovies(allMovies: [MovieRecord], withErrorView errorView: UIView)
+    {
+        let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
+/*
+        if (userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) != nil) {
+            let latestSuccessfullUpdate: Date? = userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) as? Date
+            
+            if let latestSuccessfullUpdate = latestSuccessfullUpdate {
+                let hoursSinceLastSuccessfullUpdate = abs(Int(latestSuccessfullUpdate.timeIntervalSinceNow)) / 60 / 60
+                
+                if (hoursSinceLastSuccessfullUpdate < Constants.hoursBetweenDbUpdates) {
+                    // last successfull update was inside the tolerance: don't get new update
+                    return
+                }
+            }
+        }
+*/
+        // check iCloud status
+        
+        MovieDatabaseUpdater.sharedInstance.checkCloudKit(
+            handler:
+            { [unowned self] (status: CKAccountStatus, error: Error?) -> () in
+            
+                var errorWindow: MessageWindow?
+                
+                switch status
+                {
+                case .available:
+                    self.getUpdatedMoviesFromDatabase(allMovies: allMovies)
+                    
+                case .noAccount:
+                    NSLog("CloudKit error on update: no account")
+                    DispatchQueue.main.async
+                    {
+                        errorWindow = MessageWindow(parent: errorView,
+                                                    darkenBackground: true,
+                                                    titleStringId: "iCloudError",
+                                                    textStringId: "iCloudNoAccountUpdate",
+                                                    buttonStringIds: ["Close"],
+                                                    handler: { (buttonIndex) -> () in
+                                                        errorWindow?.close()
+                                                    })
+                    }
+                    
+                case .restricted:
+                    NSLog("CloudKit error on update: Restricted")
+                    DispatchQueue.main.async
+                    {
+                        errorWindow = MessageWindow(parent: errorView,
+                                                    darkenBackground: true,
+                                                    titleStringId: "iCloudError",
+                                                    textStringId: "iCloudRestrictedUpdate",
+                                                    buttonStringIds: ["Close"],
+                                                    handler: { (buttonIndex) -> () in
+                                                        errorWindow?.close()
+                                                    })
+                    }
+                    
+                case .couldNotDetermine:
+                    NSLog("CloudKit error on update: CouldNotDetermine")
+                    DispatchQueue.main.async
+                    {
+                        errorWindow = MessageWindow(parent: errorView,
+                                                    darkenBackground: true,
+                                                    titleStringId: "iCloudError",
+                                                    textStringId: "iCloudCouldNotDetermineUpdate",
+                                                    buttonStringIds: ["Close"],
+                                                    handler: { (buttonIndex) -> () in
+                                                        errorWindow?.close()
+                                                    })
+                    }
+                }
+            }
+        )
+    }
+
+    
+    private func getUpdatedMoviesFromDatabase(allMovies: [MovieRecord])
+    {
+        let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
+        
+        guard let country = MovieCountry(rawValue: prefsCountryString) else
+        {
+            NSLog("ERROR getting country from preferences")
+            return
+        }
+        
+        MovieDatabaseUpdater.sharedInstance.updateThumbnailHandler = updateThumbnailHandler
+        
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async
+        {
+            MovieDatabaseUpdater.sharedInstance.getUpdatedMovies(
+                allMovies,
+                country: country,
+                addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
+                    
+                    if (!movie.isHidden)
+                    {
+                        // add new movie
+                        
+                        DispatchQueue.main.async
+                        {
+                            let title = movie.title[movie.currentCountry.languageArrayIndex]
+                            
+                            if movie.isNowPlaying()
+                            {
+                                print("Adding \(title) to NOW PLAYING")
+                                self.nowPlayingController?.addMovie(movie)
+                            }
+                            else
+                            {
+                                print("Adding \(title) to UPCOMING")
+                                self.upcomingController?.addMovie(movie)
+                            }
+                        }
+                    }
+                },
+                
+                updateMovieHandler: { [unowned self] (movie: MovieRecord) in
+                    
+                    // update movie
+                    
+                    // there are several possibilities:
+                    // 1a) movie was and is now-playing, movie cell stays in same position, only "invisible" changes
+                    // 1b) movie was and is now-playing, movie cell stays in same position, changes in visible data, change cell with animation
+                    // 1c) movie was and is now-playing, movie cell moves because of name-change
+                    
+                    // 2a) movie was and is upcoming, movie cell stays in same position (same date, same name), only "invisible" changes
+                    // 2b) movie was and is upcoming, movie cell stays in same position (same date, same name), changes in visible data, change cell with animation
+                    // 2c) movie was and is upcoming, movie cell moves in current section (same date, name has changed)
+                    // 2d) movie was and is upcoming, movie cell moves from one section to another (date has changed)
+                    
+                    // 3) movie was upcoming, is now now-playing
+                    // 4) movie was now-playing, is now upcoming (unlikely)
+                    
+                    // the last two remove the cell from one *tab* and add it to another.
+                    
+                    let movieIsInUpcomingList = self.isMovieInUpcomingList(newMovie: movie)
+                    let movieIsInNowPlayingList = self.isMovieInNowPlayingList(newMovie: movie)
+                    
+                    DispatchQueue.main.async
+                    {
+                        if (movie.isNowPlaying() && movieIsInNowPlayingList)
+                        {
+                            // movie was and is now-playing
+                            
+                            if movie.isHidden
+                            {
+                                self.nowPlayingController?.removeMovie(movie)
+                            }
+                            else
+                            {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Updating \(title) in NOW PLAYING")
+                                self.nowPlayingController?.updateMovie(movie)
+                            }
+                        }
+                        else if (!movie.isNowPlaying() && movieIsInUpcomingList)
+                        {
+                            // movie was and is upcoming
+                            
+                            if movie.isHidden
+                            {
+                                self.upcomingController?.removeMovie(movie)
+                            }
+                            else
+                            {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Updating \(title) in UPCOMING")
+                                self.upcomingController?.updateMovie(movie)
+                            }
+                        }
+                        else if (!movie.isNowPlaying() && movieIsInNowPlayingList)
+                        {
+                            // movie was now-playing, is now upcoming
+                            
+                            if movie.isHidden
+                            {
+                                self.nowPlayingController?.removeMovie(movie)
+                            }
+                            else
+                            {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Moving \(title) in from NOW PLAYING to UPCOMING")
+                                self.nowPlayingController?.removeMovie(movie)
+                                self.upcomingController?.addMovie(movie)
+                            }
+                        }
+                        else if (movie.isNowPlaying() && movieIsInUpcomingList)
+                        {
+                            // movie was upcoming, is now now-playing
+                            
+                            if movie.isHidden
+                            {
+                                self.upcomingController?.removeMovie(movie)
+                            }
+                            else
+                            {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Moving \(title) in from UPCOMING to NOW PLAYING")
+                                self.upcomingController?.removeMovie(movie)
+                                self.nowPlayingController?.addMovie(movie)
+                            }
+                        }
+                        
+                        if (Favorites.IDs.contains(movie.id))
+                        {
+                            // also, update the favorites
+                            
+                            if movie.isHidden
+                            {
+                                self.favoriteController?.removeFavorite(movie.id)
+                            }
+                            else
+                            {
+                                let title = movie.title[movie.currentCountry.languageArrayIndex]
+                                print("Updating \(title) in FAVORITES")
+                                self.favoriteController?.updateFavorite(movie)
+                            }
+                        }
+                    }
+                },
+                
+                removeMovieHandler: { [unowned self] (movie: MovieRecord) in
+                    
+                    // remove movie
+                    DispatchQueue.main.async
+                    {
+                        self.nowPlayingController?.removeMovie(movie)
+                        self.upcomingController?.removeMovie(movie)
+                        
+                        if (Favorites.IDs.contains(movie.id))
+                        {
+                            self.favoriteController?.removeFavorite(movie.id)
+                        }
+                    }
+                },
+                
+                completionHandler: { [unowned self] (movies: [MovieRecord]?) in
+                    DispatchQueue.main.async
+                    {
+                         UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    }
+                    self.loadGenresFromFile()
+                },
+                
+                errorHandler: { (errorMessage: String) in
+                    DispatchQueue.main.async
+                    {
+                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                    }
+                    NSLog(errorMessage)
+                }
+            )
+        }
+    }
+*/
+    
 
 	/**
 		Checks if there are new or updates movies in the cloud and gets them.
@@ -73,6 +342,8 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 							completionHandler: @escaping ([MovieRecord]?) -> (),
 							errorHandler: @escaping (String) -> ())
 	{
+        self.inProgress = true
+
 		self.addNewMovieHandler = addNewMovieHandler
 		self.updateMovieHandler = updateMovieHandler
 		self.removeMovieHandler = removeMovieHandler
@@ -84,7 +355,8 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 		let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
 		let latestModDate: Date? = userDefaults?.object(forKey: Constants.prefsLatestDbModification) as? Date
 		
-		if let modDate: Date = latestModDate {
+		if let modDate: Date = latestModDate
+        {
 			let minReleaseDate = Date(timeIntervalSinceNow: 60 * 60 * 24 * -1 * Constants.maxDaysInThePast)
 			
 			NSLog("Getting records after modification date \(modDate) and after releasedate \(minReleaseDate)")
@@ -106,6 +378,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 		}
 		else {
 			NSLog("ERROR: mo last mod.data of db")
+            self.inProgress = false
 		}
 	}
 	
@@ -121,10 +394,12 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 	internal func executeQueryOperation(queryOperation: CKQueryOperation, onOperationQueue operationQueue: OperationQueue) {
 		let prefsCountryString = (UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsCountry) as? String) ?? MovieCountry.USA.rawValue
 		
-		if let country = MovieCountry(rawValue: prefsCountryString) {
+		if let country = MovieCountry(rawValue: prefsCountryString)
+        {
 			queryOperation.desiredKeys = self.queryKeys + country.languageQueryKeys + country.countryQueryKeys
 		}
-		else {
+		else
+        {
 			NSLog("executeQueryOperationUpdatedMovies: Error getting country for country-code \(prefsCountryString)")
 		}
 		
@@ -203,6 +478,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
         {
 			// there was an error
 			self.errorHandler?("Error querying updated records: \(error.code) (\(error.localizedDescription))")
+            self.inProgress = false
 			return
 		}
 		else
@@ -407,7 +683,8 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 			if ((posterUrl.count > 0) && (FileManager.default.fileExists(atPath: basePath + Constants.thumbnailFolder + posterUrl) == false)) {
 				// poster file is missing
 				
-				if let sourceUrl = URL(string: sourcePath + posterUrl) {
+				if let sourceUrl = URL(string: sourcePath + posterUrl)
+                {
 					let task = URLSession.shared.downloadTask(with: sourceUrl,
 						completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
 						if let error = error {
@@ -437,5 +714,27 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 			}
 		}
 	}
+    
+    
+    class func isLastMovieUpdateOlderThan(minutes: Int) -> Bool
+    {
+        let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
+        
+        if (userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) != nil)
+        {
+            if let latestSuccessfullUpdate = userDefaults?.object(forKey: Constants.prefsLatestDbSuccessfullUpdate) as? Date
+            {
+                let minutesSinceLastSuccessfullUpdate = abs(Int(latestSuccessfullUpdate.timeIntervalSinceNow)) / 60
+                
+                if (minutesSinceLastSuccessfullUpdate < minutes)
+                {
+                    // last successfull update was inside the tolerance: don't get new update
+                    return false
+                }
+            }
+        }
+
+        return true
+    }
 }
 
