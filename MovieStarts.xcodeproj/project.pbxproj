@@ -663,6 +663,7 @@
 						CreatedOnToolsVersion = 6.3;
 						DevelopmentTeam = FTX9FBCWZ9;
 						LastSwiftMigration = 0910;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -983,7 +984,7 @@
 				DEVELOPMENT_TEAM = FTX9FBCWZ9;
 				IBSC_MODULE = watchOSapp_Extension;
 				INFOPLIST_FILE = watchOSapp/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchOS2app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1007,7 +1008,7 @@
 				DEVELOPMENT_TEAM = FTX9FBCWZ9;
 				IBSC_MODULE = watchOSapp_Extension;
 				INFOPLIST_FILE = watchOSapp/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchOS2app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1027,7 +1028,7 @@
 				DEVELOPMENT_TEAM = FTX9FBCWZ9;
 				INFOPLIST_FILE = "watchOSapp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchOS2app.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1049,7 +1050,7 @@
 				DEVELOPMENT_TEAM = FTX9FBCWZ9;
 				INFOPLIST_FILE = "watchOSapp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchkitapp.watchkitextension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchOS2app.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1172,7 +1173,9 @@
 				CODE_SIGN_ENTITLEMENTS = MovieStarts/MovieStarts.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = FTX9FBCWZ9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)",
@@ -1187,6 +1190,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1202,6 +1206,8 @@
 				CODE_SIGN_ENTITLEMENTS = MovieStarts/MovieStarts.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FTX9FBCWZ9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1213,6 +1219,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
