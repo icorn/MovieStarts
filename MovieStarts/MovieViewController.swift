@@ -8,7 +8,6 @@
 
 import UIKit
 import SafariServices
-//import Crashlytics
 
 
 class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate {

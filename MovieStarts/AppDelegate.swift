@@ -9,9 +9,6 @@
 import UIKit
 import CloudKit
 import Firebase
-//import Crashlytics
-
-//let log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -233,7 +230,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 		
-//		Fabric.with([Crashlytics.self])
         UIApplication.configureLinearNetworkActivityIndicatorIfNeeded()
         FirebaseApp.configure()
         

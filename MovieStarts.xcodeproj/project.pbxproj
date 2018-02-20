@@ -78,7 +78,6 @@
 		4F956C1B1DC4CF38008EF031 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4F63E6231A99CB5D00528FB3 /* Localizable.strings */; };
 		4F956C1D1DC4D211008EF031 /* MovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F956C1C1DC4D211008EF031 /* MovieViewController.swift */; };
 		4F956C1F1DC4D24C008EF031 /* StackViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F956C1E1DC4D24C008EF031 /* StackViewExtension.swift */; };
-		4F95FC291C10A9C9008F482B /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F95FC281C10A9C9008F482B /* Reach.swift */; };
 		4F95FC311C11ABFE008F482B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F95FC301C11ABFE008F482B /* Images.xcassets */; };
 		4F9E658D1BC14694006C6BA9 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAFF8EB1A8C002B00864078 /* CloudKit.framework */; };
 		4FAB81E11D95C23D00D5EA5D /* MovieViewControllerTrailers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAB81E01D95C23D00D5EA5D /* MovieViewControllerTrailers.swift */; };
@@ -96,8 +95,6 @@
 		4FBE71A0203CD02100DB3A0F /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBE7199203CD02000DB3A0F /* GoogleToolboxForMac.framework */; };
 		4FBE71A1203CD02100DB3A0F /* FirebaseAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBE719A203CD02000DB3A0F /* FirebaseAnalytics.framework */; };
 		4FBE71A2203CD02100DB3A0F /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBE719B203CD02000DB3A0F /* nanopb.framework */; };
-		4FBE71A5203CD04C00DB3A0F /* FirebaseCrash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBE71A3203CD04C00DB3A0F /* FirebaseCrash.framework */; };
-		4FBE71A6203CD04C00DB3A0F /* Protobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FBE71A4203CD04C00DB3A0F /* Protobuf.framework */; };
 		4FCA67991D8F0B2C00FC20C2 /* ActorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCA67981D8F0B2C00FC20C2 /* ActorView.swift */; };
 		4FCFBA111C0C9D7800D43C27 /* GenreDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FCFBA101C0C9D7800D43C27 /* GenreDatabase.swift */; };
 		4FDAF8391C04CEBE00A6380F /* PosterSizePath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FDAF8381C04CEBE00A6380F /* PosterSizePath.swift */; };
@@ -237,7 +234,6 @@
 		4F956C171DC3F82B008EF031 /* MovieRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MovieRow.swift; path = "watchOSapp Extension/MovieRow.swift"; sourceTree = SOURCE_ROOT; };
 		4F956C1C1DC4D211008EF031 /* MovieViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieViewController.swift; sourceTree = "<group>"; };
 		4F956C1E1DC4D24C008EF031 /* StackViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StackViewExtension.swift; sourceTree = "<group>"; };
-		4F95FC281C10A9C9008F482B /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
 		4F95FC301C11ABFE008F482B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		4FAB81E01D95C23D00D5EA5D /* MovieViewControllerTrailers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieViewControllerTrailers.swift; sourceTree = "<group>"; };
 		4FAFF8C31A8BFFE500864078 /* MovieStarts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieStarts.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -258,8 +254,6 @@
 		4FBE7199203CD02000DB3A0F /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleToolboxForMac.framework; sourceTree = "<group>"; };
 		4FBE719A203CD02000DB3A0F /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseAnalytics.framework; sourceTree = "<group>"; };
 		4FBE719B203CD02000DB3A0F /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = nanopb.framework; sourceTree = "<group>"; };
-		4FBE71A3203CD04C00DB3A0F /* FirebaseCrash.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FirebaseCrash.framework; sourceTree = "<group>"; };
-		4FBE71A4203CD04C00DB3A0F /* Protobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Protobuf.framework; sourceTree = "<group>"; };
 		4FBE71A7203CD3FE00DB3A0F /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; name = module.modulemap; path = FirebaseHeaders/module.modulemap; sourceTree = "<group>"; };
 		4FCA67981D8F0B2C00FC20C2 /* ActorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActorView.swift; sourceTree = "<group>"; };
 		4FCFBA101C0C9D7800D43C27 /* GenreDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenreDatabase.swift; sourceTree = "<group>"; };
@@ -303,9 +297,7 @@
 				4FBE71A0203CD02100DB3A0F /* GoogleToolboxForMac.framework in Frameworks */,
 				4FBE71A1203CD02100DB3A0F /* FirebaseAnalytics.framework in Frameworks */,
 				4FBE719C203CD02100DB3A0F /* FirebaseNanoPB.framework in Frameworks */,
-				4FBE71A6203CD04C00DB3A0F /* Protobuf.framework in Frameworks */,
 				4FBE719E203CD02100DB3A0F /* FirebaseInstanceID.framework in Frameworks */,
-				4FBE71A5203CD04C00DB3A0F /* FirebaseCrash.framework in Frameworks */,
 				4F852A40203CD8E400912382 /* Crashlytics.framework in Frameworks */,
 				4F852A41203CD8E400912382 /* Fabric.framework in Frameworks */,
 			);
@@ -521,8 +513,6 @@
 				4FAFF8C71A8BFFE500864078 /* Info.plist */,
 				4F63E62A1A9A415100528FB3 /* Launch Images */,
 				4F63E6231A99CB5D00528FB3 /* Localizable.strings */,
-				4F852A3E203CD8E300912382 /* Crashlytics.framework */,
-				4F852A3F203CD8E400912382 /* Fabric.framework */,
 				4F1F63771DC7FD6400449C88 /* TagListView-1.1.0 */,
 			);
 			name = "Supporting Files";
@@ -542,7 +532,6 @@
 				4FECDF211A9096A700F84A52 /* MovieRecord.swift */,
 				4F7A99AE1BAF01E600ED38C9 /* NetworkChecker.swift */,
 				4F2D38311C5BC984000927E7 /* NotificationManager.swift */,
-				4F95FC281C10A9C9008F482B /* Reach.swift */,
 				4F956C231DC4D637008EF031 /* Screens */,
 				4F70ACBF1BCC419100E34987 /* WatchSessionManager.swift */,
 				4F694E6A1FC0D9BA000A2A28 /* RotatableSafariViewController.swift */,
@@ -553,18 +542,18 @@
 		4FBE7194203CCFFA00DB3A0F /* Firebase */ = {
 			isa = PBXGroup;
 			children = (
+				4F852A3E203CD8E300912382 /* Crashlytics.framework */,
+				4F852A3F203CD8E400912382 /* Fabric.framework */,
 				4F852A3C203CD52000912382 /* Firebase.h */,
 				4FBE719A203CD02000DB3A0F /* FirebaseAnalytics.framework */,
 				4FBE7198203CD01F00DB3A0F /* FirebaseCore.framework */,
 				4FBE7196203CD01F00DB3A0F /* FirebaseCoreDiagnostics.framework */,
-				4FBE71A3203CD04C00DB3A0F /* FirebaseCrash.framework */,
 				4FBE7197203CD01F00DB3A0F /* FirebaseInstanceID.framework */,
 				4FBE7195203CD01F00DB3A0F /* FirebaseNanoPB.framework */,
 				4FBE7192203CCE9700DB3A0F /* GoogleService-Info.plist */,
 				4FBE7199203CD02000DB3A0F /* GoogleToolboxForMac.framework */,
 				4FBE71A7203CD3FE00DB3A0F /* module.modulemap */,
 				4FBE719B203CD02000DB3A0F /* nanopb.framework */,
-				4FBE71A4203CD04C00DB3A0F /* Protobuf.framework */,
 			);
 			name = Firebase;
 			sourceTree = "<group>";
@@ -816,7 +805,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "${PROJECT_DIR}/MovieStarts/Fabric.framework/run";
+			shellScript = ./MovieStarts/Fabric.framework/run;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -864,7 +853,6 @@
 				4F2D38301C5A7A29000927E7 /* NSDateExtension.swift in Sources */,
 				4FCA67991D8F0B2C00FC20C2 /* ActorView.swift in Sources */,
 				4FBB03CC1BA862B50053CE99 /* AboutViewController.swift in Sources */,
-				4F95FC291C10A9C9008F482B /* Reach.swift in Sources */,
 				4FDD6AFA1DBD094B00904FF2 /* NowViewController.swift in Sources */,
 				4F70ACC01BCC419100E34987 /* WatchSessionManager.swift in Sources */,
 				4F7A99AD1BAEA0CE00ED38C9 /* MovieViewControllerPosters.swift in Sources */,
