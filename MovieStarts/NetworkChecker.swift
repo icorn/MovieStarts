@@ -14,43 +14,6 @@ import CloudKit
 class NetworkChecker {
 	
 	/**
-		Checks the reachability of the network.
-	
-		- parameter viewForError:	The parent view for error windows. If null, no error will be shown to user.
-	
-		- returns: TRUE if the network is available, FALSE otherwise
-	*/
-/*
-	class func checkReachability(viewForError: UIView?) -> Bool {
-		
-		let reachabilityStatus = Reach().connectionStatus()
-		
-		switch reachabilityStatus {
-		case .Offline, .Unknown:
-			NSLog("No network: \(reachabilityStatus.description)")
-			
-			if let viewForError = viewForError {
-				var errorWindow: MessageWindow?
-			
-				dispatch_async(dispatch_get_main_queue()) {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "NoNetworkTitle", textStringId: reachabilityStatus.description /* "NoNetworkText" */, buttonStringIds: 	["Close"],
-						handler: { (buttonIndex) -> () in
-							errorWindow?.close()
-						}
-					)
-				}
-			}
-			
-			return false
-			
-		case .Online(ReachabilityType.WiFi), .Online(ReachabilityType.WWAN):
-			NSLog("Network good: \(reachabilityStatus.description)")
-			return true
-		}
-	}
-*/
-	
-	/**
 		Checks the availibility of CloudKit.
 	
 		- parameter viewForError:	The parent view for error windows
