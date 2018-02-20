@@ -24,20 +24,6 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>17.12.1</string>
-	<key>Fabric</key>
-	<dict>
-		<key>APIKey</key>
-		<string>cd33404e9b129bee66c039ab4eccd72b4f411510</string>
-		<key>Kits</key>
-		<array>
-			<dict>
-				<key>KitInfo</key>
-				<dict/>
-				<key>KitName</key>
-				<string>Crashlytics</string>
-			</dict>
-		</array>
-	</dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>

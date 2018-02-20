@@ -8,7 +8,7 @@
 
 import UIKit
 import SafariServices
-import Crashlytics
+//import Crashlytics
 
 
 class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate {
@@ -109,10 +109,12 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		if let movie = movie {
 			
 			#if RELEASE
+/*
 				// log this action
 				let imdbId = (movie.imdbId != nil) ? movie.imdbId! : "<unknown ID>"
 				let title = (movie.origTitle != nil) ? movie.origTitle! : "<unknown title>"
                 Answers.logContentView(withName: title, contentType: nil, contentId: imdbId, customAttributes: nil)
+*/
 			#endif
 			
 			baseImagePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
