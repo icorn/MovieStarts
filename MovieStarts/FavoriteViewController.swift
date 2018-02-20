@@ -39,7 +39,7 @@ class FavoriteViewController: MovieListViewController {
 
             let noEntriesBackView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: tableView.frame.height))
             let headlineHeight: CGFloat = 40
-            let textInset: CGFloat = 10
+            let textInset: CGFloat = 20
 
             let headlineLabel = UILabel(frame: CGRect(x: 0,
                                                       y: view.frame.height / 4,
