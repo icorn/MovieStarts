@@ -40,9 +40,17 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
             NSLog("Error getting url for app-group.")
 			var errorWindow: MessageWindow?
 
-			if let viewForError = viewForError {
-				DispatchQueue.main.async {
-					errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "InternalError", textStringId: "NoAppGroup", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+			if let viewForError = viewForError
+            {
+				DispatchQueue.main.async
+                {
+					errorWindow = MessageWindow(parent: viewForError,
+                                                darkenBackground: true,
+                                                titleStringId: "InternalError",
+                                                textStringId: "NoAppGroup",
+                                                buttonStringIds: ["Close"],
+                                                handler:
+                    { (buttonIndex) -> () in
 						errorWindow?.close()
 					})
 				}
@@ -67,9 +75,12 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
 		Checks if there is a database file on the device.
 		- returns: TRUE if there is a file, FALSE otherwise
 	*/
-	func isDatabaseOnDevice() -> Bool {
-		if let moviesPlistFile = moviesPlistFile {
-			if (FileManager.default.fileExists(atPath: moviesPlistFile)) {
+	func isDatabaseOnDevice() -> Bool
+    {
+		if let moviesPlistFile = moviesPlistFile
+        {
+			if (FileManager.default.fileExists(atPath: moviesPlistFile))
+            {
 				return true
 			}
 		}
