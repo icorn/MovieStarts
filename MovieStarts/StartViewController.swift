@@ -68,9 +68,6 @@ class StartViewController: UIViewController {
 					UserDefaults(suiteName: Constants.movieStartsGroup)?.set(countries[buttonIndex].rawValue, forKey: Constants.prefsCountry)
 					UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 
-					// check network, load database if all is OK
-//					if (NetworkChecker.checkReachability(self.view) == false) { return }
-
 					NetworkChecker.checkCloudKit(viewForError: self.view,
                                                  database: MovieDatabaseLoader.sharedInstance,
 						okCallback: { () -> () in
@@ -83,12 +80,8 @@ class StartViewController: UIViewController {
 		}
 	}
 
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-	}
-	
-	
-	// MARK: - 
+
+    // MARK: - 
 
 
 	/**
