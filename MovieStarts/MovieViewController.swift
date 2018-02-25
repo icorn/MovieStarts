@@ -105,17 +105,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		// start to show all movie details
 		
-		if let movie = movie {
-			
-			#if RELEASE
-/*
-				// log this action
-				let imdbId = (movie.imdbId != nil) ? movie.imdbId! : "<unknown ID>"
-				let title = (movie.origTitle != nil) ? movie.origTitle! : "<unknown title>"
-                Answers.logContentView(withName: title, contentType: nil, contentId: imdbId, customAttributes: nil)
-*/
-			#endif
-			
+		if let movie = movie
+        {
 			baseImagePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
 				
 			// show movie data
@@ -157,9 +148,11 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 	
-	override func viewDidAppear(_ animated: Bool) {
+	override func viewDidAppear(_ animated: Bool)
+    {
 		super.viewDidAppear(animated)
 		view.layoutIfNeeded()
+        AnalyticsClient.trackScreenName("Detail Screen")
 	}
 	    
 
@@ -369,6 +362,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
             guard let webUrl = URL(string: tomatoURLString) else { return }
             let webVC = RotatableSafariViewController(url: webUrl)
             webVC.delegate = self
+            webVC.category = SafariCategory.RottenTomatoes
             self.present(webVC, animated: true, completion: nil)
         }
     }
@@ -379,6 +373,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
         let webVC = RotatableSafariViewController(url: tmdbURL)
         webVC.delegate = self
+        webVC.category = SafariCategory.TMDb
         self.present(webVC, animated: true, completion: nil)
     }
     
@@ -407,6 +402,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			guard let webUrl = URL(string: urlString) else { return }
 			let webVC = RotatableSafariViewController(url: webUrl)
 			webVC.delegate = self
+            webVC.category = SafariCategory.RottenTomatoes
 			self.present(webVC, animated: true, completion: nil)
 		}
 	}
@@ -483,6 +479,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				guard let webUrl = URL(string: "http://www.imdb.com/title/\(imdbId)") else { return }
 				let webVC = RotatableSafariViewController(url: webUrl)
 				webVC.delegate = self
+                webVC.category = SafariCategory.IMDb
 				self.present(webVC, animated: true, completion: nil)
 			}
 		}

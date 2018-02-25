@@ -44,6 +44,11 @@ class AcknowledgementsViewController: UITableViewController
         navigationItem.title = NSLocalizedString("Acknowledgements", comment: "")
     }
     
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        AnalyticsClient.trackScreenName("Acknowledgements Screen")
+    }
 
     // MARK: - Table view data source
 

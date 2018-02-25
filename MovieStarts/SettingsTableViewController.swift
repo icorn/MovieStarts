@@ -59,7 +59,9 @@ class SettingsTableViewController: UITableViewController
 	override func viewDidAppear(_ animated: Bool)
     {
 		super.viewDidAppear(animated)
-        
+
+        AnalyticsClient.trackScreenName("Settings Screen")
+
         updateTimeSubtitle()
 		
 		// set up the switches
@@ -148,14 +150,18 @@ class SettingsTableViewController: UITableViewController
 	
 	// MARK: - Private helper functions
 
-	@objc func imdbSwitchTapped() {
+	@objc func imdbSwitchTapped()
+    {
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(imdbSwitch.isOn, forKey: Constants.prefsUseImdbApp)
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+        AnalyticsClient.setPropertyUseImdbApp(to: imdbSwitch.isOn ? "1" : "0")
 	}
 	
-	@objc func youtubeSwitchTapped() {
+	@objc func youtubeSwitchTapped()
+    {
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(youtubeSwitch.isOn, forKey: Constants.prefsUseYoutubeApp)
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+        AnalyticsClient.setPropertyUseYouTubeApp(to: youtubeSwitch.isOn ? "1" : "0")
 	}
 	
 	@objc func notificationSwitchTapped()
@@ -174,6 +180,8 @@ class SettingsTableViewController: UITableViewController
 			// notification switch was turned off
 			switchNotifications(false)
 		}
+        
+        NotificationManager.setUserPropertyForNotifications()
 	}
 
     // Also called by the AppDelegate!

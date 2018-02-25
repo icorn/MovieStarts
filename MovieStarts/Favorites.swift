@@ -16,11 +16,14 @@ struct Favorites {
 	/**
 		Writes the favorites to the device.
 	*/
-	static func saveFavorites() {
+	static func saveFavorites()
+    {
 		let userDefaults = UserDefaults(suiteName: Constants.movieStartsGroup)
 		userDefaults?.set(IDs, forKey: Constants.prefsFavorites)
 		userDefaults?.synchronize()
-	}
+
+        AnalyticsClient.setPropertyNumberOfMoviesInWatchlist(to: IDs.count)
+    }
 
 	/**
 		Add a new movie ID to favorites.
@@ -69,24 +72,21 @@ struct Favorites {
             UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
         }
 
-		#if RELEASE
-/*
-			let imdbId = (movie.imdbId != nil) ? movie.imdbId! : "<unknown ID>"
-			let title = (movie.origTitle != nil) ? movie.origTitle! : "<unknown title>"
-            Answers.logCustomEvent(withName: "Add Favorite", customAttributes: ["Title": title, "IMDb-ID": imdbId])
- */
-		#endif
-	}
+        // log event to AnalyticsClient
+        AnalyticsClient.logEventAddMovieToWatchlist(movie.origTitle, withImdbId: movie.imdbId)
+    }
 	
 	/**
 		Removes a movie ID from favorites.
 	
 		- parameter id:	the movie id to be removed
 	*/
-    static func removeMovie(_ movie: MovieRecord, tabBarController: TabBarController?) {
-		
-		for i in 0 ..< Favorites.IDs.count {
-			if (Favorites.IDs[i] == movie.id) {
+    static func removeMovie(_ movie: MovieRecord, tabBarController: TabBarController?)
+    {
+		for i in 0 ..< Favorites.IDs.count
+        {
+			if (Favorites.IDs[i] == movie.id)
+            {
 				Favorites.IDs.remove(at: i)
 				Favorites.saveFavorites()
 				tabBarController?.favoriteController?.removeFavorite(movie.id)

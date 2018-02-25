@@ -38,7 +38,9 @@ class StartViewController: UIViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-		
+
+        AnalyticsClient.trackScreenName("Launch Screen")
+
 		// read movies from device or from cloud
 
 		MovieDatabaseLoader.sharedInstance.viewForError = view

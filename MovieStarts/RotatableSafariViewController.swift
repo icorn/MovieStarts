@@ -9,15 +9,32 @@
 import UIKit
 import SafariServices
 
+
+enum SafariCategory: String
+{
+    case RottenTomatoes    = "Rotten Tomatoes WebView"
+    case TMDb              = "TMDb WebView"
+    case IMDb              = "IMDb WebView"
+    case Trailer           = "Trailer/YouTube WebView"
+}
+
 class RotatableSafariViewController: SFSafariViewController, Rotatable
 {
+    public var category: SafariCategory?
+    
     override func viewWillDisappear(_ animated: Bool)
     {
         super.viewWillDisappear(animated)
-
-//        if isMovingFromParentViewController
-//        {
-            resetToPortrait()
-//        }
+        resetToPortrait()
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        
+        if let category = category
+        {
+            AnalyticsClient.trackScreenName(category.rawValue)
+        }
     }
 }

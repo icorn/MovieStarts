@@ -23,6 +23,12 @@ class NotificationTimeViewController: UIViewController, UIPickerViewDelegate, UI
         []
     ]
 
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        AnalyticsClient.trackScreenName("Notification Time Screen")
+    }
+
     override func viewDidLoad()
     {
         super.viewDidLoad()

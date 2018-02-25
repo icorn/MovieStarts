@@ -18,12 +18,14 @@ class NotificationManager {
 	// MARK: - Public functions
 	
 	
-	static func removeAllFavoriteNotifications() {
+	static func removeAllFavoriteNotifications()
+    {
 		UIApplication.shared.cancelAllLocalNotifications()
 		NSLog("Removed all notifications")
 	}
 	
-	static func updateFavoriteNotifications(favoriteMovies: [[MovieRecord]]?) {
+	static func updateFavoriteNotifications(favoriteMovies: [[MovieRecord]]?)
+    {
 		let notificationsOn: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotifications) as? Bool
 		
 		if let notificationsOn = notificationsOn , notificationsOn == true {
@@ -133,7 +135,22 @@ class NotificationManager {
 		})
 	}
 
+    
+    static func setUserPropertyForNotifications()
+    {
+        let notificationsOn: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotifications) as? Bool
+        
+        if let notificationsOn = notificationsOn, notificationsOn == true
+        {
+            AnalyticsClient.setPropertyUseNotifications(to: "1")
+        }
+        else
+        {
+            AnalyticsClient.setPropertyUseNotifications(to: "0")
+        }
+    }
 
+    
 	// MARK: - Private functions
 
 	

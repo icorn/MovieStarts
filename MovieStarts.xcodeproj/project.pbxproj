@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F0841652040B7E6006F3C22 /* AnalyticsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0841642040B7E6006F3C22 /* AnalyticsClient.swift */; };
 		4F0953411B9F17D50040BBC9 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */; };
 		4F0FED001CF9E40A003B9975 /* MovieDatabaseUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0FECFF1CF9E40A003B9975 /* MovieDatabaseUpdater.swift */; };
 		4F0FED021CF9F0C4003B9975 /* MovieDatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0FED011CF9F0C4003B9975 /* MovieDatabaseProtocol.swift */; };
@@ -161,6 +162,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4F0841642040B7E6006F3C22 /* AnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsClient.swift; sourceTree = "<group>"; };
 		4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		4F0FECFF1CF9E40A003B9975 /* MovieDatabaseUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseUpdater.swift; sourceTree = "<group>"; };
 		4F0FED011CF9F0C4003B9975 /* MovieDatabaseProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseProtocol.swift; sourceTree = "<group>"; };
@@ -535,6 +537,7 @@
 				4F956C231DC4D637008EF031 /* Screens */,
 				4F70ACBF1BCC419100E34987 /* WatchSessionManager.swift */,
 				4F694E6A1FC0D9BA000A2A28 /* RotatableSafariViewController.swift */,
+				4F0841642040B7E6006F3C22 /* AnalyticsClient.swift */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -868,6 +871,7 @@
 				4F34A5B01DCFC5360032F7BA /* TagListView.swift in Sources */,
 				4FE9A89B1BF23F1500278CA4 /* MovieCountry.swift in Sources */,
 				4F0FED001CF9E40A003B9975 /* MovieDatabaseUpdater.swift in Sources */,
+				4F0841652040B7E6006F3C22 /* AnalyticsClient.swift in Sources */,
 				4FDD6AFC1DBD096300904FF2 /* UpcomingViewController.swift in Sources */,
 				4F8ED3EC1B4442C7008C24FE /* MovieTableViewCell.swift in Sources */,
 				4F63E6421A9D2A8B00528FB3 /* TabBarController.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import UIKit
 import CloudKit
-import Firebase
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -51,28 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 
-	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-		
-		// add log destinations. at least one is needed
-/*
-        SwiftyBeaver stuff
-         
-		let console = ConsoleDestination()  // log to Xcode Console
-//		let file = FileDestination()  // log to default swiftybeaver.log file
-		let platform = SBPlatformDestination(appID: "NxnnVL",
-		                                     appSecret: "wvDg36mYNrwrqsZ3iw5TtbFz5lmt1cho",
-		                                     encryptionKey: "xfjxarkwsscacv7Sglsbl9eYZpc89rji")
-		log.addDestination(platform)
-		log.addDestination(console)
-//		log.addDestination(file)
-		
-//		log.verbose("not so important")  // prio 1, VERBOSE in silver
-//		log.debug("something to debug")  // prio 2, DEBUG in blue
-//		log.info("a nice information")   // prio 3, INFO in green
-//		log.warning("oh no, that won’t be good")  // prio 4, WARNING in yellow
-//		log.error("ouch, an error did occur!")  // prio 5, ERROR in red
-*/
-        
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+    {
 		// create folders for image asset
 		
 		let appPathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
@@ -80,11 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if let appPathUrl = appPathUrl {
 			let fileManager = FileManager.default
 
-			
-			
 			// TODO: kürzer!!!!!!
-			
-			
 			
 			// create thumbnail folder
 			do {
@@ -157,34 +133,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 
-		// read favorites from file
-		let favorites = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsFavorites)
-		if let favorites = favorites as? [String] {
-			Favorites.IDs = favorites
-		}
-		
-		// set some colors, etc.
-		UITabBar.appearance().tintColor = UIColor.darkTürkisColor()
+        // set some colors, etc.
+        UITabBar.appearance().tintColor = UIColor.darkTürkisColor()
         UITabBar.appearance().barTintColor = UIColor.lightGrayBackgroundColor()
-		UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0)], for: UIControlState())
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0)], for: UIControlState())
         
-		UINavigationBar.appearance().tintColor = UIColor.darkTürkisColor()
+        UINavigationBar.appearance().tintColor = UIColor.darkTürkisColor()
         UINavigationBar.appearance().barTintColor = UIColor.lightGrayBackgroundColor()
-
+        
+        // because we will use it soon: init the AnalyticsClient (a.k.a. Firebase)
+        AnalyticsClient.initialize()
+        
+		// read favorites from file (and send number to analytics)
+		let favorites = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsFavorites)
+        
+		if let favorites = favorites as? [String]
+        {
+			Favorites.IDs = favorites
+            AnalyticsClient.setPropertyNumberOfMoviesInWatchlist(to: favorites.count)
+		}
+        else
+        {
+            AnalyticsClient.setPropertyNumberOfMoviesInWatchlist(to: 0)
+        }
+        
 		// check if use-app-prefs are stored. If not, set them to "false"
 		let useImdbApp: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsUseImdbApp) as? Bool
 		let useYoutubeApp: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsUseYoutubeApp) as? Bool
 		
-		if useImdbApp == nil {
+        if let useImdbApp = useImdbApp
+        {
+            AnalyticsClient.setPropertyUseImdbApp(to: useImdbApp ? "1" : "0")
+        }
+        else
+        {
 			UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsUseImdbApp)
 			UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+            AnalyticsClient.setPropertyUseImdbApp(to: "0")
 		}
 		
-		if useYoutubeApp == nil {
+        if let useYoutubeApp = useYoutubeApp
+        {
+            AnalyticsClient.setPropertyUseYouTubeApp(to: useYoutubeApp ? "1" : "0")
+        }
+		else
+        {
 			UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsUseYoutubeApp)
 			UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+            AnalyticsClient.setPropertyUseYouTubeApp(to: "0")
 		}
-		
+
+        NotificationManager.setUserPropertyForNotifications()
+
 		// start watch session (if there is a watch)
 		WatchSessionManager.sharedManager.startSession()
 		
@@ -231,7 +231,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
         UIApplication.configureLinearNetworkActivityIndicatorIfNeeded()
-        FirebaseApp.configure()
         
 		return true
 	}
@@ -246,26 +245,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	// MARK: - Handling local notifications
  
 	
-	func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings) {
-		
-		if (notificationSettings.types.contains(UIUserNotificationType.alert)) {
+	func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings)
+    {
+		if (notificationSettings.types.contains(UIUserNotificationType.alert))
+        {
 			// user has allowed notifications
-			if let settings = settingsTableViewController {
+			if let settings = settingsTableViewController
+            {
 				settings.switchNotifications(true)
 			}
-			else {
+			else
+            {
 				NSLog("Settings dialog not available. This should never happen.")
 				UserDefaults(suiteName: Constants.movieStartsGroup)?.set(true, forKey: Constants.prefsNotifications)
 				UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
 				NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
 			}
 		}
-		else {
+		else
+        {
 			// user has *not* allowed notifications
-			if let settings = settingsTableViewController {
+			if let settings = settingsTableViewController
+            {
 				settings.switchNotifications(false)
 			}
-			else {
+			else
+            {
 				NSLog("Settings dialog not available. This should never happen.")
 				UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsNotifications)
 				UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
@@ -275,49 +280,64 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			// warn user
 			var messageWindow: MessageWindow?
 			
-			if let viewForMessage = window {
-				messageWindow = MessageWindow(parent: viewForMessage, darkenBackground: true, titleStringId: "NotificationWarnTitle", textStringId: "NotificationWarnText", buttonStringIds: ["Close"],
-					handler: { (buttonIndex) -> () in
+			if let viewForMessage = window
+            {
+				messageWindow = MessageWindow(parent: viewForMessage,
+                                              darkenBackground: true,
+                                              titleStringId: "NotificationWarnTitle",
+                                              textStringId: "NotificationWarnText",
+                                              buttonStringIds: ["Close"],
+                                              handler:
+                    { (buttonIndex) -> () in
 						messageWindow?.close()
 					}
 				)
 			}
 		}
+
+        NotificationManager.setUserPropertyForNotifications()
 	}
 
-	func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
-
+	func application(_ application: UIApplication, didReceive notification: UILocalNotification)
+    {
 		guard let userInfo = notification.userInfo,
-			  let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] , movieIDs.count > 0,
-			  let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] , movieTitles.count > 0,
+			  let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String], movieIDs.count > 0,
+			  let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String], movieTitles.count > 0,
 			  let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
-			  let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else {
+			  let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else
+        {
 			return
 		}
 
 		let state = application.applicationState
 
-		if (state == UIApplicationState.active) {
+		if (state == UIApplicationState.active)
+        {
 			// app was in foreground
 			
-			if (movieTitles.count == 1) {
+			if (movieTitles.count == 1)
+            {
 				// only one movie
 				NotificationManager.notifyAboutOneMovie(appDelegate: self, movieID: movieIDs[0], movieTitle: movieTitles[0], movieDate: movieDate, notificationDay: notificationDay)
 			}
-			else {
+			else
+            {
 				// multiple movies
 				NotificationManager.notifyAboutMultipleMovies(appDelegate: self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
 			}
 		}
-		else if (state == UIApplicationState.inactive) {
+		else if (state == UIApplicationState.inactive)
+        {
 			// app was in background, but in memory
 			
-			if (movieTitles.count == 1) {
+			if (movieTitles.count == 1)
+            {
 				// only one movie
 				self.movieTabBarController?.selectedIndex = Constants.tabIndexFavorites
 				self.favoriteViewController?.showFavoriteMovie(movieIDs[0])
 			}
-			else {
+			else
+            {
 				// multiple movies
 				NotificationManager.notifyAboutMultipleMovies(appDelegate: self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
 			}

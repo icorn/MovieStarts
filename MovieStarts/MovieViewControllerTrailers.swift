@@ -194,6 +194,7 @@ extension MovieViewController {
             guard let webUrl = URL(string: "https://www.youtube.com/watch?v=\(trailerId)&autoplay=1&o=U&noapp=1") else { return }
             let webVC = RotatableSafariViewController(url: webUrl)
             webVC.delegate = self
+            webVC.category = SafariCategory.Trailer
             self.present(webVC, animated: true, completion: nil)
         }
     }

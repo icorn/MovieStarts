@@ -50,6 +50,12 @@ class AboutViewController: UIViewController
         acknowledgmentsButton.addTarget(self, action: #selector(AboutViewController.acknowledgmentsButtonPressed(_:)), for: UIControlEvents.touchUpInside)
 	}
     
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        AnalyticsClient.trackScreenName("About Screen")
+    }
+
     override func viewDidLayoutSubviews()
     {
         super.viewDidLayoutSubviews()

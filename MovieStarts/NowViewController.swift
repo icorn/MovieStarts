@@ -22,6 +22,12 @@ class NowViewController: MovieListViewController {
         navigationItem.title = NSLocalizedString("NowPlayingLong", comment: "")
     }
 
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        AnalyticsClient.trackScreenName("Now Playing Screen")
+    }
+
     override var filterViewOutlet: FilterView? {
         get { return self.filterView }
         set {}

@@ -19,6 +19,12 @@ class UpcomingViewController: MovieListViewController {
         navigationItem.title = NSLocalizedString("UpcomingLong", comment: "")
     }
 
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        AnalyticsClient.trackScreenName("Upcoming Screen")
+    }
+
     override var tableViewOutlet: UITableView! {
         get {
             return self.tableView

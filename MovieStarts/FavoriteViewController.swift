@@ -28,7 +28,14 @@ class FavoriteViewController: MovieListViewController {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool)
+    {
+        super.viewDidAppear(animated)
+        AnalyticsClient.trackScreenName("Watchlist Screen")
+    }
+
+    override func viewWillAppear(_ animated: Bool)
+    {
         super.viewWillAppear(animated)
         checkForEmptyList()
     }
