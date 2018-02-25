@@ -53,9 +53,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
+        // because we will use it soon: init the AnalyticsClient (a.k.a. Firebase)
+        AnalyticsClient.initialize()
+        
 		// create folders for image asset
-		
-		let appPathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
+        let appPathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 
 		if let appPathUrl = appPathUrl {
 			let fileManager = FileManager.default
@@ -140,9 +142,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().tintColor = UIColor.darkTürkisColor()
         UINavigationBar.appearance().barTintColor = UIColor.lightGrayBackgroundColor()
-        
-        // because we will use it soon: init the AnalyticsClient (a.k.a. Firebase)
-        AnalyticsClient.initialize()
         
 		// read favorites from file (and send number to analytics)
 		let favorites = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsFavorites)

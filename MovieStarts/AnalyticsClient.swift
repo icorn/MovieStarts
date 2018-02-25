@@ -14,6 +14,7 @@ class AnalyticsClient
     class func initialize()
     {
         #if RELEASE
+            FirebaseConfiguration.shared.setLoggerLevel(.warning)
             FirebaseApp.configure()
         #endif
     }
