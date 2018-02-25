@@ -134,10 +134,34 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
 					showIndicator?()
 				}
 
-				// get all movies which started a month ago or later
-				let compareDate = Date().addingTimeInterval(-30 * 24 * 60 * 60)
-				let predicate = NSPredicate(format: "(%K > %@) AND (hidden == 0)", argumentArray: [country.databaseKeyRelease, compareDate])
-				let query = CKQuery(recordType: self.recordType, predicate: predicate)
+				// get all movies which started a month ago or later (and before year 9999)
+				let compareDateInThePast = Date().addingTimeInterval(-30 * 24 * 60 * 60)
+                
+                let futureCalendar = Calendar(identifier: .gregorian)
+                let futureDateComponents = DateComponents(calendar: futureCalendar,
+                                                          timeZone: TimeZone(secondsFromGMT: 0),
+                                                          year: 9999,
+                                                          month: 1,
+                                                          day: 1,
+                                                          hour: 0,
+                                                          minute: 0,
+                                                          second: 0)
+                let compareDateInTheFuture = futureCalendar.date(from: futureDateComponents)
+                var predicate = NSPredicate()
+                
+                if let compareDateInTheFuture = compareDateInTheFuture
+                {
+                    predicate = NSPredicate(format: "(%K > %@) AND (%K < %@) AND (hidden == 0)",
+                                            argumentArray: [country.databaseKeyRelease, compareDateInThePast, country.databaseKeyRelease, compareDateInTheFuture])
+                }
+                else
+                {
+                    // No future date set. This should not happen. But doesn't really matter much.
+                    predicate = NSPredicate(format: "(%K > %@) AND (hidden == 0)",
+                                            argumentArray: [country.databaseKeyRelease, compareDateInThePast])
+                }
+
+                let query = CKQuery(recordType: self.recordType, predicate: predicate)
 				
 				let queryOperation = CKQueryOperation(query: query)
 				let operationQueue = OperationQueue()
