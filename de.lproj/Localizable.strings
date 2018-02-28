@@ -150,6 +150,8 @@
 "twitterHeadline"		= "Twitter:";
 "swift"					= "MovieStarts wurde zu 100% in Swift geschrieben.";
 "Acknowledgements"      = "Danksagungen";
+"PrivacyStatement"      = "Datenschutzrichtlinie";
+"PrivacyStatementText"  = "Die MovieStarts-App sammelt keine persönlichen Nutzerdaten, sondern erfasst nicht-persönliche Informationen durch den Service Google Analytics für Firebase, um statistische Nutzungs-Daten zu erfassen, mit denen die App in Zukunft verbessert werden kann.\n\nPersönliche Daten wie E-Mail-Adresse oder Benutzername sind der App nicht bekannt.\n\nMit Google Analytics für Firebase werden die folgenden Datentypen erfasst:\n- Anzahl der Nutzer und Sitzungen\n- Sitzungsdauer\n- Betriebssysteme\n- Gerätemodelle\n- Region\n- Erstmalige Starts\n- App-Ausführungen\n- App-Updates\n- In-App-Käufe\n\nDie MovieStarts-App speichert außerdem die Einstellungen der App sowie die Watchlist.\n\nVollständige Listen der in Google Analytics für Firebase erfassten Daten finden Sie unter 'Automatisch gesammelte Ereignisse' (https://support.google.com/firebase/answer/6317485) und 'Automatisch erfasste Nutzereigenschaften' (https://support.google.com/firebase/answer/6317486). In der Firebase SDK-Bibliothek kommt eine App-Instanz-ID zur Identifizierung einzelner App-Installationen zum Einsatz. Bei Verwendung des SDK wird mittels der Hersteller-ID eine App-Instanz-ID auf App-Ebene generiert.";
 
 // Notification times
 

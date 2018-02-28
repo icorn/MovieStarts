@@ -150,6 +150,8 @@
 "twitterHeadline"		= "Twitter:";
 "swift"					= "MovieStarts was proudly written in 100% Swift.";
 "Acknowledgements"      = "Acknowledgements";
+"PrivacyStatement"      = "Privacy Statement";
+"PrivacyStatementText"  = "The MovieStarts app doesn’t collect personally identifiable information, but it collects non-personally identifiable information using the third party service Google Firebase Analytics to collect app usage statistics. We use this usage statistics to improve the MovieStarts app.\n\nThe app doesn't know personal data like the users email adress or name.\n\nThe type of information collected through Firebase Analytics’s default implementation includes:\n\n- The number of users and sessions\n- Session duration\n- Operating systems\n- Device models\n- Geography\n- First launches\n- App opens\n- App updates\n- In-app purchases\n\nThe MovieStarts app furthermore collects the apps settings and the watchlist.\n\nSee a full list of the default events (https://support.google.com/firebase/answer/6317485) and user properties (https://support.google.com/firebase/answer/6317486) collected by Firebase Analytics. The Firebase SDK library uses an app-instance identifier to Identify a unique installation of the App. When using the SDK, an app-instance identifier gets generated at the app level via the Vendor Identifier. ";
 
 // Notification times
 

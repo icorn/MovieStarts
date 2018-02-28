@@ -19,7 +19,8 @@ class AboutViewController: UIViewController
 	@IBOutlet weak var twitterHeadlineLabel: UILabel!
 	@IBOutlet weak var swiftLabel: UILabel!
     @IBOutlet weak var acknowledgmentsButton: UIButton!
-	
+    @IBOutlet weak var privacyButton: UIButton!
+    
 	@IBOutlet weak var webLinkButton: UIButton!
 	@IBOutlet weak var emailLinkButton: UIButton!
 	@IBOutlet weak var twitterLinkButton: UIButton!
@@ -46,9 +47,13 @@ class AboutViewController: UIViewController
 		emailHeadlineLabel.text = NSLocalizedString("emailHeadline", comment: "")
 		twitterHeadlineLabel.text = NSLocalizedString("twitterHeadline", comment: "")
 		swiftLabel.text = NSLocalizedString("swift", comment: "")
+        
         acknowledgmentsButton.setTitle(NSLocalizedString("Acknowledgements", comment: ""), for: UIControlState.normal)
-        acknowledgmentsButton.addTarget(self, action: #selector(AboutViewController.acknowledgmentsButtonPressed(_:)), for: UIControlEvents.touchUpInside)
-	}
+        acknowledgmentsButton.addTarget(self, action: #selector(AboutViewController.acknowledgmentsButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+
+        privacyButton.setTitle(NSLocalizedString("PrivacyStatement", comment: ""), for: UIControlState.normal)
+        privacyButton.addTarget(self, action: #selector(AboutViewController.privacyButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+}
     
     override func viewDidAppear(_ animated: Bool)
     {
@@ -67,6 +72,9 @@ class AboutViewController: UIViewController
             self.trailingConstraint.constant = keyWindow.safeAreaInsets.right
         }
     }
+    
+    
+    // MARK: - Handlers
     
 	@IBAction func webLinkTouched(_ sender: AnyObject)
     {
@@ -98,7 +106,7 @@ class AboutViewController: UIViewController
 		}
 	}
 
-    @objc func acknowledgmentsButtonPressed(_ sender: UIButton!)
+    @objc func acknowledgmentsButtonTapped(_ sender: UIButton!)
     {
         if let ackController = storyboard?.instantiateViewController(withIdentifier: "AcknowledgementsViewController") as? AcknowledgementsViewController
         {
@@ -106,4 +114,14 @@ class AboutViewController: UIViewController
         }
     }
 
+    @objc func privacyButtonTapped(_ sender: UIButton!)
+    {
+        if let bigLabelController = storyboard?.instantiateViewController(withIdentifier: "BigLabelViewController") as? BigLabelViewController
+        {
+            bigLabelController.navigationItem.title = NSLocalizedString("PrivacyStatement", comment: "")
+            bigLabelController.contentText = NSLocalizedString("PrivacyStatementText", comment: "")
+            navigationController?.pushViewController(bigLabelController, animated: true)
+        }
+    }
+    
 }
