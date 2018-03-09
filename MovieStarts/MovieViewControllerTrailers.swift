@@ -37,99 +37,116 @@ extension MovieViewController {
         }
     }
 
-
-    final func showTrailersIn(_ stackview: UIStackView,
-                              spaceConstraint: NSLayoutConstraint,
-                              trailerIDs: [String],
-                              tagStart: Int){
-
-        if (trailerIDs.count == 0) {
-            // no trailers: hide all related UI elements
-            setConstraintsToZero(spaceConstraint)
-            return
-        }
-
+    
+    func showTrailerLinks()
+    {
         guard let basePath = self.baseImagePath else { return }
         guard let movie = self.movie else { return }
-
+        let englishIDs = movie.trailerIds[MovieCountry.USA.languageArrayIndex]
+        let germanIDs = movie.trailerIds[MovieCountry.Germany.languageArrayIndex]
+        
+        if ((englishIDs.count == 0) && (germanIDs.count == 0))
+        {
+            // no trailers: hide all related UI elements
+            setConstraintsToZero(trailerStackViewVerticalSpaceConstraint)
+            return
+        }
+        
         var showFlag = false
 
-        if (movie.currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex) {
+        if (movie.currentCountry.languageArrayIndex != MovieCountry.USA.languageArrayIndex)
+        {
             // non-english country: show the little flag
             showFlag = true
         }
 
-        for (index, trailerId) in trailerIDs.enumerated() {
+        var currentSubStackview: UIStackView?
+
+        for (index, trailerId) in (englishIDs + germanIDs).enumerated()
+        {
+            if (index % 2 == 0)
+            {
+                // create new sub-stackview
+                let subStackview = UIStackView()
+                subStackview.axis = .horizontal
+                subStackview.spacing = 10.0
+                trailerStackView.addArrangedSubview(subStackview)
+                currentSubStackview = subStackview
+            }
+            
             // try to load existing trailer-image
             let trailerImageFilePath = basePath + Constants.trailerFolder + "/" + trailerId + ".jpg"
             var trailerImage = UIImage(contentsOfFile: trailerImageFilePath)?.cgImage
-
-            if (trailerImage == nil) {
+            
+            if (trailerImage == nil)
+            {
                 // trailer-image not found: use default-image
                 trailerImage = UIImage(named: "no-trailer")?.cgImage
-
+                
                 // load the correct image from YouTube
                 guard let sourceImageUrl = URL(string: "https://img.youtube.com/vi/" + trailerId + "/mqdefault.jpg") else { continue }
-
+                
                 let task = URLSession.shared.downloadTask(with: sourceImageUrl,
-                            completionHandler: {
-                                [unowned self] (location: URL?, response: URLResponse?, error: Error?) -> Void in
-                                self.youtubeImageDownloaded(location, response, error, stackview,
-                                                            controller: self,
-                                                            filepath: trailerImageFilePath,
-                                                            trailerId: trailerId,
-                                                            trailerIndex: index,
-                                                            showFlag: showFlag)
-                            })
-
+                                                          completionHandler:
+                    {
+                        [unowned self] (location: URL?, response: URLResponse?, error: Error?) -> Void in
+                        self.youtubeImageDownloaded(location, response, error,
+                                                    controller: self,
+                                                    filepath: trailerImageFilePath,
+                                                    trailerId: trailerId,
+                                                    trailerIndex: index,
+                                                    showFlag: showFlag)
+                })
+                
                 task.resume()
             }
-            
-            if let trailerImage = trailerImage {
-                let scaledImage = UIImage(cgImage: trailerImage, scale: 1.5, orientation: UIImageOrientation.up)
+
+            if let trailerImage = trailerImage
+            {
                 let button = UIButton()
-                button.tag = tagStart + index
-                button.setImage(scaledImage, for: UIControlState())
+                button.tag = Constants.tagTrailers + index
                 button.contentMode = .scaleAspectFit
                 button.addTarget(self, action: #selector(MovieViewController.trailerButtonTapped(_:)), for: UIControlEvents.touchUpInside)
-                if (showFlag) {
-                    addFlagToButton(button)
-                }
-                stackview.addArrangedSubview(button)
+                setImage(trailerImage, withFlag: showFlag, toButton: button)
+                currentSubStackview?.addArrangedSubview(button)
             }
         }
         
-        stackview.layoutIfNeeded()
+        trailerStackView.layoutIfNeeded()
     }
-
-
+    
+  
     fileprivate func youtubeImageDownloaded(_ location: URL?,
                                             _ response: URLResponse?,
                                             _ error: Error?,
-                                            _ stackview: UIStackView,
                                             controller: MovieViewController,
                                             filepath: String,
                                             trailerId: String,
                                             trailerIndex: Int,
-                                            showFlag: Bool) -> Void {
-
-        if let error = error as NSError? {
+                                            showFlag: Bool) -> Void
+    {
+        if let error = error as NSError?
+        {
             NSLog("Error getting poster from Youtube: \(error.localizedDescription)")
         }
-        else if let receivedPath = location?.path {
+        else if let receivedPath = location?.path
+        {
             // move received poster to target path where it belongs and update the button
-            do {
+            do
+            {
                 try FileManager.default.moveItem(atPath: receivedPath, toPath: filepath)
                 controller.updateTrailerButton(index: trailerIndex,
                                                trailerId: trailerId,
-                                               stackview: stackview,
                                                showFlag: showFlag)
             }
-            catch let error as NSError {
-                if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+            catch let error as NSError
+            {
+                if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError))
+                {
                     // ignoring, because it's okay it it's already there
                 }
-                else {
+                else
+                {
                     NSLog("Error moving trailer-poster: \(error.localizedDescription)")
                 }
             }
@@ -143,41 +160,54 @@ extension MovieViewController {
         - parameter index:		The index of the button inside the stackview
         - parameter trailerId:	The id of the trailer, which is also the filename of the trailer-image
     */
-    final func updateTrailerButton(index: Int, trailerId: String, stackview: UIStackView, showFlag: Bool) {
-        DispatchQueue.main.async {
-            if (index >= stackview.arrangedSubviews.count) {
-                return
+    final func updateTrailerButton(index: Int, trailerId: String, showFlag: Bool)
+    {
+        DispatchQueue.main.async
+        {
+            // find the button to update
+            var foundButton: UIButton?
+            
+            outerLoop: for innerStackView in self.trailerStackView.arrangedSubviews
+            {
+                if let innerStackView = innerStackView as? UIStackView
+                {
+                    for button in innerStackView.arrangedSubviews
+                    {
+                        if button.tag == Constants.tagTrailers + index
+                        {
+                            foundButton = button as? UIButton
+                            break outerLoop
+                        }
+                    }
+                }
             }
 
-            guard let buttonToUpdate = stackview.arrangedSubviews[index] as? UIButton else { return }
+            guard let buttonToUpdate = foundButton else { return }
             guard let basePath = self.baseImagePath else { return }
-
+            
             let trailerImageFilePath = basePath + Constants.trailerFolder + "/" + trailerId + ".jpg"
-
             guard let trailerImage = UIImage(contentsOfFile: trailerImageFilePath)?.cgImage else { return }
-
-            let scaledImage = UIImage(cgImage: trailerImage, scale: 1.5, orientation: UIImageOrientation.up)
-            buttonToUpdate.setImage(scaledImage, for: UIControlState())
-
-            if (showFlag) {
-                self.addFlagToButton(buttonToUpdate)
-            }
+            self.setImage(trailerImage, withFlag: showFlag, toButton: buttonToUpdate)
         }
     }
 
 
-    @objc final func trailerButtonTapped(_ sender: UIButton) {
+    @objc final func trailerButtonTapped(_ sender: UIButton)
+    {
         guard let movie = self.movie else { return }
 
+        let trailerIndex = sender.tag - Constants.tagTrailers
         var trailerId = ""
 
-        if (sender.tag >= Constants.tagTrailerGerman) {
-            // german trailer
-            trailerId = movie.trailerIds[MovieCountry.Germany.languageArrayIndex][sender.tag - Constants.tagTrailerGerman]
-        }
-        else {
+        if (trailerIndex < movie.trailerIds[MovieCountry.USA.languageArrayIndex].count)
+        {
             // english trailer
-            trailerId = movie.trailerIds[MovieCountry.USA.languageArrayIndex][sender.tag - Constants.tagTrailerEnglish]
+            trailerId = movie.trailerIds[MovieCountry.USA.languageArrayIndex][trailerIndex]
+        }
+        else
+        {
+            // german trailer
+            trailerId = movie.trailerIds[MovieCountry.Germany.languageArrayIndex][trailerIndex - movie.trailerIds[MovieCountry.USA.languageArrayIndex].count]
         }
 
         let useApp: Bool? =
@@ -200,21 +230,36 @@ extension MovieViewController {
     }
 
 
-    final func addFlagToButton(_ button: UIButton) {
-        var flagImageView: UIImageView?
-
-        if (button.tag >= Constants.tagTrailerGerman) {
-            // german flag
-            flagImageView = UIImageView(image: UIImage(named: "germany"))
-        }
-        else {
-            // english flag
-            flagImageView = UIImageView(image: UIImage(named: "usuk"))
-        }
-
-        if let flagImageView = flagImageView {
-            flagImageView.frame = CGRect(x: 172.0, y: 8.0, width: 34, height: 18)
-            button.addSubview(flagImageView)
+    func setImage(_ image: CGImage, withFlag showFlag: Bool, toButton button: UIButton)
+    {
+        guard let movie = self.movie else { return }
+        let scaleFactor = CGFloat(image.width) / ((self.view.frame.size.width - 2 * padding - self.linksStackView.spacing) / 2.0)
+        let scaledImage = UIImage(cgImage: image, scale: scaleFactor, orientation: UIImageOrientation.up)
+        button.setImage(scaledImage, for: UIControlState())
+        
+        if (showFlag)
+        {
+            var flagImageView: UIImageView?
+            
+            if (button.tag - Constants.tagTrailers < movie.trailerIds[MovieCountry.USA.languageArrayIndex].count)
+            {
+                // english flag
+                flagImageView = UIImageView(image: UIImage(named: "usuk"))
+            }
+            else
+            {
+                // german flag
+                flagImageView = UIImageView(image: UIImage(named: "germany"))
+            }
+            
+            if let flagImageView = flagImageView
+            {
+                flagImageView.frame = CGRect(x: scaledImage.size.width - 34.0 - 8.0,
+                                             y: 8.0,
+                                             width: 34.0,
+                                             height: 18.0)
+                button.addSubview(flagImageView)
+            }
         }
     }
 }

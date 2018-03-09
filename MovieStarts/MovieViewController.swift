@@ -26,7 +26,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var storyLabel: UILabel!
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
-    @IBOutlet weak var trailerStackView2: UIStackView!
 	@IBOutlet weak var actorStackView: UIStackView!
 	@IBOutlet weak var infoStackView: UIStackView!
 	
@@ -54,7 +53,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
     @IBOutlet weak var storyLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
-    @IBOutlet weak var trailerStackViewVerticalSpaceConstraint2: NSLayoutConstraint!
 	@IBOutlet weak var ratingStackViewHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ratingStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var imdbImageViewWidthConstraint: NSLayoutConstraint!
@@ -62,7 +60,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var moreStoryButtonHeightConstraint: NSLayoutConstraint!
 	@IBOutlet weak var moreStoryButtonVerticalSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
-
+    @IBOutlet weak var linksStackViewHeightConstraint: NSLayoutConstraint!
+    
     @IBOutlet weak var imdbOuterView: UIView!
     @IBOutlet weak var tomatoesOuterView: UIView!
     @IBOutlet weak var metascoreOuterView: UIView!
@@ -97,10 +96,13 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	var baseImagePath: String?
 	var showCompleteStory: Bool = false
 	
+    let padding: CGFloat = 16.0
+    
 	
 	// MARK: - UIViewController
 	
-	override func viewDidLoad() {
+	override func viewDidLoad()
+    {
 		super.viewDidLoad()
 		
 		// start to show all movie details
@@ -117,34 +119,14 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			showActors()
 			showInfos()
 			showLinkButtons()
-
             configureTrailerLabel()
-			showTrailersIn(trailerStackView,
-			               spaceConstraint: trailerStackViewVerticalSpaceConstraint,
-			               trailerIDs: movie.trailerIds[MovieCountry.USA.languageArrayIndex],
-			               tagStart: Constants.tagTrailerEnglish)
-            showTrailersIn(trailerStackView2,
-                           spaceConstraint: trailerStackViewVerticalSpaceConstraint2,
-                           trailerIDs: movie.trailerIds[MovieCountry.Germany.languageArrayIndex],
-                           tagStart: Constants.tagTrailerGerman)
-
+            showTrailerLinks()
 			setUpFavoriteButton()
 			
 			// shrink story label if needed
 			
 			view.layoutIfNeeded()
 			shrinkStoryIfNeeded()
-
-			// Set nice distance between lowest line and the bottom of the content view.
-/*
-			contentView.addConstraint(NSLayoutConstraint(item: linksStackView,
-			                                             attribute: NSLayoutAttribute.bottom,
-			                                             relatedBy: NSLayoutRelation.equal,
-			                                             toItem: contentView,
-			                                             attribute: NSLayoutAttribute.bottom,
-			                                             multiplier: 1.0,
-			                                             constant: 10))
-*/
 		}
 	}
 	
@@ -300,42 +282,60 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 	
-	fileprivate final func showLinkButtons() {
+	fileprivate final func showLinkButtons()
+    {
 		guard let movie = self.movie else { return }
-
-        if (movie.imdbId != nil) {
-            let imdbButton = UIButton()
-            imdbButton.setImage(UIImage(named: "imdb"), for: UIControlState.normal)
-            imdbButton.addTarget(self, action: #selector(MovieViewController.imdbButtonTapped(_:)),
-                                 for: UIControlEvents.touchUpInside)
+        
+        if (movie.imdbId != nil)
+        {
+            let imdbButton = UIImageView(image: UIImage(named: "imdb"))
+            imdbButton.contentMode = UIViewContentMode.scaleAspectFill
+            imdbButton.isUserInteractionEnabled = true
+            imdbButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.imdbButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(imdbButton)
         }
 
-        if (movie.tomatoURL != nil) {
-            let tomatoButton = UIButton()
-            tomatoButton.setImage(UIImage(named: "rotten-tomatoes"), for: UIControlState.normal)
-            tomatoButton.addTarget(self, action: #selector(MovieViewController.rottenTomatoesButtonTapped(_:)),
-                                   for: UIControlEvents.touchUpInside)
+        if (movie.tomatoURL != nil)
+        {
+            let tomatoButton = UIImageView(image: UIImage(named: "rotten-tomatoes"))
+            tomatoButton.contentMode = UIViewContentMode.scaleAspectFill
+            tomatoButton.isUserInteractionEnabled = true
+            tomatoButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.rottenTomatoesButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(tomatoButton)
         }
 
         if (movie.tmdbId != nil) {
-            let tmdbButton = UIButton()
-            tmdbButton.setImage(UIImage(named: "tmdb"), for: UIControlState.normal)
-            tmdbButton.addTarget(self, action: #selector(MovieViewController.tmdbButtonTapped(_:)),
-                                 for: UIControlEvents.touchUpInside)
+            let tmdbButton = UIImageView(image: UIImage(named: "tmdb"))
+            tmdbButton.contentMode = UIViewContentMode.scaleAspectFill
+            tmdbButton.isUserInteractionEnabled = true
+            tmdbButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.tmdbButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(tmdbButton)
         }
+      
+        for _ in stride(from: 3, to: self.linksStackView.subviews.count, by: -1)
+        {
+            let dummyView = UIView()
+            self.linksStackView.addArrangedSubview(dummyView)
+        }
+        
+        // calculate neccessary height of stackview for ideal images
+        
+        let imageWidth = (self.view.frame.size.width - 2 * padding - 2 * self.linksStackView.spacing) / 3.0
+        let imageHeight = imageWidth * 0.475
+        self.linksStackViewHeightConstraint.constant = imageHeight
 	}
 
-	fileprivate final func shrinkStoryIfNeeded() {
+	fileprivate final func shrinkStoryIfNeeded()
+    {
 		let numLinesOfStory = round(storyLabel.frame.height / storyLabel.font.lineHeight)
 		
-		if (numLinesOfStory > 9) {
+		if (numLinesOfStory > 9)
+        {
 			// set height to 8 lines and show button
 			storyLabel.numberOfLines = 8
 		}
-		else {
+		else
+        {
 			moreStoryButton.isHidden = true
 			setConstraintsToZero(moreStoryButtonHeightConstraint, moreStoryButtonVerticalSpaceConstraint)
 		}

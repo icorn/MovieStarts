@@ -23,7 +23,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="700"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hxp-mG-nWN" userLabel="ContentView">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="607"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="625"/>
                                         <subviews>
                                             <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eV1-Lj-IO0" userLabel="posterImageView">
                                                 <rect key="frame" x="16" y="16" width="80" height="115"/>
@@ -265,14 +265,13 @@
                                                     <constraint firstAttribute="bottom" secondItem="Tzo-kM-EfJ" secondAttribute="bottom" id="jLx-Or-9fU"/>
                                                 </constraints>
                                             </stackView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Infos" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wfA-YV-bBb" userLabel="infoHeadlineLabel">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Infos" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wfA-YV-bBb" userLabel="infoHeadlineLabel">
                                                 <rect key="frame" x="16" y="341" width="568" height="21"/>
-                                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="21" id="9WT-2h-z1u"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <color key="textColor" red="0.47058823529411764" green="0.47058823529411764" blue="0.47058823529411764" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                                <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Story" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9NL-Yw-BuV" userLabel="storyLabel">
@@ -316,51 +315,46 @@
                                                 <rect key="frame" x="50" y="370" width="500" height="50"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </stackView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trailers" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dwk-PI-SML" userLabel="trailerHeadlineLabel">
-                                                <rect key="frame" x="16" y="428" width="568" height="18"/>
-                                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <color key="textColor" red="0.47058823529411764" green="0.47058823529411764" blue="0.47058823529411764" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trailers" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dwk-PI-SML" userLabel="trailerHeadlineLabel">
+                                                <rect key="frame" x="16" y="428" width="568" height="26.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                                <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <stackView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="568" placeholderIntrinsicHeight="31" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Joe-oI-bJB" userLabel="trailerStackView">
-                                                <rect key="frame" x="16" y="453" width="568" height="31"/>
+                                            <stackView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="568" placeholderIntrinsicHeight="31" axis="vertical" distribution="fillEqually" alignment="top" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Joe-oI-bJB" userLabel="trailerStackView">
+                                                <rect key="frame" x="16" y="461.5" width="568" height="31"/>
                                             </stackView>
-                                            <stackView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="568" placeholderIntrinsicHeight="31" axis="vertical" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="pCJ-Ys-xwo" userLabel="trailerStackView2">
-                                                <rect key="frame" x="16" y="492" width="568" height="31"/>
-                                            </stackView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Links" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwj-HQ-sxC" userLabel="linksHeadlineLabel">
-                                                <rect key="frame" x="16" y="531" width="568" height="18"/>
-                                                <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                                <color key="textColor" red="0.47058823529999999" green="0.47058823529999999" blue="0.47058823529999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Links" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hwj-HQ-sxC" userLabel="linksHeadlineLabel">
+                                                <rect key="frame" x="16" y="504.5" width="568" height="26.5"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="50" distribution="equalSpacing" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xmn-ie-vpS" userLabel="linksStackView">
-                                                <rect key="frame" x="100" y="557" width="400" height="50"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="400" placeholderIntrinsicHeight="70" distribution="fillEqually" alignment="center" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="xmn-ie-vpS" userLabel="linksStackView">
+                                                <rect key="frame" x="16" y="539" width="568" height="70"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="70" id="ipL-fB-fiA"/>
+                                                </constraints>
                                             </stackView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstItem="pCJ-Ys-xwo" firstAttribute="top" secondItem="Joe-oI-bJB" secondAttribute="bottom" constant="8" id="1zC-Ck-t2n"/>
-                                            <constraint firstItem="xmn-ie-vpS" firstAttribute="centerX" secondItem="Hxp-mG-nWN" secondAttribute="centerX" id="8LH-hi-4aU"/>
                                             <constraint firstItem="IDh-DI-GX7" firstAttribute="leading" secondItem="asT-cd-qc4" secondAttribute="leading" id="9vy-bY-Mee"/>
                                             <constraint firstAttribute="trailing" secondItem="Joe-oI-bJB" secondAttribute="trailing" constant="16" id="AES-e8-h8u"/>
                                             <constraint firstItem="x55-LK-1rP" firstAttribute="top" secondItem="eV1-Lj-IO0" secondAttribute="bottom" constant="8" id="AU9-Xb-8ti"/>
                                             <constraint firstItem="asT-cd-qc4" firstAttribute="top" secondItem="EVT-wh-LDJ" secondAttribute="bottom" constant="3" id="D5G-Z7-afS"/>
                                             <constraint firstAttribute="trailing" secondItem="wfA-YV-bBb" secondAttribute="trailing" constant="16" id="E9R-BU-f2h"/>
-                                            <constraint firstItem="pCJ-Ys-xwo" firstAttribute="leading" secondItem="Joe-oI-bJB" secondAttribute="leading" id="FiB-ln-of5"/>
                                             <constraint firstAttribute="trailing" secondItem="dwk-PI-SML" secondAttribute="trailing" constant="16" id="FiW-05-gj9"/>
-                                            <constraint firstAttribute="bottom" secondItem="xmn-ie-vpS" secondAttribute="bottom" id="Fng-iu-tvQ"/>
+                                            <constraint firstAttribute="bottom" secondItem="xmn-ie-vpS" secondAttribute="bottom" constant="16" id="Fng-iu-tvQ"/>
                                             <constraint firstItem="IDh-DI-GX7" firstAttribute="trailing" secondItem="EVT-wh-LDJ" secondAttribute="trailing" id="GaX-UH-1va"/>
                                             <constraint firstItem="9NL-Yw-BuV" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="Hr8-BK-r5L"/>
                                             <constraint firstItem="Gg1-tZ-iwt" firstAttribute="centerX" secondItem="Hxp-mG-nWN" secondAttribute="centerX" id="Jg5-df-9De"/>
-                                            <constraint firstItem="hwj-HQ-sxC" firstAttribute="top" secondItem="pCJ-Ys-xwo" secondAttribute="bottom" constant="8" id="Kp7-Te-Esb"/>
                                             <constraint firstItem="cU6-bZ-VCa" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="LsZ-PR-5NV"/>
                                             <constraint firstItem="Gg1-tZ-iwt" firstAttribute="top" secondItem="cU6-bZ-VCa" secondAttribute="bottom" constant="8" id="MXc-6e-T2Q"/>
                                             <constraint firstItem="eV1-Lj-IO0" firstAttribute="top" secondItem="IDh-DI-GX7" secondAttribute="top" id="OS7-Ae-cE3"/>
                                             <constraint firstItem="9NL-Yw-BuV" firstAttribute="top" secondItem="Fv6-kd-gT2" secondAttribute="bottom" constant="8" id="OZp-N2-dMX"/>
                                             <constraint firstItem="IDh-DI-GX7" firstAttribute="leading" secondItem="eV1-Lj-IO0" secondAttribute="trailing" constant="8" id="QDM-cf-6tJ"/>
+                                            <constraint firstItem="xmn-ie-vpS" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="Qi9-gi-Fot"/>
                                             <constraint firstItem="wfA-YV-bBb" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="RFL-Ul-OsG"/>
                                             <constraint firstItem="wfA-YV-bBb" firstAttribute="top" secondItem="Gg1-tZ-iwt" secondAttribute="bottom" constant="8" id="RZZ-j4-LxD"/>
                                             <constraint firstItem="Ub9-Fp-6kR" firstAttribute="centerX" secondItem="Hxp-mG-nWN" secondAttribute="centerX" id="Sbu-PC-YmL"/>
@@ -374,6 +368,7 @@
                                             <constraint firstItem="xmn-ie-vpS" firstAttribute="top" secondItem="hwj-HQ-sxC" secondAttribute="bottom" constant="8" id="Y9h-MW-1OZ"/>
                                             <constraint firstItem="Fv6-kd-gT2" firstAttribute="top" secondItem="x55-LK-1rP" secondAttribute="bottom" constant="6" id="YFK-1v-BNH"/>
                                             <constraint firstItem="Fv6-kd-gT2" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="YG6-lW-3cx"/>
+                                            <constraint firstItem="hwj-HQ-sxC" firstAttribute="top" secondItem="Joe-oI-bJB" secondAttribute="bottom" constant="12" id="a0I-i3-ufd"/>
                                             <constraint firstItem="Ub9-Fp-6kR" firstAttribute="top" secondItem="wfA-YV-bBb" secondAttribute="bottom" constant="8" id="a7p-5G-3ez"/>
                                             <constraint firstItem="koB-Vy-bpd" firstAttribute="leading" secondItem="9NL-Yw-BuV" secondAttribute="leading" id="aLc-df-dEG"/>
                                             <constraint firstItem="dwk-PI-SML" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="aZv-YU-pzW"/>
@@ -389,8 +384,8 @@
                                             <constraint firstItem="dwk-PI-SML" firstAttribute="top" secondItem="Ub9-Fp-6kR" secondAttribute="bottom" constant="8" id="ops-6E-ETi"/>
                                             <constraint firstAttribute="trailing" secondItem="x55-LK-1rP" secondAttribute="trailing" constant="16" id="p3E-Z5-FJc"/>
                                             <constraint firstItem="IDh-DI-GX7" firstAttribute="trailing" secondItem="VdW-4b-UKZ" secondAttribute="trailing" id="rm3-UE-5rl"/>
-                                            <constraint firstItem="pCJ-Ys-xwo" firstAttribute="trailing" secondItem="Joe-oI-bJB" secondAttribute="trailing" id="tVb-ZX-Yxc"/>
                                             <constraint firstAttribute="trailing" secondItem="IDh-DI-GX7" secondAttribute="trailing" constant="16" id="toy-yp-EwI"/>
+                                            <constraint firstAttribute="trailing" secondItem="xmn-ie-vpS" secondAttribute="trailing" constant="16" id="v0Z-oX-3eF"/>
                                             <constraint firstItem="Joe-oI-bJB" firstAttribute="leading" secondItem="Hxp-mG-nWN" secondAttribute="leading" constant="16" id="vGw-XG-2Or"/>
                                             <constraint firstAttribute="trailing" secondItem="9NL-Yw-BuV" secondAttribute="trailing" constant="16" id="z7G-7o-Je2"/>
                                             <constraint firstAttribute="trailing" secondItem="Fv6-kd-gT2" secondAttribute="trailing" constant="16" id="zY8-uV-xp8"/>
@@ -438,6 +433,7 @@
                         <outlet property="lineTopHeightConstraint" destination="xST-UW-B5K" id="x82-Ip-5fu"/>
                         <outlet property="linksHeadlineLabel" destination="hwj-HQ-sxC" id="h1M-4h-gZ0"/>
                         <outlet property="linksStackView" destination="xmn-ie-vpS" id="SFV-BB-86A"/>
+                        <outlet property="linksStackViewHeightConstraint" destination="ipL-fB-fiA" id="xeF-Om-9rp"/>
                         <outlet property="metascoreInnerView" destination="PwF-QZ-tiv" id="sda-vu-mzp"/>
                         <outlet property="metascoreOuterView" destination="U3T-Cd-cig" id="vMR-4G-FRi"/>
                         <outlet property="metascoreRatingLabel" destination="EG9-A3-iTW" id="79N-Vu-F97"/>
@@ -464,9 +460,7 @@
                         <outlet property="trailerHeadlineLabel" destination="dwk-PI-SML" id="hMs-g0-L3y"/>
                         <outlet property="trailerHeadlineLabelVerticalSpaceConstraint" destination="ops-6E-ETi" id="nCV-bi-X50"/>
                         <outlet property="trailerStackView" destination="Joe-oI-bJB" id="5mr-Wm-jRN"/>
-                        <outlet property="trailerStackView2" destination="pCJ-Ys-xwo" id="9x0-IF-GnJ"/>
                         <outlet property="trailerStackViewVerticalSpaceConstraint" destination="bsk-QQ-Lp5" id="h7H-eU-PS4"/>
-                        <outlet property="trailerStackViewVerticalSpaceConstraint2" destination="1zC-Ck-t2n" id="g0a-0f-V0N"/>
                         <outlet property="trailingConstraint" destination="S85-35-tE9" id="DJw-vY-0XZ"/>
                     </connections>
                 </viewController>
