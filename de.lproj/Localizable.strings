@@ -30,7 +30,7 @@
 
 // Details view
 
-"ReleaseDate"		= "Veröffentlichung";
+"ReleaseDate"		= "Kinostart";
 "UserRating"		= "Bewertung";
 "Actors"			= "Besetzung";
 "Directors"			= "Regie";

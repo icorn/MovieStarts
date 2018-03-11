@@ -107,7 +107,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		// start to show all movie details
 		
-		if let movie = movie
+		if let _ = movie
         {
 			baseImagePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
 				
