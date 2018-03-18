@@ -1,5 +1,5 @@
 //
-//  MovieViewControllerActorStackview.swift
+//  MovieViewControllerActors.swift
 //  MovieStarts
 //
 //  Created by Oliver Eichhorn on 13.07.16.
@@ -10,119 +10,148 @@ import Foundation
 import UIKit
 
 
-extension MovieViewController {
-
-	final func showActors() {
-		guard let movie = self.movie else { return }
-		
-		if (movie.actors.count > 0) {
-			actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "")
-			
-			for actorIndex in 0...movie.actors.count-1 {
-				addActorToStackView(actorIndex: actorIndex, hidden: actorIndex > 4)
-			}
-			
-			if (movie.actors.count > 5) {
-				addShowAllActorsButtonToStackView()
-			}
-		}
-		else {
-			// no actors
-            setConstraintsToZero(actorHeadlineLabelHeightConstraint, actorHeadlineLabelVerticalSpaceConstraint,
-                                 actorStackViewVerticalSpaceConstraint)
-		}
-	}
-	
-	fileprivate final func addShowAllActorsButtonToStackView() {
-		let showAllActorsButton = UIButton()
-		showAllActorsButton.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
-		showAllActorsButton.setTitle("▼  " + NSLocalizedString("ShowAllActors", comment: ""), for: UIControlState())
-		showAllActorsButton.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0),
-		                                  for: UIControlState())
-		showAllActorsButton.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0),
-		                                  for: UIControlState.highlighted)
-		showAllActorsButton.addTarget(self, action: #selector(MovieViewController.showAllActorsButtonPressed(_:)),
-		                              for: UIControlEvents.touchUpInside)
-		actorStackView.addArrangedSubview(showAllActorsButton)
-	}
-	
-	fileprivate final func addShowLessActorsButtonToStackView() {
-		let showLessActorsButton = UIButton()
-		showLessActorsButton.titleLabel?.font = UIFont.systemFont(ofSize: 14.0)
-		showLessActorsButton.setTitle("▲  " + NSLocalizedString("ShowLessActors", comment: ""), for: UIControlState())
-		showLessActorsButton.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0),
-		                                   for: UIControlState())
-		showLessActorsButton.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0),
-		                                   for: UIControlState.highlighted)
-		showLessActorsButton.addTarget(self, action: #selector(MovieViewController.showLessActorsButtonPressed(_:)),
-		                               for: UIControlEvents.touchUpInside)
-		actorStackView.addArrangedSubview(showLessActorsButton)
-	}
-	
-	fileprivate final func addActorToStackView(actorIndex: Int, hidden: Bool) {
-		guard let movie = self.movie else { return }
-        let actorView = ActorView.instanceFromNib()
-        var profilePicture = ""
+extension MovieViewController
+{
+    final func showActors()
+    {
+        guard let movie = self.movie else { return }
+        if movie.actors.count < 1 { return }
         
-        if (movie.profilePictures.count > actorIndex)
+        let imageWidth: CGFloat = 75.0
+        let imageHeight: CGFloat = 100.0
+        let hGap: CGFloat = 3.0
+        let vGap: CGFloat = 3.0
+        let bottomGap: CGFloat = 6.0
+        var maxLabelHeight: CGFloat = 0.0
+
+        for (index, actorName) in movie.actors.enumerated()
         {
-            profilePicture = movie.profilePictures[actorIndex]
+            let imageView = UIImageView(frame: CGRect(x: (imageWidth + hGap) * CGFloat(index),
+                                                      y: 0.0,
+                                                      width: imageWidth,
+                                                      height: imageHeight))
+            imageView.contentMode = .scaleToFill
+            imageView.image = UIImage(named: "no-actor")
+
+            if let actorFilePath = getActorFilePathForActorWithIndex(index)
+            {
+                if let profileImageFromFile = UIImage(contentsOfFile: actorFilePath)
+                {
+                    // profile image already downloaded: use it
+                    imageView.image = self.cropImageTo45x60(profileImageFromFile)
+                }
+                else
+                {
+                    // profile image must be downloaded
+                    self.downloadProfilePicture(movie.profilePictures[index], fromPath: actorFilePath, andShowItInImageView: imageView)
+                }
+            }
+            
+            self.actorContentView.addSubview(imageView)
+
+            let label = UILabel()
+            label.numberOfLines = 0
+            label.font = UIFont.systemFont(ofSize: 11.0)
+            label.text = actorName
+            label.textAlignment = .center
+            label.allowsDefaultTighteningForTruncation = true
+            let labelSize = label.sizeThatFits(CGSize(width: imageWidth, height: 1000.0))
+            label.frame = CGRect(x: imageView.frame.origin.x,
+                                 y: imageView.frame.size.height + vGap,
+                                 width: imageWidth,
+                                 height: labelSize.height)
+            self.actorContentView.addSubview(label)
+            
+            maxLabelHeight = labelSize.height > maxLabelHeight ? labelSize.height : maxLabelHeight
         }
 
-        actorView.setupWithActorWithName(movie.actors[actorIndex],
-                                         characterName: movie.characters[actorIndex],
-                                         profilePicture: profilePicture,
-                                         hidden: hidden,
-                                         parentWidth: self.view.frame.width)
+        self.actorScrollHeightConstraint.constant = imageHeight + vGap + maxLabelHeight + bottomGap
+        self.actorScrollContentWidthConstraint.constant = imageWidth * CGFloat(movie.actors.count) + hGap * CGFloat(movie.actors.count-1)
+        self.actorScrollView.delegate = self
+    }
+    
+    
+    final private func downloadProfilePicture(_ profilePictureFilename: String, fromPath actorImageFilePath: String, andShowItInImageView imageView: UIImageView)
+    {
+        // load the correct image from tmdb
+        guard let sourceImageUrl = URL(string: "http://image.tmdb.org/t/p/w185" + profilePictureFilename) else { return }
 
-        self.actorStackView.addArrangedSubview(actorView)
-	}
-	
-	
-	// MARK: - Button callbacks
+        let task = URLSession.shared.downloadTask(with: sourceImageUrl,
+                                                  completionHandler:
+        {
+            [weak self] (location: URL?, response: URLResponse?, error: Error?) -> Void in
+            
+            if let error = error
+            {
+                NSLog("Error getting actor thumbnail: \(error.localizedDescription)")
+            }
+            else if let receivedPath = location?.path
+            {
+                // move received poster to target path where it belongs and update the imageview
+                do
+                {
+                    try FileManager.default.moveItem(atPath: receivedPath, toPath: actorImageFilePath)
+                    
+                    DispatchQueue.main.async
+                    {
+                        imageView.image = self?.cropImageTo45x60(UIImage(contentsOfFile: actorImageFilePath))
+                    }
+                }
+                catch let error as NSError
+                {
+                    if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError))
+                    {
+                        // ignoring, because it's okay it it's already there
+                    }
+                    else
+                    {
+                        NSLog("Error moving actor thumbnail: \(error.localizedDescription)")
+                    }
+                }
+            }
+        })
+        
+        task.resume()
+    }
 
-	
-	@objc func showAllActorsButtonPressed(_ sender: UIButton!) {
-		guard let movie = self.movie else { return }
+    
+    // MARK: - Small helper functions
+    
+    final private func cropImageTo45x60(_ inputImage: UIImage?) -> UIImage?
+    {
+        guard let inputImage = inputImage, let inputCgImage = inputImage.cgImage else { return nil }
 
-        for actorIndex in 5...movie.actors.count-1 {
-            self.actorStackView.arrangedSubviews[actorIndex].alpha = 1.0
-            (self.actorStackView.arrangedSubviews[actorIndex] as? ActorView)?.imageView?.frame =
-                CGRect(x: ActorView.imageSize/2, y: ActorView.imageSize/2, width: 0, height: 0)
+        if let imageRef = inputCgImage.cropping(to:
+            CGRect(x: 0.0, y: 0.0, width: 185.0, height: 247.0))
+        {
+            return UIImage(cgImage: imageRef)
         }
 
-		UIView.animate(
-            withDuration: 0.2,
-            animations: {
-                for actorIndex in 5...movie.actors.count-1 {
-                    self.actorStackView.arrangedSubviews[actorIndex].isHidden = false
-                    (self.actorStackView.arrangedSubviews[actorIndex] as? ActorView)?.imageView?.frame =
-                        CGRect(x: 0, y: 0, width: ActorView.imageSize, height: ActorView.imageSize)
-                }
-            },
-		    completion: { (_) in
-                self.actorStackView.removeLastArrangedSubView()
-                self.addShowLessActorsButtonToStackView()
-            }
-        )
-	}
-	
-	@objc func showLessActorsButtonPressed(_ sender: UIButton!) {
-		guard let movie = self.movie else { return }
-		
-		UIView.animate(
-            withDuration: 0.2,
-            animations: {
-                for actorIndex in 5...movie.actors.count-1 {
-                    self.actorStackView.arrangedSubviews[actorIndex].isHidden = true
-                    self.actorStackView.arrangedSubviews[actorIndex].alpha = 0.0
-                }
-			},
-            completion: { (_) in
-				self.actorStackView.removeLastArrangedSubView()
-				self.addShowAllActorsButtonToStackView()
-            }
-        )
-	}
+        return nil
+    }
+
+    final private func getActorFilePathForActorWithIndex(_ actorIndex: Int) -> String?
+    {
+        // check the basics
+        guard let movie = self.movie else { return nil }
+        guard let basePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path else { return nil }
+        if (movie.profilePictures.count <= actorIndex) { return nil }
+        if (movie.profilePictures[actorIndex].count <= 0) { return nil }
+
+        // get filename and path, merge them, return them
+        return basePath + Constants.actorThumbnailFolder + movie.profilePictures[actorIndex]
+    }
+    
+    
+    // MARK: - UIScrollViewDelegate (for actor scroll-view)
+    
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>)
+    {
+        if (scrollView == self.actorScrollView)
+        {
+            let cellWidth: CGFloat = 78.0 // imageWidth (75) plus hGap (3)
+            targetContentOffset.pointee.x = round(targetContentOffset.pointee.x / cellWidth) * cellWidth
+        }
+    }
 }
 

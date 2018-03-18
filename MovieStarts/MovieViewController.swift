@@ -10,8 +10,8 @@ import UIKit
 import SafariServices
 
 
-class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate {
-
+class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate
+{
 	// outlets
 	
 	@IBOutlet weak var contentView: UIView!
@@ -26,7 +26,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var storyLabel: UILabel!
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
-	@IBOutlet weak var actorStackView: UIStackView!
 	@IBOutlet weak var infoStackView: UIStackView!
 	
 	@IBOutlet weak var ratingStackView: UIStackView!
@@ -38,7 +37,10 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var metascoreRatingLabel: UILabel!
 	@IBOutlet weak var metascoreInnerView: UIView!
 	@IBOutlet weak var moreStoryButton: UIButton!
-
+    @IBOutlet weak var actorHorizontalView: UIView!
+    @IBOutlet weak var actorScrollView: UIScrollView!
+    @IBOutlet weak var actorContentView: UIView!
+    
 	// constraints
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
@@ -47,7 +49,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
     @IBOutlet weak var line1VerticalSpaceConstraint: NSLayoutConstraint!
 
 	@IBOutlet weak var actorHeadlineLabelHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var actorStackViewVerticalSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var actorHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
 
@@ -68,7 +69,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
     @IBOutlet weak var imdbInnerView: UIView!
     @IBOutlet weak var linksStackView: UIStackView!
     @IBOutlet weak var linksHeadlineLabel: UILabel!
-
+    @IBOutlet weak var actorScrollContentWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var actorScrollHeightConstraint: NSLayoutConstraint!
+    
 	var posterImageViewTopConstraint: NSLayoutConstraint?
 	var posterImageViewLeadingConstraint: NSLayoutConstraint?
 	var posterImageViewWidthConstraint: NSLayoutConstraint?
@@ -116,7 +119,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			showTitles()
 			showRatings()
 			showSynopsis()
-			showActors()
+            showActors()
 			showInfos()
 			showLinkButtons()
             configureTrailerLabel()

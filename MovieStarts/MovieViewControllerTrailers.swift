@@ -89,13 +89,18 @@ extension MovieViewController {
                 let task = URLSession.shared.downloadTask(with: sourceImageUrl,
                                                           completionHandler:
                     {
-                        [unowned self] (location: URL?, response: URLResponse?, error: Error?) -> Void in
-                        self.youtubeImageDownloaded(location, response, error,
-                                                    controller: self,
-                                                    filepath: trailerImageFilePath,
-                                                    trailerId: trailerId,
-                                                    trailerIndex: index,
-                                                    showFlag: showFlag)
+                        [weak self] (location: URL?, response: URLResponse?, error: Error?) -> Void in
+                        
+                        if let location = location,
+                           let weakSelf = self
+                        {
+                            weakSelf.youtubeImageDownloaded(location, error,
+                                                            controller: weakSelf,
+                                                            filepath: trailerImageFilePath,
+                                                            trailerId: trailerId,
+                                                            trailerIndex: index,
+                                                            showFlag: showFlag)
+                        }
                 })
                 
                 task.resume()
@@ -116,8 +121,7 @@ extension MovieViewController {
     }
     
   
-    fileprivate func youtubeImageDownloaded(_ location: URL?,
-                                            _ response: URLResponse?,
+    fileprivate func youtubeImageDownloaded(_ location: URL,
                                             _ error: Error?,
                                             controller: MovieViewController,
                                             filepath: String,
@@ -128,27 +132,26 @@ extension MovieViewController {
         if let error = error as NSError?
         {
             NSLog("Error getting poster from Youtube: \(error.localizedDescription)")
+            return
         }
-        else if let receivedPath = location?.path
+
+        // move received poster to target path where it belongs and update the button
+        do
         {
-            // move received poster to target path where it belongs and update the button
-            do
+            try FileManager.default.moveItem(atPath: location.path, toPath: filepath)
+            controller.updateTrailerButton(index: trailerIndex,
+                                           trailerId: trailerId,
+                                           showFlag: showFlag)
+        }
+        catch let error as NSError
+        {
+            if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError))
             {
-                try FileManager.default.moveItem(atPath: receivedPath, toPath: filepath)
-                controller.updateTrailerButton(index: trailerIndex,
-                                               trailerId: trailerId,
-                                               showFlag: showFlag)
+                // ignoring, because it's okay it it's already there
             }
-            catch let error as NSError
+            else
             {
-                if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError))
-                {
-                    // ignoring, because it's okay it it's already there
-                }
-                else
-                {
-                    NSLog("Error moving trailer-poster: \(error.localizedDescription)")
-                }
+                NSLog("Error moving trailer-poster: \(error.localizedDescription)")
             }
         }
     }

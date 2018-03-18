@@ -332,8 +332,8 @@ extension MovieViewController {
 	
 	// MARK: - UIScrollViewDelegate (for big poster view)
 	
-	@objc(viewForZoomingInScrollView:) func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+	@objc(viewForZoomingInScrollView:) func viewForZooming(in scrollView: UIScrollView) -> UIView?
+    {
 		return bigPosterImageView
 	}
-	
 }

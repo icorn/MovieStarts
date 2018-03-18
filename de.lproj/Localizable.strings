@@ -44,8 +44,6 @@
 "IMDbRating"		= "IMDb-Score";
 "Score unknown"		= "unbek.";
 "ActorAs"			= "als";
-"ShowAllActors"		= "Alle Schauspieler zeigen";
-"ShowLessActors"	= "Weniger Schauspieler zeigen";
 "Budget"			= "Budget";
 "Mio."				= "Mio.";
 
