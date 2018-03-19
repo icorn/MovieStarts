@@ -45,8 +45,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	
 	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var infoHeadlineLabelHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var lineTopHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var line1VerticalSpaceConstraint: NSLayoutConstraint!
 
 	@IBOutlet weak var actorHeadlineLabelHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var actorHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
@@ -55,7 +53,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
     @IBOutlet weak var storyLabelVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var ratingStackViewHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var ratingStackViewVerticalSpaceConstraint: NSLayoutConstraint!
 	@IBOutlet weak var imdbImageViewWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var tomatoesImageViewWidthConstraint: NSLayoutConstraint!
 	@IBOutlet weak var moreStoryButtonHeightConstraint: NSLayoutConstraint!
@@ -187,8 +184,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		self.showRatingsFlag = (movie.ratingImdb != nil) || (movie.ratingTomato != nil) || (movie.ratingMetacritic != nil)
 		
 		if (self.showRatingsFlag) {
-			setConstraintsToZero(line1VerticalSpaceConstraint, lineTopHeightConstraint)
-			
 			// IMDb rating
 			
 			imdbHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "")
@@ -262,8 +257,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		else {
 			// hide all ratings stuff, because we have no ratings
 			ratingStackView.isHidden = true
-			setConstraintsToZero(ratingStackViewHeightConstraint, ratingStackViewVerticalSpaceConstraint,
-								 line1VerticalSpaceConstraint, lineTopHeightConstraint)
+			setConstraintsToZero(ratingStackViewHeightConstraint)
 		}
 	}
 	
