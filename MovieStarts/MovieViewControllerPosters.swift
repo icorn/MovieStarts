@@ -11,20 +11,16 @@ import UIKit
 import CFNetwork
 
 
-extension MovieViewController {
-	
-	/**
-		Enlarges the tapped thumbnail poster.
-	
-		- parameter recognizer:	The gesture recognizer - unused.
-	*/
-	@objc func thumbnailTapped(_ recognizer: UITapGestureRecognizer) {
-
-		if let movie = movie, let navigationController = navigationController {
+extension MovieViewController
+{
+	//	Enlarges the tapped thumbnail poster
+	@objc func thumbnailTapped(_ recognizer: UITapGestureRecognizer)
+    {
+		if let movie = movie, let navigationController = navigationController
+        {
 			let bigPoster = movie.bigPoster
 			
 			// create poster background, scrollview, and imageview
-			
 			bigPosterBackView = UIView()
 			bigPosterScrollView = UIScrollView()
 			bigPosterImageView = UIImageView()
@@ -32,10 +28,12 @@ extension MovieViewController {
 			spinnerBackground = UIView()
 			spinner = UIActivityIndicatorView()
 
-			if let bigPosterImageView = bigPosterImageView, let bigPosterScrollView = bigPosterScrollView, let bigPosterBackView = bigPosterBackView, let spinnerBackground = self.spinnerBackground, let spinner = self.spinner {
-
-				// set up UI elements
-				
+			if let bigPosterImageView = bigPosterImageView,
+               let bigPosterScrollView = bigPosterScrollView,
+               let bigPosterBackView = bigPosterBackView,
+               let spinnerBackground = self.spinnerBackground,
+               let spinner = self.spinner
+            {
 				bigPosterBackView.backgroundColor = UIColor.clear
 				bigPosterBackView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -50,10 +48,12 @@ extension MovieViewController {
 				bigPosterImageView.isUserInteractionEnabled = true
 				bigPosterImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.bigPosterTapped(_:))))
 				
-				if let bigPoster = bigPoster {
+				if let bigPoster = bigPoster
+                {
 					bigPosterImageView.image = bigPoster
 				}
-				else {
+				else
+                {
 					bigPosterImageView.image = movie.thumbnailImage.0
 				}
 				
@@ -70,7 +70,6 @@ extension MovieViewController {
 				bigPosterImageView.translatesAutoresizingMaskIntoConstraints = false
 				
 				// add subviews to views
-
 				spinnerBackground.addSubview(spinner)
 				bigPosterImageView.addSubview(spinnerBackground)
 				bigPosterScrollView.addSubview(bigPosterImageView)
@@ -78,17 +77,23 @@ extension MovieViewController {
 				self.view.addSubview(bigPosterBackView)
 				
 				// set up constraints
-				
-				let viewsDictionary = ["bigPosterBackView": bigPosterBackView, "bigPosterScrollView": bigPosterScrollView, "bigPosterImageView": bigPosterImageView]
+				let viewsDictionary = ["bigPosterBackView"   : bigPosterBackView,
+                                       "bigPosterScrollView" : bigPosterScrollView,
+                                       "bigPosterImageView"  : bigPosterImageView]
 
 				self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[bigPosterBackView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
 				self.view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[bigPosterBackView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
 				bigPosterBackView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[bigPosterScrollView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
 				bigPosterBackView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[bigPosterScrollView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
 				
-				posterImageViewTopConstraint = NSLayoutConstraint(item: bigPosterImageView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal,
-					toItem: bigPosterScrollView, attribute: NSLayoutAttribute.top, multiplier: 1.0,
-					constant: posterImageView.frame.minY + navigationController.navigationBar.frame.height + navigationController.navigationBar.frame.origin.y)
+				posterImageViewTopConstraint = NSLayoutConstraint(item: bigPosterImageView,
+                                                                  attribute: NSLayoutAttribute.top,
+                                                                  relatedBy: NSLayoutRelation.equal,
+                                                                  toItem: bigPosterScrollView,
+                                                                  attribute: NSLayoutAttribute.top,
+                                                                  multiplier: 1.0,
+                                                                  constant: posterImageView.frame.minY + navigationController.navigationBar.frame.height +
+                                                                            navigationController.navigationBar.frame.origin.y - self.scrollView.contentOffset.y)
 				posterImageViewLeadingConstraint = NSLayoutConstraint(item: bigPosterImageView, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal,
 					toItem: bigPosterScrollView, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: posterImageView.frame.minX)
 				posterImageViewWidthConstraint = NSLayoutConstraint(item: bigPosterImageView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal,
@@ -113,8 +118,10 @@ extension MovieViewController {
 						toItem: spinnerBackground, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0)
 				])
 				
-				if let imageViewTopConstraint = posterImageViewTopConstraint, let imageViewLeadingConstraint = posterImageViewLeadingConstraint,
-					let imageViewWidthConstraint = posterImageViewWidthConstraint, let imageViewHeightConstraint = posterImageViewHeightConstraint
+				if let imageViewTopConstraint = posterImageViewTopConstraint,
+                   let imageViewLeadingConstraint = posterImageViewLeadingConstraint,
+                   let imageViewWidthConstraint = posterImageViewWidthConstraint,
+                   let imageViewHeightConstraint = posterImageViewHeightConstraint
 				{
 					bigPosterScrollView.addConstraints([imageViewTopConstraint, imageViewLeadingConstraint, imageViewWidthConstraint, imageViewHeightConstraint])
 				
@@ -125,8 +132,11 @@ extension MovieViewController {
 					posterImageTopSpaceConstraint.constant += navigationController.navigationBar.frame.height
 					view.layoutIfNeeded()
 
-					UIView.animate(withDuration: 0.2, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut,
-						animations: {
+					UIView.animate(withDuration: 0.2,
+                                   delay: 0.0,
+                                   options: UIViewAnimationOptions.curveEaseOut,
+                                   animations:
+                        {
 							bigPosterBackView.backgroundColor = UIColor.black
 							imageViewTopConstraint.constant = 0
 							imageViewLeadingConstraint.constant = 0
@@ -134,8 +144,11 @@ extension MovieViewController {
 							imageViewWidthConstraint.constant = navigationController.view.frame.width
 							self.view.layoutIfNeeded()
 						},
-						completion: { finished in
-							if bigPoster != nil {
+                                   completion:
+                        {
+                            finished in
+							if bigPoster != nil
+                            {
 								// big poster already loaded, that's it
 								return
 							}
@@ -149,13 +162,6 @@ extension MovieViewController {
 							}
 							
 							// no big poster here: load it!
-/*
-							if (NetworkChecker.checkReachability(self.view) == false) {
-								// no network available
-								self.stopSpinners()
-								return
-							}
-*/
 							self.loadBigPoster()
 						}
 					)
@@ -168,43 +174,40 @@ extension MovieViewController {
 	/**
 		Loads the big movie poster and stores it on the device.
 	*/
-	func loadBigPoster() {
-		
-		guard let bigPosterImageView = bigPosterImageView, let movie = movie else {
+	func loadBigPoster()
+    {
+		guard let bigPosterImageView = bigPosterImageView,
+              let movie = movie,
+              let targetPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path else
+        {
 			stopSpinners()
 			return
 		}
 		
-		var errorWindow: MessageWindow?
-
-		// build paths
-		guard let targetPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path else {
-			stopSpinners()
-			return
-		}
-		
+        var errorWindow: MessageWindow?
 		let sourcePath = Constants.imageBaseUrl + PosterSizePath.Big.rawValue
 		var posterUrl = movie.posterUrl[movie.currentCountry.languageArrayIndex]
 		
-		if (posterUrl.count == 0) {
+		if (posterUrl.count == 0)
+        {
 			// if there is no poster in wanted language, try the english one
 			posterUrl = movie.posterUrl[MovieCountry.USA.languageArrayIndex]
 		}
 		
-		if (posterUrl.count <= 0) {
+		if (posterUrl.count <= 0)
+        {
 			stopSpinners()
 			return
 		}
 		
-		// poster file is missing
-		
-		guard let sourceUrl = URL(string: sourcePath + posterUrl) else {
+		guard let sourceUrl = URL(string: sourcePath + posterUrl) else
+        {
+            // poster file is missing
 			stopSpinners()
 			return
 		}
 		
 		// configure download task
-		
 		let config = URLSessionConfiguration.default
 		config.allowsCellularAccess = true
 		config.timeoutIntervalForRequest = 10
@@ -214,41 +217,71 @@ extension MovieViewController {
 		
 		// start the download
 		let task = session.downloadTask(with: sourceUrl,
-		                                completionHandler: { (location: URL?, response: URLResponse?, error: Error?) -> Void in
-			self.stopSpinners()
+		                                completionHandler:
+        {
+            (location: URL?, response: URLResponse?, error: Error?) -> Void in
 			
-			if let error = error as NSError? {
+            self.stopSpinners()
+			
+			if let error = error as NSError?
+            {
 				NSLog("Error getting missing thumbnail: \(error.localizedDescription)")
 				
-				if (Int32(error.code) == CFNetworkErrors.cfurlErrorTimedOut.rawValue) {
-					DispatchQueue.main.async {
-						errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterTimeOut", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+				if (Int32(error.code) == CFNetworkErrors.cfurlErrorTimedOut.rawValue)
+                {
+					DispatchQueue.main.async
+                    {
+						errorWindow = MessageWindow(parent: bigPosterImageView,
+                                                    darkenBackground: true,
+                                                    titleStringId: "BigPosterErrorTitle",
+                                                    textStringId: "BigPosterTimeOut",
+                                                    buttonStringIds: ["Close"],
+                                                    handler:
+                        { (buttonIndex) -> () in
 							errorWindow?.close()
 						})
 					}
 				}
 				else {
 					DispatchQueue.main.async {
-						errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+						errorWindow = MessageWindow(parent: bigPosterImageView,
+                                                    darkenBackground: true,
+                                                    titleStringId: "BigPosterErrorTitle",
+                                                    textStringId: "BigPosterErrorText",
+                                                    buttonStringIds: ["Close"],
+                                                    handler:
+                        { (buttonIndex) -> () in
 							errorWindow?.close()
 						})
 					}
 				}
 			}
-			else if let receivedPath = location?.path {
+			else if let receivedPath = location?.path
+            {
 				// move received poster to target path where it belongs
-				do {
+				do
+                {
 					try FileManager.default.moveItem(atPath: receivedPath, toPath: targetPath + Constants.bigPosterFolder + posterUrl)
 				}
-				catch let error as NSError {
-					if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError)) {
+				catch let error as NSError
+                {
+					if ((error.domain == NSCocoaErrorDomain) && (error.code == NSFileWriteFileExistsError))
+                    {
 						// ignoring, because it's okay it it's already there
 					}
-					else {
+					else
+                    {
 						NSLog("Error moving missing poster: \(error.localizedDescription)")
 
-						DispatchQueue.main.async {
-							errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+						DispatchQueue.main.async
+                        {
+							errorWindow = MessageWindow(parent: bigPosterImageView,
+                                                        darkenBackground: true,
+                                                        titleStringId: "BigPosterErrorTitle",
+                                                        textStringId: "BigPosterErrorText",
+                                                        buttonStringIds: ["Close"],
+                                                        handler:
+                            { (buttonIndex) -> () in
 								errorWindow?.close()
 							})
 						}
@@ -257,20 +290,30 @@ extension MovieViewController {
 				}
 
 				// load and show poster
-				if let bigPoster = movie.bigPoster {
-					DispatchQueue.main.async {
+				if let bigPoster = movie.bigPoster
+                {
+					DispatchQueue.main.async
+                    {
 						bigPosterImageView.image = bigPoster
 					}
 					return
 				}
 
 				// poster not loaded or error
-				if let error = error as NSError? {
+				if let error = error as NSError?
+                {
 					NSLog("Error getting big poster: \(error.code) (\(error.localizedDescription))")
 				}
 
-				DispatchQueue.main.async {
-					errorWindow = MessageWindow(parent: bigPosterImageView, darkenBackground: true, titleStringId: "BigPosterErrorTitle", textStringId: "BigPosterErrorText", buttonStringIds: ["Close"], handler: { (buttonIndex) -> () in
+				DispatchQueue.main.async
+                {
+					errorWindow = MessageWindow(parent: bigPosterImageView,
+                                                darkenBackground: true,
+                                                titleStringId: "BigPosterErrorTitle",
+                                                textStringId: "BigPosterErrorText",
+                                                buttonStringIds: ["Close"],
+                                                handler:
+                    { (buttonIndex) -> () in
 						errorWindow?.close()
 					})
 				}
@@ -284,7 +327,8 @@ extension MovieViewController {
 		Stops both the network activity indicator and the loading spinner. 
 		Also removes the loading spinner from the superview.
 	*/
-	fileprivate func stopSpinners() {
+	fileprivate func stopSpinners()
+    {
 		DispatchQueue.main.async
         {
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -295,8 +339,6 @@ extension MovieViewController {
 	
 	/**
 		Closes the enlarged poster.
-	
-		- parameter recognizer:	The gesture recognizer - unused.
 	*/
 	@objc func bigPosterTapped(_ recognizer: UITapGestureRecognizer) {
 		
