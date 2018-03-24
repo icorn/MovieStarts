@@ -24,6 +24,7 @@ extension MovieViewController {
             self.trailerHeadlineLabel.removeFromSuperview()
             self.trailerStackView.removeFromSuperview()
             self.trailerSeparatorView.removeFromSuperview()
+            self.trailerPaddingView.removeFromSuperview()
         }
         else if (numberOfTrailers == 1)
         {

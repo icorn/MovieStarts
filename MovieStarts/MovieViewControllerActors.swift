@@ -21,6 +21,7 @@ extension MovieViewController
             self.actorHeadlineLabel.removeFromSuperview()
             self.actorHorizontalView.removeFromSuperview()
             self.actorSeparatorView.removeFromSuperview()
+            self.actorPaddingView.removeFromSuperview()
             return
         }
         
