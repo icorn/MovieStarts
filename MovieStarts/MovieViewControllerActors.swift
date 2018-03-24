@@ -15,7 +15,14 @@ extension MovieViewController
     final func showActors()
     {
         guard let movie = self.movie else { return }
-        if movie.actors.count < 1 { return }
+        
+        if (movie.actors.count < 1)
+        {
+            self.actorHeadlineLabel.removeFromSuperview()
+            self.actorHorizontalView.removeFromSuperview()
+            self.actorSeparatorView.removeFromSuperview()
+            return
+        }
         
         let imageWidth: CGFloat = 75.0
         let imageHeight: CGFloat = 100.0
@@ -68,6 +75,8 @@ extension MovieViewController
         self.actorScrollHeightConstraint.constant = imageHeight + vGap + maxLabelHeight + bottomGap
         self.actorScrollContentWidthConstraint.constant = imageWidth * CGFloat(movie.actors.count) + hGap * CGFloat(movie.actors.count-1)
         self.actorScrollView.delegate = self
+        
+        self.actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "")
     }
     
     

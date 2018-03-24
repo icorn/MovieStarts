@@ -13,7 +13,7 @@ import SafariServices
 class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewControllerDelegate
 {
 	// outlets
-	
+    @IBOutlet weak var bigStackView: UIStackView!
 	@IBOutlet weak var contentView: UIView!
 	@IBOutlet weak var scrollView: UIScrollView!
 	@IBOutlet weak var posterImageView: UIImageView!
@@ -27,7 +27,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var trailerHeadlineLabel: UILabel!
 	@IBOutlet weak var trailerStackView: UIStackView!
 	@IBOutlet weak var infoStackView: UIStackView!
-	
 	@IBOutlet weak var ratingStackView: UIStackView!
 	@IBOutlet weak var imdbRatingLabel: UILabel!
     @IBOutlet weak var imdbImageView: UIImageView!
@@ -40,42 +39,34 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
     @IBOutlet weak var actorHorizontalView: UIView!
     @IBOutlet weak var actorScrollView: UIScrollView!
     @IBOutlet weak var actorContentView: UIView!
-    
-	// constraints
-	
-	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var infoHeadlineLabelHeightConstraint: NSLayoutConstraint!
-
-	@IBOutlet weak var actorHeadlineLabelHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var actorHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
-
-    @IBOutlet weak var storyLabelVerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var trailerStackViewVerticalSpaceConstraint: NSLayoutConstraint!
-	@IBOutlet weak var ratingStackViewHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var imdbImageViewWidthConstraint: NSLayoutConstraint!
-	@IBOutlet weak var tomatoesImageViewWidthConstraint: NSLayoutConstraint!
-	@IBOutlet weak var moreStoryButtonHeightConstraint: NSLayoutConstraint!
-	@IBOutlet weak var moreStoryButtonVerticalSpaceConstraint: NSLayoutConstraint!
-    @IBOutlet weak var trailerHeadlineLabelVerticalSpaceConstraint: NSLayoutConstraint!
-    @IBOutlet weak var linksStackViewHeightConstraint: NSLayoutConstraint!
-    
     @IBOutlet weak var imdbOuterView: UIView!
     @IBOutlet weak var tomatoesOuterView: UIView!
     @IBOutlet weak var metascoreOuterView: UIView!
     @IBOutlet weak var imdbInnerView: UIView!
     @IBOutlet weak var linksStackView: UIStackView!
     @IBOutlet weak var linksHeadlineLabel: UILabel!
+    
+    @IBOutlet weak var ratingSeparatorView: UIView!
+    @IBOutlet weak var storySeparatorView: UIView!
+    @IBOutlet weak var actorSeparatorView: UIView!
+    @IBOutlet weak var actorPaddingView: UIView!
+    @IBOutlet weak var infoSeparatorView: UIView!
+    @IBOutlet weak var trailerSeparatorView: UIView!
+    @IBOutlet weak var trailerPaddingView: UIView!
+    
+	// constraints
+	@IBOutlet weak var posterImageTopSpaceConstraint: NSLayoutConstraint!
+	@IBOutlet weak var titleLabelTopSpaceConstraint: NSLayoutConstraint!
     @IBOutlet weak var actorScrollContentWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var actorScrollHeightConstraint: NSLayoutConstraint!
+	@IBOutlet weak var imdbImageViewWidthConstraint: NSLayoutConstraint!
+	@IBOutlet weak var tomatoesImageViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var linksStackViewHeightConstraint: NSLayoutConstraint!
     
 	var posterImageViewTopConstraint: NSLayoutConstraint?
 	var posterImageViewLeadingConstraint: NSLayoutConstraint?
 	var posterImageViewWidthConstraint: NSLayoutConstraint?
 	var posterImageViewHeightConstraint: NSLayoutConstraint?
-	
-    @IBOutlet weak var leadingContraint: NSLayoutConstraint!
-    @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
     
     
 	var movieTabBarController: TabBarController? {
@@ -111,6 +102,8 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         {
 			baseImagePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
 				
+            self.drawHairLineInViews(self.storySeparatorView, self.actorSeparatorView, self.infoSeparatorView, self.trailerSeparatorView)
+            
 			// show movie data
 			showPoster()
 			showTitles()
@@ -182,8 +175,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		guard let movie = self.movie else { return }
 	
 		self.showRatingsFlag = (movie.ratingImdb != nil) || (movie.ratingTomato != nil) || (movie.ratingMetacritic != nil)
-		
-		if (self.showRatingsFlag) {
+        
+		if (self.showRatingsFlag)
+        {
 			// IMDb rating
 			
 			imdbHeadlineLabel.text = NSLocalizedString("IMDbRating", comment: "")
@@ -254,10 +248,11 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				metascoreInnerView.backgroundColor = UIColor.clear
 			}
 		}
-		else {
+		else
+        {
 			// hide all ratings stuff, because we have no ratings
-			ratingStackView.isHidden = true
-			setConstraintsToZero(ratingStackViewHeightConstraint)
+            ratingStackView.removeFromSuperview()
+            ratingSeparatorView.removeFromSuperview()
 		}
 	}
 	
@@ -266,16 +261,18 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		
 		let synopsisForLanguage = movie.synopsisForLanguage
 		
-		if (synopsisForLanguage.0.count > 0) {
+		if (synopsisForLanguage.0.count > 0)
+        {
 			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: ""),
 			                         for: UIControlState())
 			storyLabel.text = synopsisForLanguage.0
 		}
-		else {
+		else
+        {
 			// hide everything related to synopsis
-            setConstraintsToZero(storyLabelVerticalSpaceConstraint)
-			storyLabel.addConstraint(NSLayoutConstraint(item: storyLabel, attribute: NSLayoutAttribute.height,
-				relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: 0))
+            self.storyLabel.removeFromSuperview()
+            self.moreStoryButton.removeFromSuperview()
+            self.storySeparatorView.removeFromSuperview()
 		}
 	}
 	
@@ -333,8 +330,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 		else
         {
-			moreStoryButton.isHidden = true
-			setConstraintsToZero(moreStoryButtonHeightConstraint, moreStoryButtonVerticalSpaceConstraint)
+            self.moreStoryButton.removeFromSuperview()
 		}
 	}
 	
@@ -404,53 +400,96 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
 
-	@IBAction func moreStoryButtonTapped(_ sender: AnyObject) {
+	@IBAction func moreStoryButtonTapped(_ sender: AnyObject)
+    {
 		showCompleteStory = !showCompleteStory
 		
-		if (showCompleteStory) {
+		if (showCompleteStory)
+        {
 			moreStoryButton.setTitle("▲  " + NSLocalizedString("ShowShortSynopsis", comment: ""),
 			                         for: UIControlState())
-			storyLabel.numberOfLines = 0
+/*
+            UIView.animate(withDuration: 0.1,
+                           delay: 0.0,
+                           options: UIViewAnimationOptions.curveEaseOut,
+                           animations:
+                {
+*/
+                    self.storyLabel.numberOfLines = 0
+/*
+                    self.storyLabel.sizeToFit()
+                    self.view.layoutIfNeeded()
+                }
+            )
+*/
 		}
-		else {
+		else
+        {
 			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: ""),
 			                         for: UIControlState())
-			storyLabel.numberOfLines = 8
+/*
+            UIView.animate(withDuration: 0.1,
+                           delay: 0.0,
+                           options: UIViewAnimationOptions.curveEaseOut,
+                           animations:
+                {
+*/
+                    self.storyLabel.numberOfLines = 8
+/*
+                    self.view.layoutIfNeeded()
+                }
+            )
+*/
 		}
 	}
 
 	
 	// MARK: - Helpers
-	
-	
-	/**
-		Sets the given constraint constant to 0.
-	
-		- parameter constraints: A number of NSLayoutConstraints to be set to 0
-	*/
-	final func setConstraintsToZero(_ constraints: NSLayoutConstraint...) {
-		for constraint in constraints {
+		
+	final func setConstraintsToZero(_ constraints: NSLayoutConstraint...)
+    {
+		for constraint in constraints
+        {
 			constraint.constant = 0
 		}
 	}
 
-    final func setConstraintsToZero(_ constraints: [NSLayoutConstraint]) {
-        for constraint in constraints {
+    final func setConstraintsToZero(_ constraints: [NSLayoutConstraint])
+    {
+        for constraint in constraints
+        {
             constraint.constant = 0
         }
     }
+    
+    final func drawHairLineInViews(_ views: UIView...)
+    {
+        for view in views
+        {
+            let line = UIView(frame: CGRect(x: 0.0, y: 10.0, width: UIScreen.main.bounds.size.width, height: 1.0 / UIScreen.main.scale))
+            line.backgroundColor = UIColor(white: 0.8, alpha: 1.0)
+            view.addSubview(line)
+            view.clipsToBounds = true
+        }
+    }
 
-	fileprivate final func setUpFavoriteButton() {
-		if let movie = movie {
-			if (Favorites.IDs.contains(movie.id)) {
+	fileprivate final func setUpFavoriteButton()
+    {
+		if let movie = movie
+        {
+			if (Favorites.IDs.contains(movie.id))
+            {
 				// this movie is a favorite: show remove-button
-				if let navigationController = navigationController, let topViewController = navigationController.topViewController {
+				if let navigationController = navigationController, let topViewController = navigationController.topViewController
+                {
 					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite"), style: UIBarButtonItemStyle.done, target: self, action: #selector(MovieViewController.removeFavoriteButtonTapped(_:)))
 				}
 			}
-			else {
+			else
+            {
 				// this movie is not a favorite: show add-button
-				if let navigationController = navigationController, let topViewController = navigationController.topViewController {
+				if let navigationController = navigationController, let topViewController = navigationController.topViewController
+                {
 					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite-frame"), style: UIBarButtonItemStyle.done, target: self, action: #selector(MovieViewController.addFavoriteButtonTapped(_:)))
 				}
 			}

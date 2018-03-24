@@ -12,27 +12,25 @@ import UIKit
 
 extension MovieViewController {
 
-    final func configureTrailerLabel() {
+    final func configureTrailerLabel()
+    {
         guard let movie = self.movie else { return }
 
         let numberOfTrailers = movie.trailerIds[MovieCountry.USA.languageArrayIndex].count +
             movie.trailerIds[MovieCountry.Germany.languageArrayIndex].count
 
-        if (numberOfTrailers == 0) {
-            setConstraintsToZero(trailerHeadlineLabelVerticalSpaceConstraint)
-            trailerHeadlineLabel.addConstraint(
-                NSLayoutConstraint(item: trailerHeadlineLabel,
-                                   attribute: NSLayoutAttribute.height,
-                                   relatedBy: NSLayoutRelation.equal,
-                                   toItem: nil,
-                                   attribute: NSLayoutAttribute.notAnAttribute,
-                                   multiplier: 1.0,
-                                   constant: 0))
+        if (numberOfTrailers == 0)
+        {
+            self.trailerHeadlineLabel.removeFromSuperview()
+            self.trailerStackView.removeFromSuperview()
+            self.trailerSeparatorView.removeFromSuperview()
         }
-        else if (numberOfTrailers == 1) {
+        else if (numberOfTrailers == 1)
+        {
             trailerHeadlineLabel.text = NSLocalizedString("TrailersSingular", comment: "")
         }
-        else {
+        else
+        {
             trailerHeadlineLabel.text = NSLocalizedString("TrailersPlural", comment: "")
         }
     }
@@ -48,7 +46,7 @@ extension MovieViewController {
         if ((englishIDs.count == 0) && (germanIDs.count == 0))
         {
             // no trailers: hide all related UI elements
-            setConstraintsToZero(trailerStackViewVerticalSpaceConstraint)
+            self.trailerStackView.removeFromSuperview()
             return
         }
         
