@@ -63,21 +63,20 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	@IBOutlet weak var tomatoesImageViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var linksStackViewHeightConstraint: NSLayoutConstraint!
     
-	var posterImageViewTopConstraint: NSLayoutConstraint?
-	var posterImageViewLeadingConstraint: NSLayoutConstraint?
-	var posterImageViewWidthConstraint: NSLayoutConstraint?
-	var posterImageViewHeightConstraint: NSLayoutConstraint?
-    
-    
-	var movieTabBarController: TabBarController? {
-		get {
-			return navigationController?.parent as? TabBarController
-		}
-	}
+    var movieTabBarController: TabBarController? {
+        get {
+            return navigationController?.parent as? TabBarController
+        }
+    }
 
-	var bigPosterBackView: UIView?
-	var bigPosterImageView: UIImageView?
-	var bigPosterScrollView: UIScrollView?
+	var bigImageViewTopConstraint: NSLayoutConstraint?
+	var bigImageViewLeadingConstraint: NSLayoutConstraint?
+	var bigImageViewWidthConstraint: NSLayoutConstraint?
+	var bigImageViewHeightConstraint: NSLayoutConstraint?
+    
+	var bigImageBackView: UIView?
+	var bigImageView: UIImageView?
+	var bigImageScrollView: UIScrollView?
 
 	var spinnerBackground: UIView?
 	var spinner: UIActivityIndicatorView?
@@ -138,8 +137,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 	{
 		posterImageView.image = self.movie?.thumbnailImage.0
 		
-		if let movie = self.movie , movie.thumbnailImage.1 {
-			let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.thumbnailTapped(_:)))
+		if let movie = self.movie, movie.thumbnailImage.1
+        {
+			let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.posterThumbnailTapped(_:)))
 			rec.numberOfTapsRequired = 1
 			posterImageView.addGestureRecognizer(rec)
 		}
@@ -520,4 +520,5 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			}
 		}
 	}
+    
 }

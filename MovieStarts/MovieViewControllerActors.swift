@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-
 extension MovieViewController
 {
     final func showActors()
@@ -34,6 +33,8 @@ extension MovieViewController
 
         for (index, actorName) in movie.actors.enumerated()
         {
+            // image view
+            
             let imageView = UIImageView(frame: CGRect(x: (imageWidth + hGap) * CGFloat(index),
                                                       y: 0.0,
                                                       width: imageWidth,
@@ -56,7 +57,15 @@ extension MovieViewController
             }
             
             self.actorContentView.addSubview(imageView)
+            
+            let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.actorThumbnailTapped(_:)))
+            rec.numberOfTapsRequired = 1
+            imageView.tag = index
+            imageView.isUserInteractionEnabled = true
+            imageView.addGestureRecognizer(rec)
 
+            // label
+            
             let label = UILabel()
             label.numberOfLines = 0
             label.font = UIFont.systemFont(ofSize: 11.0)
@@ -76,15 +85,57 @@ extension MovieViewController
         self.actorScrollHeightConstraint.constant = imageHeight + vGap + maxLabelHeight + bottomGap
         self.actorScrollContentWidthConstraint.constant = imageWidth * CGFloat(movie.actors.count) + hGap * CGFloat(movie.actors.count-1)
         self.actorScrollView.delegate = self
-        
         self.actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "")
     }
     
     
+    // Enlarges the tapped thumbnail image
+    @objc func actorThumbnailTapped(_ recognizer: UITapGestureRecognizer)
+    {
+        if let movie = movie,
+           let navigationController = navigationController,
+           let imageView = recognizer.view as? UIImageView
+        {
+            var bigImagePath = ""
+            var smallImagePath = ""
+            var bigImage: UIImage?
+            var smallImage: UIImage?
+            
+            if let basePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)?.path
+            {
+                bigImagePath = basePath + Constants.actorBigFolder + movie.profilePictures[imageView.tag]
+                smallImagePath = basePath + Constants.actorThumbnailFolder + movie.profilePictures[imageView.tag]
+            }
+            
+            if (movie.profilePictures[imageView.tag].count > 0)
+            {
+                bigImage = UIImage(contentsOfFile: bigImagePath)
+                smallImage = UIImage(contentsOfFile: smallImagePath)
+            }
+            else
+            {
+                // no picture available
+                bigImage = UIImage(named: "no-actor")
+                smallImage = UIImage(named: "no-actor")
+            }
+
+            self.createBigImageUI(smallImage: smallImage,
+                                  smallFrame: CGRect(x: self.bigStackView.frame.minX + imageView.frame.minX + self.actorHorizontalView.frame.minX + self.actorScrollView.frame.minX -
+                                                        self.actorScrollView.contentOffset.x,
+                                                     y: navigationController.navigationBar.frame.origin.y + navigationController.navigationBar.frame.height + self.bigStackView.frame.minY +
+                                                        self.actorHorizontalView.frame.minY + self.actorScrollView.frame.minY - self.scrollView.contentOffset.y,
+                                                     width: imageView.frame.width,
+                                                     height: imageView.frame.height),
+                                  bigImage: bigImage,
+                                  bigImageURL: Constants.imageBaseUrl + ProfilePictureSizePath.Big.rawValue + movie.profilePictures[imageView.tag],
+                                  bigImageTargetPath: bigImagePath)
+        }
+    }
+
+    
     final private func downloadProfilePicture(_ profilePictureFilename: String, fromPath actorImageFilePath: String, andShowItInImageView imageView: UIImageView)
     {
-        // load the correct image from tmdb
-        guard let sourceImageUrl = URL(string: "http://image.tmdb.org/t/p/w185" + profilePictureFilename) else { return }
+        guard let sourceImageUrl = URL(string: Constants.imageBaseUrl + ProfilePictureSizePath.Small.rawValue + profilePictureFilename) else { return }
 
         let task = URLSession.shared.downloadTask(with: sourceImageUrl,
                                                   completionHandler:
