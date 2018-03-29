@@ -283,7 +283,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         if (movie.imdbId != nil)
         {
             let imdbButton = UIImageView(image: UIImage(named: "imdb"))
-            imdbButton.contentMode = UIViewContentMode.scaleAspectFill
+            imdbButton.contentMode = UIViewContentMode.scaleAspectFit
             imdbButton.isUserInteractionEnabled = true
             imdbButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.imdbButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(imdbButton)
@@ -292,7 +292,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         if (movie.tomatoURL != nil)
         {
             let tomatoButton = UIImageView(image: UIImage(named: "rotten-tomatoes"))
-            tomatoButton.contentMode = UIViewContentMode.scaleAspectFill
+            tomatoButton.contentMode = UIViewContentMode.scaleAspectFit
             tomatoButton.isUserInteractionEnabled = true
             tomatoButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.rottenTomatoesButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(tomatoButton)
@@ -300,7 +300,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
         if (movie.tmdbId != nil) {
             let tmdbButton = UIImageView(image: UIImage(named: "tmdb"))
-            tmdbButton.contentMode = UIViewContentMode.scaleAspectFill
+            tmdbButton.contentMode = UIViewContentMode.scaleAspectFit
             tmdbButton.isUserInteractionEnabled = true
             tmdbButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.tmdbButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(tmdbButton)

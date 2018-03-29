@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "rotten.png",
+      "filename" : "rotten@1x.png",
       "scale" : "1x"
     },
     {

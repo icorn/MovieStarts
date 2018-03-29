@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "fresh.png",
+      "filename" : "fresh@1x.png",
       "scale" : "1x"
     },
     {
