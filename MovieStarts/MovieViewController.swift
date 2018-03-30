@@ -69,18 +69,6 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         }
     }
 
-	var bigImageViewTopConstraint: NSLayoutConstraint?
-	var bigImageViewLeadingConstraint: NSLayoutConstraint?
-	var bigImageViewWidthConstraint: NSLayoutConstraint?
-	var bigImageViewHeightConstraint: NSLayoutConstraint?
-    
-	var bigImageBackView: UIView?
-	var bigImageView: UIImageView?
-	var bigImageScrollView: UIScrollView?
-
-	var spinnerBackground: UIView?
-	var spinner: UIActivityIndicatorView?
-
 	var movie: MovieRecord?
 	var showRatingsFlag: Bool = false
 	var baseImagePath: String?

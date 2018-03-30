@@ -119,16 +119,29 @@ extension MovieViewController
                 smallImage = UIImage(named: "no-actor")
             }
 
-            self.createBigImageUI(smallImage: smallImage,
-                                  smallFrame: CGRect(x: self.bigStackView.frame.minX + imageView.frame.minX + self.actorHorizontalView.frame.minX + self.actorScrollView.frame.minX -
-                                                        self.actorScrollView.contentOffset.x,
-                                                     y: navigationController.navigationBar.frame.origin.y + navigationController.navigationBar.frame.height + self.bigStackView.frame.minY +
-                                                        self.actorHorizontalView.frame.minY + self.actorScrollView.frame.minY - self.scrollView.contentOffset.y,
-                                                     width: imageView.frame.width,
-                                                     height: imageView.frame.height),
-                                  bigImage: bigImage,
-                                  bigImageURL: Constants.imageBaseUrl + ProfilePictureSizePath.Big.rawValue + movie.profilePictures[imageView.tag],
-                                  bigImageTargetPath: bigImagePath)
+            // build zoom view and start it
+            let zoomView = ZoomImageView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+            zoomView.setup(smallImage: smallImage,
+                           smallFrame: CGRect(x: self.bigStackView.frame.minX + imageView.frame.minX + self.actorHorizontalView.frame.minX + self.actorScrollView.frame.minX -
+                            self.actorScrollView.contentOffset.x,
+                                              y: navigationController.navigationBar.frame.origin.y + navigationController.navigationBar.frame.height + self.bigStackView.frame.minY +
+                                                self.actorHorizontalView.frame.minY + self.actorScrollView.frame.minY - self.scrollView.contentOffset.y,
+                                              width: imageView.frame.width,
+                                              height: imageView.frame.height),
+                           bigImage: bigImage,
+                           bigImageURL: Constants.imageBaseUrl + ProfilePictureSizePath.Big.rawValue + movie.profilePictures[imageView.tag],
+                           bigImageTargetPath: bigImagePath,
+                           navController: navigationController,
+                           tabBar: self.tabBarController?.tabBar)
+            
+            self.view.addSubview(zoomView)
+            self.posterImageTopSpaceConstraint.constant += navigationController.navigationBar.frame.height
+            
+            zoomView.startPresentation
+            {
+                zoomView.removeFromSuperview()
+                self.posterImageTopSpaceConstraint.constant -= navigationController.navigationBar.frame.height
+            }
         }
     }
 
