@@ -120,7 +120,21 @@ extension MovieViewController
             }
 
             // build zoom view and start it
+            var actorName: String?
+            var characterName: String?
+            
+            if ((movie.actors.count > imageView.tag) && (movie.actors[imageView.tag].count > 0))
+            {
+                actorName = movie.actors[imageView.tag]
+            }
+            if ((movie.characters.count > imageView.tag) && (movie.characters[imageView.tag].count > 0))
+            {
+                characterName = NSLocalizedString("ActorAs", comment: "") + " " + movie.characters[imageView.tag]
+            }
+
             let zoomView = ZoomImageView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+            zoomView.navigationController = navigationController
+            zoomView.tabBar = self.tabBarController?.tabBar
             zoomView.setup(smallImage: smallImage,
                            smallFrame: CGRect(x: self.bigStackView.frame.minX + imageView.frame.minX + self.actorHorizontalView.frame.minX + self.actorScrollView.frame.minX -
                             self.actorScrollView.contentOffset.x,
@@ -131,8 +145,8 @@ extension MovieViewController
                            bigImage: bigImage,
                            bigImageURL: Constants.imageBaseUrl + ProfilePictureSizePath.Big.rawValue + movie.profilePictures[imageView.tag],
                            bigImageTargetPath: bigImagePath,
-                           navController: navigationController,
-                           tabBar: self.tabBarController?.tabBar)
+                           mainText: actorName,
+                           secondText: characterName)
             
             self.view.addSubview(zoomView)
             self.posterImageTopSpaceConstraint.constant += navigationController.navigationBar.frame.height

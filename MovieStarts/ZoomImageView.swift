@@ -25,6 +25,8 @@ class ZoomImageView: UIView, UIScrollViewDelegate
     var bigImageScrollView: UIScrollView!
     var spinnerBackground: UIView!
     var spinner: UIActivityIndicatorView!
+    var mainLabel: UILabel!
+    var secondLabel: UILabel!
 
     var smallImage: UIImage?
     var smallFrame: CGRect?
@@ -32,9 +34,10 @@ class ZoomImageView: UIView, UIScrollViewDelegate
     var bigImageURL: String?
     var bigImageTargetPath: String?
     
-    var navigationController: UINavigationController?
-    var tabBar: UITabBar?
     var completionClosure: (() -> ())?
+
+    open var navigationController: UINavigationController?
+    open var tabBar: UITabBar?
 
     
     required init?(coder aDecoder: NSCoder)
@@ -75,11 +78,31 @@ class ZoomImageView: UIView, UIScrollViewDelegate
         spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
         spinner.hidesWhenStopped = true
 
+        mainLabel = UILabel()
+        mainLabel.translatesAutoresizingMaskIntoConstraints = false
+        mainLabel.backgroundColor = UIColor.black
+        mainLabel.textColor = UIColor.white
+        mainLabel.textAlignment = .center
+        mainLabel.font = UIFont.systemFont(ofSize: 18.0)
+        mainLabel.alpha = 0.0
+        mainLabel.isHidden = true
+        
+        secondLabel = UILabel()
+        secondLabel.translatesAutoresizingMaskIntoConstraints = false
+        secondLabel.backgroundColor = UIColor.black
+        secondLabel.textColor = UIColor.lightGray
+        secondLabel.textAlignment = .center
+        secondLabel.font = UIFont.systemFont(ofSize: 16.0)
+        secondLabel.alpha = 0.0
+        secondLabel.isHidden = true
+
         // add subviews to views
         spinnerBackground.addSubview(spinner)
         bigImageView.addSubview(spinnerBackground)
         bigImageScrollView.addSubview(bigImageView)
         bigImageBackView.addSubview(bigImageScrollView)
+        bigImageBackView.addSubview(mainLabel)
+        bigImageBackView.addSubview(secondLabel)
         self.addSubview(bigImageBackView)
     }
 
@@ -89,17 +112,20 @@ class ZoomImageView: UIView, UIScrollViewDelegate
                       bigImage: UIImage?,
                       bigImageURL: String,
                       bigImageTargetPath: String,
-                      navController: UINavigationController,
-                      tabBar: UITabBar?)
+                      mainText: String? = nil,
+                      secondText: String? = nil)
     {
         self.smallImage             = smallImage
         self.smallFrame             = smallFrame
         self.bigImage               = bigImage
         self.bigImageURL            = bigImageURL
         self.bigImageTargetPath     = bigImageTargetPath
-        self.navigationController   = navController
-        self.tabBar                 = tabBar
-        
+
+        mainLabel.text = mainText
+        mainLabel.isHidden = (mainText == nil)
+        secondLabel.text = secondText
+        secondLabel.isHidden = (secondText == nil)
+
         let rec = BigImageTapGestureRecognizer(target: self, action: #selector(bigImageTapped(_:)))
         rec.smallFrame = smallFrame
         bigImageView.addGestureRecognizer(rec)
@@ -122,35 +148,15 @@ class ZoomImageView: UIView, UIScrollViewDelegate
         self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[bigImageBackView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
         bigImageBackView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[bigImageScrollView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
         bigImageBackView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[bigImageScrollView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
-        
-        bigImageViewTopConstraint = NSLayoutConstraint(item: bigImageView,
-                                                       attribute: NSLayoutAttribute.top,
-                                                       relatedBy: NSLayoutRelation.equal,
-                                                       toItem: bigImageScrollView,
-                                                       attribute: NSLayoutAttribute.top,
-                                                       multiplier: 1.0,
-                                                       constant: smallFrame.origin.y)
-        bigImageViewLeadingConstraint = NSLayoutConstraint(item: bigImageView,
-                                                           attribute: NSLayoutAttribute.leading,
-                                                           relatedBy: NSLayoutRelation.equal,
-                                                           toItem: bigImageScrollView,
-                                                           attribute: NSLayoutAttribute.leading,
-                                                           multiplier: 1.0,
-                                                           constant: smallFrame.origin.x)
-        bigImageViewWidthConstraint = NSLayoutConstraint(item: bigImageView,
-                                                         attribute: NSLayoutAttribute.width,
-                                                         relatedBy: NSLayoutRelation.equal,
-                                                         toItem: nil,
-                                                         attribute: NSLayoutAttribute.notAnAttribute,
-                                                         multiplier: 1.0,
-                                                         constant: smallFrame.size.width)
-        bigImageViewHeightConstraint = NSLayoutConstraint(item: bigImageView,
-                                                          attribute: NSLayoutAttribute.height,
-                                                          relatedBy: NSLayoutRelation.equal,
-                                                          toItem: nil,
-                                                          attribute: NSLayoutAttribute.notAnAttribute,
-                                                          multiplier: 1.0,
-                                                          constant: smallFrame.size.height)
+
+        bigImageViewTopConstraint = NSLayoutConstraint(item: bigImageView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: bigImageScrollView,
+                                                       attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: smallFrame.origin.y)
+        bigImageViewLeadingConstraint = NSLayoutConstraint(item: bigImageView, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal,
+                                                           toItem: bigImageScrollView, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: smallFrame.origin.x)
+        bigImageViewWidthConstraint = NSLayoutConstraint(item: bigImageView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal,
+                                                         toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: smallFrame.size.width)
+        bigImageViewHeightConstraint = NSLayoutConstraint(item: bigImageView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal,
+                                                          toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: smallFrame.size.height)
         bigImageView.addConstraints([
             NSLayoutConstraint(item: spinnerBackground, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal,
                                toItem: bigImageView, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0),
@@ -167,7 +173,58 @@ class ZoomImageView: UIView, UIScrollViewDelegate
             NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal,
                                toItem: spinnerBackground, attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0)
             ])
+
+        var bottomPadding: CGFloat = 0.0
         
+        if #available(iOS 11.0, *)
+        {
+            if let window = UIApplication.shared.keyWindow
+            {
+                bottomPadding = -window.safeAreaInsets.bottom
+            }
+        }
+        
+        if (secondLabel.isHidden == false)
+        {
+            let labelSize = secondLabel.sizeThatFits(self.frame.size)
+
+            bigImageBackView.addConstraints([
+                NSLayoutConstraint(item: secondLabel, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal,
+                                   toItem: bigImageBackView, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: bottomPadding),
+                NSLayoutConstraint(item: secondLabel, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal,
+                                   toItem: bigImageBackView, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: secondLabel, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal,
+                                   toItem: bigImageBackView, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: secondLabel, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal,
+                                   toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: labelSize.height + 10.0)
+                ])
+        }
+
+        if (mainLabel.isHidden == false)
+        {
+            if (secondLabel.isHidden)
+            {
+                bigImageBackView.addConstraint(NSLayoutConstraint(item: mainLabel, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal,
+                                                                  toItem: bigImageBackView, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: bottomPadding))
+            }
+            else
+            {
+                bigImageBackView.addConstraint(NSLayoutConstraint(item: mainLabel, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal,
+                                                                  toItem: secondLabel, attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0.0))
+            }
+
+            let labelSize = mainLabel.sizeThatFits(self.frame.size)
+
+            bigImageBackView.addConstraints([
+                NSLayoutConstraint(item: mainLabel, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal,
+                                   toItem: bigImageBackView, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: mainLabel, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal,
+                                   toItem: bigImageBackView, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: mainLabel, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal,
+                                   toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: labelSize.height + 8.0)
+                ])
+        }
+
         if let imageViewTopConstraint = bigImageViewTopConstraint,
            let imageViewLeadingConstraint = bigImageViewLeadingConstraint,
            let imageViewWidthConstraint = bigImageViewWidthConstraint,
@@ -197,6 +254,8 @@ class ZoomImageView: UIView, UIScrollViewDelegate
                 self.bigImageViewLeadingConstraint?.constant = 0
                 self.bigImageViewHeightConstraint?.constant = navigationController.view.frame.height
                 self.bigImageViewWidthConstraint?.constant = navigationController.view.frame.width
+                self.mainLabel.alpha = 0.75
+                self.secondLabel.alpha = 0.75
                 self.layoutIfNeeded()
             },
                        completion:
@@ -372,6 +431,8 @@ class ZoomImageView: UIView, UIScrollViewDelegate
                     self.bigImageViewHeightConstraint?.constant = smallFrame.size.height
                     self.bigImageViewWidthConstraint?.constant = smallFrame.size.width
                     bigImageView.alpha = 0.3
+                    self.mainLabel.alpha = 0.0
+                    self.secondLabel.alpha = 0.0
                     self.layoutIfNeeded()
                 },
                            completion:

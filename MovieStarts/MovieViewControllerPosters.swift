@@ -39,6 +39,8 @@ extension MovieViewController
             
             // build zoom view and start it
             let zoomView = ZoomImageView(frame: CGRect(x: 0.0, y: 0.0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height))
+            zoomView.navigationController = navigationController
+            zoomView.tabBar = self.tabBarController?.tabBar
             zoomView.setup(smallImage: movie.thumbnailImage.0,
                            smallFrame: CGRect(x: posterImageView.frame.minX,
                                               y: posterImageView.frame.minY + navigationController.navigationBar.frame.height +
@@ -47,9 +49,7 @@ extension MovieViewController
                                               height: posterImageView.frame.height),
                            bigImage: movie.bigPoster,
                            bigImageURL: sourcePathString,
-                           bigImageTargetPath: targetPath,
-                           navController: navigationController,
-                           tabBar: self.tabBarController?.tabBar)
+                           bigImageTargetPath: targetPath)
             
             self.view.addSubview(zoomView)
             self.posterImageTopSpaceConstraint.constant += navigationController.navigationBar.frame.height
