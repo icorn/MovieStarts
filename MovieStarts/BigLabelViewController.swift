@@ -10,7 +10,8 @@ import UIKit
 
 class BigLabelViewController: UIViewController
 {
-    @IBOutlet weak var bigLabel: UILabel!
+    @IBOutlet weak var bigLabel: UITextView!
+    @IBOutlet weak var bigLabelHeightConstraint: NSLayoutConstraint!
     public var contentText : String?
     
     override func viewDidLoad()
@@ -20,6 +21,8 @@ class BigLabelViewController: UIViewController
         if let contentText = contentText
         {
             bigLabel.text = contentText
+            let labelSize = bigLabel.sizeThatFits(CGSize(width: self.bigLabel.frame.width, height: CGFloat.greatestFiniteMagnitude))
+            self.bigLabelHeightConstraint.constant = labelSize.height
         }
     }
 }
