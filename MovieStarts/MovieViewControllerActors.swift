@@ -11,6 +11,25 @@ import UIKit
 
 extension MovieViewController
 {
+    var actorThumbnailSize: CGSize
+    {
+        get
+        {
+            switch (UIScreen.main.bounds.size.width)
+            {
+                case 320.0:
+                    // small phones (iPhone SE)
+                    return CGSize(width: 75.0, height: 100.0)
+                case 375.0:
+                    // medium phones (iPhone 7, iPhone 8, iPhone X)
+                    return CGSize(width: 76.0, height: 101.0)
+                default:
+                    // large phones (iPhone 7 Plus, iPhone 8 Plus)
+                    return CGSize(width: 84.0, height: 112.0)
+            }
+        }
+    }
+    
     final func showActors()
     {
         guard let movie = self.movie else { return }
@@ -24,8 +43,6 @@ extension MovieViewController
             return
         }
         
-        let imageWidth: CGFloat = 75.0
-        let imageHeight: CGFloat = 100.0
         let hGap: CGFloat = 3.0
         let vGap: CGFloat = 3.0
         let bottomGap: CGFloat = 6.0
@@ -35,10 +52,10 @@ extension MovieViewController
         {
             // image view
             
-            let imageView = UIImageView(frame: CGRect(x: (imageWidth + hGap) * CGFloat(index),
+            let imageView = UIImageView(frame: CGRect(x: (actorThumbnailSize.width + hGap) * CGFloat(index),
                                                       y: 0.0,
-                                                      width: imageWidth,
-                                                      height: imageHeight))
+                                                      width: actorThumbnailSize.width,
+                                                      height: actorThumbnailSize.height))
             imageView.contentMode = .scaleToFill
             imageView.image = UIImage(named: "no-actor")
 
@@ -47,7 +64,7 @@ extension MovieViewController
                 if let profileImageFromFile = UIImage(contentsOfFile: actorFilePath)
                 {
                     // profile image already downloaded: use it
-                    imageView.image = self.cropImageTo45x60(profileImageFromFile)
+                    imageView.image = self.cropImageToProperHeight(profileImageFromFile)
                 }
                 else
                 {
@@ -69,21 +86,21 @@ extension MovieViewController
             let label = UILabel()
             label.numberOfLines = 0
             label.font = UIFont.systemFont(ofSize: 11.0)
-            label.text = actorName
+            label.attributedText = NSAttributedString(string: actorName, attributes: [NSAttributedStringKey.kern: -0.3])
             label.textAlignment = .center
             label.allowsDefaultTighteningForTruncation = true
-            let labelSize = label.sizeThatFits(CGSize(width: imageWidth, height: 1000.0))
+            let labelSize = label.sizeThatFits(CGSize(width: actorThumbnailSize.width, height: 1000.0))
             label.frame = CGRect(x: imageView.frame.origin.x,
                                  y: imageView.frame.size.height + vGap,
-                                 width: imageWidth,
+                                 width: actorThumbnailSize.width,
                                  height: labelSize.height)
             self.actorContentView.addSubview(label)
             
             maxLabelHeight = labelSize.height > maxLabelHeight ? labelSize.height : maxLabelHeight
         }
 
-        self.actorScrollHeightConstraint.constant = imageHeight + vGap + maxLabelHeight + bottomGap
-        self.actorScrollContentWidthConstraint.constant = imageWidth * CGFloat(movie.actors.count) + hGap * CGFloat(movie.actors.count-1)
+        self.actorScrollHeightConstraint.constant = actorThumbnailSize.height + vGap + maxLabelHeight + bottomGap
+        self.actorScrollContentWidthConstraint.constant = actorThumbnailSize.width * CGFloat(movie.actors.count) + hGap * CGFloat(movie.actors.count-1)
         self.actorScrollView.delegate = self
         self.actorHeadlineLabel.text = NSLocalizedString("Actors", comment: "")
     }
@@ -182,7 +199,7 @@ extension MovieViewController
                     
                     DispatchQueue.main.async
                     {
-                        imageView.image = self?.cropImageTo45x60(UIImage(contentsOfFile: actorImageFilePath))
+                        imageView.image = self?.cropImageToProperHeight(UIImage(contentsOfFile: actorImageFilePath))
                     }
                 }
                 catch let error as NSError
@@ -205,7 +222,7 @@ extension MovieViewController
     
     // MARK: - Small helper functions
     
-    final private func cropImageTo45x60(_ inputImage: UIImage?) -> UIImage?
+    final private func cropImageToProperHeight(_ inputImage: UIImage?) -> UIImage?
     {
         guard let inputImage = inputImage, let inputCgImage = inputImage.cgImage else { return nil }
 
@@ -237,7 +254,7 @@ extension MovieViewController
     {
         if (scrollView == self.actorScrollView)
         {
-            let cellWidth: CGFloat = 78.0 // imageWidth (75) plus hGap (3)
+            let cellWidth: CGFloat = actorThumbnailSize.width + 3.0 // imageWidth plus hGap (3)
             targetContentOffset.pointee.x = round(targetContentOffset.pointee.x / cellWidth) * cellWidth
         }
     }
