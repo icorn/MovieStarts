@@ -18,6 +18,7 @@
 		4F2C91181B6374810044A27B /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C91171B6374810044A27B /* Favorites.swift */; };
 		4F2D38301C5A7A29000927E7 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */; };
 		4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D38311C5BC984000927E7 /* NotificationManager.swift */; };
+		4F2E301120724BE2003ECEB6 /* TapGestureRecognizerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2E301020724BE2003ECEB6 /* TapGestureRecognizerExtension.swift */; };
 		4F2E40A0202F2FE1009B5AEB /* AcknowledgementsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2E409F202F2FE1009B5AEB /* AcknowledgementsViewController.swift */; };
 		4F2E40A2202F40EA009B5AEB /* BigLabelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2E40A1202F40EA009B5AEB /* BigLabelViewController.swift */; };
 		4F2E40A4202F5AB9009B5AEB /* NotificationTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2E40A3202F5AB9009B5AEB /* NotificationTimeViewController.swift */; };
@@ -164,6 +165,7 @@
 		4F2C91171B6374810044A27B /* Favorites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
 		4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		4F2D38311C5BC984000927E7 /* NotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		4F2E301020724BE2003ECEB6 /* TapGestureRecognizerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapGestureRecognizerExtension.swift; sourceTree = "<group>"; };
 		4F2E409F202F2FE1009B5AEB /* AcknowledgementsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsViewController.swift; sourceTree = "<group>"; };
 		4F2E40A1202F40EA009B5AEB /* BigLabelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigLabelViewController.swift; sourceTree = "<group>"; };
 		4F2E40A3202F5AB9009B5AEB /* NotificationTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTimeViewController.swift; sourceTree = "<group>"; };
@@ -377,6 +379,7 @@
 				4F956C1E1DC4D24C008EF031 /* StackViewExtension.swift */,
 				4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */,
 				4F35FE6C1E70A4F70020EDFB /* ColorExtension.swift */,
+				4F2E301020724BE2003ECEB6 /* TapGestureRecognizerExtension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -821,6 +824,7 @@
 				4F956C1F1DC4D24C008EF031 /* StackViewExtension.swift in Sources */,
 				4F885C7C1CA5C39000659D2D /* MovieDatabaseParent.swift in Sources */,
 				4F6C3F7F2067D9A600D3BAAF /* ProfilePictureSizePath.swift in Sources */,
+				4F2E301120724BE2003ECEB6 /* TapGestureRecognizerExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
