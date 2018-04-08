@@ -127,7 +127,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 					for fileInDocDir in filesInDocDirSave {
 						let filename = fileInDocDir.lastPathComponent
 						
-						if ((filename.endsWith(".jpg")) && posterUrl.contains(filename)) {
+						if ((filename.hasSuffix(".jpg")) && posterUrl.contains(filename)) {
 							thumbnailFound = true
 							break
 						}

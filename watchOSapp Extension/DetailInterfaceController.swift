@@ -67,7 +67,8 @@ class DetailInterfaceController: WKInterfaceController {
 					directorHeadlineLabel.setText(NSLocalizedString("Directors", comment: "") + ":")
 				}
 				
-				directorLabel.setText(text.substringByRemovingLastCharacters(numberOfCharacters: 2))
+                text.removeLast(2)
+				directorLabel.setText(text)
 			}
 			else {
 				directorGroup.setHidden(true)
@@ -82,7 +83,8 @@ class DetailInterfaceController: WKInterfaceController {
 				}
 
 				actorHeadlineLabel.setText(NSLocalizedString("Actors", comment: ""))
-				actorLabel.setText(text.substringByRemovingLastCharacters(numberOfCharacters: 2))
+                text.removeLast(2)
+				actorLabel.setText(text)
 			}
 			else {
 				actorGroup.setHidden(true)

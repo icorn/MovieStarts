@@ -21,8 +21,9 @@ class DetailTitleMaker {
 			detailText += genreName + " | "
 		}
 		
-		if (detailText.count > 0) {
-			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 3)
+		if (detailText.count > 0)
+        {
+            detailText.removeLast(3)
 		}
 		
 		return detailText
@@ -40,7 +41,7 @@ class DetailTitleMaker {
 				detailText += genreName + ", "
 			}
 			
-			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 2)
+			detailText.removeLast(2)
             detailText += " | "
 		}
 
@@ -51,7 +52,7 @@ class DetailTitleMaker {
 		}
 		
 		if (detailText.count > 0) {
-			detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 3)
+            detailText.removeLast(3)
 		}
 		
 		return detailText

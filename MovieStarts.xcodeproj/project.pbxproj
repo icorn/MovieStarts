@@ -26,14 +26,12 @@
 		4F34A5B01DCFC5360032F7BA /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F34A5AD1DCFC5360032F7BA /* TagListView.swift */; };
 		4F34A5B11DCFC5360032F7BA /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F34A5AE1DCFC5360032F7BA /* TagView.swift */; };
 		4F35FE6D1E70A4F70020EDFB /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F35FE6C1E70A4F70020EDFB /* ColorExtension.swift */; };
-		4F5857441BCFDF2E0066DDE1 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */; };
 		4F63D8CF1DC3EDE700922C4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F63D8CE1DC3EDE700922C4A /* Assets.xcassets */; };
 		4F63D8D61DC3EDE700922C4A /* watchOSapp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4F63D8D51DC3EDE700922C4A /* watchOSapp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4F63D8DD1DC3EDE700922C4A /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63D8DC1DC3EDE700922C4A /* ExtensionDelegate.swift */; };
 		4F63D8E31DC3EDE700922C4A /* watchOSapp.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 4F63D8C91DC3EDE700922C4A /* watchOSapp.app */; };
 		4F63D8EB1DC3EF8100922C4A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F87F9251A8DEE31001869A1 /* Constants.swift */; };
 		4F63D8EC1DC3EF9400922C4A /* MovieCountry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FE9A89A1BF23F1500278CA4 /* MovieCountry.swift */; };
-		4F63D8ED1DC3EFA200922C4A /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */; };
 		4F63D8F91DC3F66400922C4A /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F63D8F71DC3F66400922C4A /* Interface.storyboard */; };
 		4F63D8FC1DC3F6BA00922C4A /* DetailInterfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63D8FA1DC3F6BA00922C4A /* DetailInterfaceController.swift */; };
 		4F63D8FD1DC3F6BA00922C4A /* DetailTitleMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63D8FB1DC3F6BA00922C4A /* DetailTitleMaker.swift */; };
@@ -173,7 +171,6 @@
 		4F34A5AD1DCFC5360032F7BA /* TagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TagListView.swift; path = TagListView/TagListView.swift; sourceTree = "<group>"; };
 		4F34A5AE1DCFC5360032F7BA /* TagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TagView.swift; path = TagListView/TagView.swift; sourceTree = "<group>"; };
 		4F35FE6C1E70A4F70020EDFB /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
-		4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		4F63D8C91DC3EDE700922C4A /* watchOSapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watchOSapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F63D8CE1DC3EDE700922C4A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F63D8D01DC3EDE700922C4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -377,7 +374,6 @@
 				4F7A99A71BAE1A6700ED38C9 /* AnimatedTabBar.swift */,
 				4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */,
 				4F956C1E1DC4D24C008EF031 /* StackViewExtension.swift */,
-				4F5857431BCFDF2E0066DDE1 /* StringExtension.swift */,
 				4F35FE6C1E70A4F70020EDFB /* ColorExtension.swift */,
 				4F2E301020724BE2003ECEB6 /* TapGestureRecognizerExtension.swift */,
 			);
@@ -752,7 +748,6 @@
 				4F63D8FD1DC3F6BA00922C4A /* DetailTitleMaker.swift in Sources */,
 				4F956C1A1DC3F82B008EF031 /* MovieRow.swift in Sources */,
 				4F63D9051DC3F6F700922C4A /* WatchSessionManager.swift in Sources */,
-				4F63D8ED1DC3EFA200922C4A /* StringExtension.swift in Sources */,
 				4F63D8DD1DC3EDE700922C4A /* ExtensionDelegate.swift in Sources */,
 				4F63D9041DC3F6F700922C4A /* WatchMovieRecord.swift in Sources */,
 				4F63D8FC1DC3F6BA00922C4A /* DetailInterfaceController.swift in Sources */,
@@ -785,7 +780,6 @@
 				4F1B6B62202CFF0400E079C9 /* FTLinearActivityIndicator.swift in Sources */,
 				4F87F9261A8DEE31001869A1 /* Constants.swift in Sources */,
 				4FB552F21C9560390053A81B /* TomatoImage.swift in Sources */,
-				4F5857441BCFDF2E0066DDE1 /* StringExtension.swift in Sources */,
 				4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */,
 				4F1F637F1DC7FFA300449C88 /* FilterView.swift in Sources */,
 				4F885C7E1CA8475E00659D2D /* MovieDatabaseMigrator.swift in Sources */,

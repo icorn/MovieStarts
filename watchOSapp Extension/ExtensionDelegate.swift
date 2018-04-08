@@ -43,7 +43,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 for fileInDocDir in filesInDocDir {
                     let filename = fileInDocDir.lastPathComponent
 
-                    if filename.endsWith(".jpg") {
+                    if filename.hasSuffix(".jpg") {
                         // found a thumbnail. now check if it's still needed.
                         if (isThumbnailInFavorites(movieDictArray: movieDictArray, filename: filename) == false) {
                             do {
