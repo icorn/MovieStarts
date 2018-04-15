@@ -46,6 +46,8 @@
 "ActorAs"			= "als";
 "Budget"			= "Budget";
 "Mio."				= "Mio.";
+"Homepage"          = "Webseite";
+"Screenplay"        = "Drehbuch";
 
 "ShowCompleteSynopsis"		= "Komplette Beschreibung";
 "ShowShortSynopsis"			= "Kürzere Beschreibung";

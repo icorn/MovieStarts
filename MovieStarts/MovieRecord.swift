@@ -73,7 +73,10 @@ open class MovieRecord : CustomStringConvertible {
 	var backdrop: String?
 	var profilePictures: [String] = []
 	var directorPictures: [String] = []
-	
+    var homepage:[String] = []
+    var tagline:[String] = []
+    var crewWriting: [String] = []
+
 	/// is this movie hidden?
 	fileprivate var hidden: Bool = false
 
@@ -188,7 +191,8 @@ open class MovieRecord : CustomStringConvertible {
 				countryText += NSLocalizedString(country, comment: "") + ", "
 			}
 			
-			return countryText.substringByRemovingLastCharacters(numberOfCharacters: 2)
+            countryText.removeLast(2)
+            return countryText
 		}
 		else {
 			return nil
@@ -207,11 +211,16 @@ open class MovieRecord : CustomStringConvertible {
 
 				let doubleMillions = Double(budget) / 1000000.0
 				
-				if let millions = numberFormatter.string(from: NSNumber(value: doubleMillions)) {
-					if (millions.endsWith("0")) {
-						return "$" + millions.substringByRemovingLastCharacters(numberOfCharacters: 2) + " " + NSLocalizedString("Mio.", comment: "")
+				if let millions = numberFormatter.string(from: NSNumber(value: doubleMillions))
+                {
+					if (millions.hasSuffix("0"))
+                    {
+                        var millionsString = millions
+                        millionsString.removeLast(2)
+						return "$" + millionsString + " " + NSLocalizedString("Mio.", comment: "")
 					}
-					else {
+					else
+                    {
 						return "$" + millions + " " + NSLocalizedString("Mio.", comment: "")
 					}
 				}
@@ -228,6 +237,33 @@ open class MovieRecord : CustomStringConvertible {
 		
 		return nil
 	}
+    
+    /// The homepage string for display
+    func optimizedHomepageStringForLangIndex(_ langIndex: Int) -> String?
+    {
+        if ((langIndex <= homepage.count) && (homepage[langIndex].count > 0))
+        {
+            var displayHomepage = homepage[langIndex]
+            
+            if (displayHomepage.hasSuffix("/"))
+            {
+                displayHomepage.removeLast()
+            }
+
+            if (displayHomepage.hasPrefix("http://"))
+            {
+                displayHomepage.removeFirst(7)
+            }
+            else if (displayHomepage.hasPrefix("https://"))
+            {
+                displayHomepage.removeFirst(8)
+            }
+
+            return displayHomepage
+        }
+        
+        return nil
+    }
 	
 	/// The subtitle for the detail view of the movie.
 	fileprivate var detailSubtitle: String? {
@@ -261,7 +297,7 @@ open class MovieRecord : CustomStringConvertible {
 		}
 		else {
 			if (detailText.count > 2) {
-				detailText = detailText.substringByRemovingLastCharacters(numberOfCharacters: 2)
+                detailText.removeLast(2)
 			}
 		}
 		
@@ -356,6 +392,8 @@ open class MovieRecord : CustomStringConvertible {
 			title.append("")
 			sortTitle.append("")
 			trailerIds.append([])
+            homepage.append("")
+            tagline.append("")
 		}
 		
 		for _ in 0 ..< MovieCountry.numberOfDifferentCountries {
@@ -375,12 +413,16 @@ open class MovieRecord : CustomStringConvertible {
 		if (dict[Constants.dbIdSortTitleDE] != nil) { self.sortTitle[MovieCountry.Germany.languageArrayIndex] 	= dict[Constants.dbIdSortTitleDE]	as! String }
 		if (dict[Constants.dbIdPosterUrlDE] != nil) { self.posterUrl[MovieCountry.Germany.languageArrayIndex] 	= dict[Constants.dbIdPosterUrlDE] 	as! String }
 		if (dict[Constants.dbIdSynopsisDE] != nil) 	{ self.synopsis[MovieCountry.Germany.languageArrayIndex] 	= dict[Constants.dbIdSynopsisDE] 	as! String }
-		
+        if (dict[Constants.dbIdHomepageDE] != nil)  { self.homepage[MovieCountry.Germany.languageArrayIndex]    = dict[Constants.dbIdHomepageDE]     as! String }
+        if (dict[Constants.dbIdTaglineDE] != nil)   { self.tagline[MovieCountry.Germany.languageArrayIndex]     = dict[Constants.dbIdTaglineDE]     as! String }
+
 		if (dict[Constants.dbIdTitleEN] != nil) 	{ self.title[MovieCountry.USA.languageArrayIndex] 		= dict[Constants.dbIdTitleEN] 		as! String }
 		if (dict[Constants.dbIdSortTitleEN] != nil) { self.sortTitle[MovieCountry.USA.languageArrayIndex] 	= dict[Constants.dbIdSortTitleEN]	as! String }
 		if (dict[Constants.dbIdPosterUrlEN] != nil) { self.posterUrl[MovieCountry.USA.languageArrayIndex] 	= dict[Constants.dbIdPosterUrlEN] 	as! String }
 		if (dict[Constants.dbIdSynopsisEN] != nil) 	{ self.synopsis[MovieCountry.USA.languageArrayIndex] 	= dict[Constants.dbIdSynopsisEN] 	as! String }
-		
+        if (dict[Constants.dbIdHomepageEN] != nil)  { self.homepage[MovieCountry.USA.languageArrayIndex]    = dict[Constants.dbIdHomepageEN]    as! String }
+        if (dict[Constants.dbIdTaglineEN] != nil)   { self.tagline[MovieCountry.USA.languageArrayIndex]     = dict[Constants.dbIdTaglineEN]     as! String }
+
 		if (dict[Constants.dbIdReleaseUS] != nil) 		{ self.releaseDate[MovieCountry.USA.countryArrayIndex] 			= dict[Constants.dbIdReleaseUS] 		as! Date }
 		if (dict[Constants.dbIdCertificationUS] != nil) { self.certification[MovieCountry.USA.countryArrayIndex] 		= dict[Constants.dbIdCertificationUS] 	as! String }
 		if (dict[Constants.dbIdReleaseDE] != nil) 		{ self.releaseDate[MovieCountry.Germany.countryArrayIndex] 		= dict[Constants.dbIdReleaseDE] 		as! Date }
@@ -406,7 +448,8 @@ open class MovieRecord : CustomStringConvertible {
 
 		if let value = dict[Constants.dbIdProfilePictures] as? [String] 	{ self.profilePictures 		= value	}
 		if let value = dict[Constants.dbIdDirectorPictures] as? [String] 	{ self.directorPictures 	= value	}
-		
+        if let value = dict[Constants.dbIdCrewWriting] as? [String]         { self.crewWriting          = value    }
+
 		if (dict[Constants.dbIdRatingImdb] != nil) 			{ self.ratingImdb 		= dict[Constants.dbIdRatingImdb] 		as? Double }
 		if (dict[Constants.dbIdRatingMetacritic] != nil) 	{ self.ratingMetacritic = dict[Constants.dbIdRatingMetacritic] 	as? Int }
 		if (dict[Constants.dbIdRatingTomato] != nil) 		{ self.ratingTomato 	= dict[Constants.dbIdRatingTomato] 		as? Int }
@@ -444,42 +487,47 @@ open class MovieRecord : CustomStringConvertible {
 		if (ckRecord.object(forKey: Constants.dbIdSortTitleEN) != nil) 	{ self.sortTitle[MovieCountry.USA.languageArrayIndex]	= ckRecord.object(forKey: Constants.dbIdSortTitleEN) 	as! String }
 		if (ckRecord.object(forKey: Constants.dbIdSynopsisEN) != nil) 	{ self.synopsis[MovieCountry.USA.languageArrayIndex] 	= ckRecord.object(forKey: Constants.dbIdSynopsisEN) 	as! String }
 		if (ckRecord.object(forKey: Constants.dbIdPosterUrlEN) != nil) 	{ self.posterUrl[MovieCountry.USA.languageArrayIndex] 	= ckRecord.object(forKey: Constants.dbIdPosterUrlEN) 	as! String }
+        if (ckRecord.object(forKey: Constants.dbIdHomepageEN) != nil)   { self.homepage[MovieCountry.USA.languageArrayIndex]    = ckRecord.object(forKey: Constants.dbIdHomepageEN)     as! String }
+        if (ckRecord.object(forKey: Constants.dbIdTaglineEN) != nil)    { self.tagline[MovieCountry.USA.languageArrayIndex]     = ckRecord.object(forKey: Constants.dbIdTaglineEN)      as! String }
 
 		if (ckRecord.object(forKey: Constants.dbIdTitleDE) != nil) 		{ self.title[MovieCountry.Germany.languageArrayIndex] 		= ckRecord.object(forKey: Constants.dbIdTitleDE) 		as! String }
 		if (ckRecord.object(forKey: Constants.dbIdSortTitleDE) != nil) 	{ self.sortTitle[MovieCountry.Germany.languageArrayIndex] 	= ckRecord.object(forKey: Constants.dbIdSortTitleDE) 	as! String }
 		if (ckRecord.object(forKey: Constants.dbIdSynopsisDE) != nil) 	{ self.synopsis[MovieCountry.Germany.languageArrayIndex] 	= ckRecord.object(forKey: Constants.dbIdSynopsisDE) 	as! String }
 		if (ckRecord.object(forKey: Constants.dbIdPosterUrlDE) != nil) 	{ self.posterUrl[MovieCountry.Germany.languageArrayIndex]	= ckRecord.object(forKey: Constants.dbIdPosterUrlDE) 	as! String }
-		
+        if (ckRecord.object(forKey: Constants.dbIdHomepageDE) != nil)   { self.homepage[MovieCountry.Germany.languageArrayIndex]    = ckRecord.object(forKey: Constants.dbIdHomepageDE)     as! String }
+        if (ckRecord.object(forKey: Constants.dbIdTaglineDE) != nil)    { self.tagline[MovieCountry.Germany.languageArrayIndex]     = ckRecord.object(forKey: Constants.dbIdTaglineDE)      as! String }
+
 		if (ckRecord.object(forKey: Constants.dbIdReleaseUS) != nil) 		{ self.releaseDate[MovieCountry.USA.countryArrayIndex] 		 = ckRecord.object(forKey: Constants.dbIdReleaseUS) 		as! Date }
-		if (ckRecord.object(forKey: Constants.dbIdCertificationUS) != nil){ self.certification[MovieCountry.USA.countryArrayIndex] 	 = ckRecord.object(forKey: Constants.dbIdCertificationUS) 	as! String }
+		if (ckRecord.object(forKey: Constants.dbIdCertificationUS) != nil){ self.certification[MovieCountry.USA.countryArrayIndex] 	     = ckRecord.object(forKey: Constants.dbIdCertificationUS) 	as! String }
 		if (ckRecord.object(forKey: Constants.dbIdReleaseDE) != nil) 		{ self.releaseDate[MovieCountry.Germany.countryArrayIndex] 	 = ckRecord.object(forKey: Constants.dbIdReleaseDE) 		as! Date }
-		if (ckRecord.object(forKey: Constants.dbIdCertificationDE) != nil){ self.certification[MovieCountry.Germany.countryArrayIndex] = ckRecord.object(forKey: Constants.dbIdCertificationDE) 	as! String }
+		if (ckRecord.object(forKey: Constants.dbIdCertificationDE) != nil){ self.certification[MovieCountry.Germany.countryArrayIndex]   = ckRecord.object(forKey: Constants.dbIdCertificationDE) 	as! String }
 		if (ckRecord.object(forKey: Constants.dbIdReleaseGB) != nil) 		{ self.releaseDate[MovieCountry.England.countryArrayIndex] 	 = ckRecord.object(forKey: Constants.dbIdReleaseGB) 		as! Date }
-		if (ckRecord.object(forKey: Constants.dbIdCertificationGB) != nil){ self.certification[MovieCountry.England.countryArrayIndex] = ckRecord.object(forKey: Constants.dbIdCertificationGB) 	as! String }
+		if (ckRecord.object(forKey: Constants.dbIdCertificationGB) != nil){ self.certification[MovieCountry.England.countryArrayIndex]   = ckRecord.object(forKey: Constants.dbIdCertificationGB) 	as! String }
 
 		if let value = ckRecord.object(forKey: Constants.dbIdRuntimeEN) as? Int				{ self.runtime[MovieCountry.USA.languageArrayIndex] 		= value }
-		if let value = ckRecord.object(forKey: Constants.dbIdTrailerIdsEN) as? [String] 		{ self.trailerIds[MovieCountry.USA.languageArrayIndex] 		= value }
-		if let value = ckRecord.object(forKey: Constants.dbIdRuntimeDE) as? Int				{ self.runtime[MovieCountry.Germany.languageArrayIndex] 		= value }
-		if let value = ckRecord.object(forKey: Constants.dbIdTrailerIdsDE) as? [String] 		{ self.trailerIds[MovieCountry.Germany.languageArrayIndex] 		= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdTrailerIdsEN) as? [String] 	{ self.trailerIds[MovieCountry.USA.languageArrayIndex] 		= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdRuntimeDE) as? Int				{ self.runtime[MovieCountry.Germany.languageArrayIndex] 	= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdTrailerIdsDE) as? [String] 	{ self.trailerIds[MovieCountry.Germany.languageArrayIndex] 	= value }
 
-		if let value = ckRecord.object(forKey: Constants.dbIdVoteAverage) as? Double				{ self.voteAverage 			= value }
-		if let value = ckRecord.object(forKey: Constants.dbIdGenreIds) as? [Int]	 				{ self.genreIds 			= value }
-		if let value = ckRecord.object(forKey: Constants.dbIdDirectors) as? [String] 				{ self.directors 			= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdVoteAverage) as? Double			{ self.voteAverage 			= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdGenreIds) as? [Int]	 			{ self.genreIds 			= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdDirectors) as? [String] 			{ self.directors 			= value }
 		if let value = ckRecord.object(forKey: Constants.dbIdActors) as? [String] 				{ self.actors 				= value }
 		if let value = ckRecord.object(forKey: Constants.dbIdCharacters) as? [String] 			{ self.characters 			= value }
 		if let value = ckRecord.object(forKey: Constants.dbIdProductionCountries) as? [String] 	{ self.productionCountries 	= value }
-		if let value = ckRecord.object(forKey: Constants.dbIdPopularity) as? Int					{ self.popularity 			= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdPopularity) as? Int				{ self.popularity 			= value }
 		if let value = ckRecord.object(forKey: Constants.dbIdVoteCount) as? Int					{ self.voteCount 			= value }
-		if let value = ckRecord.object(forKey: Constants.dbIdHidden) as? Bool						{ self.isHidden				= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdHidden) as? Bool					{ self.isHidden				= value }
 
 		if let value = ckRecord.object(forKey: Constants.dbIdProfilePictures) as? [String] 		{ self.profilePictures 		= value }
-		if let value = ckRecord.object(forKey: Constants.dbIdDirectorPictures) as? [String] 		{ self.directorPictures 	= value }
+		if let value = ckRecord.object(forKey: Constants.dbIdDirectorPictures) as? [String] 	{ self.directorPictures 	= value }
+        if let value = ckRecord.object(forKey: Constants.dbIdCrewWriting) as? [String]          { self.crewWriting          = value }
 
 		if (ckRecord.object(forKey: Constants.dbIdRatingImdb) != nil) 		{ self.ratingImdb 		= ckRecord.object(forKey: Constants.dbIdRatingImdb) 		as? Double }
-		if (ckRecord.object(forKey: Constants.dbIdRatingMetacritic) != nil) 	{ self.ratingMetacritic = ckRecord.object(forKey: Constants.dbIdRatingMetacritic) as? Int }
-		if (ckRecord.object(forKey: Constants.dbIdRatingTomato) != nil) 		{ self.ratingTomato 	= ckRecord.object(forKey: Constants.dbIdRatingTomato) 	as? Int }
+		if (ckRecord.object(forKey: Constants.dbIdRatingMetacritic) != nil) { self.ratingMetacritic = ckRecord.object(forKey: Constants.dbIdRatingMetacritic)   as? Int }
+		if (ckRecord.object(forKey: Constants.dbIdRatingTomato) != nil) 	{ self.ratingTomato 	= ckRecord.object(forKey: Constants.dbIdRatingTomato) 	    as? Int }
 		if (ckRecord.object(forKey: Constants.dbIdTomatoImage) != nil) 		{ self.tomatoImage 		= ckRecord.object(forKey: Constants.dbIdTomatoImage) 		as? Int }
-		if (ckRecord.object(forKey: Constants.dbIdTomatoURL) != nil) 			{ self.tomatoURL 		= ckRecord.object(forKey: Constants.dbIdTomatoURL) 		as? String }
+		if (ckRecord.object(forKey: Constants.dbIdTomatoURL) != nil) 		{ self.tomatoURL 		= ckRecord.object(forKey: Constants.dbIdTomatoURL) 		    as? String }
 
 		if (ckRecord.object(forKey: Constants.dbIdBudget) != nil)		{ self.budget	= ckRecord.object(forKey: Constants.dbIdBudget) as? Int }
 		if (ckRecord.object(forKey: Constants.dbIdBackdrop) != nil) 	{ self.backdrop	= ckRecord.object(forKey: Constants.dbIdBackdrop)	as? String }
@@ -513,14 +561,18 @@ open class MovieRecord : CustomStringConvertible {
 		retval[Constants.dbIdTitleDE] 			= title[MovieCountry.Germany.languageArrayIndex] as AnyObject?
 		retval[Constants.dbIdSynopsisDE] 	 	= synopsis[MovieCountry.Germany.languageArrayIndex] as AnyObject?
 		retval[Constants.dbIdPosterUrlDE] 	 	= posterUrl[MovieCountry.Germany.languageArrayIndex] as AnyObject?
-		
+        retval[Constants.dbIdHomepageDE]        = homepage[MovieCountry.Germany.languageArrayIndex] as AnyObject?
+        retval[Constants.dbIdTaglineDE]         = tagline[MovieCountry.Germany.languageArrayIndex] as AnyObject?
+
 		retval[Constants.dbIdSortTitleEN]		= sortTitle[MovieCountry.USA.languageArrayIndex] as AnyObject?
 		retval[Constants.dbIdRuntimeEN] 		= runtime[MovieCountry.USA.languageArrayIndex] as AnyObject?
 		retval[Constants.dbIdTrailerIdsEN] 		= trailerIds[MovieCountry.USA.languageArrayIndex] as AnyObject?
 		retval[Constants.dbIdTitleEN] 			= title[MovieCountry.USA.languageArrayIndex] as AnyObject?
 		retval[Constants.dbIdSynopsisEN] 	 	= synopsis[MovieCountry.USA.languageArrayIndex] as AnyObject?
 		retval[Constants.dbIdPosterUrlEN] 	 	= posterUrl[MovieCountry.USA.languageArrayIndex] as AnyObject?
-		
+        retval[Constants.dbIdHomepageEN]        = homepage[MovieCountry.USA.languageArrayIndex] as AnyObject?
+        retval[Constants.dbIdTaglineEN]         = tagline[MovieCountry.USA.languageArrayIndex] as AnyObject?
+
 		retval[Constants.dbIdRatingImdb] 		= ratingImdb as AnyObject?
 		retval[Constants.dbIdRatingMetacritic] 	= ratingMetacritic as AnyObject?
 		retval[Constants.dbIdRatingTomato] 		= ratingTomato as AnyObject?
@@ -531,6 +583,7 @@ open class MovieRecord : CustomStringConvertible {
 		retval[Constants.dbIdBackdrop]			= backdrop as AnyObject?
 		retval[Constants.dbIdProfilePictures] 	= profilePictures as AnyObject?
 		retval[Constants.dbIdDirectorPictures] 	= directorPictures as AnyObject?
+        retval[Constants.dbIdCrewWriting]       = crewWriting as AnyObject?
 
 		retval[Constants.dbIdVoteAverage] 			= voteAverage as AnyObject?
 		retval[Constants.dbIdDirectors] 			= directors as AnyObject?
@@ -631,7 +684,8 @@ open class MovieRecord : CustomStringConvertible {
 				genreText += genreName + ", "
 			}
 			
-			return genreText.substringByRemovingLastCharacters(numberOfCharacters: 2)
+            genreText.removeLast(2)
+            return genreText
 		}
 		else {
 			return nil
@@ -748,6 +802,18 @@ open class MovieRecord : CustomStringConvertible {
 		if (updateKeys.contains(Constants.dbIdDirectorPictures)) {
 			self.directorPictures = updateRecord.directorPictures
 		}
+        if (updateKeys.contains(Constants.dbIdHomepageEN) || updateKeys.contains(Constants.dbIdHomepageDE))
+        {
+            self.homepage = updateRecord.homepage
+        }
+        if (updateKeys.contains(Constants.dbIdTaglineEN) || updateKeys.contains(Constants.dbIdTaglineDE))
+        {
+            self.tagline = updateRecord.tagline
+        }
+        if (updateKeys.contains(Constants.dbIdCrewWriting))
+        {
+            self.crewWriting = updateRecord.crewWriting
+        }
 	}
 	
 	

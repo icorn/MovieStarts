@@ -60,7 +60,7 @@ public enum MovieCountry: String {
 	var languageQueryKeys: [String] {
 		switch self {
 		case .USA, .England: return [Constants.dbIdSortTitleEN, Constants.dbIdTitleEN]
-		case .Germany:		 return [Constants.dbIdSortTitleDE, Constants.dbIdTitleDE, Constants.dbIdPosterUrlDE, Constants.dbIdSynopsisDE, Constants.dbIdRuntimeDE, Constants.dbIdTrailerIdsDE]
+		case .Germany:		 return [Constants.dbIdSortTitleDE, Constants.dbIdTitleDE, Constants.dbIdPosterUrlDE, Constants.dbIdSynopsisDE, Constants.dbIdRuntimeDE, Constants.dbIdTrailerIdsDE, Constants.dbIdHomepageDE, Constants.dbIdTaglineDE]
 		}
 	}
 	

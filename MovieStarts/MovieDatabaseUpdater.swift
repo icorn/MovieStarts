@@ -29,7 +29,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
             Constants.dbIdRatingImdb, Constants.dbIdRatingTomato, Constants.dbIdTomatoImage, Constants.dbIdTomatoURL, Constants.dbIdRatingMetacritic,
             
             // version 1.3
-            Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures
+            Constants.dbIdBudget, Constants.dbIdBackdrop, Constants.dbIdProfilePictures, Constants.dbIdDirectorPictures, Constants.dbIdHomepageEN, Constants.dbIdTaglineEN, Constants.dbIdCrewWriting
         ]
         
         let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
@@ -634,7 +634,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 						for trailerIdsForCountry in movie.trailerIds {
 							for trailerId in trailerIdsForCountry {
 								if (trailerId.count > 0) {
-									if (trailerfilenameString.beginsWith(trailerId)) {
+									if (trailerfilenameString.hasPrefix(trailerId)) {
 										found = true
 										break
 									}

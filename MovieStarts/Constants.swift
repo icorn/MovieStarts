@@ -103,6 +103,7 @@ public struct Constants {
 	static let dbIdBackdrop				= "backdrop"
 	static let dbIdProfilePictures		= "profilePictures"
 	static let dbIdDirectorPictures		= "directorPictures"
+    static let dbIdCrewWriting          = "crewWriting"
 
 	// country-specific database fields (table "Movie")
 	static let dbIdReleaseUS			= "releaseUS"
@@ -121,17 +122,23 @@ public struct Constants {
 	static let dbIdSortTitleEN			= "sortTitleEN"
 	static let dbIdSynopsisEN			= "synopsisEN"
 	static let dbIdRuntimeEN			= "runtimeEN"
-	
+    static let dbIdHomepageEN           = "homepageEN"
+    static let dbIdTaglineEN            = "taglineEN"
+
 	static let dbIdTrailerIdsDE			= "trailerIdsDE"
 	static let dbIdTitleDE				= "titleDE"
 	static let dbIdSortTitleDE			= "sortTitleDE"
 	static let dbIdSynopsisDE			= "synopsisDE"
 	static let dbIdRuntimeDE			= "runtimeDE"
+    static let dbIdHomepageDE           = "homepageDE"
+    static let dbIdTaglineDE            = "taglineDE"
 
 	static let dbIdTitle				= "title"
 	static let dbIdSortTitle			= "sortTitle"
 	static let dbIdSynopsis				= "synopsis"
 	static let dbIdRuntime				= "runtime"
+    static let dbIdHomepage             = "homepage"
+    static let dbIdTagline              = "tagline"
 
  	// database fields for third-party rating
 	static let dbIdRatingImdb			= "ratingImdb"

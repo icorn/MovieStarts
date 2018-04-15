@@ -19,28 +19,12 @@ extension MovieViewController
 		var titleLabels: [UILabel] = []
 		var valueLabels: [UILabel] = []
 		
-		// release date
-		
-		if (movie.releaseDate[movie.currentCountry.countryArrayIndex].compare(Date(timeIntervalSince1970: 0)) == ComparisonResult.orderedDescending)
-		{
-			titleLabels.append(createTitleLabelWithText(NSLocalizedString("ReleaseDate", comment: "") + ":"))
-			valueLabels.append(createValueLabelWithText(movie.releaseDateString))
-		}
-		
-		// budget
-		
-		if let budget = movie.budgetString
-        {
-			titleLabels.append(createTitleLabelWithText(NSLocalizedString("Budget", comment: "") + ":"))
-			valueLabels.append(createValueLabelWithText(budget))
-		}
-		
 		// directors
 		
 		if (movie.directors.count == 1)
         {
 			titleLabels.append(createTitleLabelWithText(NSLocalizedString("Director", comment: "") + ":"))
-			valueLabels.append(createValueLabelWithText(movie.directors[0]))
+			valueLabels.append(createValueLabelWithText(movie.directors[0], andNumberOfLines: 1))
 		}
 		else if (movie.directors.count > 1)
         {
@@ -52,12 +36,70 @@ extension MovieViewController
 				directorsString = directorsString + director + "\n"
 			}
 			
-			directorsString = directorsString.substringByRemovingLastCharacters(numberOfCharacters: 1)
-			let label = createValueLabelWithText(directorsString)
+            directorsString.removeLast()
+			let label = createValueLabelWithText(directorsString, andNumberOfLines: movie.directors.count)
 			label.numberOfLines = movie.directors.count
 			valueLabels.append(label)
 		}
 		
+        // writers
+        
+        let writers = self.findScreenplayWritersInCrew(movie.crewWriting)
+        
+        if (writers.count == 1)
+        {
+            titleLabels.append(createTitleLabelWithText(NSLocalizedString("Screenplay", comment: "") + ":"))
+            valueLabels.append(createValueLabelWithText(writers[0], andNumberOfLines: 1))
+        }
+        else if (writers.count > 1)
+        {
+            titleLabels.append(createTitleLabelWithText(NSLocalizedString("Screenplay", comment: "") + ":"))
+            
+            var writersString = ""
+            for writer in writers
+            {
+                writersString = writersString + writer + "\n"
+            }
+  
+            writersString.removeLast()
+            let label = createValueLabelWithText(writersString, andNumberOfLines: writers.count)
+            label.numberOfLines = writers.count
+            valueLabels.append(label)
+        }
+        
+        // release date
+        
+        if (movie.releaseDate[movie.currentCountry.countryArrayIndex].compare(Date(timeIntervalSince1970: 0)) == ComparisonResult.orderedDescending)
+        {
+            titleLabels.append(createTitleLabelWithText(NSLocalizedString("ReleaseDate", comment: "") + ":"))
+            valueLabels.append(createValueLabelWithText(movie.releaseDateString, andNumberOfLines: 1))
+        }
+        
+        // homepage
+        
+        if let homepage = movie.optimizedHomepageStringForLangIndex(movie.currentCountry.languageArrayIndex)
+        {
+            titleLabels.append(createTitleLabelWithText(NSLocalizedString("Homepage", comment: "") + ":"))
+            let valueLabel = createValueLabelWithText(homepage, andNumberOfLines: 1)
+            valueLabel.textColor = UIColor.blue
+            valueLabel.isUserInteractionEnabled = true
+            valueLabel.lineBreakMode = .byTruncatingTail
+            
+            let rec = UITapGestureRecognizer(target: self, action: #selector(MovieViewController.homepageTapped(_:)))
+            valueLabel.addGestureRecognizer(rec)
+            valueLabels.append(valueLabel)
+        }
+        
+        // budget
+        
+        if let budget = movie.budgetString
+        {
+            titleLabels.append(createTitleLabelWithText(NSLocalizedString("Budget", comment: "") + ":"))
+            valueLabels.append(createValueLabelWithText(budget, andNumberOfLines: 1))
+        }
+
+        // calculate layout
+        
 		let maxTitleWidth = getMaxLabelWidth(labels: titleLabels)
 		let maxValueWidth = getMaxLabelWidth(labels: valueLabels)
 		
@@ -66,6 +108,26 @@ extension MovieViewController
 			addInfoToStackView(titleLabel: titleLabels[i], valueLabel: valueLabels[i], maxTitleWidth: maxTitleWidth, maxValueWidth: maxValueWidth);
 		}
 	}
+    
+    fileprivate final func findScreenplayWritersInCrew(_ crew: [String]) -> [String]
+    {
+        var writers: [String] = []
+
+        for crewMember in crew
+        {
+            if (crewMember.hasSuffix("||Writer") || crewMember.hasSuffix("||Screenplay"))
+            {
+                let components = crewMember.components(separatedBy: "||")
+                
+                if ((components.count > 0) && (writers.contains(components[0]) == false))
+                {
+                    writers.append(components[0])
+                }
+            }
+        }
+
+        return writers;
+    }
 	
 	fileprivate final func addInfoToStackView(titleLabel: UILabel, valueLabel: UILabel, maxTitleWidth: CGFloat, maxValueWidth: CGFloat)
     {
@@ -88,18 +150,12 @@ extension MovieViewController
 		if let titleRect = titleLabel.text?.boundingRect(with: CGSize(width: 320, height: 200),
 		    options: .usesLineFragmentOrigin, attributes: textAttributes, context: nil)
 		{
-			titleLabelHeight = titleRect.size.height + 1
+			titleLabelHeight = titleRect.size.height
 		}
-		
-		var valueLabelHeight: CGFloat = 24.0
-		
-		if let valueRect = valueLabel.text?.boundingRect(with: CGSize(width: 320, height: 200),
-			options: .usesLineFragmentOrigin, attributes: textAttributes, context: nil)
-		{
-			valueLabelHeight = valueRect.size.height + 1
-		}
-		
-		let viewHeight = valueLabelHeight + 2 * paddingVertical
+
+        let valueLabelHeight = "Ag".boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude),
+                                                 options: .usesLineFragmentOrigin, attributes: textAttributes, context: nil).size.height * CGFloat(valueLabel.numberOfLines)
+		let viewHeight = valueLabelHeight + 2.0 * paddingVertical
 
 		// set up view and labels
 
@@ -111,11 +167,13 @@ extension MovieViewController
 		
 		valueLabel.frame = CGRect(x: maxTitleWidth + paddingCenter,
 		                          y: paddingVertical,
-		                          width: maxValueWidth,
+                                  // ugly: we don't have the width of the stackview, so use the screen width and
+                                  // subtract 32 (the combined bigStackViews padding left and right)
+		                          width: UIScreen.main.bounds.size.width - (maxTitleWidth + paddingCenter) - 32.0,
 		                          height: valueLabelHeight)
 		view.addSubview(titleLabel)
 		view.addSubview(valueLabel)
-		
+        
 		infoStackView.addArrangedSubview(view)
 	}
 	
@@ -127,11 +185,12 @@ extension MovieViewController
 		return label
 	}
 	
-	fileprivate final func createValueLabelWithText(_ text: String) -> UILabel
+    fileprivate final func createValueLabelWithText(_ text: String, andNumberOfLines numOfLines: Int) -> UILabel
     {
 		let label = UILabel()
 		label.text = text
 		label.font = UIFont.systemFont(ofSize: 14.0)
+        label.numberOfLines = numOfLines
 		return label
 	}
 
@@ -159,4 +218,16 @@ extension MovieViewController
 		
 		return maxWidth
 	}
+    
+    
+    @objc func homepageTapped(_ recognizer: UITapGestureRecognizer)
+    {
+        guard let movie = movie else { return }
+        let url = URL(string: movie.homepage[movie.currentCountry.languageArrayIndex])
+        
+        if let url = url, UIApplication.shared.canOpenURL(url)
+        {
+            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
+        }
+    }
 }
