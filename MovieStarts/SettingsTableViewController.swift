@@ -130,7 +130,11 @@ class SettingsTableViewController: UITableViewController
                 if ((indexPath as NSIndexPath).item == itemRate)
                 {
                     guard let rateUrl = URL(string: "itms-apps://itunes.apple.com/app/id1043041023?action=write-review") else { return }
-                    UIApplication.shared.open(rateUrl, options: [:], completionHandler: { (Bool) in })
+                    UIApplication.shared.open(rateUrl, options: [:], completionHandler:
+                        { (Bool) in
+                            tableView.deselectRow(at: indexPath, animated: false)
+                        }
+                    )
                 }
                 else if ((indexPath as NSIndexPath).item == itemAbout)
                 {
