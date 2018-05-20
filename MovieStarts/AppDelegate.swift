@@ -53,9 +53,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
     {
-        // because we will use it soon: init the AnalyticsClient (a.k.a. Firebase)
-        AnalyticsClient.initialize()
-        
 		// create folders for image asset
         let appPathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 

@@ -119,9 +119,6 @@ class AboutViewController: UIViewController
         if let bigLabelController = storyboard?.instantiateViewController(withIdentifier: "BigLabelViewController") as? BigLabelViewController
         {
             bigLabelController.navigationItem.title = NSLocalizedString("PrivacyStatement", comment: "")
-            bigLabelController.createAttributedStringForText(NSLocalizedString("PrivacyStatementText", comment: ""),
-                                                             withLinks: ["https://support.google.com/firebase/answer/6317486",
-                                                                         "https://support.google.com/firebase/answer/6317485"])
             navigationController?.pushViewController(bigLabelController, animated: true)
         }
     }
