@@ -15,6 +15,8 @@
 		4F1B6B63202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B6B61202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift */; };
 		4F1F63761DC7F76900449C88 /* FilterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1F63751DC7F76900449C88 /* FilterView.xib */; };
 		4F1F637F1DC7FFA300449C88 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1F637E1DC7FFA300449C88 /* FilterView.swift */; };
+		4F23A0B420B2A71D00FB3759 /* AcceptPrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */; };
+		4F23A0B620B2B05100FB3759 /* AcceptPrivacyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */; };
 		4F2C91181B6374810044A27B /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C91171B6374810044A27B /* Favorites.swift */; };
 		4F2D38301C5A7A29000927E7 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */; };
 		4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D38311C5BC984000927E7 /* NotificationManager.swift */; };
@@ -150,6 +152,8 @@
 		4F1B6B61202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+LinearNetworkActivityIndicator.swift"; sourceTree = "<group>"; };
 		4F1F63751DC7F76900449C88 /* FilterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterView.xib; sourceTree = "<group>"; };
 		4F1F637E1DC7FFA300449C88 /* FilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
+		4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptPrivacyViewController.swift; sourceTree = "<group>"; };
+		4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptPrivacyDelegate.swift; sourceTree = "<group>"; };
 		4F2C91171B6374810044A27B /* Favorites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
 		4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		4F2D38311C5BC984000927E7 /* NotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -397,6 +401,7 @@
 				4F87F9271A8DF0C1001869A1 /* Table Screens */,
 				4F63E63F1A9D24BA00528FB3 /* StartViewController.swift */,
 				4F63E6411A9D2A8B00528FB3 /* TabBarController.swift */,
+				4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */,
 			);
 			name = Screens;
 			sourceTree = "<group>";
@@ -450,6 +455,7 @@
 		4FAFF8EF1A8C036A00864078 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */,
 				4F694E681FC0D84A000A2A28 /* Rotatable.swift */,
 				4FAFF8C81A8BFFE500864078 /* AppDelegate.swift */,
 				4F87F9251A8DEE31001869A1 /* Constants.swift */,
@@ -729,6 +735,8 @@
 				4F2E40A4202F5AB9009B5AEB /* NotificationTimeViewController.swift in Sources */,
 				4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */,
 				4F35FE6D1E70A4F70020EDFB /* ColorExtension.swift in Sources */,
+				4F23A0B420B2A71D00FB3759 /* AcceptPrivacyViewController.swift in Sources */,
+				4F23A0B620B2B05100FB3759 /* AcceptPrivacyDelegate.swift in Sources */,
 				4F956C1D1DC4D211008EF031 /* MovieViewController.swift in Sources */,
 				4F2E40A0202F2FE1009B5AEB /* AcknowledgementsViewController.swift in Sources */,
 				4F1B6B63202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift in Sources */,

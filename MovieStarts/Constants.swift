@@ -40,7 +40,7 @@ public struct Constants {
 	static let prefsVersion						= "version"
 	static let prefsMigrateFromVersion			= "migrateFromVersion"
     static let prefsPushHintAlreadyShown        = "pushHintAlreadyShown"
-
+    static let prefsPrivacyStatementV1Accepted  = "privacyV1accepted"
 	static let dbRecordTypeMovie			= "Movie"
 	static let dbRecordTypeGenre			= "Genre"
 	

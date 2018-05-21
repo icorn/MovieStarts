@@ -12,7 +12,6 @@ class AboutViewController: UIViewController
 {
 	@IBOutlet weak var versionLabel: UILabel!
 	@IBOutlet weak var taglineLabel: UILabel!
-	@IBOutlet weak var developerHeadlineLabel: UILabel!
 	@IBOutlet weak var supportHeadlineLabel: UILabel!
 	@IBOutlet weak var webHeadlineLabel: UILabel!
 	@IBOutlet weak var emailHeadlineLabel: UILabel!
@@ -26,6 +25,8 @@ class AboutViewController: UIViewController
 	@IBOutlet weak var twitterLinkButton: UIButton!
     @IBOutlet weak var leadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var trailingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var impressumLabel: UILabel!
+    @IBOutlet weak var impressumHeadlineLabel: UILabel!
     
 	
     override func viewDidLoad()
@@ -41,12 +42,13 @@ class AboutViewController: UIViewController
 
 		taglineLabel.text = NSLocalizedString("TagLine", comment: "")
 		
-		developerHeadlineLabel.text = NSLocalizedString("developerHeadline", comment: "")
 		supportHeadlineLabel.text = NSLocalizedString("supportHeadline", comment: "")
 		webHeadlineLabel.text = NSLocalizedString("webHeadline", comment: "")
 		emailHeadlineLabel.text = NSLocalizedString("emailHeadline", comment: "")
 		twitterHeadlineLabel.text = NSLocalizedString("twitterHeadline", comment: "")
 		swiftLabel.text = NSLocalizedString("swift", comment: "")
+        impressumHeadlineLabel.text = NSLocalizedString("ImpressumHeadline", comment: "")
+        impressumLabel.text = NSLocalizedString("Impressum", comment: "")
         
         acknowledgmentsButton.setTitle(NSLocalizedString("Acknowledgements", comment: ""), for: UIControlState.normal)
         acknowledgmentsButton.addTarget(self, action: #selector(AboutViewController.acknowledgmentsButtonTapped(_:)), for: UIControlEvents.touchUpInside)
@@ -118,6 +120,10 @@ class AboutViewController: UIViewController
     {
         if let bigLabelController = storyboard?.instantiateViewController(withIdentifier: "BigLabelViewController") as? BigLabelViewController
         {
+            bigLabelController.createAttributedStringForText(NSLocalizedString("PrivacyStatementText", comment: ""),
+                                                             withLinks: ["https://www.google.com/policies/privacy/",
+                                                                         "https://adssettings.google.com/authenticated",
+                                                                         "https://datenschutz-generator.de/"])
             bigLabelController.navigationItem.title = NSLocalizedString("PrivacyStatement", comment: "")
             navigationController?.pushViewController(bigLabelController, animated: true)
         }

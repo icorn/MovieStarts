@@ -10,8 +10,8 @@ import UIKit
 import CloudKit
 
 
-class StartViewController: UIViewController {
-	
+class StartViewController: UIViewController, AcceptPrivacyDelegate
+{
 	var aboutView: UIView?
 	var welcomeWindow: MessageWindow?
 	var myTabBarController: TabBarController?
@@ -36,13 +36,20 @@ class StartViewController: UIViewController {
 		}
     }
 	
-	override func viewDidAppear(_ animated: Bool) {
+	override func viewDidAppear(_ animated: Bool)
+    {
 		super.viewDidAppear(animated)
 
         AnalyticsClient.trackScreenName("Launch Screen")
-
-		// read movies from device or from cloud
-
+        askForPrivacyStatementIfNeeded()
+    }
+        
+    
+    /**
+        Read movies from device or from cloud
+    */
+    func readMovies()
+    {
 		MovieDatabaseLoader.sharedInstance.viewForError = view
 		
 		if (MovieDatabaseLoader.sharedInstance.isDatabaseOnDevice() == true)
@@ -153,4 +160,32 @@ class StartViewController: UIViewController {
 		)
 	}
 	
+    func askForPrivacyStatementIfNeeded()
+    {
+        let privacyAccepted: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsPrivacyStatementV1Accepted) as? Bool
+
+        if let privacyAccepted = privacyAccepted, privacyAccepted == true
+        {
+            // privacy-statement already accepted
+            readMovies()
+        }
+        else
+        {
+            if let acceptPrivacyViewController = self.storyboard?.instantiateViewController(withIdentifier: "PrivacyViewController") as? AcceptPrivacyViewController
+            {
+                acceptPrivacyViewController.acceptPrivacyDelegate = self
+                self.present(acceptPrivacyViewController, animated: true, completion: { () in })
+            }
+        }
+    }
+    
+
+    // MARK: AcceptPrivacyDelegate
+    
+    func privacyStatementAccepted()
+    {
+        UserDefaults(suiteName: Constants.movieStartsGroup)?.set(true, forKey: Constants.prefsPrivacyStatementV1Accepted)
+        UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+        readMovies()
+    }
 }
