@@ -17,6 +17,8 @@
 		4F1F637F1DC7FFA300449C88 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1F637E1DC7FFA300449C88 /* FilterView.swift */; };
 		4F23A0B420B2A71D00FB3759 /* AcceptPrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */; };
 		4F23A0B620B2B05100FB3759 /* AcceptPrivacyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */; };
+		4F23A0C220B2F6B800FB3759 /* privacyEN.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F23A0C020B2F6B700FB3759 /* privacyEN.html */; };
+		4F23A0C320B2F6B800FB3759 /* privacyDE.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F23A0C120B2F6B700FB3759 /* privacyDE.html */; };
 		4F2C91181B6374810044A27B /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2C91171B6374810044A27B /* Favorites.swift */; };
 		4F2D38301C5A7A29000927E7 /* NSDateExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */; };
 		4F2D38321C5BC984000927E7 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F2D38311C5BC984000927E7 /* NotificationManager.swift */; };
@@ -154,6 +156,8 @@
 		4F1F637E1DC7FFA300449C88 /* FilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptPrivacyViewController.swift; sourceTree = "<group>"; };
 		4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptPrivacyDelegate.swift; sourceTree = "<group>"; };
+		4F23A0C020B2F6B700FB3759 /* privacyEN.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = privacyEN.html; sourceTree = "<group>"; };
+		4F23A0C120B2F6B700FB3759 /* privacyDE.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = privacyDE.html; sourceTree = "<group>"; };
 		4F2C91171B6374810044A27B /* Favorites.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
 		4F2D382F1C5A7A29000927E7 /* NSDateExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSDateExtension.swift; sourceTree = "<group>"; };
 		4F2D38311C5BC984000927E7 /* NotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -445,6 +449,8 @@
 				4F63E6311A9A8C9D00528FB3 /* Icons */,
 				4F95FC301C11ABFE008F482B /* Images.xcassets */,
 				4FAFF8C71A8BFFE500864078 /* Info.plist */,
+				4F23A0C120B2F6B700FB3759 /* privacyDE.html */,
+				4F23A0C020B2F6B700FB3759 /* privacyEN.html */,
 				4F63E62A1A9A415100528FB3 /* Launch Images */,
 				4F63E6231A99CB5D00528FB3 /* Localizable.strings */,
 				4F1F63771DC7FD6400449C88 /* TagListView-1.1.0 */,
@@ -661,7 +667,9 @@
 				4F8ED3ED1B4442C7008C24FE /* MovieTableViewCell.xib in Resources */,
 				4F63E62E1A9A416100528FB3 /* LaunchLogo@2x.png in Resources */,
 				4F63E63C1A9A8CD100528FB3 /* icon60@3x.png in Resources */,
+				4F23A0C320B2F6B800FB3759 /* privacyDE.html in Resources */,
 				4F63E63A1A9A8CD100528FB3 /* icon40@3x.png in Resources */,
+				4F23A0C220B2F6B800FB3759 /* privacyEN.html in Resources */,
 				4F63E63B1A9A8CD100528FB3 /* icon40@2x.png in Resources */,
 				4F63E63E1A9A8CD100528FB3 /* icon29@2x.png in Resources */,
 				4F63E6291A9A3E1100528FB3 /* LaunchBackground.jpg in Resources */,

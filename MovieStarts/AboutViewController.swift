@@ -118,6 +118,12 @@ class AboutViewController: UIViewController
 
     @objc func privacyButtonTapped(_ sender: UIButton!)
     {
+        if let acceptPrivacyViewController = self.storyboard?.instantiateViewController(withIdentifier: "PrivacyViewController") as? AcceptPrivacyViewController
+        {
+            navigationController?.pushViewController(acceptPrivacyViewController, animated: true)
+        }
+
+/*
         if let bigLabelController = storyboard?.instantiateViewController(withIdentifier: "BigLabelViewController") as? BigLabelViewController
         {
             bigLabelController.createAttributedStringForText(NSLocalizedString("PrivacyStatementText", comment: ""),
@@ -127,6 +133,7 @@ class AboutViewController: UIViewController
             bigLabelController.navigationItem.title = NSLocalizedString("PrivacyStatement", comment: "")
             navigationController?.pushViewController(bigLabelController, animated: true)
         }
+ */
     }
     
 }

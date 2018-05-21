@@ -10,9 +10,9 @@ import UIKit
 
 class AcceptPrivacyViewController: UIViewController
 {
-    @IBOutlet weak var privacyLabel: UILabel!
     @IBOutlet weak var acceptButton: UIButton!
     @IBOutlet weak var headlineLabel: UILabel!
+    @IBOutlet weak var webView: UIWebView!
     
     var acceptPrivacyDelegate: AcceptPrivacyDelegate?
     
@@ -20,10 +20,27 @@ class AcceptPrivacyViewController: UIViewController
     {
         super.viewDidLoad()
         
-        self.privacyLabel.text = NSLocalizedString("PrivacyStatementText", comment: "")
         self.headlineLabel.text = NSLocalizedString("PrivacyStatement", comment: "")
-        self.acceptButton.setTitle(NSLocalizedString("AcceptPrivacy", comment: ""), for: .normal)
-        self.acceptButton.addTarget(self, action: #selector(AcceptPrivacyViewController.buttonTapped(_:)), for: UIControlEvents.touchUpInside)
+        
+        if (self.acceptPrivacyDelegate != nil)
+        {
+            self.acceptButton.setTitle(NSLocalizedString("AcceptPrivacy", comment: ""), for: .normal)
+            self.acceptButton.addTarget(self, action: #selector(AcceptPrivacyViewController.buttonTapped(_:)), for: UIControlEvents.touchUpInside)
+        }
+        else
+        {
+            self.acceptButton.isHidden = true
+            self.acceptButton.alpha = 1.0
+        }
+        
+        // read privacy statment file
+        if let filepath = Bundle.main.path(forResource: NSLocalizedString("PrivacyStatementFile", comment: ""), ofType: "html")
+        {
+            if let fileContents = try? String.init(contentsOfFile: filepath)
+            {
+                self.webView.loadHTMLString(fileContents, baseURL: nil)
+            }
+        }
     }
     
     
