@@ -60,7 +60,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
         
         if let refreshControl = self.refreshControl
         {
-            refreshControl.addTarget(self, action: #selector(MovieListViewController.refreshControlActivated(refreshControl:)), for: UIControlEvents.valueChanged)
+            refreshControl.addTarget(self, action: #selector(MovieListViewController.refreshControlActivated(refreshControl:)), for: UIControl.Event.valueChanged)
             self.tableViewOutlet.refreshControl = refreshControl
         }
 
@@ -115,7 +115,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
             UIView.animate(
                 withDuration: 0.2,
                 delay: 0.0,
-                options: UIViewAnimationOptions.curveEaseOut,
+                options: UIView.AnimationOptions.curveEaseOut,
                 animations:
                 {
                     self.filterViewTop?.constant = 0
@@ -139,7 +139,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
             UIView.animate(
                 withDuration: 0.2,
                 delay: 0.0,
-                options: UIViewAnimationOptions.curveEaseOut,
+                options: UIView.AnimationOptions.curveEaseOut,
                 animations:
                 {
                     self.filterViewTop?.constant = -realHeight
@@ -458,7 +458,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
         for movieIndex in 0 ..< movieListDataSource.moviesInSections[foundSectionIndex].count {
             if (movieListDataSource.moviesInSections[foundSectionIndex][movieIndex].id == newMovie.id) {
                 tableViewOutlet.insertRows(at: [IndexPath(row: movieIndex,
-                                                          section: foundSectionIndex)], with: UITableViewRowAnimation.automatic)
+                                                          section: foundSectionIndex)], with: UITableView.RowAnimation.automatic)
                 break
             }
         }
@@ -470,8 +470,8 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
             // special case: insert the "now playing" section (which is always first) with the movie
             movieTableViewDataSource?.sections.insert(sectionName, at: 0)
             movieTableViewDataSource?.moviesInSections.insert([newMovie], at: 0)
-            tableViewOutlet.insertSections(IndexSet(integer: 0), with: UITableViewRowAnimation.automatic)
-            tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableViewRowAnimation.automatic)
+            tableViewOutlet.insertSections(IndexSet(integer: 0), with: UITableView.RowAnimation.automatic)
+            tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.automatic)
         }
         else {
             // normal case: insert a section for the release date with the movie
@@ -498,15 +498,15 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
                     // insert new section
                     movieListDataSource.sections.insert(sectionName, at: newSectionIndex)
                     movieListDataSource.moviesInSections.insert([newMovie], at: newSectionIndex)
-                    tableViewOutlet.insertSections(IndexSet(integer: newSectionIndex), with: UITableViewRowAnimation.automatic)
-                    tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: newSectionIndex)], with: UITableViewRowAnimation.automatic)
+                    tableViewOutlet.insertSections(IndexSet(integer: newSectionIndex), with: UITableView.RowAnimation.automatic)
+                    tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: newSectionIndex)], with: UITableView.RowAnimation.automatic)
                 }
                 else {
                     // append new section at the end
                     movieListDataSource.sections.append(sectionName)
                     movieListDataSource.moviesInSections.append([newMovie])
-                    tableViewOutlet.insertSections(IndexSet(integer: movieListDataSource.sections.count-1), with: UITableViewRowAnimation.automatic)
-                    tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: movieListDataSource.sections.count-1)], with: UITableViewRowAnimation.automatic)
+                    tableViewOutlet.insertSections(IndexSet(integer: movieListDataSource.sections.count-1), with: UITableView.RowAnimation.automatic)
+                    tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: movieListDataSource.sections.count-1)], with: UITableView.RowAnimation.automatic)
                 }
             }
         }
@@ -521,7 +521,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
             for (movieIndex, movie) in section.enumerated() {
                 if (movie.tmdbId == tmdbId) {
                     tableViewOutlet.beginUpdates()
-                    tableViewOutlet.reloadRows(at: [IndexPath(row: movieIndex, section: sectionIndex)], with: UITableViewRowAnimation.none)
+                    tableViewOutlet.reloadRows(at: [IndexPath(row: movieIndex, section: sectionIndex)], with: UITableView.RowAnimation.none)
                     tableViewOutlet.endUpdates()
                     updated = true
                     break

@@ -57,7 +57,7 @@ class TabBarController: UITabBarController
         for viewController in self.viewControllers!
         {
             if let navController = viewController as? UINavigationController {
-                for child in navController.childViewControllers {
+                for child in navController.children {
                     // access "view" to force loading it
                     child.view.isHidden = false
                 }
@@ -257,7 +257,11 @@ class TabBarController: UITabBarController
 						}
 					)
 				}
-			}
+                
+            @unknown default:
+                // TODO
+                NSLog("Unknown error updating.")
+            }
 		})
 	}
 

@@ -25,7 +25,7 @@ class AcceptPrivacyViewController: UIViewController
         if (self.acceptPrivacyDelegate != nil)
         {
             self.acceptButton.setTitle(NSLocalizedString("AcceptPrivacy", comment: ""), for: .normal)
-            self.acceptButton.addTarget(self, action: #selector(AcceptPrivacyViewController.buttonTapped(_:)), for: UIControlEvents.touchUpInside)
+            self.acceptButton.addTarget(self, action: #selector(AcceptPrivacyViewController.buttonTapped(_:)), for: UIControl.Event.touchUpInside)
         }
         else
         {

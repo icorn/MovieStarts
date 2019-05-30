@@ -81,7 +81,7 @@ class MovieTableViewDelegate : NSObject, UITableViewDelegate {
 
         // define button-action
 
-        let favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowActionStyle.default,
+        let favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowAction.Style.default,
                                                                    title: title,
                                                                    handler:
             {
@@ -128,7 +128,7 @@ class MovieTableViewDelegate : NSObject, UITableViewDelegate {
         return [favAction]
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // Bug in iOS 8: This function is not called, but without it, swiping is not enabled
     }
 /*

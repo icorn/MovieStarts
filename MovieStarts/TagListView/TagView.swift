@@ -98,12 +98,12 @@ open class TagView: UIButton {
         else if isSelected {
             backgroundColor = selectedBackgroundColor ?? tagBackgroundColor
             layer.borderColor = selectedBorderColor?.cgColor ?? borderColor?.cgColor
-            setTitleColor(selectedTextColor, for: UIControlState())
+            setTitleColor(selectedTextColor, for: UIControl.State())
         }
         else {
             backgroundColor = tagBackgroundColor
             layer.borderColor = borderColor?.cgColor
-            setTitleColor(textColor, for: UIControlState())
+            setTitleColor(textColor, for: UIControl.State())
         }
     }
     
@@ -115,7 +115,7 @@ open class TagView: UIButton {
     
     override open var isSelected: Bool {
         didSet {
-            setTitle(isSelected ? titlePrefixSelected + tagTitle : titlePrefixUnselected + self.tagTitle, for: UIControlState())
+            setTitle(isSelected ? titlePrefixSelected + tagTitle : titlePrefixUnselected + self.tagTitle, for: UIControl.State())
             setupView()
             reloadStyles()
         }
@@ -132,8 +132,8 @@ open class TagView: UIButton {
     public init(title: String) {
         super.init(frame: CGRect.zero)
         self.tagTitle = title
-        setTitle(titlePrefixUnselected + title, for: UIControlState())
-        addTarget(self, action: #selector(buttonTapped), for: UIControlEvents.touchUpInside)
+        setTitle(titlePrefixUnselected + title, for: UIControl.State())
+        addTarget(self, action: #selector(buttonTapped), for: UIControl.Event.touchUpInside)
         setupView()
     }
     
@@ -148,7 +148,7 @@ open class TagView: UIButton {
     // MARK: - layout
 
     override open var intrinsicContentSize: CGSize {
-        var size = titleLabel?.text?.size(withAttributes: [NSAttributedStringKey.font: textFont]) ?? CGSize.zero
+        var size = titleLabel?.text?.size(withAttributes: [NSAttributedString.Key.font: textFont]) ?? CGSize.zero
         size.height = textFont.pointSize + paddingY * 2
         size.width += paddingX * 2
         

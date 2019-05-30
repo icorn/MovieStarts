@@ -51,7 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 	
 
-	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool
+	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool
     {
 		// create folders for image asset
         let appPathUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
@@ -135,7 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // set some colors, etc.
         UITabBar.appearance().tintColor = UIColor.darkTürkisColor()
         UITabBar.appearance().barTintColor = UIColor.lightGrayBackgroundColor()
-        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14.0)], for: UIControlState())
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0)], for: UIControl.State())
         
         UINavigationBar.appearance().tintColor = UIColor.darkTürkisColor()
         UINavigationBar.appearance().barTintColor = UIColor.lightGrayBackgroundColor()
@@ -186,7 +186,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		// Handle launching from a notification
 		if let launchOptions = launchOptions {
-			if let notification = launchOptions[UIApplicationLaunchOptionsKey.localNotification] as? UILocalNotification {
+			if let notification = launchOptions[UIApplication.LaunchOptionsKey.localNotification] as? UILocalNotification {
 				// save received notification for later
 				movieReleaseNotification = notification
 			}
@@ -307,7 +307,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 		let state = application.applicationState
 
-		if (state == UIApplicationState.active)
+		if (state == UIApplication.State.active)
         {
 			// app was in foreground
 			
@@ -322,7 +322,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				NotificationManager.notifyAboutMultipleMovies(appDelegate: self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
 			}
 		}
-		else if (state == UIApplicationState.inactive)
+		else if (state == UIApplication.State.inactive)
         {
 			// app was in background, but in memory
 			

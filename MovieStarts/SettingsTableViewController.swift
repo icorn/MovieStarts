@@ -51,9 +51,9 @@ class SettingsTableViewController: UITableViewController
 		notificationLabel.text = NSLocalizedString("SettingsNotifications", comment: "")
         notificationTimeTitleLabel.text = NSLocalizedString("SettingsNotificationTime", comment: "")
         
-        imdbSwitch.addTarget(self, action: #selector(SettingsTableViewController.imdbSwitchTapped), for: UIControlEvents.touchUpInside)
-		youtubeSwitch.addTarget(self, action: #selector(SettingsTableViewController.youtubeSwitchTapped), for: UIControlEvents.touchUpInside)
-		notificationSwitch.addTarget(self, action: #selector(SettingsTableViewController.notificationSwitchTapped), for: UIControlEvents.touchUpInside)
+        imdbSwitch.addTarget(self, action: #selector(SettingsTableViewController.imdbSwitchTapped), for: UIControl.Event.touchUpInside)
+		youtubeSwitch.addTarget(self, action: #selector(SettingsTableViewController.youtubeSwitchTapped), for: UIControl.Event.touchUpInside)
+		notificationSwitch.addTarget(self, action: #selector(SettingsTableViewController.notificationSwitchTapped), for: UIControl.Event.touchUpInside)
     }
 	
 	override func viewDidAppear(_ animated: Bool)
@@ -130,7 +130,7 @@ class SettingsTableViewController: UITableViewController
                 if ((indexPath as NSIndexPath).item == itemRate)
                 {
                     guard let rateUrl = URL(string: "itms-apps://itunes.apple.com/app/id1043041023?action=write-review") else { return }
-                    UIApplication.shared.open(rateUrl, options: [:], completionHandler:
+                    UIApplication.shared.open(rateUrl, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler:
                         { (Bool) in
                             tableView.deselectRow(at: indexPath, animated: false)
                         }
@@ -203,7 +203,7 @@ class SettingsTableViewController: UITableViewController
         {
 			if (tableView != nil)
             {
-				tableView.insertRows(at: [IndexPath(row: 1, section: sectionNotifications)], with: UITableViewRowAnimation.middle)
+				tableView.insertRows(at: [IndexPath(row: 1, section: sectionNotifications)], with: UITableView.RowAnimation.middle)
 			}
 			NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
 		}
@@ -214,7 +214,7 @@ class SettingsTableViewController: UITableViewController
 			if ((tableView != nil) && (tableView.cellForRow(at: indexPathToDelete) != nil))
             {
 				// delete time-setting-row if it exists
-				tableView.deleteRows(at: [indexPathToDelete], with: UITableViewRowAnimation.middle)
+				tableView.deleteRows(at: [indexPathToDelete], with: UITableView.RowAnimation.middle)
 			}
 			
 			NotificationManager.removeAllFavoriteNotifications()
@@ -305,3 +305,8 @@ class SettingsTableViewController: UITableViewController
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+}

@@ -92,10 +92,10 @@ class UpcomingViewController: MovieListViewController {
 
                 // remove section from table
                 let indexSet: IndexSet = IndexSet(integer: (indexPathForExistingMovie as NSIndexPath).section)
-                tableView.deleteSections(indexSet, with: UITableViewRowAnimation.automatic)
+                tableView.deleteSections(indexSet, with: UITableView.RowAnimation.automatic)
             }
 
-            tableView.deleteRows(at: [indexPathForExistingMovie], with: UITableViewRowAnimation.automatic)
+            tableView.deleteRows(at: [indexPathForExistingMovie], with: UITableView.RowAnimation.automatic)
         }
 
         tableView.endUpdates()
@@ -130,7 +130,7 @@ class UpcomingViewController: MovieListViewController {
 
                 // remove movie from old position
                 movieListDataSource.moviesInSections[(indexPathForExistingMovie as NSIndexPath).section].remove(at: (indexPathForExistingMovie as NSIndexPath).row)
-                tableView.deleteRows(at: [indexPathForExistingMovie], with: UITableViewRowAnimation.automatic)
+                tableView.deleteRows(at: [indexPathForExistingMovie], with: UITableView.RowAnimation.automatic)
 
                 // add it at new position
                 addMoviePrivate(updatedMovie)
@@ -138,12 +138,12 @@ class UpcomingViewController: MovieListViewController {
             else if (movieListDataSource.moviesInSections[(indexPathForExistingMovie as NSIndexPath).section][(indexPathForExistingMovie as NSIndexPath).row].hasVisibleChanges(updatedMovie: updatedMovie)) {
                 // some data has changed which is shown in the table cell -> change the cell with an animation
                 movieListDataSource.moviesInSections[(indexPathForExistingMovie as NSIndexPath).section][(indexPathForExistingMovie as NSIndexPath).row] = updatedMovie
-                tableView.reloadRows(at: [indexPathForExistingMovie], with: UITableViewRowAnimation.automatic)
+                tableView.reloadRows(at: [indexPathForExistingMovie], with: UITableView.RowAnimation.automatic)
             }
             else {
                 // some data has changed which is now visible in the table cell -> change the cell, no animation
                 movieListDataSource.moviesInSections[(indexPathForExistingMovie as NSIndexPath).section][(indexPathForExistingMovie as NSIndexPath).row] = updatedMovie
-                tableView.reloadRows(at: [indexPathForExistingMovie], with: UITableViewRowAnimation.none)
+                tableView.reloadRows(at: [indexPathForExistingMovie], with: UITableView.RowAnimation.none)
             }
         }
         

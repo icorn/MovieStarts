@@ -50,11 +50,11 @@ class AboutViewController: UIViewController
         impressumHeadlineLabel.text = NSLocalizedString("ImpressumHeadline", comment: "")
         impressumLabel.text = NSLocalizedString("Impressum", comment: "")
         
-        acknowledgmentsButton.setTitle(NSLocalizedString("Acknowledgements", comment: ""), for: UIControlState.normal)
-        acknowledgmentsButton.addTarget(self, action: #selector(AboutViewController.acknowledgmentsButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+        acknowledgmentsButton.setTitle(NSLocalizedString("Acknowledgements", comment: ""), for: UIControl.State.normal)
+        acknowledgmentsButton.addTarget(self, action: #selector(AboutViewController.acknowledgmentsButtonTapped(_:)), for: UIControl.Event.touchUpInside)
 
-        privacyButton.setTitle(NSLocalizedString("PrivacyStatement", comment: ""), for: UIControlState.normal)
-        privacyButton.addTarget(self, action: #selector(AboutViewController.privacyButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+        privacyButton.setTitle(NSLocalizedString("PrivacyStatement", comment: ""), for: UIControl.State.normal)
+        privacyButton.addTarget(self, action: #selector(AboutViewController.privacyButtonTapped(_:)), for: UIControl.Event.touchUpInside)
 }
     
     override func viewDidAppear(_ animated: Bool)
@@ -84,7 +84,7 @@ class AboutViewController: UIViewController
 
 		if let url = url , UIApplication.shared.canOpenURL(url)
         {
-            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (Bool) in })
 		}
 	}
 	
@@ -94,7 +94,7 @@ class AboutViewController: UIViewController
 		
 		if let url = url , UIApplication.shared.canOpenURL(url)
         {
-            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (Bool) in })
 		}
 	}
 	
@@ -104,7 +104,7 @@ class AboutViewController: UIViewController
 		
 		if let url = url , UIApplication.shared.canOpenURL(url)
         {
-            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (Bool) in })
 		}
 	}
 
@@ -136,4 +136,9 @@ class AboutViewController: UIViewController
  */
     }
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

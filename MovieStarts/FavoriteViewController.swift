@@ -72,20 +72,20 @@ class FavoriteViewController: MovieListViewController {
             let attrString = NSMutableAttributedString(string: stringValue)
             let style = NSMutableParagraphStyle()
             style.lineSpacing = 8
-            attrString.addAttribute(NSAttributedStringKey.paragraphStyle, value: style, range: NSRange(location: 0, length: stringValue.count))
+            attrString.addAttribute(NSAttributedString.Key.paragraphStyle, value: style, range: NSRange(location: 0, length: stringValue.count))
             textLabel.attributedText = attrString
             
             textLabel.sizeToFit()
             noEntriesBackView.addSubview(textLabel)
             
-            tableView.separatorStyle =  UITableViewCellSeparatorStyle.none
+            tableView.separatorStyle =  UITableViewCell.SeparatorStyle.none
             tableView.backgroundView = noEntriesBackView
         }
         else {
             // there are favorites: no background view and normal separators
 
             tableView.backgroundView = nil
-            tableView.separatorStyle =  UITableViewCellSeparatorStyle.singleLine
+            tableView.separatorStyle =  UITableViewCell.SeparatorStyle.singleLine
         }
     }
 
@@ -164,7 +164,7 @@ class FavoriteViewController: MovieListViewController {
         if let rowId = rowId, let sectionId = sectionId {
             // remove cell
             let indexPath: IndexPath = IndexPath(row: rowId, section: sectionId)
-            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
 
             // remove movie from datasource
             movieTableViewDataSource.moviesInSections[sectionId].remove(at: rowId)
@@ -177,7 +177,7 @@ class FavoriteViewController: MovieListViewController {
 
                 // remove section from table
                 let indexSet: IndexSet = IndexSet(integer: sectionId)
-                tableView.deleteSections(indexSet, with: UITableViewRowAnimation.automatic)
+                tableView.deleteSections(indexSet, with: UITableView.RowAnimation.automatic)
             }
         }
     }
@@ -217,12 +217,12 @@ class FavoriteViewController: MovieListViewController {
             else if (movieTableViewDataSource.moviesInSections[(indexPathForUpdateMovie as NSIndexPath).section][(indexPathForUpdateMovie as NSIndexPath).row].hasVisibleChanges(updatedMovie: updatedMovie)) {
                 // some data has changed which is shown in the table cell -> change the cell with an animation
                 movieTableViewDataSource.moviesInSections[(indexPathForUpdateMovie as NSIndexPath).section][(indexPathForUpdateMovie as NSIndexPath).row] = updatedMovie
-                tableView.reloadRows(at: [indexPathForUpdateMovie], with: UITableViewRowAnimation.automatic)
+                tableView.reloadRows(at: [indexPathForUpdateMovie], with: UITableView.RowAnimation.automatic)
             }
             else {
                 // some data has changed which is now visible in the table cell -> change the cell, no animation
                 movieTableViewDataSource.moviesInSections[(indexPathForUpdateMovie as NSIndexPath).section][(indexPathForUpdateMovie as NSIndexPath).row] = updatedMovie
-                tableView.reloadRows(at: [indexPathForUpdateMovie], with: UITableViewRowAnimation.none)
+                tableView.reloadRows(at: [indexPathForUpdateMovie], with: UITableView.RowAnimation.none)
             }
         }
         
@@ -239,7 +239,7 @@ class FavoriteViewController: MovieListViewController {
                     if (movie.id == movieID) {
                         // we found the movie to show: select the row and show it
                         let indexPath = IndexPath(row: movieIndex, section: sectionIndex)
-                        self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: UITableViewScrollPosition.none)
+                        self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: UITableView.ScrollPosition.none)
                         self.movieTableViewDelegate?.tableView(self.tableView, didSelectRowAt: indexPath)
                         tabBarController?.tabBar.isHidden = false
                         return

@@ -252,7 +252,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		if (synopsisForLanguage.0.count > 0)
         {
 			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: ""),
-			                         for: UIControlState())
+			                         for: UIControl.State())
 			storyLabel.text = synopsisForLanguage.0
 		}
 		else
@@ -271,7 +271,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         if (movie.imdbId != nil)
         {
             let imdbButton = UIImageView(image: UIImage(named: "imdb"))
-            imdbButton.contentMode = UIViewContentMode.scaleAspectFit
+            imdbButton.contentMode = UIView.ContentMode.scaleAspectFit
             imdbButton.isUserInteractionEnabled = true
             imdbButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.imdbButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(imdbButton)
@@ -280,7 +280,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         if (movie.tomatoURL != nil)
         {
             let tomatoButton = UIImageView(image: UIImage(named: "rotten-tomatoes"))
-            tomatoButton.contentMode = UIViewContentMode.scaleAspectFit
+            tomatoButton.contentMode = UIView.ContentMode.scaleAspectFit
             tomatoButton.isUserInteractionEnabled = true
             tomatoButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.rottenTomatoesButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(tomatoButton)
@@ -288,7 +288,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 
         if (movie.tmdbId != nil) {
             let tmdbButton = UIImageView(image: UIImage(named: "tmdb"))
-            tmdbButton.contentMode = UIViewContentMode.scaleAspectFit
+            tmdbButton.contentMode = UIView.ContentMode.scaleAspectFit
             tmdbButton.isUserInteractionEnabled = true
             tmdbButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(MovieViewController.tmdbButtonTapped(_:))))
             self.linksStackView.addArrangedSubview(tmdbButton)
@@ -395,7 +395,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		if (showCompleteStory)
         {
 			moreStoryButton.setTitle("▲  " + NSLocalizedString("ShowShortSynopsis", comment: ""),
-			                         for: UIControlState())
+			                         for: UIControl.State())
 /*
             UIView.animate(withDuration: 0.1,
                            delay: 0.0,
@@ -414,7 +414,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		else
         {
 			moreStoryButton.setTitle("▼  " + NSLocalizedString("ShowCompleteSynopsis", comment: ""),
-			                         for: UIControlState())
+			                         for: UIControl.State())
 /*
             UIView.animate(withDuration: 0.1,
                            delay: 0.0,
@@ -470,7 +470,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				// this movie is a favorite: show remove-button
 				if let navigationController = navigationController, let topViewController = navigationController.topViewController
                 {
-					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite"), style: UIBarButtonItemStyle.done, target: self, action: #selector(MovieViewController.removeFavoriteButtonTapped(_:)))
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite"), style: UIBarButtonItem.Style.done, target: self, action: #selector(MovieViewController.removeFavoriteButtonTapped(_:)))
 				}
 			}
 			else
@@ -478,7 +478,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 				// this movie is not a favorite: show add-button
 				if let navigationController = navigationController, let topViewController = navigationController.topViewController
                 {
-					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite-frame"), style: UIBarButtonItemStyle.done, target: self, action: #selector(MovieViewController.addFavoriteButtonTapped(_:)))
+					topViewController.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "favorite-frame"), style: UIBarButtonItem.Style.done, target: self, action: #selector(MovieViewController.addFavoriteButtonTapped(_:)))
 				}
 			}
 		}
@@ -495,7 +495,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			if let url = url , (useApp == true) && UIApplication.shared.canOpenURL(url)
             {
 				// use the app instead of the webview
-                UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
+                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (Bool) in })
 			}
 			else
             {
@@ -509,4 +509,9 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 		}
 	}
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

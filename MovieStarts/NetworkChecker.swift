@@ -68,7 +68,18 @@ class NetworkChecker {
 						}
 					)
 				}
-			}
+            @unknown default:
+                NSLog("CloudKit error: Unknown error")
+                errorCallback?()
+                
+                DispatchQueue.main.async {
+                    errorWindow = MessageWindow(parent: viewForError, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermine", buttonStringIds: ["Close"],
+                                                handler: { (buttonIndex) -> () in
+                                                    errorWindow?.close()
+                    }
+                    )
+                }
+            }
 		})
 		
 	}

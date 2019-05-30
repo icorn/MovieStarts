@@ -67,11 +67,11 @@ class NowViewController: MovieListViewController {
         if let indexForInsert = indexForInsert {
             // insert new movie
             movieListDataSource.nowMovies.insert(newMovie, at: indexForInsert)
-            tableView.insertRows(at: [IndexPath(row: indexForInsert, section: 0)], with: UITableViewRowAnimation.automatic)
+            tableView.insertRows(at: [IndexPath(row: indexForInsert, section: 0)], with: UITableView.RowAnimation.automatic)
         }
         else {
             movieListDataSource.nowMovies.append(newMovie)
-            tableView.insertRows(at: [IndexPath(row: movieListDataSource.nowMovies.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
+            tableView.insertRows(at: [IndexPath(row: movieListDataSource.nowMovies.count-1, section: 0)], with: UITableView.RowAnimation.automatic)
         }
 
         tableView.endUpdates()
@@ -95,7 +95,7 @@ class NowViewController: MovieListViewController {
 
         if let indexForExistingMovie = indexForExistingMovie {
             movieListDataSource.nowMovies.remove(at: indexForExistingMovie)
-            tableView.deleteRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableViewRowAnimation.automatic)
+            tableView.deleteRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableView.RowAnimation.automatic)
         }
 
         tableView.endUpdates()
@@ -147,7 +147,7 @@ class NowViewController: MovieListViewController {
                     tableView.endUpdates()
 
                     tableView.beginUpdates()
-                    tableView.reloadRows(at: [IndexPath(row: indexForUpdatedMovie, section: 0)], with: UITableViewRowAnimation.none)
+                    tableView.reloadRows(at: [IndexPath(row: indexForUpdatedMovie, section: 0)], with: UITableView.RowAnimation.none)
                 }
                 else {
 
@@ -157,18 +157,18 @@ class NowViewController: MovieListViewController {
                     tableView.endUpdates()
 
                     tableView.beginUpdates()
-                    tableView.reloadRows(at: [IndexPath(row: movieListDataSource.nowMovies.count-1, section: 0)], with: UITableViewRowAnimation.automatic)
+                    tableView.reloadRows(at: [IndexPath(row: movieListDataSource.nowMovies.count-1, section: 0)], with: UITableView.RowAnimation.automatic)
                 }
             }
             else if (movieListDataSource.nowMovies[indexForExistingMovie].hasVisibleChanges(updatedMovie: updatedMovie)) {
                 // some data has changed which is shown in the table cell -> change the cell with an animation
                 movieListDataSource.nowMovies[indexForExistingMovie] = updatedMovie
-                tableView.reloadRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableViewRowAnimation.automatic)
+                tableView.reloadRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableView.RowAnimation.automatic)
             }
             else {
                 // some data has changed which is now visible in the table cell -> change the cell, no animation
                 movieListDataSource.nowMovies[indexForExistingMovie] = updatedMovie
-                tableView.reloadRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableViewRowAnimation.none)
+                tableView.reloadRows(at: [IndexPath(row: indexForExistingMovie, section: 0)], with: UITableView.RowAnimation.none)
             }
         }
         
@@ -183,7 +183,7 @@ class NowViewController: MovieListViewController {
         for (index, movie) in movieListDataSource.nowMovies.enumerated() {
             if (movie.tmdbId == tmdbId) {
                 tableView.beginUpdates()
-                tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: UITableViewRowAnimation.none)
+                tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: UITableView.RowAnimation.none)
                 tableView.endUpdates()
                 updated = true
                 break

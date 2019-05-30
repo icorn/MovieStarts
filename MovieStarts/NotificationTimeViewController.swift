@@ -59,7 +59,7 @@ class NotificationTimeViewController: UIViewController, UIPickerViewDelegate, UI
     {
         super.viewWillDisappear(animated)
         
-        if self.isMovingFromParentViewController
+        if self.isMovingFromParent
         {
             // save the time
             saveNotificationTime()

@@ -37,7 +37,7 @@ class BigLabelViewController: UIViewController
                     if let linkString = self.bigLabel.attributedText?.attributedSubstring(from: range).string,
                        let linkURL = URL(string: linkString)
                     {
-                        UIApplication.shared.open(linkURL, options: [:], completionHandler: nil)
+                        UIApplication.shared.open(linkURL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
                         break
                     }
                 }
@@ -53,11 +53,16 @@ class BigLabelViewController: UIViewController
         for link in links
         {
             let range = (text as NSString).range(of: link)
-            self.attributedString?.addAttributes([NSAttributedStringKey.underlineStyle : NSUnderlineStyle.styleSingle.rawValue,
-                                                  NSAttributedStringKey.foregroundColor: UIColor.blue], range: range)
+            self.attributedString?.addAttributes([NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
+                                                  NSAttributedString.Key.foregroundColor: UIColor.blue], range: range)
             self.ranges?.append(range)
         }
         
-        self.attributedString?.addAttribute(NSAttributedStringKey.font, value: UIFont.systemFont(ofSize: 15.0), range: NSMakeRange(0, text.count))
+        self.attributedString?.addAttribute(NSAttributedString.Key.font, value: UIFont.systemFont(ofSize: 15.0), range: NSMakeRange(0, text.count))
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

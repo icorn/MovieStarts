@@ -110,7 +110,7 @@ extension MovieViewController {
                 let button = UIButton()
                 button.tag = Constants.tagTrailers + index
                 button.contentMode = .scaleAspectFit
-                button.addTarget(self, action: #selector(MovieViewController.trailerButtonTapped(_:)), for: UIControlEvents.touchUpInside)
+                button.addTarget(self, action: #selector(MovieViewController.trailerButtonTapped(_:)), for: UIControl.Event.touchUpInside)
                 setImage(trailerImage, withFlag: showFlag, toButton: button)
                 currentSubStackview?.addArrangedSubview(button)
             }
@@ -219,7 +219,7 @@ extension MovieViewController {
         if let url = url , (useApp == true) && UIApplication.shared.canOpenURL(url)
         {
             // use the app instead of the webview
-            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (Bool) in })
         }
         else
         {
@@ -236,8 +236,8 @@ extension MovieViewController {
     {
         guard let movie = self.movie else { return }
         let scaleFactor = CGFloat(image.width) / ((self.view.frame.size.width - 2 * padding - self.linksStackView.spacing) / 2.0)
-        let scaledImage = UIImage(cgImage: image, scale: scaleFactor, orientation: UIImageOrientation.up)
-        button.setImage(scaledImage, for: UIControlState())
+        let scaledImage = UIImage(cgImage: image, scale: scaleFactor, orientation: UIImage.Orientation.up)
+        button.setImage(scaledImage, for: UIControl.State())
         
         if (showFlag)
         {
@@ -264,4 +264,9 @@ extension MovieViewController {
             }
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

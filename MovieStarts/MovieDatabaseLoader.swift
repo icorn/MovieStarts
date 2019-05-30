@@ -201,7 +201,7 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
 			self.updateIndicator?(counter: self.allCKRecords.count)
 		}
 */
-		queryOperation.queryCompletionBlock = { [unowned self] (cursor: CKQueryCursor?, error: Error?) -> Void in
+		queryOperation.queryCompletionBlock = { [unowned self] (cursor: CKQueryOperation.Cursor?, error: Error?) -> Void in
 			if let cursor = cursor {
 				// some objects are here, ask for more
 				let queryCursorOperation = CKQueryOperation(cursor: cursor)

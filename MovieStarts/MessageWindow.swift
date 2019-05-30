@@ -141,19 +141,19 @@ class MessageWindow: NSObject {
 			let button = UIButton()
 			button.tag = index
 			button.translatesAutoresizingMaskIntoConstraints = false
-			button.setTitle(NSLocalizedString(buttonStringId, comment: ""), for: UIControlState())
-			button.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0), for: UIControlState())
-			button.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0), for: UIControlState.highlighted)
-			button.addTarget(self, action: #selector(MessageWindow.buttonPressed(_:)), for: UIControlEvents.touchUpInside)
+			button.setTitle(NSLocalizedString(buttonStringId, comment: ""), for: UIControl.State())
+			button.setTitleColor(UIColor(red: 0.0, green: 170.0/255.0, blue: 170.0/255.0, alpha: 1.0), for: UIControl.State())
+			button.setTitleColor(UIColor(red: 0.0, green: 120.0/255.0, blue: 120.0/255.0, alpha: 1.0), for: UIControl.State.highlighted)
+			button.addTarget(self, action: #selector(MessageWindow.buttonPressed(_:)), for: UIControl.Event.touchUpInside)
 			buttons.append(button)
 		}
 		
 		progressView.translatesAutoresizingMaskIntoConstraints = false
-		progressView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+		progressView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
 		progressView.isHidden = true
 		
 		spinner.translatesAutoresizingMaskIntoConstraints = false
-		spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+		spinner.style = UIActivityIndicatorView.Style.gray
 		spinner.hidesWhenStopped = false
 		
 		progressLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -188,116 +188,116 @@ class MessageWindow: NSObject {
 		
 		let viewsDictionary = ["view": view, "backView": backView, "progressView": progressView]
 		
-		parent.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[backView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
-		parent.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[backView]-0-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
-		parent.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[view]-20-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
+		parent.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[backView]-0-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
+		parent.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[backView]-0-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
+		parent.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[view]-20-|", options: NSLayoutConstraint.FormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary))
 		
 		// create the more complicated constraints in code
 
 		if let logoImageView = logoImageView, let logoImage = logoImage {
 			parent.addConstraints([
-				NSLayoutConstraint(item: logoImageView,	attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view,
-					attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: -1 * (logoImage.size.height / 2)),
-				NSLayoutConstraint(item: logoImageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: view,
-					attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0)
+				NSLayoutConstraint(item: logoImageView,	attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+					attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: -1 * (logoImage.size.height / 2)),
+				NSLayoutConstraint(item: logoImageView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+					attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1.0, constant: 0)
 			])
 		}
 
 		view.addConstraints([
-			NSLayoutConstraint(item: title, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: view,
-				attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 40),
-			NSLayoutConstraint(item: title, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: view,
-				attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: title, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: view,
-				attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0)
+			NSLayoutConstraint(item: title, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+				attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: 40),
+			NSLayoutConstraint(item: title, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+				attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant: 0),
+            NSLayoutConstraint(item: title, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+                               attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: 0)
 		])
 
 		view.addConstraints([
-			NSLayoutConstraint(item: msg, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: title,
-				attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 10),
-			NSLayoutConstraint(item: msg, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: view,
-				attribute: NSLayoutAttribute.leading, multiplier: 1.0, 	constant: 15),
-			NSLayoutConstraint(item: msg, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: view,
-				attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: -15)
+			NSLayoutConstraint(item: msg, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: title,
+				attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 10),
+			NSLayoutConstraint(item: msg, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+				attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, 	constant: 15),
+            NSLayoutConstraint(item: msg, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+                               attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: -15)
 		])
 
 		for (index, button) in buttons.enumerated() {
 			view.addConstraints([
-				NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: view,
-					attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0),
-				NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: view,
-					attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0)
+				NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+					attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant: 0),
+				NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+					attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: 0)
 			])
 
 			if (index == 0) {
-				view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal,
-					toItem: msg, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 20))
+				view.addConstraint(NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal,
+					toItem: msg, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 20))
 			}
 			else {
-				let topConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal,
-					toItem: buttons[index-1], attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: buttonTop)
+				let topConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal,
+					toItem: buttons[index-1], attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: buttonTop)
 				view.addConstraint(topConstraint)
 				buttonTopConstraints.append(topConstraint)
 				
-				let heightConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal,
-					toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: buttonHeight)
+				let heightConstraint = NSLayoutConstraint(item: button, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal,
+					toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1.0, constant: buttonHeight)
 				view.addConstraint(heightConstraint)
 				buttonHeightConstraints.append(heightConstraint)
 			}
 		}
 
 		progressView.addConstraints([
-			NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: progressView,
-				attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0),
-			NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: progressView,
-				attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0),
+			NSLayoutConstraint(item: spinner, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: progressView,
+				attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant: 0),
+			NSLayoutConstraint(item: spinner, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: progressView,
+				attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1.0, constant: 0),
 			
-			NSLayoutConstraint(item: progressLabel, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: spinner,
-				attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 10),
-			NSLayoutConstraint(item: progressLabel, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: progressView,
-				attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0)
+            NSLayoutConstraint(item: progressLabel, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: spinner,
+                               attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: 10),
+            NSLayoutConstraint(item: progressLabel, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: progressView,
+                               attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1.0, constant: 0)
 		])
 
 		view.addConstraint(
-			NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: view,
-				attribute: NSLayoutAttribute.centerX, multiplier: 1.0, constant: 0))
+			NSLayoutConstraint(item: progressView, attribute: NSLayoutConstraint.Attribute.centerX, relatedBy: NSLayoutConstraint.Relation.equal, toItem: view,
+				attribute: NSLayoutConstraint.Attribute.centerX, multiplier: 1.0, constant: 0))
 
 		if (buttons.count > 0) {
 			view.addConstraints([
-				NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: buttons[0],
-					attribute: NSLayoutAttribute.top, multiplier: 1.0, constant: 0),
-				NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: buttons[0],
-					attribute: NSLayoutAttribute.height, multiplier: 1.0, constant: 0)
+				NSLayoutConstraint(item: progressView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: buttons[0],
+					attribute: NSLayoutConstraint.Attribute.top, multiplier: 1.0, constant: 0),
+				NSLayoutConstraint(item: progressView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: buttons[0],
+					attribute: NSLayoutConstraint.Attribute.height, multiplier: 1.0, constant: 0)
 				])
 		}
 		else {
 			view.addConstraints([
-				NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: msg,
-					attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 10),
-				NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: msg,
-					attribute: NSLayoutAttribute.height, multiplier: 1.0, constant: 0)
+				NSLayoutConstraint(item: progressView, attribute: NSLayoutConstraint.Attribute.top, relatedBy: NSLayoutConstraint.Relation.equal, toItem: msg,
+					attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 10),
+				NSLayoutConstraint(item: progressView, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: msg,
+					attribute: NSLayoutConstraint.Attribute.height, multiplier: 1.0, constant: 0)
 				])
 		}
 
-		progressViewWidthConstraint =  NSLayoutConstraint(item: progressView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil,
-			attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1.0, constant: progressLabel.frame.width + 30)
+		progressViewWidthConstraint =  NSLayoutConstraint(item: progressView, attribute: NSLayoutConstraint.Attribute.width, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil,
+			attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1.0, constant: progressLabel.frame.width + 30)
 
 		if let constraint = progressViewWidthConstraint {
 			view.addConstraint(constraint)
 		}
 		
 		parent.addConstraint(
-			NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: parent,
-				attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0)
+			NSLayoutConstraint(item: view, attribute: NSLayoutConstraint.Attribute.centerY, relatedBy: NSLayoutConstraint.Relation.equal, toItem: parent,
+				attribute: NSLayoutConstraint.Attribute.centerY, multiplier: 1.0, constant: 0)
 		)
 
 		if (buttons.count > 0) {
-			parent.addConstraint(NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal,
-				toItem: buttons[buttons.count-1], attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 20))
+			parent.addConstraint(NSLayoutConstraint(item: view, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal,
+				toItem: buttons[buttons.count-1], attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 20))
 		}
 		else {
-			parent.addConstraint(NSLayoutConstraint(item: view, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal,
-				toItem: progressView, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 20))
+			parent.addConstraint(NSLayoutConstraint(item: view, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal,
+				toItem: progressView, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 20))
 		}
 	}
 	

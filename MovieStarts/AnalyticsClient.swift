@@ -63,12 +63,13 @@ class AnalyticsClient
     class func logEventAddMovieToWatchlist(_ movieTitle: String?, withImdbId imdbId: String?)
     {
         #if RELEASE
+/*
             var imdbIdToLog = "?"
             var movieTitleToLog = "?"
 
             if let movieTitle = movieTitle  { movieTitleToLog = movieTitle }
             if let imdbId = imdbId  { imdbIdToLog = imdbId }
-/*
+
             Analytics.logEvent(AnalyticsEventAddToWishlist, parameters:
             [
                 AnalyticsParameterItemID: imdbIdToLog as NSObject,

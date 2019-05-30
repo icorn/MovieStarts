@@ -144,7 +144,7 @@ extension MovieViewController
 			labelfont = realLabelfont
 		}
 		
-		let textAttributes = [NSAttributedStringKey.font: labelfont]
+		let textAttributes = [NSAttributedString.Key.font: labelfont]
 		var titleLabelHeight: CGFloat = 24.0
 		
 		if let titleRect = titleLabel.text?.boundingRect(with: CGSize(width: 320, height: 200),
@@ -201,7 +201,7 @@ extension MovieViewController
 		for label in labels
         {
 			guard let labelfont = label.font else { continue }
-			let textAttributes = [NSAttributedStringKey.font: labelfont]
+			let textAttributes = [NSAttributedString.Key.font: labelfont]
 			
 			let rect = label.text?.boundingRect(with: CGSize(width: 320, height: 200),
 			                                    options: .usesLineFragmentOrigin,
@@ -227,7 +227,12 @@ extension MovieViewController
         
         if let url = url, UIApplication.shared.canOpenURL(url)
         {
-            UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
+            UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (Bool) in })
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

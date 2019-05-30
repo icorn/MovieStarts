@@ -86,7 +86,7 @@ extension MovieViewController
             let label = UILabel()
             label.numberOfLines = 0
             label.font = UIFont.systemFont(ofSize: 11.0)
-            label.attributedText = NSAttributedString(string: actorName, attributes: [NSAttributedStringKey.kern: -0.3])
+            label.attributedText = NSAttributedString(string: actorName, attributes: [NSAttributedString.Key.kern: -0.3])
             label.textAlignment = .center
             label.allowsDefaultTighteningForTruncation = true
             let labelSize = label.sizeThatFits(CGSize(width: actorThumbnailSize.width, height: 1000.0))

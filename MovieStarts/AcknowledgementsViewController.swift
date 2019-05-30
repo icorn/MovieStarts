@@ -87,7 +87,7 @@ class AcknowledgementsViewController: UITableViewController
             
                     if let url = url, UIApplication.shared.canOpenURL(url)
                     {
-                        UIApplication.shared.open(url, options: [:], completionHandler: { (Bool) in })
+                        UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (Bool) in })
                     }
 
                 case .FTLinear, .Minicons:
@@ -102,4 +102,9 @@ class AcknowledgementsViewController: UITableViewController
             }
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }
