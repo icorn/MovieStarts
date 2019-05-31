@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import WebKit
 
 class AcceptPrivacyViewController: UIViewController
 {
     @IBOutlet weak var acceptButton: UIButton!
     @IBOutlet weak var headlineLabel: UILabel!
-    @IBOutlet weak var webView: UIWebView!
+    @IBOutlet weak var webView: WKWebView!
     
     var acceptPrivacyDelegate: AcceptPrivacyDelegate?
     
