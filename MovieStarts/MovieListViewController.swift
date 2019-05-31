@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 
 class MovieListViewController: UIViewController, FavoriteIconDelegate
@@ -180,12 +181,14 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
         return stvc
     }
 
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool)
+    {
         super.viewDidAppear(animated)
 
         // set header height and move it up to be invisible
 
-        if let realHeight = self.filterViewOutlet?.realHeight {
+        if let realHeight = self.filterViewOutlet?.realHeight
+        {
             self.filterViewHeight?.constant = realHeight
         }
 
@@ -206,34 +209,42 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
         // check if we had notifications turned on in the app, but turned off in the system
         let notificationsTurnedOnInSettings: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsNotifications) as? Bool
 
-        if let notificationsTurnedOnInSettings = notificationsTurnedOnInSettings , notificationsTurnedOnInSettings == true {
-            if let currentSettings = UIApplication.shared.currentUserNotificationSettings , currentSettings.types.contains(UIUserNotificationType.alert) {
-                // current notifications settings are okay
-            }
-            else {
-                // tell the user, the notifications are no longer working - and it's all his fault ;-)
-                guard let errorView = movieTableViewDataSource?.tabBarController.view else { return }
-                var errorWindow: MessageWindow?
-                errorWindow = MessageWindow(parent: errorView,
-                                            darkenBackground: true,
-                                            titleStringId: "NotificationWarnTitle",
-                                            textStringId: "NotificationWarnText2",
-                                            buttonStringIds: ["Close"],
-                                            handler: { (buttonIndex) -> () in
-                                                errorWindow?.close()
+        if let notificationsTurnedOnInSettings = notificationsTurnedOnInSettings, notificationsTurnedOnInSettings == true
+        {
+            let center = UNUserNotificationCenter.current()
+            
+            center.getNotificationSettings
+            { [unowned self] (settings) in
+                if settings.authorizationStatus != .authorized
+                {
+                    // tell the user, the notifications are no longer working - and it's all his fault ;-)
+                    DispatchQueue.main.async
+                    {
+                        guard let errorView = self.movieTableViewDataSource?.tabBarController.view else { return }
+                        var errorWindow: MessageWindow?
+                        errorWindow = MessageWindow(parent: errorView,
+                                                    darkenBackground: true,
+                                                    titleStringId: "NotificationWarnTitle",
+                                                    textStringId: "NotificationWarnText2",
+                                                    buttonStringIds: ["Close"],
+                                                    handler:
+                                                    { (buttonIndex) -> () in
+                                                        errorWindow?.close()
+                                                    })
                     }
-                )
-
-
-                // also, turn notifications off
-                if let settings = settingsTableViewController {
-                    settings.switchNotifications(false)
-                }
-                else {
-                    NSLog("Settings dialog not available. This should never happen.")
-                    UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsNotifications)
-                    UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
-                    NotificationManager.removeAllFavoriteNotifications()
+                    
+                    // also, turn notifications off
+                    if let settings = self.settingsTableViewController
+                    {
+                        settings.switchNotifications(false)
+                    }
+                    else
+                    {
+                        NSLog("Settings dialog not available. This should never happen.")
+                        UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsNotifications)
+                        UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
+                        NotificationManager.removeAllFavoriteNotifications()
+                    }
                 }
             }
         }

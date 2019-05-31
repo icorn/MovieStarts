@@ -30,6 +30,7 @@
 		4F34A5B01DCFC5360032F7BA /* TagListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F34A5AD1DCFC5360032F7BA /* TagListView.swift */; };
 		4F34A5B11DCFC5360032F7BA /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F34A5AE1DCFC5360032F7BA /* TagView.swift */; };
 		4F35FE6D1E70A4F70020EDFB /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F35FE6C1E70A4F70020EDFB /* ColorExtension.swift */; };
+		4F60C1D422A0099E00BC3086 /* NotificationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F60C1D322A0099E00BC3086 /* NotificationDelegate.swift */; };
 		4F63D8CF1DC3EDE700922C4A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F63D8CE1DC3EDE700922C4A /* Assets.xcassets */; };
 		4F63D8D61DC3EDE700922C4A /* watchOSapp Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 4F63D8D51DC3EDE700922C4A /* watchOSapp Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4F63D8DD1DC3EDE700922C4A /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F63D8DC1DC3EDE700922C4A /* ExtensionDelegate.swift */; };
@@ -169,6 +170,7 @@
 		4F34A5AD1DCFC5360032F7BA /* TagListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TagListView.swift; path = TagListView/TagListView.swift; sourceTree = "<group>"; };
 		4F34A5AE1DCFC5360032F7BA /* TagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TagView.swift; path = TagListView/TagView.swift; sourceTree = "<group>"; };
 		4F35FE6C1E70A4F70020EDFB /* ColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
+		4F60C1D322A0099E00BC3086 /* NotificationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationDelegate.swift; sourceTree = "<group>"; };
 		4F63D8C91DC3EDE700922C4A /* watchOSapp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watchOSapp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F63D8CE1DC3EDE700922C4A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F63D8D01DC3EDE700922C4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -462,7 +464,7 @@
 			isa = PBXGroup;
 			children = (
 				4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */,
-				4F694E681FC0D84A000A2A28 /* Rotatable.swift */,
+				4F0841642040B7E6006F3C22 /* AnalyticsClient.swift */,
 				4FAFF8C81A8BFFE500864078 /* AppDelegate.swift */,
 				4F87F9251A8DEE31001869A1 /* Constants.swift */,
 				4FCFBA0F1C0C9C1300D43C27 /* Database */,
@@ -472,11 +474,12 @@
 				4FFE43471BA6B4D10080D9F3 /* MessageWindow.swift */,
 				4FECDF211A9096A700F84A52 /* MovieRecord.swift */,
 				4F7A99AE1BAF01E600ED38C9 /* NetworkChecker.swift */,
+				4F60C1D322A0099E00BC3086 /* NotificationDelegate.swift */,
 				4F2D38311C5BC984000927E7 /* NotificationManager.swift */,
+				4F694E681FC0D84A000A2A28 /* Rotatable.swift */,
+				4F694E6A1FC0D9BA000A2A28 /* RotatableSafariViewController.swift */,
 				4F956C231DC4D637008EF031 /* Screens */,
 				4F70ACBF1BCC419100E34987 /* WatchSessionManager.swift */,
-				4F694E6A1FC0D9BA000A2A28 /* RotatableSafariViewController.swift */,
-				4F0841642040B7E6006F3C22 /* AnalyticsClient.swift */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -750,6 +753,7 @@
 				4F2E40A0202F2FE1009B5AEB /* AcknowledgementsViewController.swift in Sources */,
 				4F1B6B63202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift in Sources */,
 				4FAB81E11D95C23D00D5EA5D /* MovieViewControllerTrailers.swift in Sources */,
+				4F60C1D422A0099E00BC3086 /* NotificationDelegate.swift in Sources */,
 				4F91DB30206E1328005E45BD /* ZoomImageView.swift in Sources */,
 				4F63E61E1A992BCA00528FB3 /* MovieDatabaseHelper.swift in Sources */,
 				4F63E6401A9D24BA00528FB3 /* StartViewController.swift in Sources */,

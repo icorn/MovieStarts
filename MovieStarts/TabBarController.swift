@@ -64,27 +64,28 @@ class TabBarController: UITabBarController
             }
         }
 
-		if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let notification = appDelegate.movieReleaseNotification {
+		if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let notification = appDelegate.movieReleaseNotification
+        {
 			// we have a notification for the user
-			guard let userInfo = notification.userInfo,
-				let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] , movieIDs.count > 0,
-				let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] , movieTitles.count > 0,
-				let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
-				let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else {
-					return
+            let userInfo = notification.content.userInfo
+            
+			if let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String] , movieIDs.count > 0,
+               let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String] , movieTitles.count > 0,
+               let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
+               let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int
+            {
+                if (movieTitles.count == 1) {
+                    // only one movie: go directly to the movie
+                    selectedIndex = Constants.tabIndexFavorites
+                    self.favoriteController?.showFavoriteMovie(movieIDs[0])
+                }
+                else {
+                    // multiple movies
+                    NotificationManager.notifyAboutMultipleMovies(appDelegate: appDelegate, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
+                }
+                
+                appDelegate.movieReleaseNotification = nil
 			}
-			
-			if (movieTitles.count == 1) {
-				// only one movie: go directly to the movie
-				selectedIndex = Constants.tabIndexFavorites
-				self.favoriteController?.showFavoriteMovie(movieIDs[0])
-			}
-			else {
-				// multiple movies
-				NotificationManager.notifyAboutMultipleMovies(appDelegate: appDelegate, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
-			}
-			
-			appDelegate.movieReleaseNotification = nil
         }
 	}
 

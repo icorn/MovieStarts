@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import UserNotifications
 
 
 class NotificationManager {
@@ -20,7 +21,7 @@ class NotificationManager {
 	
 	static func removeAllFavoriteNotifications()
     {
-		UIApplication.shared.cancelAllLocalNotifications()
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
 		NSLog("Removed all notifications")
 	}
 	
@@ -69,8 +70,9 @@ class NotificationManager {
 		}
 		
 		// add a notification for each group
-		for fireDate in fireMovies.keys {
-			addFavoriteNotification(movies: fireMovies[fireDate], fireDate: /*now.dateByAddingTimeInterval(30)*/ fireDate, notificationDay: notificationDay)
+		for fireDate in fireMovies.keys
+        {
+            addFavoriteNotification(movies: fireMovies[fireDate], fireDate: fireDate, notificationDay: notificationDay)
 		}
         
         NSLog("Updated \(fireMovies.keys.count) notifications")
@@ -152,55 +154,62 @@ class NotificationManager {
 
     
 	// MARK: - Private functions
-
 	
-	fileprivate static func addFavoriteNotification(movies: [MovieRecord]?, fireDate: Date, notificationDay: Int) {
+	fileprivate static func addFavoriteNotification(movies: [MovieRecord]?, fireDate: Date, notificationDay: Int)
+    {
 		guard let movies = movies , movies.count > 0 else { return }
-		
-		let notification = UILocalNotification()
-		
-		notification.fireDate = fireDate
-		notification.hasAction = true
-		notification.soundName = UILocalNotificationDefaultSoundName
-		notification.alertBody = NotificationManager.generateNotificationText(
-			movieCount: movies.count,
-			notificationDay: notificationDay,
-			firstMovieTitle: movies[0].title[movies[0].currentCountry.languageArrayIndex],
-			movieDate: movies[0].releaseDateStringLong)
-
-//		notification.applicationIconBadgeNumber = movies.count
-//		notification.timeZone = NSTimeZone.defaultTimeZone()
-// 		notification.alertLaunchImage = nil
-// 		notification.alertAction = nil // "View" is default
-// 		notification.category = nil
-//		notification.alertTitle = "Film-Alarm"
-
-		if (movies.count == 1) {
-			notification.userInfo = [
-				Constants.notificationUserInfoId 	: [movies[0].id],
-				Constants.notificationUserInfoName 	: [movies[0].title[movies[0].currentCountry.languageArrayIndex]],
-				Constants.notificationUserInfoDate 	: movies[0].releaseDateStringLong,
-				Constants.notificationUserInfoDay 	: notificationDay
-			]
-			NSLog("Added notification at \(fireDate) for '\(movies[0].title[movies[0].currentCountry.languageArrayIndex])'")
-		}
-		else {
-			if let alertBody = notification.alertBody {
-				notification.alertBody = alertBody + "."
-			}
-			
-            notification.userInfo = [
+        
+        let fireDateComponents = Calendar.current.dateComponents([.year,.month,.day,.hour,.minute,.second,], from: fireDate)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: fireDateComponents,
+                                                    repeats: false)
+        let content = UNMutableNotificationContent()
+        content.title = NSLocalizedString("NotificationMsgWindowTitle", comment: "")
+        content.body = NotificationManager.generateNotificationText(movieCount: movies.count,
+                                                                    notificationDay: notificationDay,
+                                                                    firstMovieTitle: movies[0].title[movies[0].currentCountry.languageArrayIndex],
+                                                                    movieDate: movies[0].releaseDateStringLong)
+        content.sound = UNNotificationSound.default
+        
+        if (movies.count == 1)
+        {
+            content.userInfo =
+            [
+                Constants.notificationUserInfoId     : [movies[0].id],
+                Constants.notificationUserInfoName   : [movies[0].title[movies[0].currentCountry.languageArrayIndex]],
+                Constants.notificationUserInfoDate   : movies[0].releaseDateStringLong,
+                Constants.notificationUserInfoDay    : notificationDay
+            ]
+            NSLog("Added notification at \(fireDate) for '\(movies[0].title[movies[0].currentCountry.languageArrayIndex])'")
+        }
+        else
+        {
+            content.body = content.body + "."
+            
+            content.userInfo =
+            [
                 Constants.notificationUserInfoId    : movies.map { $0.id },
                 Constants.notificationUserInfoName  : movies.map { $0.title[$0.currentCountry.languageArrayIndex] },
                 Constants.notificationUserInfoDate  : movies[0].releaseDateStringLong,
                 Constants.notificationUserInfoDay   : notificationDay
             ]
-
-			NSLog("Added notification at \(fireDate) for \(movies.count) movies")
-		}
+            
+            NSLog("Added notification at \(fireDate) for \(movies.count) movies")
+        }
 		
-		UIApplication.shared.scheduleLocalNotification(notification)
+        let request = UNNotificationRequest(identifier: movies[0].id,
+                                            content: content,
+                                            trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request,
+                                               withCompletionHandler:
+            { (error) in
+                if let error = error
+                {
+                    // TODO
+                    NSLog("Error adding the notification: \(error.localizedDescription)")
+                }
+            }
+        )
 	}
-
 }
 

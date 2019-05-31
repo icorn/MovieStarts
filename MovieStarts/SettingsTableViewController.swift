@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class SettingsTableViewController: UITableViewController
 {
@@ -26,9 +27,11 @@ class SettingsTableViewController: UITableViewController
 	let sectionNotifications	= 1
 	let sectionAbout			= 2
 	
-	let itemRate		= 0
-	let itemAbout		= 1
-    
+	let itemRate  = 0
+	let itemAbout = 1
+
+    let itemTime  = 1
+
 	var movieTabBarController: TabBarController?
     {
 		get
@@ -143,8 +146,11 @@ class SettingsTableViewController: UITableViewController
                 }
             
             case sectionNotifications:
-                guard let notificationTimeController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationTimeViewController") as? NotificationTimeViewController else { return }
-                navigationController?.pushViewController(notificationTimeController, animated: true)
+                if ((indexPath as NSIndexPath).item == itemTime)
+                {
+                    guard let notificationTimeController = self.storyboard?.instantiateViewController(withIdentifier: "NotificationTimeViewController") as? NotificationTimeViewController else { return }
+                    navigationController?.pushViewController(notificationTimeController, animated: true)
+                }
 
             default:
                 ()
@@ -173,11 +179,13 @@ class SettingsTableViewController: UITableViewController
 		if (notificationSwitch.isOn)
         {
 			// notification switch was turned on: try to activate notifications
-			UIApplication.shared.registerUserNotificationSettings(
-				UIUserNotificationSettings(types: [UIUserNotificationType.alert, /*UIUserNotificationType.Badge,*/ UIUserNotificationType.sound], categories: nil))
-			saveNotificationTimeIfNeeded()
-			
-			// if registration was successfull, the AppDelegate calls "switchNotifications(true)"
+            let center = UNUserNotificationCenter.current()
+            let options: UNAuthorizationOptions = [.alert, .sound]
+
+            center.requestAuthorization(options: options)
+            { [unowned self] (granted, error) in
+                self.userDidGrantNotifications(granted, withError: error)
+            }
 		}
 		else
         {
@@ -188,12 +196,52 @@ class SettingsTableViewController: UITableViewController
         NotificationManager.setUserPropertyForNotifications()
 	}
 
+
+    func userDidGrantNotifications(_ grant: Bool, withError error: Error?)
+    {
+        if (grant && (error == nil))
+        {
+            // user has allowed notifications
+            switchNotifications(true)
+        }
+        else
+        {
+            // user has *not* allowed notifications
+            switchNotifications(false)
+
+            // warn user
+            DispatchQueue.main.async {
+                var messageWindow: MessageWindow?
+
+                if let viewForMessage = self.view?.window
+                {
+                    messageWindow = MessageWindow(parent: viewForMessage,
+                                                  darkenBackground: true,
+                                                  titleStringId: "NotificationWarnTitle",
+                                                  textStringId: "NotificationWarnText",
+                                                  buttonStringIds: ["Close"],
+                                                  handler:
+                        { (buttonIndex) -> () in
+                            messageWindow?.close()
+                        }
+                    )
+                }
+            }
+        }
+        
+        saveNotificationTimeIfNeeded()
+        NotificationManager.setUserPropertyForNotifications()
+    }
+
+    
     // Also called by the AppDelegate!
 	func switchNotifications(_ on: Bool)
     {
-		if (notificationSwitch != nil)
+		if (self.notificationSwitch != nil)
         {
-			notificationSwitch.setOn(on, animated: false)
+            DispatchQueue.main.async {
+                self.notificationSwitch.setOn(on, animated: false)
+            }
 		}
 		
 		UserDefaults(suiteName: Constants.movieStartsGroup)?.set(on, forKey: Constants.prefsNotifications)
@@ -201,23 +249,27 @@ class SettingsTableViewController: UITableViewController
 
 		if (on)
         {
-			if (tableView != nil)
+			if (self.tableView != nil)
             {
-				tableView.insertRows(at: [IndexPath(row: 1, section: sectionNotifications)], with: UITableView.RowAnimation.middle)
+                DispatchQueue.main.async {
+                    self.tableView.insertRows(at: [IndexPath(row: 1, section: self.sectionNotifications)], with: UITableView.RowAnimation.middle)
+                }
 			}
-			NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
+			NotificationManager.updateFavoriteNotifications(favoriteMovies: self.movieTabBarController?.favoriteMovies)
 		}
 		else
         {
-			let indexPathToDelete = IndexPath(row: 1, section: sectionNotifications)
+            DispatchQueue.main.async {
+                let indexPathToDelete = IndexPath(row: 1, section: self.sectionNotifications)
 
-			if ((tableView != nil) && (tableView.cellForRow(at: indexPathToDelete) != nil))
-            {
-				// delete time-setting-row if it exists
-				tableView.deleteRows(at: [indexPathToDelete], with: UITableView.RowAnimation.middle)
-			}
+                if ((self.tableView != nil) && (self.tableView.cellForRow(at: indexPathToDelete) != nil))
+                {
+                    // delete time-setting-row if it exists
+                    self.tableView.deleteRows(at: [indexPathToDelete], with: UITableView.RowAnimation.middle)
+                }
 			
-			NotificationManager.removeAllFavoriteNotifications()
+                NotificationManager.removeAllFavoriteNotifications()
+            }
 		}
 	}
 	

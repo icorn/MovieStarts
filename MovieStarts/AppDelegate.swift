@@ -8,6 +8,9 @@
 
 import UIKit
 import CloudKit
+import UserNotifications
+
+let notificationDelegate = NotificationDelegate()
 
 
 @UIApplicationMain
@@ -15,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
 	var versionOfPreviousLaunch = Constants.version1_0
-	var movieReleaseNotification: UILocalNotification?
+	var movieReleaseNotification: UNNotificationRequest?
 	var movieTabBarController: TabBarController? {
 		return (window?.rootViewController as? StartViewController)?.myTabBarController
 	}
@@ -184,15 +187,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// start watch session (if there is a watch)
 		WatchSessionManager.sharedManager.startSession()
 		
-		// Handle launching from a notification
-		if let launchOptions = launchOptions {
-			if let notification = launchOptions[UIApplication.LaunchOptionsKey.localNotification] as? UILocalNotification {
-				// save received notification for later
-				movieReleaseNotification = notification
-			}
-		}
-		
-		// getting version of the last launch to find out if we need to set the "migrate" flag
+        // set delegate for user notifications
+        let center = UNUserNotificationCenter.current()
+        center.delegate = notificationDelegate
+
+        // getting version of the last launch to find out if we need to set the "migrate" flag
 		
 		let oldVersion = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsVersion)
 
@@ -238,109 +237,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(_ application: UIApplication) {}
 
 	
-	// MARK: - Handling local notifications
- 
-	
-	func application(_ application: UIApplication, didRegister notificationSettings: UIUserNotificationSettings)
-    {
-		if (notificationSettings.types.contains(UIUserNotificationType.alert))
-        {
-			// user has allowed notifications
-			if let settings = settingsTableViewController
-            {
-				settings.switchNotifications(true)
-			}
-			else
-            {
-				NSLog("Settings dialog not available. This should never happen.")
-				UserDefaults(suiteName: Constants.movieStartsGroup)?.set(true, forKey: Constants.prefsNotifications)
-				UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
-				NotificationManager.updateFavoriteNotifications(favoriteMovies: movieTabBarController?.favoriteMovies)
-			}
-		}
-		else
-        {
-			// user has *not* allowed notifications
-			if let settings = settingsTableViewController
-            {
-				settings.switchNotifications(false)
-			}
-			else
-            {
-				NSLog("Settings dialog not available. This should never happen.")
-				UserDefaults(suiteName: Constants.movieStartsGroup)?.set(false, forKey: Constants.prefsNotifications)
-				UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
-				NotificationManager.removeAllFavoriteNotifications()
-			}
-			
-			// warn user
-			var messageWindow: MessageWindow?
-			
-			if let viewForMessage = window
-            {
-				messageWindow = MessageWindow(parent: viewForMessage,
-                                              darkenBackground: true,
-                                              titleStringId: "NotificationWarnTitle",
-                                              textStringId: "NotificationWarnText",
-                                              buttonStringIds: ["Close"],
-                                              handler:
-                    { (buttonIndex) -> () in
-						messageWindow?.close()
-					}
-				)
-			}
-		}
+    // MARK: - Misc.
 
-        NotificationManager.setUserPropertyForNotifications()
-	}
-
-	func application(_ application: UIApplication, didReceive notification: UILocalNotification)
-    {
-		guard let userInfo = notification.userInfo,
-			  let movieIDs = userInfo[Constants.notificationUserInfoId] as? [String], movieIDs.count > 0,
-			  let movieTitles = userInfo[Constants.notificationUserInfoName] as? [String], movieTitles.count > 0,
-			  let movieDate = userInfo[Constants.notificationUserInfoDate] as? String,
-			  let notificationDay = userInfo[Constants.notificationUserInfoDay] as? Int else
-        {
-			return
-		}
-
-		let state = application.applicationState
-
-		if (state == UIApplication.State.active)
-        {
-			// app was in foreground
-			
-			if (movieTitles.count == 1)
-            {
-				// only one movie
-				NotificationManager.notifyAboutOneMovie(appDelegate: self, movieID: movieIDs[0], movieTitle: movieTitles[0], movieDate: movieDate, notificationDay: notificationDay)
-			}
-			else
-            {
-				// multiple movies
-				NotificationManager.notifyAboutMultipleMovies(appDelegate: self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
-			}
-		}
-		else if (state == UIApplication.State.inactive)
-        {
-			// app was in background, but in memory
-			
-			if (movieTitles.count == 1)
-            {
-				// only one movie
-				self.movieTabBarController?.selectedIndex = Constants.tabIndexFavorites
-				self.favoriteViewController?.showFavoriteMovie(movieIDs[0])
-			}
-			else
-            {
-				// multiple movies
-				NotificationManager.notifyAboutMultipleMovies(appDelegate: self, movieIDs: movieIDs, movieTitles: movieTitles, movieDate: movieDate, notificationDay: notificationDay)
-			}
-		}
-	}
-
-	
 	fileprivate func databaseFileExists() -> Bool {
 		let fileUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: Constants.movieStartsGroup)
 		
