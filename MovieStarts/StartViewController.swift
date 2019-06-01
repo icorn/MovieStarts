@@ -58,7 +58,8 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 			thisIsTheFirstLaunch = false
 			loadMovieDatabase()
 		}
-		else {
+		else
+        {
 			// first start, no database on the device: this is the first start, say hello to the user
 			
 			thisIsTheFirstLaunch = true
@@ -69,8 +70,13 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 				countryStringIds.append(country.welcomeStringId)
 			}
 			
-			welcomeWindow = MessageWindow(parent: view, darkenBackground: false, titleStringId: "WelcomeTitle", textStringId: "WelcomeText", buttonStringIds: countryStringIds,
-				handler: { (buttonIndex) -> () in
+			welcomeWindow = MessageWindow(parent: view,
+                                          darkenBackground: false,
+                                          titleStringId: "WelcomeTitle",
+                                          textStringId: "WelcomeText",
+                                          buttonStringIds: countryStringIds,
+                                          handler:
+                { (buttonIndex) -> () in
 					// store selected country in preferences
 					UserDefaults(suiteName: Constants.movieStartsGroup)?.set(countries[buttonIndex].rawValue, forKey: Constants.prefsCountry)
 					UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
@@ -167,7 +173,10 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
         if let privacyAccepted = privacyAccepted, privacyAccepted == true
         {
             // privacy-statement already accepted
-            readMovies()
+            if self.welcomeWindow == nil
+            {
+                readMovies()
+            }
         }
         else
         {
