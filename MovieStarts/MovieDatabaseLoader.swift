@@ -196,20 +196,20 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
 		queryOperation.recordFetchedBlock = self.recordFetchedCallback
 		
 /*
-		queryOperation.recordFetchedBlock = { [unowned self] (record : CKRecord) -> Void in
+		queryOperation.recordFetchedBlock = { [weak self] (record : CKRecord) -> Void in
 			self.allCKRecords.append(record)
 			self.updateIndicator?(counter: self.allCKRecords.count)
 		}
 */
-		queryOperation.queryCompletionBlock = { [unowned self] (cursor: CKQueryOperation.Cursor?, error: Error?) -> Void in
+		queryOperation.queryCompletionBlock = { [weak self] (cursor: CKQueryOperation.Cursor?, error: Error?) -> Void in
 			if let cursor = cursor {
 				// some objects are here, ask for more
 				let queryCursorOperation = CKQueryOperation(cursor: cursor)
-				self.executeQueryOperation(queryOperation: queryCursorOperation, onOperationQueue: operationQueue)
+                self?.executeQueryOperation(queryOperation: queryCursorOperation, onOperationQueue: operationQueue)
 			}
 			else {
 				// download finished (with error or not)
-				self.queryOperationFinished(error: error)
+                self?.queryOperationFinished(error: error)
 			}
 		}
 		
@@ -318,7 +318,7 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
 
 					if let sourceUrl = URL(string: sourcePath + posterUrl) {
 						let task = URLSession.shared.downloadTask(with: sourceUrl,
-							completionHandler: { [unowned self] (location: URL?, response: URLResponse?, error: Error?) -> Void in
+							completionHandler: { [weak self] (location: URL?, response: URLResponse?, error: Error?) -> Void in
 							if let error = error {
 								NSLog("Error getting thumbnail: \(error.localizedDescription)")
 							}
@@ -327,7 +327,7 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
 								do {
 									try FileManager.default.moveItem(atPath: receivedPath, toPath: targetPath + Constants.thumbnailFolder + posterUrl)
 									if let tmdbId = tmdbId {
-										self.updateThumbnailHandler?(tmdbId)
+										self?.updateThumbnailHandler?(tmdbId)
 									}
 								}
 								catch let error as NSError {
@@ -352,9 +352,18 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
 			
 			// finish movies
 			if let completionHandler = self.completionHandler, let errorHandler = self.errorHandler {
-				loadGenreDatabase({ [unowned self] () -> () in
-					self.writeMovies(allMovieRecords: movieRecordArray, updatedMoviesAsRecordArray: self.allCKRecords, completionHandler: completionHandler, errorHandler: errorHandler)
-				})
+				loadGenreDatabase(
+                    { [weak self] () -> () in
+                        
+                        if let allCKRecords = self?.allCKRecords
+                        {
+                            self?.writeMovies(allMovieRecords: movieRecordArray,
+                                              updatedMoviesAsRecordArray: allCKRecords,
+                                              completionHandler: completionHandler,
+                                              errorHandler: errorHandler)
+                        }
+                    }
+                )
 			}
 			else {
 				if let saveStopIndicator = self.stopIndicator {

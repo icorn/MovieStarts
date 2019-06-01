@@ -93,7 +93,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
         
         MovieDatabaseUpdater.sharedInstance.checkCloudKit(
             handler:
-            { [unowned self] (status: CKAccountStatus, error: Error?) -> () in
+            { [weak self] (status: CKAccountStatus, error: Error?) -> () in
             
                 var errorWindow: MessageWindow?
                 
@@ -166,7 +166,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
             MovieDatabaseUpdater.sharedInstance.getUpdatedMovies(
                 allMovies,
                 country: country,
-                addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
+                addNewMovieHandler: { [weak self] (movie: MovieRecord) in
                     
                     if (!movie.isHidden)
                     {
@@ -190,7 +190,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
                     }
                 },
                 
-                updateMovieHandler: { [unowned self] (movie: MovieRecord) in
+                updateMovieHandler: { [weak self] (movie: MovieRecord) in
                     
                     // update movie
                     
@@ -295,7 +295,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
                     }
                 },
                 
-                removeMovieHandler: { [unowned self] (movie: MovieRecord) in
+                removeMovieHandler: { [weak self] (movie: MovieRecord) in
                     
                     // remove movie
                     DispatchQueue.main.async
@@ -310,7 +310,7 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
                     }
                 },
                 
-                completionHandler: { [unowned self] (movies: [MovieRecord]?) in
+                completionHandler: { [weak self] (movies: [MovieRecord]?) in
                     DispatchQueue.main.async
                     {
                          UIApplication.shared.isNetworkActivityIndicatorVisible = false

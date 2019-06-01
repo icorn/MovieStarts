@@ -218,45 +218,70 @@ class TabBarController: UITabBarController
         
 		// check iCloud status
 		
-		MovieDatabaseUpdater.sharedInstance.checkCloudKit(handler: { [unowned self] (status: CKAccountStatus, error: Error?) -> () in
+		MovieDatabaseUpdater.sharedInstance.checkCloudKit(handler:
+        { [weak self] (status: CKAccountStatus, error: Error?) -> () in
 			
 			var errorWindow: MessageWindow?
 			
 			switch status {
 			case .available:
-				self.getUpdatedMoviesFromDatabase(allMovies: allMovies)
+				self?.getUpdatedMoviesFromDatabase(allMovies: allMovies)
 				
 			case .noAccount:
 				NSLog("CloudKit error on update: no account")
                 NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
-                DispatchQueue.main.async {
-					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudNoAccountUpdate", buttonStringIds: ["Close"],
-						handler: { (buttonIndex) -> () in
-							errorWindow?.close()
-						}
-					)
+                DispatchQueue.main.async
+                {
+                    if let view = self?.view
+                    {
+                        errorWindow = MessageWindow(parent: view,
+                                                    darkenBackground: true,
+                                                    titleStringId: "iCloudError",
+                                                    textStringId: "iCloudNoAccountUpdate",
+                                                    buttonStringIds: ["Close"],
+                            handler: { (buttonIndex) -> () in
+                                errorWindow?.close()
+                            }
+                        )
+                    }
 				}
 				
 			case .restricted:
 				NSLog("CloudKit error on update: Restricted")
                 NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
-				DispatchQueue.main.async {
-					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudRestrictedUpdate", buttonStringIds: ["Close"],
-						handler: { (buttonIndex) -> () in
-							errorWindow?.close()
-						}
-					)
+				DispatchQueue.main.async
+                {
+                    if let view = self?.view
+                    {
+                        errorWindow = MessageWindow(parent: view,
+                                                    darkenBackground: true,
+                                                    titleStringId: "iCloudError",
+                                                    textStringId: "iCloudRestrictedUpdate",
+                                                    buttonStringIds: ["Close"],
+                            handler: { (buttonIndex) -> () in
+                                errorWindow?.close()
+                            }
+                        )
+                    }
 				}
 				
 			case .couldNotDetermine:
 				NSLog("CloudKit error on update: CouldNotDetermine")
                 NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
-				DispatchQueue.main.async {
-					errorWindow = MessageWindow(parent: self.view, darkenBackground: true, titleStringId: "iCloudError", textStringId: "iCloudCouldNotDetermineUpdate", buttonStringIds: ["Close"],
-						handler: { (buttonIndex) -> () in
-							errorWindow?.close()
-						}
-					)
+				DispatchQueue.main.async
+                {
+                    if let view = self?.view
+                    {
+                        errorWindow = MessageWindow(parent: view,
+                                                    darkenBackground: true,
+                                                    titleStringId: "iCloudError",
+                                                    textStringId: "iCloudCouldNotDetermineUpdate",
+                                                    buttonStringIds: ["Close"],
+                            handler: { (buttonIndex) -> () in
+                                errorWindow?.close()
+                            }
+                        )
+                    }
 				}
                 
             @unknown default:
@@ -285,7 +310,7 @@ class TabBarController: UITabBarController
             MovieDatabaseUpdater.sharedInstance.getUpdatedMovies(
                 allMovies,
                 country: country,
-                addNewMovieHandler: { [unowned self] (movie: MovieRecord) in
+                addNewMovieHandler: { [weak self] (movie: MovieRecord) in
 
                     if (!movie.isHidden) {
                         // add new movie
@@ -295,17 +320,17 @@ class TabBarController: UITabBarController
 
                             if movie.isNowPlaying() {
                                 print("Adding \(title) to NOW PLAYING")
-                                self.nowPlayingController?.addMovie(movie)
+                                self?.nowPlayingController?.addMovie(movie)
                             }
                             else {
                                 print("Adding \(title) to UPCOMING")
-                                self.upcomingController?.addMovie(movie)
+                                self?.upcomingController?.addMovie(movie)
                             }
                         }
                     }
                 },
                 
-                updateMovieHandler: { [unowned self] (movie: MovieRecord) in
+                updateMovieHandler: { [weak self] (movie: MovieRecord) in
 
                     // update movie
 
@@ -324,95 +349,112 @@ class TabBarController: UITabBarController
                     
                     // the last two remove the cell from one *tab* and add it to another.
                     
-                    let movieIsInUpcomingList = self.isMovieInUpcomingList(newMovie: movie)
-                    let movieIsInNowPlayingList = self.isMovieInNowPlayingList(newMovie: movie)
+                    let movieIsInUpcomingList = self?.isMovieInUpcomingList(newMovie: movie) ?? false
+                    let movieIsInNowPlayingList = self?.isMovieInNowPlayingList(newMovie: movie) ?? false
                     
-                    DispatchQueue.main.async {
-                        if (movie.isNowPlaying() && movieIsInNowPlayingList) {
+                    DispatchQueue.main.async
+                    {
+                        if (movie.isNowPlaying() && movieIsInNowPlayingList)
+                        {
                             // movie was and is now-playing
                             
-                            if movie.isHidden {
-                                self.nowPlayingController?.removeMovie(movie)
+                            if movie.isHidden
+                            {
+                                self?.nowPlayingController?.removeMovie(movie)
                             }
-                            else {
+                            else
+                            {
                                 let title = movie.title[movie.currentCountry.languageArrayIndex]
                                 print("Updating \(title) in NOW PLAYING")
-                                self.nowPlayingController?.updateMovie(movie)
+                                self?.nowPlayingController?.updateMovie(movie)
                             }
                         }
-                        else if (!movie.isNowPlaying() && movieIsInUpcomingList) {
+                        else if (!movie.isNowPlaying() && movieIsInUpcomingList)
+                        {
                             // movie was and is upcoming
                             
-                            if movie.isHidden {
-                                self.upcomingController?.removeMovie(movie)
+                            if movie.isHidden
+                            {
+                                self?.upcomingController?.removeMovie(movie)
                             }
-                            else {
+                            else
+                            {
                                 let title = movie.title[movie.currentCountry.languageArrayIndex]
                                 print("Updating \(title) in UPCOMING")
-                                self.upcomingController?.updateMovie(movie)
+                                self?.upcomingController?.updateMovie(movie)
                             }
                         }
-                        else if (!movie.isNowPlaying() && movieIsInNowPlayingList) {
+                        else if (!movie.isNowPlaying() && movieIsInNowPlayingList)
+                        {
                             // movie was now-playing, is now upcoming
                             
-                            if movie.isHidden {
-                                self.nowPlayingController?.removeMovie(movie)
+                            if movie.isHidden
+                            {
+                                self?.nowPlayingController?.removeMovie(movie)
                             }
-                            else {
+                            else
+                            {
                                 let title = movie.title[movie.currentCountry.languageArrayIndex]
                                 print("Moving \(title) in from NOW PLAYING to UPCOMING")
-                                self.nowPlayingController?.removeMovie(movie)
-                                self.upcomingController?.addMovie(movie)
+                                self?.nowPlayingController?.removeMovie(movie)
+                                self?.upcomingController?.addMovie(movie)
                             }
                         }
-                        else if (movie.isNowPlaying() && movieIsInUpcomingList) {
+                        else if (movie.isNowPlaying() && movieIsInUpcomingList)
+                        {
                             // movie was upcoming, is now now-playing
                             
-                            if movie.isHidden {
-                                self.upcomingController?.removeMovie(movie)
+                            if movie.isHidden
+                            {
+                                self?.upcomingController?.removeMovie(movie)
                             }
-                            else {
+                            else
+                            {
                                 let title = movie.title[movie.currentCountry.languageArrayIndex]
                                 print("Moving \(title) in from UPCOMING to NOW PLAYING")
-                                self.upcomingController?.removeMovie(movie)
-                                self.nowPlayingController?.addMovie(movie)
+                                self?.upcomingController?.removeMovie(movie)
+                                self?.nowPlayingController?.addMovie(movie)
                             }
                         }
                         
-                        if (Favorites.IDs.contains(movie.id)) {
+                        if (Favorites.IDs.contains(movie.id))
+                        {
                             // also, update the favorites
                             
-                            if movie.isHidden {
-                                self.favoriteController?.removeFavorite(movie.id)
+                            if movie.isHidden
+                            {
+                                self?.favoriteController?.removeFavorite(movie.id)
                             }
-                            else {
+                            else
+                            {
                                 let title = movie.title[movie.currentCountry.languageArrayIndex]
                                 print("Updating \(title) in FAVORITES")
-                                self.favoriteController?.updateFavorite(movie)
+                                self?.favoriteController?.updateFavorite(movie)
                             }
                         }
                     }
                 },
                 
-                removeMovieHandler: { [unowned self] (movie: MovieRecord) in
+                removeMovieHandler: { [weak self] (movie: MovieRecord) in
                     
                     // remove movie
                     DispatchQueue.main.async {
-                        self.nowPlayingController?.removeMovie(movie)
-                        self.upcomingController?.removeMovie(movie)
+                        self?.nowPlayingController?.removeMovie(movie)
+                        self?.upcomingController?.removeMovie(movie)
                     
-                        if (Favorites.IDs.contains(movie.id)) {
-                            self.favoriteController?.removeFavorite(movie.id)
+                        if (Favorites.IDs.contains(movie.id))
+                        {
+                            self?.favoriteController?.removeFavorite(movie.id)
                         }
                     }
                 },
                 
-                completionHandler: { [unowned self] (movies: [MovieRecord]?) in
+                completionHandler: { [weak self] (movies: [MovieRecord]?) in
                     DispatchQueue.main.async
                     {
                         UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     }
-                    self.loadGenresFromFile()
+                    self?.loadGenresFromFile()
                     NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
                 },
 

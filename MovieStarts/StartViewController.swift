@@ -97,7 +97,7 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 	func loadMovieDatabase()
     {
 		MovieDatabaseLoader.sharedInstance.getAllMovies(
-			completionHandler: { [unowned self] (movies: [MovieRecord]?) in
+			completionHandler: { [weak self] (movies: [MovieRecord]?) in
 				
 				// show the next view controller
 				
@@ -106,20 +106,20 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 }
                 
-				self.myTabBarController = self.storyboard?.instantiateViewController(withIdentifier: "TabBarController") as? TabBarController
+				self?.myTabBarController = self?.storyboard?.instantiateViewController(withIdentifier: "TabBarController") as? TabBarController
 				
-				if let tabBarController = self.myTabBarController, let allMovies = movies {
+				if let tabBarController = self?.myTabBarController, let allMovies = movies {
 					MovieDatabaseLoader.sharedInstance.updateThumbnailHandler = tabBarController.updateThumbnailHandler
 					
 					// store movies in tabbarcontroller
 					tabBarController.setUpMovies(allMovies)
 					tabBarController.loadGenresFromFile()
-					tabBarController.thisIsTheFirstLaunch = self.thisIsTheFirstLaunch
+					tabBarController.thisIsTheFirstLaunch = self!.thisIsTheFirstLaunch
 
 					// show tabbarcontroller
 					
-					self.present(tabBarController, animated: true, completion: { () in
-						if let saveAboutView = self.aboutView {
+					self?.present(tabBarController, animated: true, completion: { () in
+						if let saveAboutView = self?.aboutView {
 							saveAboutView.removeFromSuperview()
 						}
 					})
@@ -139,22 +139,22 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 				}
 			},
 			
-			showIndicator: { [unowned self] () in
-				self.welcomeWindow?.showProgressIndicator(NSLocalizedString("WelcomeDownloading", comment: ""))
+			showIndicator: { [weak self] () in
+				self?.welcomeWindow?.showProgressIndicator(NSLocalizedString("WelcomeDownloading", comment: ""))
 			},
 			
-			stopIndicator: { [unowned self] () in
-				self.welcomeWindow?.hideProgressIndicator()
+			stopIndicator: { [weak self] () in
+				self?.welcomeWindow?.hideProgressIndicator()
 			},
 			
-			updateIndicator: { [unowned self] (counter: Int) in
-				self.welcomeWindow?.updateProgressIndicator("\(counter) " + NSLocalizedString("WelcomeProgress", comment: ""))
+			updateIndicator: { [weak self] (counter: Int) in
+				self?.welcomeWindow?.updateProgressIndicator("\(counter) " + NSLocalizedString("WelcomeProgress", comment: ""))
 			},
 			
-			finishHandler: { [unowned self] () in
+			finishHandler: { [weak self] () in
 				DispatchQueue.main.async {
-					self.welcomeWindow?.close()
-					self.welcomeWindow = nil
+					self?.welcomeWindow?.close()
+					self?.welcomeWindow = nil
 				}
 			}
 		)

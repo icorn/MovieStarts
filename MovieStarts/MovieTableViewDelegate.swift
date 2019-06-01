@@ -85,40 +85,43 @@ class MovieTableViewDelegate : NSObject, UITableViewDelegate {
                                                                    title: title,
                                                                    handler:
             {
-                [unowned self] (action: UITableViewRowAction, path: IndexPath) -> () in
+                [weak self] (action: UITableViewRowAction, path: IndexPath) -> () in
 
                 // find out movie id
 
                 var movie: MovieRecord!
-                if self.movieTableViewDataSource.moviesInSections.count > 0 {
-                    movie = self.movieTableViewDataSource.moviesInSections[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
+                if let dataSource = self?.movieTableViewDataSource, dataSource.moviesInSections.count > 0
+                {
+                    movie = self?.movieTableViewDataSource.moviesInSections[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
                 }
-                else {
-                    movie = self.movieTableViewDataSource.nowMovies[(indexPath as NSIndexPath).row]
+                else
+                {
+                    movie = self?.movieTableViewDataSource.nowMovies[(indexPath as NSIndexPath).row]
                 }
 
                 // add or remove movie as favorite
 
-                let currentCell: UITableViewCell? = self.tableView.cellForRow(at: indexPath)
+                let currentCell: UITableViewCell? = self?.tableView.cellForRow(at: indexPath)
 
                 if (Favorites.IDs.contains(movie.id))
                 {
                     // movie is favorite: remove it as favorite and remove favorite-icon
-                    Favorites.removeMovie(movie, tabBarController: self.movieTableViewDataSource.tabBarController)
-                    self.favoriteIconManager.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
+                    Favorites.removeMovie(movie, tabBarController: self?.movieTableViewDataSource.tabBarController)
+                    self?.favoriteIconManager.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
                 }
                 else
                 {
                     // movie was no favorite: add as favorite and add favorite-icon
-                    Favorites.addMovie(movie, tabBarController: self.movieTableViewDataSource.tabBarController)
-                    self.favoriteIconManager.addFavoriteIconToCell(currentCell as? MovieTableViewCell)
+                    Favorites.addMovie(movie, tabBarController: self?.movieTableViewDataSource.tabBarController)
+                    self?.favoriteIconManager.addFavoriteIconToCell(currentCell as? MovieTableViewCell)
                 }
                 
-                self.tableView.setEditing(false, animated: true)
+                self?.tableView.setEditing(false, animated: true)
                 
-                if self.isKind(of: FavoriteViewController.self) {
+                if let selfObject = self, selfObject.isKind(of: FavoriteViewController.self)
+                {
                     // immediately refresh favorite-tableview
-                    self.vcWithTable.viewDidLoad()
+                    selfObject.vcWithTable.viewDidLoad()
                 }
             }
         )

@@ -183,8 +183,8 @@ class SettingsTableViewController: UITableViewController
             let options: UNAuthorizationOptions = [.alert, .sound]
 
             center.requestAuthorization(options: options)
-            { [unowned self] (granted, error) in
-                self.userDidGrantNotifications(granted, withError: error)
+            { [weak self] (granted, error) in
+                self?.userDidGrantNotifications(granted, withError: error)
             }
 		}
 		else

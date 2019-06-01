@@ -214,13 +214,13 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
             let center = UNUserNotificationCenter.current()
             
             center.getNotificationSettings
-            { [unowned self] (settings) in
+            { [weak self] (settings) in
                 if settings.authorizationStatus != .authorized
                 {
                     // tell the user, the notifications are no longer working - and it's all his fault ;-)
                     DispatchQueue.main.async
                     {
-                        guard let errorView = self.movieTableViewDataSource?.tabBarController.view else { return }
+                        guard let errorView = self?.movieTableViewDataSource?.tabBarController.view else { return }
                         var errorWindow: MessageWindow?
                         errorWindow = MessageWindow(parent: errorView,
                                                     darkenBackground: true,
@@ -234,7 +234,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
                     }
                     
                     // also, turn notifications off
-                    if let settings = self.settingsTableViewController
+                    if let settings = self?.settingsTableViewController
                     {
                         settings.switchNotifications(false)
                     }
