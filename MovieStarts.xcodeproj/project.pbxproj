@@ -13,7 +13,6 @@
 		4F0FED021CF9F0C4003B9975 /* MovieDatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0FED011CF9F0C4003B9975 /* MovieDatabaseProtocol.swift */; };
 		4F1B6B62202CFF0400E079C9 /* FTLinearActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B6B60202CFF0400E079C9 /* FTLinearActivityIndicator.swift */; };
 		4F1B6B63202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B6B61202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift */; };
-		4F1F63761DC7F76900449C88 /* FilterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4F1F63751DC7F76900449C88 /* FilterView.xib */; };
 		4F1F637F1DC7FFA300449C88 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1F637E1DC7FFA300449C88 /* FilterView.swift */; };
 		4F23A0B420B2A71D00FB3759 /* AcceptPrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */; };
 		4F23A0B620B2B05100FB3759 /* AcceptPrivacyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */; };
@@ -153,7 +152,6 @@
 		4F0FED011CF9F0C4003B9975 /* MovieDatabaseProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseProtocol.swift; sourceTree = "<group>"; };
 		4F1B6B60202CFF0400E079C9 /* FTLinearActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FTLinearActivityIndicator.swift; sourceTree = "<group>"; };
 		4F1B6B61202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+LinearNetworkActivityIndicator.swift"; sourceTree = "<group>"; };
-		4F1F63751DC7F76900449C88 /* FilterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterView.xib; sourceTree = "<group>"; };
 		4F1F637E1DC7FFA300449C88 /* FilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptPrivacyViewController.swift; sourceTree = "<group>"; };
 		4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptPrivacyDelegate.swift; sourceTree = "<group>"; };
@@ -490,7 +488,6 @@
 				4FAFF8D31A8BFFE500864078 /* LaunchScreen.xib */,
 				4FAFF8CE1A8BFFE500864078 /* Main.storyboard */,
 				4F8ED3EB1B4442C7008C24FE /* MovieTableViewCell.xib */,
-				4F1F63751DC7F76900449C88 /* FilterView.xib */,
 			);
 			name = "User Interface";
 			sourceTree = "<group>";
@@ -622,10 +619,9 @@
 			};
 			buildConfigurationList = 4FAFF8BE1A8BFFE500864078 /* Build configuration list for PBXProject "MovieStarts" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 				de,
@@ -681,7 +677,6 @@
 				4F63E6211A99CB5D00528FB3 /* Localizable.strings in Resources */,
 				4F63E63D1A9A8CD100528FB3 /* icon60@2x.png in Resources */,
 				4F63E62F1A9A416100528FB3 /* LaunchLogo.png in Resources */,
-				4F1F63761DC7F76900449C88 /* FilterView.xib in Resources */,
 				4FAFF8D51A8BFFE500864078 /* LaunchScreen.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -981,7 +976,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
@@ -1033,7 +1028,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
@@ -1063,7 +1058,7 @@
 					"$(PROJECT_DIR)/MovieStarts",
 				);
 				INFOPLIST_FILE = MovieStarts/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-D DEBUG";
@@ -1093,7 +1088,7 @@
 					"$(PROJECT_DIR)/MovieStarts",
 				);
 				INFOPLIST_FILE = MovieStarts/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-D RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";

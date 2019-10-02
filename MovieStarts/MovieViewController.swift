@@ -140,7 +140,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
 			
 		// show labels with subtitles
 		
-		var subtitleLabels = [subtitleText1, subtitleText2, subtitleText3]
+		let subtitleLabels = [subtitleText1, subtitleText2, subtitleText3]
 		
 		if let genreDict = movieTabBarController?.genreDict {
 			for (index, subtitle) in movie.getSubtitleArray(genreDict: genreDict).enumerated() {

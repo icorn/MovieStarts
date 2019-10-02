@@ -63,7 +63,7 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 			// first start, no database on the device: this is the first start, say hello to the user
 			
 			thisIsTheFirstLaunch = true
-			var countries = [MovieCountry.USA, MovieCountry.Germany, MovieCountry.England]
+			let countries = [MovieCountry.USA, MovieCountry.Germany, MovieCountry.England]
 			var countryStringIds: [String] = []
 			
 			for country in countries {
@@ -110,30 +110,29 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
                 DispatchQueue.main.async
                 {
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                }
-                
-				self?.myTabBarController = self?.storyboard?.instantiateViewController(withIdentifier: "TabBarController") as? TabBarController
-				
-				if let tabBarController = self?.myTabBarController, let allMovies = movies {
-					MovieDatabaseLoader.sharedInstance.updateThumbnailHandler = tabBarController.updateThumbnailHandler
-					
-					// store movies in tabbarcontroller
-					tabBarController.setUpMovies(allMovies)
-					tabBarController.loadGenresFromFile()
-					tabBarController.thisIsTheFirstLaunch = self!.thisIsTheFirstLaunch
+                    self?.myTabBarController = self?.storyboard?.instantiateViewController(withIdentifier: "TabBarController") as? TabBarController
+                    
+                    if let tabBarController = self?.myTabBarController, let allMovies = movies {
+                        MovieDatabaseLoader.sharedInstance.updateThumbnailHandler = tabBarController.updateThumbnailHandler
+                        
+                        // store movies in tabbarcontroller
+                        tabBarController.setUpMovies(allMovies)
+                        tabBarController.loadGenresFromFile()
+                        tabBarController.thisIsTheFirstLaunch = self!.thisIsTheFirstLaunch
 
-					// show tabbarcontroller
-					
-					self?.present(tabBarController, animated: true, completion: { () in
-						if let saveAboutView = self?.aboutView {
-							saveAboutView.removeFromSuperview()
-						}
-					})
-					
-					// iOS bug: Sometimes the main runloop doesn't wake up!
-					// To wake it up, enqueue an empty block into the main runloop.
-					
-					DispatchQueue.main.async {}
+                        // show tabbarcontroller
+                        
+                        self?.present(tabBarController, animated: true, completion: { () in
+                            if let saveAboutView = self?.aboutView {
+                                saveAboutView.removeFromSuperview()
+                            }
+                        })
+                        
+                        // iOS bug: Sometimes the main runloop doesn't wake up!
+                        // To wake it up, enqueue an empty block into the main runloop.
+                        
+                        DispatchQueue.main.async {}
+                    }
 				}
 			},
 			

@@ -105,7 +105,7 @@ class MovieTableViewDataSource : NSObject, UITableViewDataSource {
 
             // show labels with subtitles
 
-            var subtitleLabels = [cell.subtitleText1, cell.subtitleText2, cell.subtitleText3]
+            let subtitleLabels = [cell.subtitleText1, cell.subtitleText2, cell.subtitleText3]
 
             for (index, subtitle) in movie.getSubtitleArray(genreDict: genreDict).enumerated() {
                 subtitleLabels[index]?.isHidden = false

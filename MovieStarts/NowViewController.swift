@@ -11,9 +11,6 @@ import UIKit
 class NowViewController: MovieListViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var filterView: FilterView!
-    @IBOutlet weak var filterViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var filterViewTopConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,23 +25,8 @@ class NowViewController: MovieListViewController {
         AnalyticsClient.trackScreenName("Now Playing Screen")
     }
 
-    override var filterViewOutlet: FilterView? {
-        get { return self.filterView }
-        set {}
-    }
-
     override var tableViewOutlet: UITableView! {
         get { return self.tableView }
-        set {}
-    }
-
-    override var filterViewTop: NSLayoutConstraint? {
-        get { return self.filterViewTopConstraint }
-        set {}
-    }
-
-    override var filterViewHeight: NSLayoutConstraint? {
-        get { return self.filterViewHeightConstraint }
         set {}
     }
 

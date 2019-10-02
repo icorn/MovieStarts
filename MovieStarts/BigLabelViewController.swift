@@ -54,7 +54,7 @@ class BigLabelViewController: UIViewController
         {
             let range = (text as NSString).range(of: link)
             self.attributedString?.addAttributes([NSAttributedString.Key.underlineStyle : NSUnderlineStyle.single.rawValue,
-                                                  NSAttributedString.Key.foregroundColor: UIColor.blue], range: range)
+                                                  NSAttributedString.Key.foregroundColor: UIColor.link], range: range)
             self.ranges?.append(range)
         }
         

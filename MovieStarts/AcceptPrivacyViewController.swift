@@ -34,12 +34,29 @@ class AcceptPrivacyViewController: UIViewController
             self.acceptButton.alpha = 1.0
         }
         
+        // set webview background
+        self.webView.isOpaque = false
+        self.webView.backgroundColor = UIColor.systemBackground
+        self.webView.scrollView.backgroundColor = UIColor.systemBackground
+        
+        // set webview font color via html header
+        let headerString1 = "<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'><style>"
+        
+        var headerString2 = "body { color: black; }"
+        
+        if (self.traitCollection.userInterfaceStyle == .dark)
+        {
+            headerString2 = "body { color: white; }"
+        }
+
+        let headerString3 = "</style></header>"
+                    
         // read privacy statment file
         if let filepath = Bundle.main.path(forResource: NSLocalizedString("PrivacyStatementFile", comment: ""), ofType: "html")
         {
             if let fileContents = try? String.init(contentsOfFile: filepath)
             {
-                self.webView.loadHTMLString(fileContents, baseURL: nil)
+                self.webView.loadHTMLString(headerString1 + headerString2 + headerString3 + fileContents, baseURL: nil)
             }
         }
     }
