@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 
 
-class MovieTableViewDelegate : NSObject, UITableViewDelegate {
-
+class MovieTableViewDelegate : NSObject, UITableViewDelegate
+{
     var movieTableViewDataSource    : MovieTableViewDataSource
     var favoriteIconManager         : FavoriteIconDelegate
     var tableView                   : UITableView
@@ -28,8 +28,8 @@ class MovieTableViewDelegate : NSObject, UITableViewDelegate {
         self.vcWithTable                = vcWithTable
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
         if let saveStoryboard = self.vcWithTable.storyboard {
             let movieController: MovieViewController? =
                 saveStoryboard.instantiateViewController(withIdentifier: "MovieViewController") as? MovieViewController
@@ -49,11 +49,13 @@ class MovieTableViewDelegate : NSObject, UITableViewDelegate {
         }
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+    {
         return 116
     }
-
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+    {
         var movieID: String!
 
         // find ID of edited movie
@@ -81,62 +83,60 @@ class MovieTableViewDelegate : NSObject, UITableViewDelegate {
 
         // define button-action
 
-        let favAction: UITableViewRowAction = UITableViewRowAction(style: UITableViewRowAction.Style.default,
-                                                                   title: title,
-                                                                   handler:
+        let favAction = UIContextualAction(style: UIContextualAction.Style.normal,
+                                           title: title,
+                                           handler:
+        {
+            [weak self] (action: UIContextualAction, view: UIView, completionHandler) in
+            
+            // find out movie id
+
+            var movie: MovieRecord!
+            if let dataSource = self?.movieTableViewDataSource, dataSource.moviesInSections.count > 0
             {
-                [weak self] (action: UITableViewRowAction, path: IndexPath) -> () in
-
-                // find out movie id
-
-                var movie: MovieRecord!
-                if let dataSource = self?.movieTableViewDataSource, dataSource.moviesInSections.count > 0
-                {
-                    movie = self?.movieTableViewDataSource.moviesInSections[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
-                }
-                else
-                {
-                    movie = self?.movieTableViewDataSource.nowMovies[(indexPath as NSIndexPath).row]
-                }
-
-                // add or remove movie as favorite
-
-                let currentCell: UITableViewCell? = self?.tableView.cellForRow(at: indexPath)
-
-                if (Favorites.IDs.contains(movie.id))
-                {
-                    // movie is favorite: remove it as favorite and remove favorite-icon
-                    Favorites.removeMovie(movie, tabBarController: self?.movieTableViewDataSource.tabBarController)
-                    self?.favoriteIconManager.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
-                }
-                else
-                {
-                    // movie was no favorite: add as favorite and add favorite-icon
-                    Favorites.addMovie(movie, tabBarController: self?.movieTableViewDataSource.tabBarController)
-                    self?.favoriteIconManager.addFavoriteIconToCell(currentCell as? MovieTableViewCell)
-                }
-                
-                self?.tableView.setEditing(false, animated: true)
-                
-                if let selfObject = self, selfObject.isKind(of: FavoriteViewController.self)
-                {
-                    // immediately refresh favorite-tableview
-                    selfObject.vcWithTable.viewDidLoad()
-                }
+                movie = self?.movieTableViewDataSource.moviesInSections[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
             }
-        )
+            else
+            {
+                movie = self?.movieTableViewDataSource.nowMovies[(indexPath as NSIndexPath).row]
+            }
+
+            // add or remove movie as favorite
+
+            let currentCell: UITableViewCell? = self?.tableView.cellForRow(at: indexPath)
+
+            if (Favorites.IDs.contains(movie.id))
+            {
+                // movie is favorite: remove it as favorite and remove favorite-icon
+                Favorites.removeMovie(movie, tabBarController: self?.movieTableViewDataSource.tabBarController)
+                self?.favoriteIconManager.removeFavoriteIconFromCell(currentCell as? MovieTableViewCell)
+            }
+            else
+            {
+                // movie was no favorite: add as favorite and add favorite-icon
+                Favorites.addMovie(movie, tabBarController: self?.movieTableViewDataSource.tabBarController)
+                self?.favoriteIconManager.addFavoriteIconToCell(currentCell as? MovieTableViewCell)
+            }
+            
+            self?.tableView.setEditing(false, animated: true)
+            
+            if let selfObject = self, selfObject.isKind(of: FavoriteViewController.self)
+            {
+                // immediately refresh favorite-tableview
+                selfObject.vcWithTable.viewDidLoad()
+            }
+        })
         
         favAction.backgroundColor = backColor
         
-        return [favAction]
+        let swipeConfig = UISwipeActionsConfiguration(actions: [favAction])
+        swipeConfig.performsFirstActionWithFullSwipe = true
+        
+        return swipeConfig
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
+    {
         // Bug in iOS 8: This function is not called, but without it, swiping is not enabled
     }
-/*
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-*/
 }

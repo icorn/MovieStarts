@@ -137,11 +137,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // set some colors, etc.
         UITabBar.appearance().tintColor = UIColor.darkTürkisColor()
-        UITabBar.appearance().barTintColor = UIColor.secondarySystemBackground // UIColor.lightGrayBackgroundColor()
+        UITabBar.appearance().barTintColor = UIColor.secondarySystemBackground
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14.0)], for: UIControl.State())
         
         UINavigationBar.appearance().tintColor = UIColor.darkTürkisColor()
-        UINavigationBar.appearance().barTintColor = UIColor.secondarySystemBackground // UIColor.lightGrayBackgroundColor()
+        UINavigationBar.appearance().barTintColor = UIColor.secondarySystemBackground
         
 		// read favorites from file (and send number to analytics)
 		let favorites = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsFavorites)

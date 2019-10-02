@@ -75,7 +75,7 @@ class ZoomImageView: UIView, UIScrollViewDelegate
 
         spinner = UIActivityIndicatorView()
         spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.style = UIActivityIndicatorView.Style.whiteLarge
+        spinner.style = UIActivityIndicatorView.Style.large
         spinner.hidesWhenStopped = true
 
         mainLabel = UILabel()
@@ -176,12 +176,9 @@ class ZoomImageView: UIView, UIScrollViewDelegate
 
         var bottomPadding: CGFloat = 0.0
         
-        if #available(iOS 11.0, *)
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow })
         {
-            if let window = UIApplication.shared.keyWindow
-            {
-                bottomPadding = -window.safeAreaInsets.bottom
-            }
+            bottomPadding = -window.safeAreaInsets.bottom
         }
         
         if (secondLabel.isHidden == false)

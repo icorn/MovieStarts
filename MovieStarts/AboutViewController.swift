@@ -67,12 +67,9 @@ class AboutViewController: UIViewController
     {
         super.viewDidLayoutSubviews()
 
-        if #available(iOS 11.0, *)
-        {
-            guard let keyWindow = UIApplication.shared.keyWindow else { return }
-            self.leadingConstraint.constant = keyWindow.safeAreaInsets.left
-            self.trailingConstraint.constant = keyWindow.safeAreaInsets.right
-        }
+        guard let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else { return }
+        self.leadingConstraint.constant = keyWindow.safeAreaInsets.left
+        self.trailingConstraint.constant = keyWindow.safeAreaInsets.right
     }
     
     

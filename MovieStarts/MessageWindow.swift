@@ -153,7 +153,7 @@ class MessageWindow: NSObject {
 		progressView.isHidden = true
 		
 		spinner.translatesAutoresizingMaskIntoConstraints = false
-		spinner.style = UIActivityIndicatorView.Style.gray
+        spinner.style = UIActivityIndicatorView.Style.medium
 		spinner.hidesWhenStopped = false
 		
 		progressLabel.translatesAutoresizingMaskIntoConstraints = false
