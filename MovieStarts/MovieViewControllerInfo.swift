@@ -81,7 +81,7 @@ extension MovieViewController
         {
             titleLabels.append(createTitleLabelWithText(NSLocalizedString("Homepage", comment: "") + ":"))
             let valueLabel = createValueLabelWithText(homepage, andNumberOfLines: 1)
-            valueLabel.textColor = UIColor.blue
+            valueLabel.textColor = UIColor.link
             valueLabel.isUserInteractionEnabled = true
             valueLabel.lineBreakMode = .byTruncatingTail
             

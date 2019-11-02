@@ -455,7 +455,7 @@ class MovieViewController: UIViewController, UIScrollViewDelegate, SFSafariViewC
         for view in views
         {
             let line = UIView(frame: CGRect(x: 0.0, y: 10.0, width: UIScreen.main.bounds.size.width, height: 1.0 / UIScreen.main.scale))
-            line.backgroundColor = UIColor(white: 0.8, alpha: 1.0)
+            line.backgroundColor = UIColor.separator // UIColor(white: 0.8, alpha: 1.0)
             view.addSubview(line)
             view.clipsToBounds = true
         }

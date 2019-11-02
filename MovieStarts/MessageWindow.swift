@@ -82,12 +82,12 @@ class MessageWindow: NSObject {
 		
 		view.translatesAutoresizingMaskIntoConstraints = false
 		view.layer.cornerRadius = 6
-		view.backgroundColor = UIColor.white
+		view.backgroundColor = UIColor.systemBackground
 		view.isOpaque = false
 		
 		backView.translatesAutoresizingMaskIntoConstraints = false
 		if darkenBackground {
-			backView.backgroundColor = UIColor.black
+			backView.backgroundColor = UIColor.darkGray
 			backView.alpha = 0.7
 		}
 		
@@ -103,7 +103,7 @@ class MessageWindow: NSObject {
 		title.text = NSLocalizedString(titleStringId, comment: "")
 		title.font = UIFont.systemFont(ofSize: 24)
 		title.textAlignment = NSTextAlignment.center
-		title.textColor = UIColor.black
+		title.textColor = UIColor.label
 		title.backgroundColor = UIColor.clear
 
 		let msg = UILabel()
@@ -132,7 +132,7 @@ class MessageWindow: NSObject {
 			msg.textAlignment = NSTextAlignment.center
 		}
 		
-		msg.textColor = UIColor.black
+		msg.textColor = UIColor.secondaryLabel
 		msg.backgroundColor = UIColor.clear
 		msg.numberOfLines = 0
 		msg.sizeToFit()
@@ -160,7 +160,7 @@ class MessageWindow: NSObject {
 		progressLabel.text = ""
 		progressLabel.font = UIFont.systemFont(ofSize: 16)
 		progressLabel.textAlignment = NSTextAlignment.left
-		progressLabel.textColor = UIColor.gray
+		progressLabel.textColor = UIColor.label
 		progressLabel.backgroundColor = UIColor.clear
 		progressLabel.sizeToFit()
 		
