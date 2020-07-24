@@ -130,7 +130,6 @@ class MovieDatabaseLoader : MovieDatabaseParent, MovieDatabaseProtocol
 				// movies are not on the device: get them from the cloud
 				
 				DispatchQueue.main.async {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = true
 					showIndicator?()
 				}
 

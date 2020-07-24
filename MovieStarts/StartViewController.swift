@@ -109,7 +109,6 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 				
                 DispatchQueue.main.async
                 {
-                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
                     self?.myTabBarController = self?.storyboard?.instantiateViewController(withIdentifier: "TabBarController") as? TabBarController
                     
                     if let tabBarController = self?.myTabBarController, let allMovies = movies {
@@ -139,7 +138,6 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 			errorHandler: { (errorMessage: String) in
 				DispatchQueue.main.async
                 {
-					UIApplication.shared.isNetworkActivityIndicatorVisible = false
 					NSLog(errorMessage)
 				}
 			},

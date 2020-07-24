@@ -361,11 +361,6 @@ class MovieDatabaseUpdater : MovieDatabaseParent, MovieDatabaseProtocol
 			
 			NSLog("Getting records after modification date \(modDate) and after releasedate \(minReleaseDate)")
 			
-            DispatchQueue.main.async
-            {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
-            }
-            
 			// get records modified after the last modification of the local database
 			let predicateModificationDate = NSPredicate(format: "(%K > %@) AND (modificationDate > %@)", argumentArray: [country.databaseKeyRelease, minReleaseDate, modDate])
 			let predicate = NSCompoundPredicate(type: NSCompoundPredicate.LogicalType.and, subpredicates: [predicateModificationDate])

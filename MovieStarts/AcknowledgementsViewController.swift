@@ -12,17 +12,15 @@ import UIKit
 enum AcknowledgementsCellType: Int
 {
     case AppzGear     = 0
-    case FTLinear     = 1
-    case Minicons     = 2
+    case Minicons     = 1
     
-    static let allValues = [AppzGear, FTLinear, Minicons]
+    static let allValues = [AppzGear, Minicons]
     
     var title: String
     {
         switch self
         {
         case .AppzGear:     return "Appzgear.com"
-        case .FTLinear:     return "FTLinearActivityIndicator"
         case .Minicons:     return "Minicons Free Vector Icons Pack"
         }
     }
@@ -32,7 +30,6 @@ enum AcknowledgementsCellType: Int
         switch self
         {
         case .AppzGear:     return "http://appzgear.com"
-        case .FTLinear:     return "Copyright (c) 2018 Ortwin Gentz, FutureTap GmbH\n\nThis work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA."
         case .Minicons:     return "Minicons Free Vector Icons Pack by Webalys is licensed under a Creative Commons Attribution 3.0 Unported License: http://creativecommons.org/licenses/by/3.0/deed.en_US \n\nThis Pack is published under a Creative Commons Attribution license and Free for both personal and commercial use. You can copy, adapt, remix, distribute or transmit it.\n\nUnder this condition: provide a mention of this \"Minicons Free Vector Icons Pack\" and a link back to this page: http://www.webalys.com/minicons"
         }
     }
@@ -90,7 +87,7 @@ class AcknowledgementsViewController: UITableViewController
                         UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (Bool) in })
                     }
 
-                case .FTLinear, .Minicons:
+                case .Minicons:
                     if let bigLabelController = storyboard?.instantiateViewController(withIdentifier: "BigLabelViewController") as? BigLabelViewController
                     {
                         bigLabelController.navigationItem.title = ackCellType.title

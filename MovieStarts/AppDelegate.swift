@@ -225,8 +225,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			}
 		}
 		
-        UIApplication.configureLinearNetworkActivityIndicatorIfNeeded()
-        
 		return true
 	}
 

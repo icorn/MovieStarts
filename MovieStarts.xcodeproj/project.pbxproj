@@ -11,8 +11,6 @@
 		4F0953411B9F17D50040BBC9 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */; };
 		4F0FED001CF9E40A003B9975 /* MovieDatabaseUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0FECFF1CF9E40A003B9975 /* MovieDatabaseUpdater.swift */; };
 		4F0FED021CF9F0C4003B9975 /* MovieDatabaseProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0FED011CF9F0C4003B9975 /* MovieDatabaseProtocol.swift */; };
-		4F1B6B62202CFF0400E079C9 /* FTLinearActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B6B60202CFF0400E079C9 /* FTLinearActivityIndicator.swift */; };
-		4F1B6B63202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1B6B61202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift */; };
 		4F1F637F1DC7FFA300449C88 /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1F637E1DC7FFA300449C88 /* FilterView.swift */; };
 		4F23A0B420B2A71D00FB3759 /* AcceptPrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */; };
 		4F23A0B620B2B05100FB3759 /* AcceptPrivacyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */; };
@@ -150,8 +148,6 @@
 		4F0953401B9F17D50040BBC9 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		4F0FECFF1CF9E40A003B9975 /* MovieDatabaseUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseUpdater.swift; sourceTree = "<group>"; };
 		4F0FED011CF9F0C4003B9975 /* MovieDatabaseProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieDatabaseProtocol.swift; sourceTree = "<group>"; };
-		4F1B6B60202CFF0400E079C9 /* FTLinearActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FTLinearActivityIndicator.swift; sourceTree = "<group>"; };
-		4F1B6B61202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+LinearNetworkActivityIndicator.swift"; sourceTree = "<group>"; };
 		4F1F637E1DC7FFA300449C88 /* FilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		4F23A0B320B2A71D00FB3759 /* AcceptPrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptPrivacyViewController.swift; sourceTree = "<group>"; };
 		4F23A0B520B2B05100FB3759 /* AcceptPrivacyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptPrivacyDelegate.swift; sourceTree = "<group>"; };
@@ -264,15 +260,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		4F1B6B5F202CFF0400E079C9 /* FTLinearActivityIndicator */ = {
-			isa = PBXGroup;
-			children = (
-				4F1B6B60202CFF0400E079C9 /* FTLinearActivityIndicator.swift */,
-				4F1B6B61202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift */,
-			);
-			path = FTLinearActivityIndicator;
-			sourceTree = "<group>";
-		};
 		4F1F63771DC7FD6400449C88 /* TagListView-1.1.0 */ = {
 			isa = PBXGroup;
 			children = (
@@ -444,7 +431,6 @@
 		4FAFF8C61A8BFFE500864078 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				4F1B6B5F202CFF0400E079C9 /* FTLinearActivityIndicator */,
 				4FAFF8EB1A8C002B00864078 /* CloudKit.framework */,
 				4F63E6311A9A8C9D00528FB3 /* Icons */,
 				4F95FC301C11ABFE008F482B /* Images.xcassets */,
@@ -720,7 +706,6 @@
 				4F70ACC01BCC419100E34987 /* WatchSessionManager.swift in Sources */,
 				4F7A99AD1BAEA0CE00ED38C9 /* MovieViewControllerPosters.swift in Sources */,
 				4F7A99A81BAE1A6700ED38C9 /* AnimatedTabBar.swift in Sources */,
-				4F1B6B62202CFF0400E079C9 /* FTLinearActivityIndicator.swift in Sources */,
 				4F87F9261A8DEE31001869A1 /* Constants.swift in Sources */,
 				4FB552F21C9560390053A81B /* TomatoImage.swift in Sources */,
 				4FECDF221A9096A700F84A52 /* MovieRecord.swift in Sources */,
@@ -746,7 +731,6 @@
 				4F23A0B620B2B05100FB3759 /* AcceptPrivacyDelegate.swift in Sources */,
 				4F956C1D1DC4D211008EF031 /* MovieViewController.swift in Sources */,
 				4F2E40A0202F2FE1009B5AEB /* AcknowledgementsViewController.swift in Sources */,
-				4F1B6B63202CFF0400E079C9 /* UIApplication+LinearNetworkActivityIndicator.swift in Sources */,
 				4FAB81E11D95C23D00D5EA5D /* MovieViewControllerTrailers.swift in Sources */,
 				4F60C1D422A0099E00BC3086 /* NotificationDelegate.swift in Sources */,
 				4F91DB30206E1328005E45BD /* ZoomImageView.swift in Sources */,

@@ -268,7 +268,6 @@ class ZoomImageView: UIView, UIScrollViewDelegate
                 // turn on network indicator and spinner
                 DispatchQueue.main.async
                 {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = true
                         self.spinnerBackground?.isHidden = false
                         self.spinner?.startAnimating()
                 }
@@ -451,10 +450,9 @@ class ZoomImageView: UIView, UIScrollViewDelegate
     func stopSpinners()
     {
         DispatchQueue.main.async
-            {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                self.spinner?.stopAnimating()
-                self.spinnerBackground?.removeFromSuperview()
+        {
+            self.spinner?.stopAnimating()
+            self.spinnerBackground?.removeFromSuperview()
         }
     }
 

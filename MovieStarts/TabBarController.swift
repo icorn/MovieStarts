@@ -450,19 +450,11 @@ class TabBarController: UITabBarController
                 },
                 
                 completionHandler: { [weak self] (movies: [MovieRecord]?) in
-                    DispatchQueue.main.async
-                    {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                    }
                     self?.loadGenresFromFile()
                     NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
                 },
 
                 errorHandler: { (errorMessage: String) in
-                    DispatchQueue.main.async
-                    {
-                        UIApplication.shared.isNetworkActivityIndicatorVisible = false
-                    }
                     NSLog(errorMessage)
                     NotificationCenter.default.post(name: NSNotification.Name(MovieDatabaseUpdater.MovieUpdateFinishNotification), object: nil)
                 }
