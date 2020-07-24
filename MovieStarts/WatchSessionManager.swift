@@ -369,9 +369,7 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
 	// MARK: WCSessionDelegate - Asynchronous Activation
 	// The next 3 methods are required in order to support asynchronous session activation; required for quick watch switching.
 	
-	
-	@available(iOS 9.3, *)
-	func session(_: WCSession, activationDidCompleteWith activationDidCompleteWithState: WCSessionActivationState, error: Error?) {
+    func session(_: WCSession, activationDidCompleteWith activationDidCompleteWithState: WCSessionActivationState, error: Error?) {
         if let error = error {
             print("session activation failed with error: \(error.localizedDescription)")
             return
