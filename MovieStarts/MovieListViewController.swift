@@ -194,7 +194,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
                 for favoriteMovie in favoriteSection {
                     if (favoriteMovie.isNowPlaying()) {
                         // this favorite movie is now playing. We check if it's already in the now-playing-section inside the favorites-list.
-                        if (movieListDataSource.tabBarController.favoriteSections[sectionIndex] != NSLocalizedString("NowPlayingLong", comment: "")) {
+                        if (movieListDataSource.tabBarController.favoriteSectionTitles[sectionIndex] != NSLocalizedString("NowPlayingLong", comment: "")) {
                             // movie is now-playing, but not in the now-playing-section inside the favorites list: move it!
                             movieListDataSource.tabBarController.favoriteController?.removeFavorite(favoriteMovie.id)
                             movieListDataSource.tabBarController.favoriteController?.addFavorite(favoriteMovie)
@@ -380,7 +380,7 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
 
         if newMovie.isNowPlaying() {
             // special case: insert the "now playing" section (which is always first) with the movie
-            movieTableViewDataSource?.sections.insert(sectionName, at: 0)
+            movieTableViewDataSource?.sectionTitles.insert(sectionName, at: 0)
             movieTableViewDataSource?.moviesInSections.insert([newMovie], at: 0)
             tableViewOutlet.insertSections(IndexSet(integer: 0), with: UITableView.RowAnimation.automatic)
             tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: 0)], with: UITableView.RowAnimation.automatic)
@@ -408,17 +408,17 @@ class MovieListViewController: UIViewController, FavoriteIconDelegate
 
                 if let newSectionIndex = newSectionIndex {
                     // insert new section
-                    movieListDataSource.sections.insert(sectionName, at: newSectionIndex)
+                    movieListDataSource.sectionTitles.insert(sectionName, at: newSectionIndex)
                     movieListDataSource.moviesInSections.insert([newMovie], at: newSectionIndex)
                     tableViewOutlet.insertSections(IndexSet(integer: newSectionIndex), with: UITableView.RowAnimation.automatic)
                     tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: newSectionIndex)], with: UITableView.RowAnimation.automatic)
                 }
                 else {
                     // append new section at the end
-                    movieListDataSource.sections.append(sectionName)
+                    movieListDataSource.sectionTitles.append(sectionName)
                     movieListDataSource.moviesInSections.append([newMovie])
-                    tableViewOutlet.insertSections(IndexSet(integer: movieListDataSource.sections.count-1), with: UITableView.RowAnimation.automatic)
-                    tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: movieListDataSource.sections.count-1)], with: UITableView.RowAnimation.automatic)
+                    tableViewOutlet.insertSections(IndexSet(integer: movieListDataSource.sectionTitles.count-1), with: UITableView.RowAnimation.automatic)
+                    tableViewOutlet.insertRows(at: [IndexPath(row: 0, section: movieListDataSource.sectionTitles.count-1)], with: UITableView.RowAnimation.automatic)
                 }
             }
         }

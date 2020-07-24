@@ -114,8 +114,8 @@ class FavoriteViewController: MovieListViewController {
         var foundSectionIndex: Int?
 
         if let movieTableViewDataSource = self.movieTableViewDataSource {
-            for sectionIndex in 0 ..< movieTableViewDataSource.sections.count {
-                if (movieTableViewDataSource.sections[sectionIndex] == sectionToSearchFor) {
+            for sectionIndex in 0 ..< movieTableViewDataSource.sectionTitles.count {
+                if (movieTableViewDataSource.sectionTitles[sectionIndex] == sectionToSearchFor) {
                     foundSectionIndex = sectionIndex
                     break
                 }
@@ -173,7 +173,7 @@ class FavoriteViewController: MovieListViewController {
             if movieTableViewDataSource.moviesInSections[sectionId].isEmpty {
                 // remove section from datasource
                 movieTableViewDataSource.moviesInSections.remove(at: sectionId)
-                movieTableViewDataSource.sections.remove(at: sectionId)
+                movieTableViewDataSource.sectionTitles.remove(at: sectionId)
 
                 // remove section from table
                 let indexSet: IndexSet = IndexSet(integer: sectionId)

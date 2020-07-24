@@ -58,13 +58,13 @@ class MovieTableViewDataSource : NSObject, UITableViewDataSource {
         }
     }
 
-    var sections: [String] {
+    var sectionTitles: [String] {
         get {
             if (currentTab == MovieTab.upcoming) {
-                return tabBarController.upcomingSections
+                return tabBarController.upcomingSectionTitles
             }
             else if (currentTab == MovieTab.favorites) {
-                return tabBarController.favoriteSections
+                return tabBarController.favoriteSectionTitles
             }
 
             return []
@@ -72,10 +72,10 @@ class MovieTableViewDataSource : NSObject, UITableViewDataSource {
         
         set {
             if (currentTab == MovieTab.upcoming) {
-                tabBarController.upcomingSections = newValue
+                tabBarController.upcomingSectionTitles = newValue
             }
             else if (currentTab == MovieTab.favorites) {
-                tabBarController.favoriteSections = newValue
+                tabBarController.favoriteSectionTitles = newValue
             }
         }
     }
@@ -143,7 +143,7 @@ class MovieTableViewDataSource : NSObject, UITableViewDataSource {
             return 1
         }
         else {
-            return sections.count
+            return sectionTitles.count
         }
     }
 
@@ -157,8 +157,8 @@ class MovieTableViewDataSource : NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if (sections.count > section) {
-            return sections[section]
+        if (sectionTitles.count > section) {
+            return sectionTitles[section]
         }
         else {
             return nil

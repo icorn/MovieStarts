@@ -202,6 +202,8 @@
 "10"					= "zehn";
 "11"					= "elf";
 "12"					= "zwölf";
+"TBDmedium"             = "Noch nicht festgelegt";
+"TBDlong"               = "Noch nicht festgelegt";
 
 // Country names
 

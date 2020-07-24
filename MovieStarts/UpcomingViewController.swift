@@ -46,8 +46,8 @@ class UpcomingViewController: MovieListViewController {
         var foundSectionIndex: Int?
 
         if let movieListDataSource = self.movieTableViewDataSource {
-            for sectionIndex in 0 ..< movieListDataSource.sections.count {
-                if (movieListDataSource.sections[sectionIndex] == sectionToSearchFor) {
+            for sectionIndex in 0 ..< movieListDataSource.sectionTitles.count {
+                if (movieListDataSource.sectionTitles[sectionIndex] == sectionToSearchFor) {
                     foundSectionIndex = sectionIndex
                     break
                 }
@@ -88,7 +88,7 @@ class UpcomingViewController: MovieListViewController {
             if movieListDataSource.moviesInSections[(indexPathForExistingMovie as NSIndexPath).section].isEmpty {
                 // remove section from datasource
                 movieListDataSource.moviesInSections.remove(at: (indexPathForExistingMovie as NSIndexPath).section)
-                movieListDataSource.sections.remove(at: (indexPathForExistingMovie as NSIndexPath).section)
+                movieListDataSource.sectionTitles.remove(at: (indexPathForExistingMovie as NSIndexPath).section)
 
                 // remove section from table
                 let indexSet: IndexSet = IndexSet(integer: (indexPathForExistingMovie as NSIndexPath).section)

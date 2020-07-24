@@ -15,9 +15,9 @@ class TabBarController: UITabBarController
 	var genreDict: [Int: String] = [:]
 	var nowMovies: [MovieRecord] = []
 	var upcomingMovies: [[MovieRecord]] = []
-	var upcomingSections: [String] = []
+	var upcomingSectionTitles: [String] = []
 	var favoriteMovies: [[MovieRecord]] = []
-	var favoriteSections: [String] = []
+	var favoriteSectionTitles: [String] = []
 	var thisIsTheFirstLaunch = false
 	var migrationHasFailedInThisSession = false
 	
@@ -145,14 +145,15 @@ class TabBarController: UITabBarController
 		var previousDate: Date? = nil
 		var currentSection = -1
 		upcomingMovies = []
-		upcomingSections = []
+		upcomingSectionTitles = []
 
 		for movie in upcoming {
-			if ((previousDate == nil) || (previousDate != movie.releaseDate[movie.currentCountry.countryArrayIndex] as Date)) {
+            if startNewSection(withPreviousDate: previousDate, newDate: movie.releaseDate[movie.currentCountry.countryArrayIndex] as Date)
+            {
 				// a new sections starts: create new array and add to film-array
 				let newMovieArray: [MovieRecord] = []
 				upcomingMovies.append(newMovieArray)
-				upcomingSections.append(movie.releaseDateStringLong)
+                upcomingSectionTitles.append(movie.releaseDateStringLong)
 				currentSection += 1
 			}
 			
@@ -174,22 +175,24 @@ class TabBarController: UITabBarController
 		previousDate = nil
 		currentSection = -1
 		favoriteMovies = []
-		favoriteSections = []
+		favoriteSectionTitles = []
 		
 		for movie in favorites {
 			if (movie.isNowPlaying() && (currentSection == -1)) {
 				// it's a current movie, but there is no section for it yet
 				let newMovieArray: [MovieRecord] = []
 				favoriteMovies.append(newMovieArray)
-				favoriteSections.append(NSLocalizedString("NowPlayingLong", comment: ""))
+				favoriteSectionTitles.append(NSLocalizedString("NowPlayingLong", comment: ""))
 				currentSection += 1
 			}
-			else if ((movie.isNowPlaying() == false) && ((previousDate == nil) || (previousDate != movie.releaseDate[movie.currentCountry.countryArrayIndex] as Date))) {
+			else if ((movie.isNowPlaying() == false) && //((previousDate == nil) || (previousDate != movie.releaseDate[movie.currentCountry.countryArrayIndex] as Date)))
+                startNewSection(withPreviousDate: previousDate, newDate: movie.releaseDate[movie.currentCountry.countryArrayIndex] as Date))
+            {
 				// upcoming movies:
 				// a new sections starts: create new array and add to film-array
 				let newMovieArray: [MovieRecord] = []
 				favoriteMovies.append(newMovieArray)
-				favoriteSections.append(movie.releaseDateStringLong)
+                favoriteSectionTitles.append(movie.releaseDateStringLong)
 				currentSection += 1
 			}
 			
@@ -208,6 +211,32 @@ class TabBarController: UITabBarController
 		NotificationManager.updateFavoriteNotifications(favoriteMovies: favoriteMovies)
 	}
 	
+    
+    func startNewSection(withPreviousDate previousDate: Date?, newDate: Date) -> Bool
+    {
+        // When previous data is nil, always start a new section (since the new movie is the first one in)
+        guard let previousDate = previousDate else { return true }
+
+        if (previousDate.compare(newDate) == .orderedSame)
+        {
+            // Movies have the same release date: Don't start a new section
+            return false
+        }
+        else
+        {
+            // Movies have different release dates. Start a new section, except when they both have "dummy" dates too far in the future
+            
+            if MovieRecord.dateIsTBD(previousDate) && MovieRecord.dateIsTBD(newDate)
+            {
+                return false
+            }
+            else
+            {
+                return true
+            }
+        }
+    }
+    
 
     func updateMovies(_ allMovies: [MovieRecord], onlyIfUpdateIsTooOld checkLastUpdate: Bool)
     {

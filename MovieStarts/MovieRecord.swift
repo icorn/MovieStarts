@@ -83,6 +83,11 @@ open class MovieRecord : CustomStringConvertible {
 	var _thumbnailImage: UIImage?
 	var _thumbnailFound: Bool = false
 	
+    var isTBD: Bool
+    {
+        return MovieRecord.dateIsTBD(releaseDate[currentCountry.countryArrayIndex])
+    }
+    
 	
 	// MARK: - Computed Properties
 
@@ -325,7 +330,12 @@ open class MovieRecord : CustomStringConvertible {
 	var releaseDateString: String {
 		var retval = NSLocalizedString("NoReleaseDate", comment: "")
 		
-		if releaseDate[currentCountry.countryArrayIndex].compare(Date(timeIntervalSince1970: 0)) == ComparisonResult.orderedDescending {
+        if isTBD
+        {
+            retval = NSLocalizedString("TBDmedium", comment: "")
+        }
+        else if releaseDate[currentCountry.countryArrayIndex].compare(Date(timeIntervalSince1970: 0)) == ComparisonResult.orderedDescending
+        {
 			let dateFormatter = DateFormatter()
 			dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 			dateFormatter.timeStyle = DateFormatter.Style.none
@@ -339,8 +349,13 @@ open class MovieRecord : CustomStringConvertible {
 	/// The release data as string in long format.
 	var releaseDateStringLong: String {
 		var retval = NSLocalizedString("NoReleaseDate", comment: "")
-		
-		if releaseDate[currentCountry.countryArrayIndex].compare(Date(timeIntervalSince1970: 0)) == ComparisonResult.orderedDescending {
+        
+        if isTBD
+        {
+            retval = NSLocalizedString("TBDlong", comment: "")
+        }
+		else if releaseDate[currentCountry.countryArrayIndex].compare(Date(timeIntervalSince1970: 0)) == ComparisonResult.orderedDescending
+        {
 			let dateFormatter = DateFormatter()
 			dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 			dateFormatter.timeStyle = DateFormatter.Style.none
@@ -716,7 +731,14 @@ open class MovieRecord : CustomStringConvertible {
 		
 		return subtitles
 	}
-	
+
+
+    static func dateIsTBD(_ date: Date) -> Bool
+    {
+        return Calendar.current.component(.year, from: date) > 2999
+    }
+
+    
 	/**
 		Checks if the movie is now playing in theaters.
 	
