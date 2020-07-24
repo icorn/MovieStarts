@@ -23,6 +23,8 @@ class AcceptPrivacyViewController: UIViewController
         
         self.headlineLabel.text = NSLocalizedString("PrivacyStatement", comment: "")
         
+        // Show Accept button only if there is an implemented delegate
+        
         if (self.acceptPrivacyDelegate != nil)
         {
             self.acceptButton.setTitle(NSLocalizedString("AcceptPrivacy", comment: ""), for: .normal)

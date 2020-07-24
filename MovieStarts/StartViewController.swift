@@ -10,7 +10,7 @@ import UIKit
 import CloudKit
 
 
-class StartViewController: UIViewController, AcceptPrivacyDelegate
+class StartViewController: UIViewController
 {
 	var aboutView: UIView?
 	var welcomeWindow: MessageWindow?
@@ -41,7 +41,7 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 		super.viewDidAppear(animated)
 
         AnalyticsClient.trackScreenName("Launch Screen")
-        askForPrivacyStatementIfNeeded()
+        readMovies()
     }
         
     
@@ -162,36 +162,4 @@ class StartViewController: UIViewController, AcceptPrivacyDelegate
 			}
 		)
 	}
-	
-    func askForPrivacyStatementIfNeeded()
-    {
-        let privacyAccepted: Bool? = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsPrivacyStatementV1Accepted) as? Bool
-
-        if let privacyAccepted = privacyAccepted, privacyAccepted == true
-        {
-            // privacy-statement already accepted
-            if self.welcomeWindow == nil
-            {
-                readMovies()
-            }
-        }
-        else
-        {
-            if let acceptPrivacyViewController = self.storyboard?.instantiateViewController(withIdentifier: "PrivacyViewController") as? AcceptPrivacyViewController
-            {
-                acceptPrivacyViewController.acceptPrivacyDelegate = self
-                self.present(acceptPrivacyViewController, animated: true, completion: { () in })
-            }
-        }
-    }
-    
-
-    // MARK: AcceptPrivacyDelegate
-    
-    func privacyStatementAccepted()
-    {
-        UserDefaults(suiteName: Constants.movieStartsGroup)?.set(true, forKey: Constants.prefsPrivacyStatementV1Accepted)
-        UserDefaults(suiteName: Constants.movieStartsGroup)?.synchronize()
-        readMovies()
-    }
 }
