@@ -129,9 +129,22 @@ class UpcomingViewController: MovieListViewController {
                 // the title or the date has changed. we have to move the table cell to a new position.
 
                 // remove movie from old position
-                movieListDataSource.moviesInSections[(indexPathForExistingMovie as NSIndexPath).section].remove(at: (indexPathForExistingMovie as NSIndexPath).row)
+                let sectionId = (indexPathForExistingMovie as NSIndexPath).section
+                movieListDataSource.moviesInSections[sectionId].remove(at: (indexPathForExistingMovie as NSIndexPath).row)
                 tableView.deleteRows(at: [indexPathForExistingMovie], with: UITableView.RowAnimation.automatic)
 
+                // if the section is now empty: remove it also
+                if movieListDataSource.moviesInSections[sectionId].isEmpty
+                {
+                    // remove section from datasource
+                    movieListDataSource.moviesInSections.remove(at: sectionId)
+                    movieListDataSource.sectionTitles.remove(at: sectionId)
+
+                    // remove section from table
+                    let indexSet: IndexSet = IndexSet(integer: sectionId)
+                    tableView.deleteSections(indexSet, with: UITableView.RowAnimation.automatic)
+                }
+                
                 // add it at new position
                 addMoviePrivate(updatedMovie)
             }
