@@ -142,6 +142,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().tintColor = UIColor.darkTürkisColor()
         UINavigationBar.appearance().barTintColor = UIColor.secondarySystemBackground
+        UINavigationBar.appearance().isTranslucent = true
         
 		// read favorites from file (and send number to analytics)
 		let favorites = UserDefaults(suiteName: Constants.movieStartsGroup)?.object(forKey: Constants.prefsFavorites)

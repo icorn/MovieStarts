@@ -68,7 +68,7 @@ class NetworkChecker {
 						}
 					)
 				}
-            @unknown default:
+            default:
                 NSLog("CloudKit error: Unknown error")
                 errorCallback?()
                 

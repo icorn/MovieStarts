@@ -313,7 +313,7 @@ class TabBarController: UITabBarController
                     }
 				}
                 
-            @unknown default:
+            default:
                 // TODO
                 NSLog("Unknown error updating.")
             }

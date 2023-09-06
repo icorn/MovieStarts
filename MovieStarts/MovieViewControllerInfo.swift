@@ -107,6 +107,8 @@ extension MovieViewController
         {
 			addInfoToStackView(titleLabel: titleLabels[i], valueLabel: valueLabels[i], maxTitleWidth: maxTitleWidth, maxValueWidth: maxValueWidth);
 		}
+
+        infoStackView.backgroundColor = .clear
 	}
     
     fileprivate final func findScreenplayWritersInCrew(_ crew: [String]) -> [String]

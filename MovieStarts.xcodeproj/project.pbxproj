@@ -817,15 +817,17 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20.7.3;
+				CURRENT_PROJECT_VERSION = 23.9.1;
 				DEVELOPMENT_TEAM = FTX9FBCWZ9;
+				"DEVELOPMENT_TEAM[sdk=watchos*]" = FTX9FBCWZ9;
 				IBSC_MODULE = watchOSapp_Extension;
 				INFOPLIST_FILE = watchOSapp/Info.plist;
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchOS2app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "97b79718-f4d0-4bf2-9bec-135e86563936";
 				PROVISIONING_PROFILE_SPECIFIER = "MovieStarts WatchApp Dev 2020";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "MovieStarts WatchApp Dev. 2023";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -848,15 +850,17 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20.7.3;
+				CURRENT_PROJECT_VERSION = 23.9.1;
 				DEVELOPMENT_TEAM = FTX9FBCWZ9;
+				"DEVELOPMENT_TEAM[sdk=watchos*]" = FTX9FBCWZ9;
 				IBSC_MODULE = watchOSapp_Extension;
 				INFOPLIST_FILE = watchOSapp/Info.plist;
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchOS2app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "7c8d5c33-7876-4ffe-96a3-4d7ddbac32d6";
 				PROVISIONING_PROFILE_SPECIFIER = "MovieStarts WatchApp AppStore 2020";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "MovieStarts WatchApp AppStore 2023";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
@@ -875,15 +879,17 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20.7.3;
+				CURRENT_PROJECT_VERSION = 23.9.1;
 				DEVELOPMENT_TEAM = FTX9FBCWZ9;
+				"DEVELOPMENT_TEAM[sdk=watchos*]" = FTX9FBCWZ9;
 				INFOPLIST_FILE = "watchOSapp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchOS2app.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "5a0c2b4c-bef8-40f5-8323-84b0610bd577";
 				PROVISIONING_PROFILE_SPECIFIER = "MovieStarts WatchExt Dev 2020";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "MovieStarts WatchExt Dev 2023";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -902,15 +908,17 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20.7.3;
+				CURRENT_PROJECT_VERSION = 23.9.1;
 				DEVELOPMENT_TEAM = FTX9FBCWZ9;
+				"DEVELOPMENT_TEAM[sdk=watchos*]" = FTX9FBCWZ9;
 				INFOPLIST_FILE = "watchOSapp Extension/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.icorn.MovieStarts.watchOS2app.watchkitextension;
 				PRODUCT_NAME = "${TARGET_NAME}";
 				PROVISIONING_PROFILE = "0c6faaf1-42d0-4523-bddc-7943a62e8c60";
 				PROVISIONING_PROFILE_SPECIFIER = "MovieStarts WatchExt AppStore 2020";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "MovieStarts WatchExt AppStore 2023";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
@@ -1042,9 +1050,10 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20.7.3;
+				CURRENT_PROJECT_VERSION = 23.9.1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = FTX9FBCWZ9;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FTX9FBCWZ9;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PROJECT_DIR)",
@@ -1055,13 +1064,14 @@
 				INFOPLIST_FILE = MovieStarts/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.6.0;
 				OTHER_LDFLAGS = "-ObjC";
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "2a218c02-b2b5-4739-9461-6facebde338f";
-				PROVISIONING_PROFILE_SPECIFIER = "MovieStarts Dev. 2020";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MovieStarts Dev. 2023";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1077,8 +1087,9 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 20.7.3;
-				DEVELOPMENT_TEAM = FTX9FBCWZ9;
+				CURRENT_PROJECT_VERSION = 23.9.1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = FTX9FBCWZ9;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -1087,12 +1098,13 @@
 				INFOPLIST_FILE = MovieStarts/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 1.6.0;
 				"OTHER_SWIFT_FLAGS[arch=*]" = "-D RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.icorn.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "2b79aea3-fa84-4f7c-9246-c67c20bd8133";
-				PROVISIONING_PROFILE_SPECIFIER = "MovieStarts AppStore 2020";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "MovieStarts Appstore 2023";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
